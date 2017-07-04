@@ -1,0 +1,182 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.UserViewModel
+
+<table class="table">
+    <tr>
+        <th role="columnheader" name="member_id">
+            System ID
+        </th>
+        <th role="columnheader" name="user_name">
+            Login ID
+        </th>
+        <th role="columnheader" name="company_id">
+            Company ID
+        </th>
+
+        <th role="columnheader" name="company_name">
+            Company Name
+        </th>
+
+        <th role="columnheader" name="wallet_balance">
+            Wallet Balance
+        </th>
+
+        <th role="columnheader" name="credit_limit">
+            Cr. Limit
+        </th>
+        <th role="columnheader" name="active_status">
+            Active Status
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+    @if (Model != null)
+    {
+        foreach (var item in Model.userDetailList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.member_id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.user_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.company_id)
+                </td>
+
+                <td>@Html.DisplayFor(modelItem => item.company_name)</td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.wallet_balance)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.credit_limit)
+                </td>
+                <td>
+                    @if (item.active_status.ToUpper().Trim() == "Y")
+                    {
+                        <div class="label label-table label-success">@Html.DisplayFor(modelItem => item.active_status)</div>
+                    }
+                    else
+                    {
+                        <div class="label label-table label-danger">@Html.DisplayFor(modelItem => item.active_status)</div>
+                    }
+
+                </td>
+                <td>
+                    <a href="#" onclick="setSessionForSelectedUser('@item.member_id','@item.company_id')" data-toggle="tooltip" title="Company Commission Structure" data-original-title="Company Commission Structure">
+                        <i class="fa fa-life-ring text-inverse m-r-10"></i>
+                    </a>
+                    &nbsp;
+                    <a  onclick="getFundForm('@item.member_id','@item.company_id','@item.company_name','@item.user_name')" data-toggle="tooltip" data-original-title="Add Fund Request">
+                        <i class="fa fa-shopping-bag text-inverse m-r-10"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr><td>No User Found</td></tr>
+    }
+</table>
+
+
+@if (Model != null && Model.userDetailList != null && Model.userDetailList.Count() > 0)
+{
+    var pageSize = Convert.ToInt32(Resources.PageSize);
+    var pageShowCount = 1;
+    <nav aria-label="~.">
+        <ul class="pagination pull-left">
+            <p> Showing <span id="fromPageIndex">@Model.FromPage</span> to <span id="toPageIndex">@Model.ToPage</span> of @Model.RecordCount entries </p>
+        </ul>
+    </nav>
+
+    <nav aria-label="~.">
+        <ul class="pagination pull-right">
+            <li class="page-item">
+                <a class="page-link" id="previousPages" data-view='@Resources.ManageCompanies' tabindex="-1" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous Pages</span>
+                </a>
+            </li>
+            @*<li class="page-item">
+                    <a class="page-link" id="previous" data-view=@Resources.ClaimListView tabindex="-1" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>*@
+            @for (var i = 1; i <= Model.PagingCount; i++)
+            {
+                var className = (@i == Model.CurrentPageIndex ? "active" : string.Empty);
+                var displayClass = (@i <= pageSize ? "db" : "dn");
+
+                /*******Code run in case of back or refresh*****/
+                if (Model.PageSlot != 0)
+                {
+                    if (Model.PageSlot == pageShowCount)
+                    {
+                        displayClass = "db";
+                    }
+                    else
+                    {
+                        displayClass = "dn";
+                    }
+                }
+
+                <li class="page-item @className @displayClass" page-slot="@pageShowCount">
+                    <a class="page-link" name="page" data-view='@Resources.ManageCompanies' data-page-index=@i href="#">@i</a>
+                </li>
+                if (i % pageSize == 0)
+                {
+                    pageShowCount = pageShowCount + 1;
+                }
+            }
+
+            @*<li class="page-item">
+                    <a class="page-link" data-view=@Resources.ClaimListView id="next" aria-label="Next" href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>*@
+            <li class="page-item">
+                <a class="page-link" id="nextPages" data-view='@Resources.ManageCompanies' aria-label="Next" href="#">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next Pages</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+}
+
+@Html.HiddenFor(m => m.PagingCount, new { @id = "pagingCount" })
+@Html.HiddenFor(m => m.PageSlot, new { @id = "pageSlot" })
+@Html.HiddenFor(m => m.CurrentPageIndex, new { @id = "pageIndex" })
+@Html.HiddenFor(m => m.RecordCount, new { @id = "RecordCount" })
+
+
+
+
+<a class="popup-with-form btn btn-success" href="#add-company_funds" id="popupfundForm" style="display:none;">Open form</a>
+<form id="add-company_funds" class="form-horizontal mfp-hide white-popup-block" style="width: 90%;" onsubmit="return false;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading"> Add Fund Request</div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <div id="addcompanyfunds"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- Add Funds Request -->
+
+   
+<script src="~/Script/User.js"></script>
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>

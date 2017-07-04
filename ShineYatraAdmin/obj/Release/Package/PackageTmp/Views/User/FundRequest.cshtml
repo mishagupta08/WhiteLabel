@@ -1,0 +1,52 @@
+﻿@model ShineYatraAdmin.Entity.CompanyFund
+
+
+
+
+<div class="form-body">
+    <div class="form-group">
+        @Html.HiddenFor(m => m.company_id)
+        @Html.HiddenFor(m => m.member_id)
+        @Html.HiddenFor(m => m.cancel_request_id)
+        @Html.HiddenFor(m => m.service_id)
+        @Html.HiddenFor(m => m.txn_type)
+
+        <label class="control-label col-md-3">Amount</label>
+
+        <div class="col-md-9">
+            @Html.TextBoxFor(m => m.amount, new { @required = "required", @id = "amount", @class = "form-control" })
+            <span style="color:red;display:none;" id="amountError">Please enter valid amount.</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-3">Payment Mode</label>
+
+        <div class="col-md-9">
+            @Html.DropDownListFor(m => m.deposit_mode, new SelectList(Model.DepositModeList, "Id", "Value"), new { @required = "required", @id = "deposit_mode", @class = "form-control" })
+            <span style="color:red;display:none;" id="paymentModeError">Please select a deposit type.</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-3">Remarks</label>
+
+        <div class="col-md-9">
+            @Html.TextAreaFor(m => m.remarks, new { @rows = "5", @cols = "30", @required = "", @id = "remarks", @class = "form-control" })
+        </div>
+    </div>
+
+</div>
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-offset-3 col-md-9">
+                    <button type="button" class="btn btn-success" onclick="AddEditFund();"> <i class="fa fa-check"></i> Submit</button>
+                    <button type="button" class="btn btn-default" onclick="closePopup()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

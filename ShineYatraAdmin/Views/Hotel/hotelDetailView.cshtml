@@ -1,0 +1,44 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.HotelViewModel
+
+<!DOCTYPE html>
+<script src="~/Script/hotel.js"></script>
+<div>
+    @if (Model != null || Model.SelectedHotel != null || Model.SelectedHotel.Hoteldetail != null)
+    {
+        <div class="form-body">
+            @*/******Overview Section***Start***/*@
+            <h3>@Model.SelectedHotel.Hoteldetail.Hotelname</h3>
+            <h5>@Model.SelectedHotel.Hoteldetail.Contactinfo.Address</h5>
+            <br />
+
+            <h4>Overview</h4>
+            <marquee behavior="scroll" direction="left">
+                @if (Model.SelectedHotel.Hoteldetail.Images != null && Model.SelectedHotel.Hoteldetail.Images.Image != null)
+                {
+                    foreach (var image in Model.SelectedHotel.Hoteldetail.Images.Image)
+                    {
+                        <img src="@image" width="120" height="80" alt="Natural" />
+                    }
+                }
+            </marquee>
+
+            @*/******Overview Section***End***/*@
+
+            <h4>Select Room</h4>
+
+            @if (Model.SelectedHotel.Ratedetail != null)
+                {
+                    foreach (var rate in Model.SelectedHotel.Ratedetail.Rate)
+                    {
+                    <h3>@rate.Roomtype</h3>
+                    <h5>@rate.Roombasis</h5>
+                    <h5>@rate.Ratebands.OriginalRoomTotal</h5>
+                    <button type="button" data-roomcode="@rate.RoomTypeCode" name="bookHotel" class="btn btn-success">Book</button>
+                }
+            }
+
+        </div>
+    }
+    <span id="hoteSearchHotel"></span>
+</div>

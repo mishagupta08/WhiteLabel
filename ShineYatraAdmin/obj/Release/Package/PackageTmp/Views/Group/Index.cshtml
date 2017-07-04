@@ -1,0 +1,256 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.GroupModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<div class="white-box">
+    <h3 class="box-title">Manage @Model.service_name Price Groups</h3>
+    @Html.HiddenFor(m => m.service_id, new { @id = "CurrentserviceId" })
+    @Html.HiddenFor(m => m.sub_service_name, new { @id = "sub_service_name" })
+    @if (Model.service_name.ToUpper() != "RECHARGE")
+    {
+        <div class="table-responsive">
+
+            <div>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <a href="javascript:alert('add link call here');">
+                            <button id="demo-btn-addrow" href="#NewGroupForm" class="popup-with-form btn btn-outline btn-rounded btn-info">
+                                <i class="icon wb-plus" aria-hidden="true"></i>
+                                Add New Group
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    @if (Model != null)
+                {
+                        <label>@Model.service_name Price Group </label>
+
+                        if (Model.service_group_list != null && Model.service_group_list.Count > 0)
+                        {
+                            @Html.DropDownListFor(m => m.service_group_list, new SelectList(Model.service_group_list, "comp_group_id", "comp_group_name"), new { @id = "serviceGroupList", @onchange = "getStructure('structure')" })
+                        }
+                        else
+                        {
+                            <p>No groups found for this service.</p>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div id="structure">
+                <br /><br /><br /><p>Loading please wait....</p>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <section>
+            <div class="sttabs tabs-style-bar">
+                <nav>
+                    <ul class="tablist">
+                        <li id="tab-1" onclick="getgroupList('recharge','prepaid')"><a href="#section-bar-1"><span>PREPAID</span></a></li>
+                        <li id="tab-2" onclick="getgroupList('recharge', 'postpaid')"><a href="#section-bar-2"><span>POSTPAID</span></a></li>
+                        <li id="tab-3" onclick="getgroupList('recharge', 'dth')"><a href="#section-bar-3"><span>DTH</span></a></li>
+                    </ul>
+                </nav>
+
+                <div class="content-wrap">
+                    <br /><br />
+                    <div class="col-md-8">
+                        <a href="javascript:alert('add link call here');">
+                            <button id="demo-btn-addrow" href="#NewGroupForm" class="popup-with-form btn btn-outline btn-rounded btn-info">
+                                <i class="icon wb-plus" aria-hidden="true"></i>
+                                Add New Group
+                            </button>
+                        </a>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" style="float:right;">
+                            @if (Model != null)
+                {
+                                <label>&lt;------Commission Group------&gt; </label><br/> 
+                                if (Model.service_group_list != null && Model.service_group_list.Count > 0)
+                                {
+                                    <span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    @Html.DropDownListFor(m => m.service_group_list, new SelectList(Model.service_group_list, "comp_group_id", "comp_group_name"), new { @id = "serviceGroupList", @onchange = "getStructure('recharge')" })
+                                        </span>
+                                }
+                                else
+                                {
+                                    <p>No groups found for this service.</p>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <section id="section-bar-1">
+                        <br /><br />
+                        <div id="prepaid_structure">
+                            <br /><br /><br /><p>Loading please wait....</p>
+                        </div>
+                    </section>
+                    <section id="section-bar-2">
+                        <br /><br />
+                        <div id="postpaid_structure">
+                            <br /><br /><br /><p>Loading please wait....</p>
+                        </div>
+                    </section>
+                    <section id="section-bar-3">
+                        <br /><br />
+                        <div id="dth_structure">
+                            <br /><br /><br /><p>Loading please wait....</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+    }
+</div>
+
+<form id="NewGroupForm" class="form-horizontal form-bordered mfp-hide white-popup-block" onsubmit="return AddNewGroup()" style="max-width: 800px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading"> Create @Model.service_name Group</div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">@Model.service_name Group Name</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="comp_group_name" id="comp_group_name" required="required" placeholder="Enter group name">
+                                    @Html.HiddenFor(m => m.service_id)
+                                    @Html.Hidden("category", Model.service_name)
+                                    <input type="hidden" name="sub_category">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Submit</button>
+                                            <button type="button" onclick="closePopup()" class="btn btn-default">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="row mfp-hide white-popup-block" id="edit-group" style="max-width: 800px;">
+    <div class="col-md-12">
+
+        <div class="panel panel-info">
+            <div class="panel-heading"> Alter @Model.service_name Group - <span id="group_name"></span></div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form action="#" name="editGroupRowDetails" id="editGroupRowDetails" onsubmit="return EditGroupRow();">
+                        <input type="hidden" name="service_id" value="@Model.service_id">
+                        <input type="hidden" name="category" value="@Model.service_name">
+                        <input type="hidden" name="sub_category">
+                        <input type="hidden" name="row_id">
+                        <input type="hidden" name="sub_service_id" value="">
+                        <input type="hidden" name="company_group_id" value="">
+                        <div class="form-body">
+                            <h3 class="box-title" id="title" name="airlineName"></h3>
+                            <hr>
+                            @if (@Model.service_id == "4")
+                            {
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Self Commission(%)</label>
+                                            <input id="SELF_COMM_PER" step="any" name="SELF_COMM_PER" required="required" class="form-control" placeholder="Margin %" type="number">
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Distribution Commission(%)</label>
+                                            <input id="DIST_COMM_PER" step="any" name="DIST_COMM_PER" required="required" class="form-control" placeholder="Margin Value" type="number">
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                            }
+                            else
+                            {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Front Margin(%)</label>
+                                        <input id="frontmargin_per" step="any" name="front_discount_per" required="required" class="form-control" placeholder="Margin %" type="number">
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Front Margin(Amount)</label>
+                                        <input id="frontmargin_amount" step="any" name="front_discount_amount" required="required" class="form-control" placeholder="Margin Value" type="number">
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <!--/row-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Back Margin(%)</label>
+                                        <input id="agent_per" step="any" class="form-control" name="back_discount_per" required="required" placeholder="Margin %" type="number">
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Back Margin(Amount)</label>
+                                        <input id="frontmargin_amount" step="any" name="back_discount_amount" required="required" class="form-control" placeholder="Margin Value" type="number">
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            }
+                            <!--/row-->
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
+                            <button type="button" onclick="closePopup()" class="btn btn-default">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Script/group.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".preloader").show();
+        if ("@Model.service_name.ToLower()" == "recharge") {
+            getStructure("prepaid_structure");
+        }
+        else {
+            getStructure("structure");
+        }
+
+    });
+</script>

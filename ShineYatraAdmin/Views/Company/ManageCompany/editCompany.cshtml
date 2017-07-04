@@ -1,0 +1,191 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.CompanyViewModel
+<link href="~/plugins/bower_components/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
+<style>
+    .heading {
+        position: fixed;
+        width: 96.3%;
+        z-index: 9999;
+    }
+</style>
+
+@if (Model == null)
+{
+    <div>No detail found!</div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading"> Create Company</div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <div class="form-body">
+                            <h3 class="box-title">Primary Info</h3>
+                            <hr class="m-t-0 m-b-40">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.CompanyName</label>
+                                        <div class="col-md-9">
+                                            @*<input type="text" class="form-control" placeholder="Company Name">*@
+                                            @Html.TextBoxFor(m => m.CompanyDetail.company_name, new { @required = "", @id = "companyName", @class = "form-control", @placeholder = @Resources.CompanyName })
+                                            <span class="help-block"> Write Company name here</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.CompanyWebSite</label>
+                                        <div class="col-md-9">
+                                            @*<input type="text" class="form-control" placeholder="Company Web Site">*@
+                                            @Html.TextBoxFor(m => m.CompanyDetail.company_website, new { @required = "", @id = "companyWebSite", @class = "form-control", @placeholder = @Resources.CompanyWebSite })
+                                            <span class="help-block"> Company Web Site. </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <!--/row-->
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.UtilityWebSite</label>
+                                        <div class="col-md-9">
+                                            @*<input type="text" class="form-control" placeholder="Utility Portal DomainName">*@
+                                            @Html.TextBoxFor(m => m.CompanyDetail.utility_domain, new { @required = "", @id = "utilityWebSite", @class = "form-control", @placeholder = @Resources.UtilityPortalDomainName })
+                                            <span class="help-block"> Utility portal domain name here. </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <!--span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.WalletCreditLimit</label>
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(m => m.CompanyDetail.wallet_credit_limit, new { @required = "", @id = "walletCreditLimit", @class = "form-control", @placeholder = @Resources.WalletCreditLimit })
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <!--/row-->
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.ContactPerson</label>
+                                        <div class="col-md-9">
+                                            @*<input type="text" class="form-control" placeholder="Contact Person">*@
+                                            @Html.TextBoxFor(m => m.CompanyDetail.contact_person_name, new { @required = "", @id = "contact_person_name", @class = "form-control", @placeholder = @Resources.ContactPerson })
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Contact No.</label>
+                                        <div class="col-md-9">
+                                            @*<input type="text" class="form-control" placeholder="Contact No.">*@
+                                            @Html.TextBoxFor(m => m.CompanyDetail.contact_person_phone, new { @required = "", @maxlength = 10, @minlength = 10, @id = "contact_person_phone", @class = "form-control", @placeholder = @Resources.ContactNo })
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <!--/row-->
+
+                            <h3 class="box-title">@Resources.Address</h3>
+                            <hr class="m-t-0 m-b-40">
+                            <!--/row-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.AddressOne</label>
+                                        <div class="col-md-9">
+                                            @*<input type="text" class="form-control">*@
+                                            @Html.TextBoxFor(m => m.CompanyDetail.company_add1, new { @required = "", @id = "company_add1", @class = "form-control", @placeholder = @Resources.AddressOne })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.AddressTwo</label>
+                                        <div class="col-md-9">
+                                            @*<input type="text" class="form-control">*@
+                                            @Html.TextBoxFor(m => m.CompanyDetail.company_add2, new { @id = "company_add2", @class = "form-control", @placeholder = @Resources.AddressTwo })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.City</label>
+                                        <div class="col-md-9">
+                                            @*<input type="text" class="form-control">*@
+                                            @Html.TextBoxFor(m => m.CompanyDetail.company_city, new { @required = "", @id = "company_city", @class = "form-control", @placeholder = @Resources.City })
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.State</label>
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(m => m.CompanyDetail.company_state, new { @required = "", @id = "company_state", @class = "form-control", @placeholder = @Resources.State })
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <!--/row-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">@Resources.PostCode</label>
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(m => m.CompanyDetail.company_zip, new { @required = "", @id = "company_zip", @class = "form-control", @placeholder = @Resources.PostCode })
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Country</label>
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m => m.CompanyDetail.company_country, new SelectList(Model.CountryList, "Id", "Value"), new { @required = "0", id = "countryDropDown", @class = "form-control" })
+                                            <span style="color:red;" id="countryError"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <!--/row-->
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn btn-success">Submit</button>
+                                            <button type="reset" onclick="closePopup()" class="btn btn-default">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.HiddenFor(m => m.CompanyDetail.company_id)
+}

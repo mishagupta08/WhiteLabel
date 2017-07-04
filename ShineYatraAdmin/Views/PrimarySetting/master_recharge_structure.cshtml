@@ -1,0 +1,248 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.PrimarySetting
+
+@{
+    ViewBag.Title = "Default Recharge Structure";
+    Layout = "~/Views/Shared/Layout.cshtml";
+    var list = new List<ShineYatraAdmin.Entity.CompanyCommissionGroup>();
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="white-box">
+
+            <!-- Tabstyle start -->
+            <h3 class="box-title m-b-0">Recharge Master Structure %</h3>
+            <br>
+
+            <section>
+                <div class="sttabs tabs-style-bar">
+                    <nav>
+                        <ul class="tablist">
+                            <li id="tab-1"><a class="sticon ti-wand" href="#section-bar-1"><span>@Resources.Prepaid</span></a></li>
+                            <li id="tab-2"><a class="sticon ti-signal" href="#section-bar-2"><span>@Resources.Postpaid</span></a></li>
+                            <li id="tab-3"><a class="sticon ti-ticket" href="#section-bar-3"><span>@Resources.Dth</span></a></li>
+                            <li id="tab-4"><a class="sticon ti-ticket" href="#section-bar-4"><span>@Resources.DefaultSetting </span></a></li>
+                        </ul>
+                    </nav>
+                    <div class="content-wrap">
+
+                        <section id="section-bar-1">
+                            @{ 
+                                if (Model.structure != null)
+                                {
+                                    list = (from r in Model.structure where r.sub_category.ToUpper() == "PREPAID" select r).ToList(); }
+                            }
+
+                            <table class="table table-bordered table-responsive color-bordered-table  color-table">
+                                <thead>
+                                    <tr>
+
+                                        <th>Logo</th>
+                                        <th>Service Provider</th>
+                                        <th>Service Type</th>
+
+                                        <th>Margin%</th>
+                                        <th>Active Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (list != null)
+                                    {
+                                        foreach (var t in list)
+                                        {
+                                            <tr id="row_@t.sub_service_id">
+                                                <td> <img src="~/plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
+                                                <td><input type="hidden" id="prepaid_provider_@t.sub_service_id" value="@t.sub_service_name">@t.sub_service_name</td>
+                                                <td>@t.sub_category</td>
+                                                <td><input type="hidden" id="prepaid_margin_@t.sub_service_id" value="@t.back_discount_per" name="back_discount_per"><span name="back_discount_per" class="row_value_@t.sub_service_id">@t.back_discount_per</span></td>
+                                                <td>
+                                                    @if (t.active_status.ToUpper().Trim() == "Y")
+                                                    {
+                                                        <div class="label label-table label-success">@t.active_status</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="label label-table label-danger">@t.active_status</div> 
+                                                    }
+                                                </td>
+                                                <td class="text-nowrap">
+                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','@t.back_discount_per','@t.service_id','@t.sub_service_id')">
+                                                        <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                                    </a>
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </section>
+                        <section id="section-bar-2">
+                            @{ 
+                                if (Model.structure != null)
+                                {
+                                    list = (from r in Model.structure where r.sub_category.ToUpper() == "POSTPAID" select r).ToList(); }
+                            }
+
+                            <table class="table table-bordered table-responsive color-bordered-table  color-table">
+                                <thead>
+                                    <tr>
+
+                                        <th>Logo</th>
+                                        <th>Service Provider</th>
+                                        <th>Service Type</th>
+
+                                        <th>Margin%</th>
+                                        <th>Active Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (list != null)
+                                    {
+                                        foreach (var t in list)
+                                        {
+                                            <tr id="row_@t.sub_service_id">
+                                                <td> <img src="~/plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
+                                                <td><input type="hidden" id="postpaid_provider_@t.sub_service_id" value="@t.sub_service_name">@t.sub_service_name</td>
+                                                <td>@t.sub_category</td>
+                                                <td><input type="hidden" id="postpaid_margin_@t.sub_service_id" value="@t.back_discount_per"name="back_discount_per"><span name="back_discount_per" class="row_value_@t.sub_service_id">@t.back_discount_per</span></td>
+                                                <td>
+                                                    @if (t.active_status.ToUpper().Trim() == "Y")
+                                                    {<div class="label label-table label-success">@t.active_status</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="label label-table label-danger">@t.active_status</div> }
+                                                </td>
+                                                <td class="text-nowrap">
+                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','@t.back_discount_per','@t.service_id','@t.sub_service_id')">
+                                                        <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                                    </a>
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </section>
+                        <section id="section-bar-3">
+                            @{  
+                                if(Model.structure!=null)
+                                { 
+                                list = (from r in Model.structure where r.sub_category.ToUpper() == "DTH" select r).ToList();  }
+                                }
+                            <table class="table table-bordered table-responsive color-bordered-table  color-table">
+                                <thead>
+                                    <tr>
+
+                                        <th>Logo</th>
+                                        <th>Service Provider</th>
+                                        <th>Service Type</th>
+
+                                        <th>Margin%</th>
+                                        <th>Active Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (list != null)
+                                    {
+                                        foreach (var t in list)
+                                        {
+                                            <tr id="row_@t.sub_service_id">
+                                                <td> <img src="~/plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
+                                                <td><input type="hidden" id="dth_provider_@t.sub_service_id" value="@t.sub_service_name">@t.sub_service_name</td>
+                                                <td>@t.sub_category</td>
+                                                <td><input type="hidden" id="dth_margin_@t.sub_service_id" value="@t.back_discount_per" name="back_discount_per"><span name="back_discount_per" class="row_value_@t.sub_service_id">@t.back_discount_per</span></td>
+                                                <td>
+                                                    @if (t.active_status.ToUpper().Trim() == "Y")
+                                                    {
+                                                        <div class="label label-table label-success">@t.active_status</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="label label-table label-danger">@t.active_status</div>
+                                                    }
+                                                </td>
+                                                <td class="text-nowrap">
+                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','@t.back_discount_per','@t.service_id','@t.sub_service_id')">
+                                                        <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                                    </a>
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </section>
+                        <section id="section-bar-4">
+                            
+                            <div class="panel panel-info">
+
+                                <div class="panel-wrapper collapse in" aria-expanded="true">
+                                    <div class="panel-body" id="defaultSettingblock">
+                                        @Html.Partial("~/Views/PrimarySetting/DefaultRechargeSetting.cshtml", Model)
+                                    </div>                                   
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<form id="edit-primary-margin" class="form-horizontal form-bordered mfp-hide white-popup-block" style="max-width: 800px;" onsubmit="return UpdatePrimaryMargin();">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading"> Alter Recharge - <span id="serviceProvider"></span></div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <div class="form-body">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="hidden" name="member_id" id="member_id" value="@ShineYatraSession.LoginUser.member_id">
+                                    <input type="hidden" name="sub_service_id"  id="sub_service_id">
+                                    <input type="hidden" id="service_id" name="service_id" value="">
+                                    <input id="valuespan" type="hidden" value="">
+                                    <label class="control-label col-md-3">Margin % </label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" step="any" type="number" required="required" name="back_discount_per" id="back_discount_per">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Apply This</button>
+                                            <button type="button" onclick="closePopup()" class="btn btn-default">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Script/PrimarySetting.js"></script>

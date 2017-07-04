@@ -1,0 +1,33 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.HotelViewModel
+
+<!DOCTYPE html>
+<script src="~/Script/hotel.js"></script>
+<div>
+    @if (Model != null || Model.HotelList != null || Model.HotelList.Count != 0)
+    {
+        <table>
+            @foreach (var hotel in Model.HotelList)
+            {
+                var imagePath = "http://" + hotel.Hoteldetail.Images.Image.Imagepath;
+                <tr>
+                    <td><img src="@imagePath" height="50" width="50" /></td>
+                    <td>
+                        <table>
+                            <tr><td>@hotel.Hoteldetail.Hotelname</td></tr>
+                            <tr><td>@hotel.Hoteldetail.Contactinfo.Address</td></tr>
+                            <tr><td>Room Left : @hotel.Hoteldetail.Noofrooms</td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr><td>@hotel.Hoteldetail.MinRate</td></tr>
+                            <tr><td><button type="button" name="viewHotel" room-left="@hotel.Hoteldetail.Noofrooms" hotel-id="@hotel.Hoteldetail.Hotelid" hotel-webservice="@hotel.Hoteldetail.WebService" class="btn btn-success">View</button></td></tr>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    <span id="hoteSearchHotel"></span>
+</div>

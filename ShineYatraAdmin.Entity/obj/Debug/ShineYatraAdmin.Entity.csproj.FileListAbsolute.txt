@@ -1,0 +1,5 @@
+E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\bin\Debug\ShineYatraAdmin.Entity.dll
+E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\bin\Debug\ShineYatraAdmin.Entity.pdb
+E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\obj\Debug\ShineYatraAdmin.Entity.csprojResolveAssemblyReference.cache
+E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\obj\Debug\ShineYatraAdmin.Entity.dll
+E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\obj\Debug\ShineYatraAdmin.Entity.pdb

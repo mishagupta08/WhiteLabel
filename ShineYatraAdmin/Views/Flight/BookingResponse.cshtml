@@ -1,0 +1,31 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.Bookingresponse
+
+@{
+    ViewBag.Title = "BookingResponse";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+@if (Model!=null && Model.Transid != null)
+{
+    <h3>flight Booked Successfully</h3>
+    <form method="post" action="CancelFlight">
+        @Html.HiddenFor(m => m.Transid)
+        @Html.HiddenFor(m => m.PartnerRefId)
+        <input type="submit" value="Cancel Flight">
+        
+    </form>
+}
+else
+{
+    if (Model != null && Model.Error != null)
+    {
+        <h3>@Model.Error</h3>
+    }
+    else
+    {
+    <h3>Some Error Occured in flight Booking please try again</h3>
+    }
+}
+
+

@@ -1,0 +1,180 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.SearchPageViewModel
+
+@{
+    ViewBag.Title = "BookingDetail";
+    Layout = "~/Views/Shared/Layout.cshtml";
+    int count = 0;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">Flight Search REsult</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form class="tr" method="post" action="BookingResponse">
+                        <hr>
+                        <h4>Flight Details</h4>
+                        <hr>
+                        <h3>@Model.flightSearch.Origin - @Model.flightSearch.Destination</h3>
+                        <h3>Total Fare - Rs @Model.arrayOfSearchedFlights.FlightsDetail.First().BookingClassFare.AdultFare</h3>
+
+                        <h4>Depart from origin:-  @Model.arrayOfSearchedFlights.FlightsDetail.First().DepartureDateTime</h4>
+                        <h4>Arrival at destination:-  @Model.arrayOfSearchedFlights.FlightsDetail.Last().ArrivalDateTime</h4>
+
+                        @Html.HiddenFor(m=>m.FlightBookingDetail.Origin)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.Destination)
+                        @Html.HiddenFor(m=>m.FlightBookingDetail.DepartDate)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.ReturnDate)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.AdultPax)
+
+                        @Html.HiddenFor(m => m.FlightBookingDetail.ChildPax)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.InfantPax)
+
+                        @Html.HiddenFor(m => m.FlightBookingDetail.Mode)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.Id)
+
+                        @Html.HiddenFor(m => m.FlightBookingDetail.FlightNumber)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.Preferredclass)
+
+
+                        <hr>
+                        <table width="600" border="1">
+                            @foreach (var flight in Model.arrayOfSearchedFlights.FlightsDetail)
+                            {
+                                <tr>
+                                    <td><span>@flight.AirLineName</span><span>&nbsp;(@flight.Id)</span></td>
+                                    <td><span>@flight.DepartureDateTime &nbsp; (@flight.DepartureAirportCode)</span></td>
+                                    <td><span>@flight.ArrivalDateTime &nbsp; (@flight.ArrivalAirportCode)</span></td>
+                                </tr>
+                            }
+                        </table>
+
+                        <hr>
+                        <h4>Passanger Details</h4>
+                        <hr>
+
+
+                        @******** Child Booking Detail *****************@
+
+                        <div class="form-group">
+                            @for (int i = 0; i < Model.flightSearch.AdultPax; i++)
+            {
+                                <label class="col-sm-2 control-label">@Resources.Adult @(i + 1)</label><br />
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="form-group col-xs-4">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                        <div class="form-group col-xs-4">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                        <div class="form-group col-xs-4">
+                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.NameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                        </div>
+
+                                        <div class="form-group col-xs-6">
+                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { Value = Resources.AdultCode })                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                count++;
+                            }
+                        </div>
+
+                        @******** Child Booking Detail *****************@
+
+                        <div class="form-group">
+                            @for (int i = 0; i < Model.flightSearch.ChildPax; i++)
+            {
+                                <br />
+                                <label class="col-sm-2 control-label">@Resources.Child @(i + 1)</label><br />
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="form-group col-xs-4">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                        <div class="form-group col-xs-4">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                        <div class="form-group col-xs-4">
+                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.NameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                        </div>
+
+                                        <div class="form-group col-xs-6">
+                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { Value = Resources.ChildCode })
+                                        </div>
+                                    </div>
+                                </div>
+                                count++;
+                            }
+                        </div>
+                        @******** Infant Booking Detail ******************@
+                        <div class="form-group">
+                            @for (int i = 0; i < Model.flightSearch.InfantPax; i++)
+            {
+                                <label class="col-sm-2 control-label">@Resources.Infant @(i + 1)</label><br />
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="form-group col-xs-4">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                        <div class="form-group col-xs-4">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                        <div class="form-group col-xs-4">
+                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.NameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                        </div>
+
+                                        <div class="form-group col-xs-6">
+                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { Value = Resources.InfantCode })
+                                        </div>
+                                    </div>
+                                </div>
+                                count++;
+                            }
+                        </div>
+
+                        <br />
+
+                        <div class="td">
+                            <label class="col-sm-25 control-label">Please Note : Make sure the name is same as what appears on traveller's govt-issued photo ID.</label>
+                        </div>
+
+                        <br />
+
+                        <hr>
+                        <h4>Contact Details</h4>
+                        <hr>
+
+                        <div class="row">
+                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PhoneNumber, new { @placeholder = "Mobile No." })
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            @Html.TextBoxFor(x => Model.FlightBookingDetail.EmailAddress, new { @placeholder = "Email Adress" })
+                        </div>
+
+                        <br />
+                        <div><label>Your booking details will be mailed to this address</label></div>
+                        <br />
+
+                        <div class="td">
+                            <input type="submit" value="Proceed To Booking">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

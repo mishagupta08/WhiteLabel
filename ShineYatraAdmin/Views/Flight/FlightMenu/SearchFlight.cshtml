@@ -1,0 +1,159 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.FlightViewModel
+
+<!-- Date picker plugins css -->
+
+<style>
+    .ui-autocomplete {
+z-index: 100;
+}
+
+</style>
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading"> Flight Search</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form action="SearchFlight" method="post" class="form-horizontal form-bordered" id="searchFlightForm" @*onsubmit="return SubmitFlightSearch();"*@>
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="control-label">Flight Category</label>
+                                <div class="radio-list">
+                                    <label>
+                                        @Html.RadioButtonFor(model => model.FlightSearchDetail.FlightType, (Resources.Domestic), new { @checked = "checked" })
+                                        @Html.Label(Resources.Domestic)
+                                    </label>
+                                    <label>
+                                        @Html.RadioButtonFor(model => model.FlightSearchDetail.FlightType, Resources.International)
+                                        @Html.Label(Resources.International)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Trip Mode</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(m => m.FlightSearchDetail.Mode, new SelectList(Model.FlightSearchDetail.TripMode, "Id", "Value"), new { @required = "0", id = "modeDropDown", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">From</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.FlightSearchDetail.Origin, new { @required = "", @id = "flightOrigin", @class = "form-control", @placeholder = Resources.Origin })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3">To</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.FlightSearchDetail.Destination, new { @required = "", @id = "flightDestination", @class = "form-control", @placeholder = Resources.Destination })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Depart On</label>
+                                <div class="col-md-3">
+                                    @Html.TextBoxFor(m => m.FlightSearchDetail.DepartDate, new { @id = "dateinput", @required = "", @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-1">AdultPax 12+</label>
+                                <div class="col-md-1">
+                                    @Html.TextBoxFor(m => m.FlightSearchDetail.AdultPax, new { @type = "number", @id = "adult", @required = "", @class = "form-control",@min="1",@Value="1" })
+                                </div>
+
+                                <label class="control-label col-md-1">Child 2-11</label>
+                                <div class="col-md-1">
+                                    @Html.TextBoxFor(m => m.FlightSearchDetail.ChildPax, new { @type = "number", @id = "ChildPax", @class = "form-control", @min = "0" })
+                                </div>
+
+                                <label class="control-label col-md-1">Infant 0-2</label>
+                                <div class="col-md-1">
+                                    @Html.TextBoxFor(m => m.FlightSearchDetail.InfantPax, new { @type = "number", @id = "infant", @class = "form-control", @min = "0" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn btn-success"> <i class="fa"></i> Search Flight</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/flight.js"></script>
+
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+        // Date Picker
+        jq('#dateinput').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            dateFormat: "yy-mm-dd",
+            minDate: 0
+        });
+
+        var taskIdValue = $("#boardTaskId").val();
+
+        jq('#flightOrigin').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "AssessorNameSearch",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.Id + " (" + item.Value + ")",
+                                value: item.Id
+                            }
+                        }));
+                    },
+                    fail: function (error) {
+                        alert(erorr);
+                    }
+                });
+            }
+        });
+
+        jq('#flightDestination').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "AssessorNameSearch",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.Id + " (" + item.Value + ")",
+                                value: item.Id
+                            }
+                        }));
+                    },
+                    fail: function (error) {
+                        alert(erorr);
+                    }
+                });
+            }
+        });
+    });
+</script>
+

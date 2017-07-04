@@ -1,0 +1,66 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.CompanyViewModel
+<link href="~/plugins/bower_components/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading"> Add Funds To @Model.CompanyName</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">From -> User ID</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(m => m.SmsSetting.sms_api_url, new { @required = "", @id = "fromuserid", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">To -> User ID</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(m => m.SmsSetting.sms_api_url, new { @required = "", @id = "touserid", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Transaction Type</label>
+                            <div class="col-md-9">
+                                <div class="radio-list">
+                                    <label>
+                                        @Html.RadioButtonFor(model => model.ConsultDetails.mode, Resources.Credit, new { @checked = "checked" })
+                                        @Html.Label(Resources.Credit)
+                                                                        </label>
+                                    <label>
+                                        @Html.RadioButtonFor(model => model.ConsultDetails.mode, (Resources.Dabit))
+                                        @Html.Label(Resources.Dabit)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Remarks</label>
+
+                            <div class="col-md-9">
+                                @Html.TextAreaFor(m => m.SmsSetting.sms_api_url, new { @rows="5", @cols="30", @required = "", @id = "remarks", @class = "form-control" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Submit</button>
+                                        <button type="button" class="btn btn-default">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

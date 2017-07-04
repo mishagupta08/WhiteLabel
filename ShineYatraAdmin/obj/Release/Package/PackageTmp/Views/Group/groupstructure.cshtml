@@ -1,0 +1,106 @@
+﻿@model ShineYatraAdmin.Entity.GroupModel
+
+
+<!-- Magnific popup JavaScript -->
+<script src="~/plugins/bower_components/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+<script src="~/plugins/bower_components/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
+
+
+<!-- Sweet-Alert  -->
+<script src="~/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+<script src="~/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js"></script>
+
+<table class="table table-bordered table-responsive color-bordered-table info-table">
+    <thead>
+        <tr>
+            @if (Model.service_id == "1")
+            {
+                <th>Logo</th>
+                <th>Airline Name</th>
+                <th>Airline Code</th>
+
+            }
+            @if (Model.service_id == "4")
+            {
+                <th>Logo</th>
+                <th>Service Provider</th>
+                <th>Service Type</th>
+                <th>Self Margin</th>
+                <th>Distribution Margin</th>
+
+            }
+            else
+            {
+                <th colspan="2">Front Margin</th>
+                <th colspan="2">Distribution Margin</th>
+            }
+            <th class="text-nowrap">Action</th>
+        </tr>
+        <tr>
+            @if (Model.service_id == "1")
+            {
+                <th colspan="1"></th>
+                <th colspan="1"></th>
+                <th colspan="1"></th>
+            }
+            
+            @if(Model.service_id != "4")
+            {
+            <th>%</th>
+            <th>Amt</th>
+
+            <th>%</th>
+            <th>Amt</th>
+            <th>&nbsp;</th>
+            }
+
+
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model.service_group_list != null)
+        {
+            foreach (var t in Model.service_group_list)
+            {
+                <tr id="row_@t.sub_service_id">
+                    @if (Model.service_id == "1" || Model.service_id == "4")
+                    {
+                        <td> <img src="~/plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
+                        <td><input type="hidden" name="sub_service_id" value="@t.sub_service_id">
+                            <input type="hidden" name="row_id" value="@t.row_id">
+                        <input type="hidden" name="airlineName" value="@t.sub_service_name (@t.sub_service_code)">@t.sub_service_name</td>
+
+                        <td>                            
+                            <input type="hidden" name="airlineCode" value="@t.sub_service_code">@t.sub_service_code
+                        </td>
+                    }
+@if (Model.service_id == "4")
+{
+    <td><input type="hidden" name="SELF_COMM_PER" value="@t.SELF_COMM_PER"><span class="row_value_@t.sub_service_id" name="SELF_COMM_PER">@t.SELF_COMM_PER</span></td>
+    <td><input type="hidden" name="DIST_COMM_PER" value="@t.DIST_COMM_PER"><span class="row_value_@t.sub_service_id" name="DIST_COMM_PER">@t.DIST_COMM_PER</span></td>
+
+
+
+}
+else
+{
+                    <td><input type="hidden" name="front_discount_per" value="@t.front_discount_per"><span class="row_value_@t.sub_service_id" name="front_discount_per">@t.front_discount_per</span></td>
+                    <td><input type="hidden" name="front_discount_amount" value="@t.front_discount_amount"><span class="row_value_@t.sub_service_id" name="front_discount_amount">@t.front_discount_amount</span></td>
+                    <td><input type="hidden" name="back_discount_per" value="@t.distb_back_discount_per"><span class="row_value_@t.sub_service_id" name="back_discount_per">@t.distb_back_discount_per</span></td>
+                    <td><input type="hidden" name="back_discount_amount" value="@t.distb_back_discount_amount"><span class="row_value_@t.sub_service_id" name="back_discount_amount">@t.distb_back_discount_amount</span></td>
+}
+                    <td class="text-nowrap">
+                        <a href="#edit-group" data-toggle="tooltip" onclick="getRowEditform('@t.sub_service_id')" data-original-title="Edit" class="popup-with-form">
+                            <i class="fa fa-pencil text-inverse m-r-10"></i>
+                        </a>
+                        <a href="#" data-toggle="tooltip" data-original-title="Close">
+                            <i class="fa fa-close text-danger sa-disable"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

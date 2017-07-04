@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShineYatraAdmin", "ShineYatraAdmin\ShineYatraAdmin.csproj", "{662E97C6-6C38-4DEA-9D88-CC8C4637473E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShineYatraAdmin.Entity", "ShineYatraAdmin.Entity\ShineYatraAdmin.Entity.csproj", "{620C02B6-1149-4F44-B0F5-FBDFC8DFE2CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{FBFF0638-F2AE-4E38-885D-163CAA7626CC}"
+	ProjectSection(SolutionItems) = preProject
+		Library\Newtonsoft.Json.dll = Library\Newtonsoft.Json.dll
+		Library\System.Net.Http.Formatting.dll = Library\System.Net.Http.Formatting.dll
+		Library\System.Web.Http.dll = Library\System.Web.Http.dll
+		Library\System.Web.Http.WebHost.dll = Library\System.Web.Http.WebHost.dll
+		Library\System.Web.Mvc.dll = Library\System.Web.Mvc.dll
+		Library\System.Web.Optimization.dll = Library\System.Web.Optimization.dll
+		Library\System.Web.WebPages.Razor.dll = Library\System.Web.WebPages.Razor.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShineYatraAdmin.Repository", "ShineYatraAdmin.Repository\ShineYatraAdmin.Repository.csproj", "{9C110049-C5D6-445B-B4F1-858330C0811C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShineYatraAdmin.Business", "ShineYatraAdmin.Business\ShineYatraAdmin.Business.csproj", "{A1FB36B3-1EBA-4B4C-8AA7-2F5297BC1D7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{662E97C6-6C38-4DEA-9D88-CC8C4637473E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{662E97C6-6C38-4DEA-9D88-CC8C4637473E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{662E97C6-6C38-4DEA-9D88-CC8C4637473E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{662E97C6-6C38-4DEA-9D88-CC8C4637473E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{620C02B6-1149-4F44-B0F5-FBDFC8DFE2CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{620C02B6-1149-4F44-B0F5-FBDFC8DFE2CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{620C02B6-1149-4F44-B0F5-FBDFC8DFE2CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{620C02B6-1149-4F44-B0F5-FBDFC8DFE2CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C110049-C5D6-445B-B4F1-858330C0811C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C110049-C5D6-445B-B4F1-858330C0811C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C110049-C5D6-445B-B4F1-858330C0811C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C110049-C5D6-445B-B4F1-858330C0811C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1FB36B3-1EBA-4B4C-8AA7-2F5297BC1D7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1FB36B3-1EBA-4B4C-8AA7-2F5297BC1D7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1FB36B3-1EBA-4B4C-8AA7-2F5297BC1D7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1FB36B3-1EBA-4B4C-8AA7-2F5297BC1D7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

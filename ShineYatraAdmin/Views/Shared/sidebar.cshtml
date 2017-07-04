@@ -1,0 +1,121 @@
+﻿@using ShineYatraAdmin.Properties;
+<!-- Left navbar-header -->
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+        <ul class="nav" id="side-menu">
+            <li class="sidebar-search hidden-sm hidden-md hidden-lg">
+                <!-- input-group -->
+                <div class="input-group custom-search-form">
+                    <input class="form-control" placeholder="@Resources.Search" type="text"> <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
+                    </span>
+                </div>
+                <!-- /input-group -->
+            </li>
+            <li>
+                <a href="index.html" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu"> Dashboard <span class="fa arrow"></span> </span></a>
+                <ul class="nav nav-second-level collapse" aria-expanded="true">
+                    <li> <a href="index.html">Basic</a> </li>
+                    <li> <a href="index2.html">Pending Approvals</a> </li>
+                </ul>
+            </li>
+            <li>
+                <a href="inbox.html" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Commission Structure<span class="fa arrow"></span></span></a>
+                <ul class="nav nav-second-level collapse">
+                    
+                    <li>
+                        <a href="javascript:void(0)" class="waves-effect">Commission Groups<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Flight">@Resources.FlightGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Hotel">@Resources.HotelGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Bus">@Resources.BUSGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Recharge">Recharge</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Bill">Bill Services</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Cab">CAB</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="inbox.html" class="waves-effect"><i data-icon="" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">@Resources.Administration<span class="fa arrow"></span></span></a>
+
+                <ul class="nav nav-second-level collapse">
+                    <li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>
+                    <li><a data-preloader="preloader" href="@Url.Action("wl_primary_users", "User")">@Resources.ManageWhiteLabelUser</a></li>
+                    <li> <a href="index.php?mod=wl_users">Manage Users</a></li>
+
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="#" class="waves-effect"><i data-icon="/" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Travel<span class="fa arrow"></span></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a data-preloader="preloader" href="@Url.Action("GetFlightMenu", "Flight", new { menu = Resources.FlightBooking })">@Resources.FlightBooking</a>
+                    </li>
+                    <li><a data-preloader="preloader" href="@Url.Action("GetHotelMenu", "Hotel", new { menu = Resources.HotelBooking })">Hotels Search</a></li>
+                    <li> <a href="contact-detail.html">Bus Booking</a></li>
+                    <li>
+                        <a href="javascript:void(0)" class="waves-effect">Reports<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a href="javascript:void(0)">Flight Booking </a> </li>
+                            <li> <a href="javascript:void(0)">Hotel Booking</a> </li>
+                            <li> <a href="javascript:void(0)">Bus Booking</a> </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="forms.html" class="waves-effect"><i data-icon="" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Recharge<span class="fa arrow"></span></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li> <a href="contact.html">PostPaid</a></li>
+                    <li> <a href="contact2.html">PrePaid</a></li>
+                    <li> <a href="contact-detail.html">DTH</a></li>
+                    <li>
+                        <a href="javascript:void(0)" class="waves-effect">Reports<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a href="javascript:void(0)">Recharge Details</a> </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="tables.html" class="waves-effect"><i data-icon="O" class="linea-icon linea-software fa-fw"></i> <span class="hide-menu">Bill Payments<span class="fa arrow"></span></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li> <a href="contact.html">Water</a></li>
+                    <li> <a href="contact2.html">Electricity</a></li>
+                    <li> <a href="contact-detail.html">LandLine</a></li>
+                    <li> <a href="contact-detail.html">Insurance Premium</a></li>
+                    <li> <a href="contact-detail.html">Credit Card</a></li>
+                    <li> <a href="contact-detail.html">GAS</a></li>
+                    <li>
+                        <a href="javascript:void(0)" class="waves-effect">Reports<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a href="javascript:void(0)">Bill Payment Details</a> </li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="waves-effect"><i data-icon="" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Reports<span class="fa arrow"></span></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="starter-page.html">Report-1</a></li>
+                    <li><a href="blank.html">Report-2</a></li>
+                    <li class="active">
+                        <a href="javascript:void(0)" class="waves-effect">Report Section-1<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse in">
+                            <li> <a href="" class="active">Report-1</a></li>
+                            <li> <a href="" class="active">Report-2</a></li>
+                            <li> <a href="" class="active">Report-3</a></li>
+                            <li> <a href="" class="active">Report-4</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

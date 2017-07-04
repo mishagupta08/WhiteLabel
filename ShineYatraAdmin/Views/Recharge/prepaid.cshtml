@@ -1,0 +1,61 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.RechargeRequest
+
+@{
+    ViewBag.Title = "Prepaid";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+
+<form class="form-horizontal form-material" id="searchHotelForm" onsubmit="return SubmitHotelSearch();">
+    <div class="form-body">
+        <div class="form-group">
+            <label class="control-label col-md-3">Destination</label>
+            <div class="col-md-9">
+                @Html.TextBoxFor(m => m.HotelRequestDetail.HotelCityName, new { @required = "", @id = "hotelCity", @class = "form-control", @placeholder = "Destination" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-3">Check In</label>
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.HotelRequestDetail.Start, new { @id = "start", @required = "", @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-3">Check Out</label>
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.HotelRequestDetail.End, new { @id = "end", @required = "", @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*<label class="control-label col-md-1">Rooms</label>
+                <div class="col-md-1">
+                    @Html.DropDownListFor(m => m.HotelRequestDetail., new SelectList(Model.RoomsList, "Id", "Value"), new { @required = "0", id = "modeDropDown", @class = "form-control" })
+                </div>*@
+
+            <label class="control-label col-md-1">Adult</label>
+            <div class="col-md-1">
+                @Html.TextBoxFor(m => m.HotelRequestDetail.GuestDetails.Adults, new { @value = "0", @type = "number", @id = "ChildPax", @class = "form-control", @min = "0" })
+            </div>
+
+            <label class="control-label col-md-1">Childers</label>
+            <div class="col-md-1">
+                @Html.TextBoxFor(m => m.HotelRequestDetail.GuestDetails.Child, new { @value = "0", @type = "number", @id = "infant", @class = "form-control", @min = "0" })
+            </div>
+        </div>
+        <span id="hoteSearchHotel"></span>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-9">
+                <button type="submit" class="btn btn-success"> <i class="fa"></i> Search Hotel</button>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+
+
