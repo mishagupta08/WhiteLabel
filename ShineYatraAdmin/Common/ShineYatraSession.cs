@@ -38,6 +38,11 @@
         public static int PageIndex { get; set; }
 
         /// <summary>
+        /// gets or sets Company_id
+        /// </summary>
+        public static CompanyTheme companytheme { get; set; }
+
+        /// <summary>
         /// gets or sets company list
         /// </summary>
         public static IList<Company> TempCompanyList { get; set; }

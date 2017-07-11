@@ -10,6 +10,8 @@
     using System.Configuration;
     using System.Web.Security;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     #endregion namespace
 
@@ -39,10 +41,17 @@
         LoginManager loginManager = new LoginManager();
 
         // GET: Login
-        public ActionResult Index(string returnUrl)
+        public async Task<ActionResult> Index(string returnUrl)
         {
             try
             {
+                ThemeManager theme = new ThemeManager();
+                string domain = Request.Url.Authority;
+                domain = "nbfcp.bisplindia.in";
+                List<CompanyTheme> ltheme = await theme.GetCompanyTheme(domain);
+
+                ShineYatraSession.companytheme = (from r in ltheme select r).FirstOrDefault();
+
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
                     ViewBag.returnUrl = returnUrl;
@@ -83,7 +92,7 @@
                 loginManager = new LoginManager();
 
                 loginDetail.action = LoginAction;
-                loginDetail.domain_name = Request.Url.Authority;
+                loginDetail.domain_name = "nbfcp.bisplindia.in";
 
                 var result = await loginManager.ValidateUser(loginDetail);
 

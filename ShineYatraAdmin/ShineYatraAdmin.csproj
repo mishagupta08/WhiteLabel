@@ -607,6 +607,7 @@
     <Content Include="Views\Recharge\prepaid.cshtml" />
     <Content Include="Views\Flight\BookingResponse.cshtml" />
     <Content Include="Views\Flight\CancelFlight.cshtml" />
+    <Content Include="Views\Login\elite_login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
