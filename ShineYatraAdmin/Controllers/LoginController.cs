@@ -92,7 +92,7 @@
                 loginManager = new LoginManager();
 
                 loginDetail.action = LoginAction;
-                loginDetail.domain_name = "nbfcp.bisplindia.in";
+                loginDetail.domain_name = Request.Url.Authority;
 
                 var result = await loginManager.ValidateUser(loginDetail);
 

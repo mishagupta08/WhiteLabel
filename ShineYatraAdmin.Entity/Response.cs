@@ -112,7 +112,12 @@
         /// gets or sets list of sub categories
         /// </summary>
         public IList<SubCategory> GET_SERVICE_SUB_CATEGORY_LIST { get; set; }
-        
+
+        /// <summary>
+        /// gets or sets white label theme for domain
+        /// </summary>
+        public List<CompanyTheme> GET_DOMAININFO { get; set; }
+
 
     }
 }

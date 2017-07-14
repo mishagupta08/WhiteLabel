@@ -15,3 +15,17 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+/WhiteLabel/ShineYatraAdmin/bin
+/WhiteLabel/ShineYatraAdmin.Business/bin
+/WhiteLabel/ShineYatraAdmin.Entity/bin
+/WhiteLabel/ShineYatraAdmin.Repository/bin
+/WhiteLabel/ShineYatraAdmin/obj/Debug
+/WhiteLabel/ShineYatraAdmin.Business/obj
+/WhiteLabel/ShineYatraAdmin.Entity/obj
+/WhiteLabel/ShineYatraAdmin.Repository/obj
+/WhiteLabel/ShineYatraAdmin/obj/Release/Package/PackageTmp/bin
+/WhiteLabel/ShineYatraAdmin/obj/Release
+/WhiteLabel/.vs/ShineYatraAdmin/v14/.suo
+/WhiteLabel/.vs/config/applicationhost.config
+

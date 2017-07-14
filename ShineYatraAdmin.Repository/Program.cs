@@ -205,6 +205,23 @@
         }
 
         /// <summary>
+        /// method to update primay setting margin for airline bus and hotel
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<List<CompanyTheme>> GetWhitLabelTheme(string domain)
+        {            
+            string data = "{\"action\":\"GET_DOMAININFO\",\"domain_name\":\""+domain+"\"}";
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS == SUCCESS && response.GET_DOMAININFO != null)
+            {
+                return response.GET_DOMAININFO;
+            }           
+            return null;
+        }
+        
+
+        /// <summary>
         /// get list of subservices for a service
         /// </summary>
         /// <param name="serviceId"></param>
