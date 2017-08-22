@@ -1,4 +1,0 @@
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\bin\Release\ShineYatraAdmin.Entity.dll
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\bin\Release\ShineYatraAdmin.Entity.pdb
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\obj\Release\ShineYatraAdmin.Entity.dll
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Entity\obj\Release\ShineYatraAdmin.Entity.pdb

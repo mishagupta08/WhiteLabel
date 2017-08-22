@@ -1,9 +1,0 @@
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\bin\Release\ShineYatraAdmin.Repository.exe.config
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\bin\Release\ShineYatraAdmin.Repository.exe
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\bin\Release\ShineYatraAdmin.Repository.pdb
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\bin\Release\Newtonsoft.Json.dll
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\bin\Release\ShineYatraAdmin.Entity.dll
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\bin\Release\ShineYatraAdmin.Entity.pdb
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\obj\Release\ShineYatraAdmin.Repository.csprojResolveAssemblyReference.cache
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\obj\Release\ShineYatraAdmin.Repository.exe
-E:\Workarea\dttravelportal\ShineYatraAdmin\ShineYatraAdmin.Repository\obj\Release\ShineYatraAdmin.Repository.pdb
