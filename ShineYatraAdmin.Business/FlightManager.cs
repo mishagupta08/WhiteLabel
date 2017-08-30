@@ -58,14 +58,7 @@ namespace ShineYatraAdmin.Business
 
             try
             {
-                flightsDetail = await Program.FlightPricing(search);
-                ///searchResponse = "&lt;?xml version =\"1.0\" encoding=\"utf-16\"?&gt;&lt;ArrayOfFlightsDetail xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"&gt;&lt;FlightsDetail&gt;&lt;Id&gt;arzoo11&lt;/Id&gt;&lt;ArrivalAirportCode&gt;DEL&lt;/ArrivalAirportCode&gt;&lt;ArrivalDateTime&gt;2017-05-20T18:10:00&lt;/ArrivalDateTime&gt;&lt;DepartureAirportCode&gt;BOM&lt;/DepartureAirportCode&gt;&lt;DepartureDateTime&gt;2017-05-20T16:00:00&lt;/DepartureDateTime&gt;&lt;FlightNumber&gt;687&lt;/FlightNumber&gt;&lt;OperatingAirlineCode&gt;AI&lt;/OperatingAirlineCode&gt;&lt;StopQuantity&gt;0&lt;/StopQuantity&gt;&lt;ImageFileName&gt;http://live.arzoo.com/FlightWS/image/AirIndia.gif&lt;/ImageFileName&gt;&lt;Availability&gt;9&lt;/Availability&gt;&lt;AirLineName&gt;Air India&lt;/AirLineName&gt;&lt;IsReturnFlight&gt;false&lt;/IsReturnFlight&gt;&lt;BookingClassFare&gt;&lt;adultFare&gt;3400&lt;/adultFare&gt;&lt;bookingclass&gt;T&lt;/bookingclass&gt;&lt;classType&gt;Economy&lt;/classType&gt;&lt;farebasiscode&gt;euK6vFaDvVLgq1HQxhtqJg==&lt;/farebasiscode&gt;&lt;Rule&gt;This fare is Non Refundable &amp;lt;br&amp;gt; Baggage : 25K&amp;lt;br&amp;gt;Booking Class : T|Re-Schedule Charges: Rs. 750 per sector + Fare difference (If any) +admin fee 500 + Service Fee of Rs. 250  Sector .|Cancellation Charges : Basic fare +Airline administration fee 500  + Service Charges 250 Per Passenger Per Sector . |&lt;/Rule&gt;&lt;adultCommission&gt;0&lt;/adultCommission&gt;&lt;childCommission&gt;0&lt;/childCommission&gt;&lt;commissionOnTCharge&gt;0&lt;/commissionOnTCharge&gt;&lt;/BookingClassFare&gt;&lt;/FlightsDetail&gt; &lt;/ArrayOfFlightsDetail&gt;";
-                //searchResponse = HttpUtility.HtmlDecode(searchResponse);
-                //var serializer = new XmlSerializer(typeof(ArrayOfFlightsDetail));
-                //using (TextReader reader = new StringReader(searchResponse))
-                //{
-                //    flightsDetail = (ArrayOfFlightsDetail)serializer.Deserialize(reader);
-                //}
+                flightsDetail = await Program.FlightPricing(search);                
             }
             catch (Exception ex)
             {
@@ -111,6 +104,22 @@ namespace ShineYatraAdmin.Business
             return bookresponse;
         }
 
+        public async Task<List<INSERT_SERVICE_BOOKING_REQUEST>> InsertServiceBookingRequest(BookingDetail bookticket)
+        {
+            List<INSERT_SERVICE_BOOKING_REQUEST> response = null;
+            try
+            {
+                response = await Program.InsertServiceBookingRequest(bookticket);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        
+
         /// <summary>
         /// function to cALL book ticket api
         /// </summary>
@@ -130,6 +139,9 @@ namespace ShineYatraAdmin.Business
             }
             return bookresponse;
         }
+
+        
+
 
     }
 }

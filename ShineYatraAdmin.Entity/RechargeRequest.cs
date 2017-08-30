@@ -41,7 +41,44 @@
         public string account { get; set; }
 
         [XmlElement(ElementName = "amount")]
-        public string amount { get; set; }
+        public float amount { get; set; }       
+    }
+
+    public class RechargeViewModel {   
+        public float walletBalance { get; set; }     
+        public string rechargeType { get; set; }
+        public string status { get; set; }
+    }
+
+    public class ValidateTransaction
+    {
+        public string ipay_errorcode { get; set; }
+        public string ipay_errordesc { get; set; }
+        public string particulars { get; set; }
+
+    }
+
+    public class WalletBalance
+    {
+        public float Wallet { get; set; }
+    }
+
+    public class TransactionStatus
+    {
+        public string ipay_id { get; set; }
+        public string agent_id { get; set; }
+        public string opr_id { get; set; }
+        public string account_no { get; set; }
+        public string sp_key { get; set; }
+        public float trans_amt { get; set; }
+        public float charged_amt { get; set; }
+        public float opening_bal { get; set; }
+        public string req_dt { get; set; }
+        public string status { get; set; }
+        public string res_code { get; set; }
+        public string res_msg { get; set; }
+        public string ipay_errorcode { get; set; }
+        public string ipay_errordesc { get; set; }       
     }
 
     /// <summary>
@@ -73,5 +110,22 @@
         /// gets or sets margin
         /// </summary>
         public string margin { get; set; }
+    }
+
+    public class RechargeDetails
+    {
+
+        public string action { get; set; }
+        public int  member_id { get; set; }
+        public string service_provider { get; set; }
+        public string request_token { get; set; }
+        public string account_no { get; set; }
+        public float amount { get; set; }
+
+    }
+
+    public class RechargeDBTxnResponse
+    {
+        public int txn_id { get; set; }
     }
 }

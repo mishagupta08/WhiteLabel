@@ -65,36 +65,18 @@
             {
                 if (string.IsNullOrEmpty(menu))
                 {
-                    if (ShineYatraSession.SelectedMenu == null)
-                    {
-                        return null;
-                    }
-
-                    menu = ShineYatraSession.SelectedMenu;
-                }
-
-                if (ShineYatraSession.LoginUser == null)
-                {
-                    return null;
-                }
+                        return null;                    
+                }                
 
                 if (ShineYatraSession.HotelCityList == null || ShineYatraSession.HotelCityList.Count == 0)
                 {
                     flightManager = new FlightManager();
                     ShineYatraSession.HotelCityList = await flightManager.GetFlightCityList(false);
                 }
-
-                ShineYatraSession.SelectedMenu = menu;
-
+                
                 hotelModel.SelectedMenu = menu;
                 hotelModel.HotelRequestDetail = new HotelRequest();
-                hotelModel.AssignRooms();
-                //if (ShineYatraSession.FlightCityList == null || ShineYatraSession.FlightCityList.Count == 0)
-                //{
-                //    ShineYatraSession.FlightCityList = await flightManager.GetFlightCityList("");
-                //}
-
-                //flightModel.FlightCityList = ShineYatraSession.FlightCityList;
+                hotelModel.AssignRooms();                
 
             }
             catch (Exception e)
@@ -319,7 +301,7 @@
                             request.FirstName = bookingModel.ProvisionalBookingDetail.GuestInformation.FirstName;
                             request.TransactionAmount = "1.0";
                             request.Email = bookingModel.ProvisionalBookingDetail.GuestInformation.Email;
-                            request.Phone = bookingModel.ProvisionalBookingDetail.GuestInformation.PhoneNumber.ToString();
+                            request.Phone = bookingModel.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Number;
                             request.ProductInfo = "Booking Hotel " + ShineYatraSession.HotelRequest.hotelid + ": " + ShineYatraSession.SelectedHotel.Hoteldetail.Hotelname + " For Name : " + request.FirstName;
                             request.surl = "http://" + Request.Url.Authority + "/PayU/Return";
                             request.furl = "http://" + Request.Url.Authority + "/PayU/Return";

@@ -4,8 +4,7 @@
 @{
     ViewBag.Title = "Default Recharge Structure";
     Layout = "~/Views/Shared/Layout.cshtml";
-    var list = new List<ShineYatraAdmin.Entity.CompanyCommissionGroup>();
-}
+    var list = new List<ShineYatraAdmin.Entity.CompanyCommissionGroup>();  }
 
 <div class="row">
     <div class="col-md-12">
@@ -68,7 +67,7 @@
                                                     }
                                                 </td>
                                                 <td class="text-nowrap">
-                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','@t.back_discount_per','@t.service_id','@t.sub_service_id')">
+                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','prepaid_margin_@t.sub_service_id','@t.service_id','@t.sub_service_id')">
                                                         <i class="fa fa-pencil text-inverse m-r-10"></i>
                                                     </a>
                                                     &nbsp;
@@ -118,7 +117,7 @@
                                                         <div class="label label-table label-danger">@t.active_status</div> }
                                                 </td>
                                                 <td class="text-nowrap">
-                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','@t.back_discount_per','@t.service_id','@t.sub_service_id')">
+                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','postpaid_margin_@t.sub_service_id','@t.service_id','@t.sub_service_id')">
                                                         <i class="fa fa-pencil text-inverse m-r-10"></i>
                                                     </a>
                                                     &nbsp;
@@ -169,7 +168,7 @@
                                                     }
                                                 </td>
                                                 <td class="text-nowrap">
-                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','@t.back_discount_per','@t.service_id','@t.sub_service_id')">
+                                                    <a href="#edit-primary-margin" data-toggle="tooltip" data-original-title="Edit" class="popup-with-form" onclick="geteditrechargemarginpopup('@t.sub_service_name','dth_margin_@t.sub_service_id','@t.service_id','@t.sub_service_id')">
                                                         <i class="fa fa-pencil text-inverse m-r-10"></i>
                                                     </a>
                                                     &nbsp;
@@ -210,13 +209,13 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="hidden" name="member_id" id="member_id" value="@ShineYatraSession.LoginUser.member_id">
+                                    <input type="hidden" name="member_id" id="member_id" value="@Model.memberid">
                                     <input type="hidden" name="sub_service_id"  id="sub_service_id">
                                     <input type="hidden" id="service_id" name="service_id" value="">
                                     <input id="valuespan" type="hidden" value="">
                                     <label class="control-label col-md-3">Margin % </label>
                                     <div class="col-md-9">
-                                        <input class="form-control" step="any" type="number" required="required" name="back_discount_per" id="back_discount_per">
+                                        <input class="form-control" step="any" type="number" min="0" max="100" required="required" name="back_discount_per" id="back_discount_per">
                                     </div>
                                 </div>
 

@@ -45,7 +45,7 @@
 </head>
 <body>
 
-    @if (ShineYatraSession.companytheme.theme_name.ToLower() == "elite")
+    @if (Convert.ToString(Session["CompanyTheme"]).ToLower() == "elite")
     {
         Html.RenderPartial("~/Views/Login/elite_login.cshtml", Model);
     }

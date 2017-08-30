@@ -19,27 +19,7 @@ namespace ShineYatraAdmin.Controllers
         Service serviceModel;
         UserViewModel userViewModel;
 
-        /// <summary>
-        /// hold page size.
-        /// </summary>
-        private static int PAGESIZE = Convert.ToInt32(Resources.PageSize);
-
-        /// <summary>
-        /// hold page show count
-        /// </summary>
-        private static int PAGESHOWCOUNT = Convert.ToInt32(Resources.PageSize);
-
-        /// <summary>
-        /// Constant for ascending order
-        /// </summary>
-        public const string Asc = "Asc";
-
-        /// <summary>
-        /// Constant for Descending order
-        /// </summary>
-        public const string Desc = "Desc";
-
-
+       
         /// <summary>
         /// GET: User list for company
         /// </summary>
@@ -49,17 +29,8 @@ namespace ShineYatraAdmin.Controllers
             userViewModel = new UserViewModel();           
             try
             {
-                /******Paging setting start*****/
-                userViewModel.PageSlot = ShineYatraSession.PageIndex / PAGESIZE;
-                if (ShineYatraSession.PageIndex % PAGESIZE != 0)
-                {
-                    userViewModel.PageSlot++;
-                }
-                userViewModel.AssignSearchList();
-                /******Paging setting end*****/
-                await GetCompanyListByPageIndex(1);
-                //userViewModel.userDetailList  = await userManager.GetCompanyUserList("");
-
+                userViewModel.AssignSearchList();                     
+                userViewModel.userDetailList  = await userManager.GetCompanyUserList("");
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.InnerException);
@@ -99,7 +70,7 @@ namespace ShineYatraAdmin.Controllers
                 userViewModel.services = await this.companyManager.GetCompanyServices("");
                 userList = await this.userManager.GetCompanyUserList(member_id);
                 userViewModel.userDetail = (from r in userList select r).FirstOrDefault();               
-                userViewModel.membergroups = await this.userManager.GetUserAllottedGroups(member_id, company_id);                
+                userViewModel.membergroups = await this.userManager.GetUserAllottedGroups(member_id, company_id,"","","");                
             }
             catch (Exception ex)
             {
@@ -144,7 +115,9 @@ namespace ShineYatraAdmin.Controllers
                 if (!string.IsNullOrEmpty(currentGroupId))
                 {
                     userViewModel.commissionstucture = await this.companyManager.GetCompanyCommissionStructure(currentGroupId, service_id, subSection);
-                    userViewModel.membergroups = await this.userManager.GetUserAllottedGroups(member_id, company_id);
+                    userViewModel.membergroups = await this.userManager.GetUserAllottedGroups(member_id, company_id,"","","");
+                    userViewModel.category = sectionName;
+                    userViewModel.sub_category = subSection;
                 }
             }
             catch (Exception ex) {
@@ -210,12 +183,33 @@ namespace ShineYatraAdmin.Controllers
         /// </summary>      
         /// <returns></returns>
         public async Task<ActionResult> EditCompanyPriceGroup(int price_group_id, int service_id)
-        {
+        {            
             try
             {
                 string member_id = Session["member_id"].ToString();                
                 int company_id = int.Parse(!String.IsNullOrEmpty(Session["company_id"].ToString())? Session["company_id"].ToString():"0");
-                var result = await this.companyManager.EditCompanyServiceGroup(company_id, price_group_id, service_id, member_id);
+                string cat = ShineYatraAdmin.Common.Common.getServiceNamebyId(Convert.ToString(service_id));
+                string subSection = string.Empty;
+                if (!string.IsNullOrEmpty(cat))
+                {
+                    if (cat.ToLower().Trim() == "flight")
+                    {
+                        subSection = "domestic";
+                    }
+                    else if (cat.ToLower().Trim() == "hotel")
+                    {
+                        subSection = "hotels";
+                    }
+                    else if (cat.ToLower().Trim() == "bus")
+                    {
+                        subSection = "bus";
+                    }
+                    else if (cat.ToLower().Trim() == "recharge")
+                    {
+                        subSection = "prepaid";
+                    }
+                }
+                var result = await this.companyManager.EditCompanyServiceGroup(company_id, price_group_id, service_id, member_id,cat, subSection);
                 if (result == null)
                 {
                     return Json(string.Empty);
@@ -229,133 +223,11 @@ namespace ShineYatraAdmin.Controllers
             return Json(string.Empty);
         }
 
-        /// <summary>
-        /// Method to get record by page index for all views
-        /// </summary>
-        /// <param name="pageIndex"></param>
-        /// <param name="View"></param>
-        /// <returns></returns>
-        public async Task<ActionResult> GetRecordsByPageIndex(int pageIndex, string View, int paging_count, int RecordCount)
-        {
-            userViewModel = new UserViewModel();
-            userViewModel.CurrentPageIndex = pageIndex;
-            userViewModel.PagingCount = paging_count;
-            userViewModel.RecordCount = RecordCount;
-            ShineYatraSession.PageIndex = pageIndex;
+      
 
-            if (View != null && View == Resources.ManageCompanies)
-            {
-                await GetCompanyListByPageIndex(pageIndex);
-                return PartialView("UserList", userViewModel);
-            }
+        
 
-            return null;
-        }
-
-        /// <summary>
-        /// Method to get company list
-        /// </summary>
-        /// <returns></returns>
-        private async Task GetCompanyListByPageIndex(int pageIndex)
-        {
-            userViewModel.CurrentPageIndex = pageIndex;
-            ShineYatraSession.PageIndex = pageIndex;
-            if (ShineYatraSession.TempUSerList == null)
-            {
-                ShineYatraSession.TempUSerList = await userManager.GetCompanyUserList("");
-            }
-
-            if (string.IsNullOrEmpty(ShineYatraSession.SortCoulmn))
-            {
-                ShineYatraSession.SortCoulmn = "company_id";
-                ShineYatraSession.SortOrder = Asc;
-            }
-
-            if (ShineYatraSession.TempUSerList != null && ShineYatraSession.SortCoulmn != null)
-            {
-                var sortExpression = ShineYatraSession.SortCoulmn + " " + ShineYatraSession.SortOrder;
-                var companyList = ShineYatraSession.TempUSerList.OrderBy(sortExpression);
-                if (companyList != null)
-                {
-                    ShineYatraSession.TempUSerList = companyList.ToList();
-                }
-                if (ShineYatraSession.TempUSerList != null)
-                {
-                    CalculatePageCount(userViewModel, ShineYatraSession.TempUSerList.Count);
-                }
-                var list = await Task.Run(() => ShineYatraSession.TempUSerList.Skip((pageIndex - 1) * PAGESIZE).Take(PAGESIZE));
-                if (list != null)
-                {
-                    userViewModel.userDetailList = list.ToList();
-                    userViewModel.FromPage = (PAGESIZE * (pageIndex - 1)) + 1;
-                    userViewModel.ToPage = userViewModel.FromPage + list.Count() - 1;
-                }
-            }
-        }
-
-        /// <summary>
-        /// method to calculate page size
-        /// </summary>
-        /// <param name="listData"></param>
-        /// <returns></returns>
-        public void CalculatePageCount(UserViewModel listData, int recordCount)
-        {
-            listData.RecordCount = recordCount;
-            if (recordCount == 0)
-            {
-                listData.PagingCount = 0;
-            }
-            else
-            {
-                listData.PagingCount = recordCount / PAGESIZE;
-                if (recordCount % PAGESIZE > 0)
-                {
-                    listData.PagingCount = listData.PagingCount + 1;
-                }
-            }
-        }
-
-        /// <summary>
-        /// method to search company list
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ActionResult> SearchUserList(UserViewModel searchParameter)
-        {
-            userViewModel = new UserViewModel();
-            userViewModel.userDetailList = await userManager.GetCompanyUserList("");
-            userViewModel.AssignSearchList();
-            userViewModel.SearchListParameter = searchParameter.SearchListParameter;
-            if (userViewModel.userDetailList != null && userViewModel.userDetailList.Count > 0)
-            {
-                if (!string.IsNullOrEmpty(userViewModel.SearchListParameter.CompanyName))
-                {
-                    var companyName = userViewModel.SearchListParameter.CompanyName.ToLower();
-                    var list = userViewModel.userDetailList.Where(c => c.company_name != null && c.company_name.ToLower().Contains(companyName));
-                    if (list != null)
-                    {
-                        userViewModel.userDetailList = list.ToList();
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(userViewModel.SearchListParameter.Status) && !userViewModel.SearchListParameter.Status.Equals("All"))
-                {
-                    var list = userViewModel.userDetailList.Where(c => c.active_status != null && c.active_status.Contains(userViewModel.SearchListParameter.Status));
-                    if (list != null)
-                    {
-                        userViewModel.userDetailList = list.ToList();
-                    }
-                }
-            }
-
-            ShineYatraSession.TempUSerList = userViewModel.userDetailList;
-            await GetCompanyListByPageIndex(1);
-            if (ShineYatraSession.TempCompanyList != null)
-            {
-                CalculatePageCount(userViewModel, ShineYatraSession.TempCompanyList.Count);
-            }
-
-            return PartialView("UserList", userViewModel);
-        }
+        
 
         public ActionResult FundRequest()
         {            

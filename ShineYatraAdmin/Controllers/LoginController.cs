@@ -43,21 +43,19 @@
         // GET: Login
         public async Task<ActionResult> Index(string returnUrl)
         {
+            ThemeManager theme = new ThemeManager();
+            string domain = Request.Url.Authority;
             try
             {
-                ThemeManager theme = new ThemeManager();
-                string domain = Request.Url.Authority;
                 domain = "nbfcp.bisplindia.in";
                 List<CompanyTheme> ltheme = await theme.GetCompanyTheme(domain);
-
-                ShineYatraSession.companytheme = (from r in ltheme select r).FirstOrDefault();
-
+                Session["CompanyTheme"] = (from r in ltheme select r.theme_name).FirstOrDefault();
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
                     ViewBag.returnUrl = returnUrl;
                 }
 
-                if (Request.IsAuthenticated && ShineYatraSession.LoginUser != null)
+                if (Request.IsAuthenticated)
                 {
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -92,7 +90,7 @@
                 loginManager = new LoginManager();
 
                 loginDetail.action = LoginAction;
-                loginDetail.domain_name = Request.Url.Authority;
+                loginDetail.domain_name = ConfigurationManager.AppSettings["DomainName"];
 
                 var result = await loginManager.ValidateUser(loginDetail);
 
@@ -101,9 +99,13 @@
                     return Json(Resources.LoginError);
                 }
 
-                ShineYatraSession.LoginUser = result;
-                FormsAuthentication.SetAuthCookie(ShineYatraSession.LoginUser.first_name, false);
-                ShineYatraSession.SelectedMenu = null;
+                //Session["LogInFirstName"] = result.first_name;
+                //Session["LogInLastName"] = result.last_name;
+                //Session["LogInMemberId"] = result.member_id;
+                //Session["LogInCompanyId"] = result.company_id;
+
+                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id + "|" + result.first_name + " " + result.last_name;
+                FormsAuthentication.SetAuthCookie(userIdentity, false);
             }
             catch (Exception ex)
             {

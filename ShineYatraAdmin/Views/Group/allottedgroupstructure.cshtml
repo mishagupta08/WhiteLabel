@@ -1,15 +1,6 @@
 ﻿@model ShineYatraAdmin.Entity.GroupModel
 
 
-<!-- Magnific popup JavaScript -->
-<script src="~/plugins/bower_components/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
-<script src="~/plugins/bower_components/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
-
-
-<!-- Sweet-Alert  -->
-<script src="~/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
-<script src="~/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js"></script>
-
 <table class="table table-bordered table-responsive color-bordered-table info-table">
     <thead>
         <tr>
@@ -24,16 +15,13 @@
             {
                 <th>Logo</th>
                 <th>Service Provider</th>
-                <th>Service Type</th>
+                <th>Service Type</th>                
                 <th>Self</th>
-                <th>Distribution</th>
 
             }
             else
             {
-                <th colspan="2">Self</th>
-                <th colspan="2">Distribution</th>
-                <th class="text-nowrap">Action</th>
+                <th colspan="2">Self</th>               
             }
             
         </tr>
@@ -46,13 +34,11 @@
             }
             
             @if(Model.service_id != "4")
-            {
-            <th>%</th>
-            <th>Amt</th>
+            {           
 
             <th>%</th>
             <th>Amt</th>
-            <th>&nbsp;</th>
+           
             }
 
 
@@ -87,19 +73,12 @@
 }
 else
 {
-                    <td><input type="hidden" name="row_id" value="@t.row_id"><input type="hidden" name="sub_service_id" value="@t.sub_service_id">
-                    <input type="hidden" name="front_discount_per" value="@t.back_discount_per"><span class="row_value_@t.sub_service_id" name="front_discount_per">@t.back_discount_per</span></td>
-                    <td><input type="hidden" name="front_discount_amount" value="@t.back_discount_amount"><span class="row_value_@t.sub_service_id" name="front_discount_amount">@t.back_discount_amount</span></td>
+                    @*<td><input type="hidden" name="row_id" value="@t.row_id"><input type="hidden" name="sub_service_id" value="@t.sub_service_id">
+                    <input type="hidden" name="front_discount_per" value="@t.front_discount_per"><span class="row_value_@t.sub_service_id" name="front_discount_per">@t.front_discount_per</span></td>*@
+                    @*<td><input type="hidden" name="front_discount_amount" value="@t.front_discount_amount"><span class="row_value_@t.sub_service_id" name="front_discount_amount">@t.front_discount_amount</span></td>*@
                     <td><input type="hidden" name="back_discount_per" value="@t.distb_back_discount_per"><span class="row_value_@t.sub_service_id" name="back_discount_per">@t.distb_back_discount_per</span></td>
                     <td><input type="hidden" name="back_discount_amount" value="@t.distb_back_discount_amount"><span class="row_value_@t.sub_service_id" name="back_discount_amount">@t.distb_back_discount_amount</span></td>
-                    <td class="text-nowrap">
-                        <a href="#edit-group" data-toggle="tooltip" onclick="getRowEditform('@t.sub_service_id')" data-original-title="Edit" class="popup-with-form">
-                            <i class="fa fa-pencil text-inverse m-r-10"></i>
-                        </a>
-                        <a href="#" data-toggle="tooltip" data-original-title="Close">
-                            <i class="fa fa-close text-danger sa-disable"></i>
-                        </a>
-                    </td>
+                    
 }
                    
                 </tr>

@@ -48,7 +48,7 @@
 function geteditrechargemarginpopup(servicetype, margin, serviceid, sub_service_id)
 {    
     $("#edit-primary-margin").find("span[id='serviceProvider']").html(servicetype);
-    $("#edit-primary-margin").find("input[id='back_discount_per']").val(margin);
+    $("#edit-primary-margin").find("input[id='back_discount_per']").val($("#"+margin).val());
     $("#edit-primary-margin").find("input[id='service_id']").val(serviceid);
     $("#edit-primary-margin").find("input[id='sub_service_id']").val(sub_service_id);
 }

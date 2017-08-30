@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/ShineYatraAdmin/bin
+/ShineYatraAdmin.Business/bin
+/ShineYatraAdmin.Entity/bin
+/ShineYatraAdmin.Repository/bin
+/ShineYatraAdmin/obj/Debug
+/ShineYatraAdmin.Business/obj
+/ShineYatraAdmin.Entity/obj
+/ShineYatraAdmin.Repository/obj
+/ShineYatraAdmin/obj/Release/Package/PackageTmp/bin
+/ShineYatraAdmin/obj/Release
+/.vs/ShineYatraAdmin/v14/.suo
+/.vs/config/applicationhost.config
+/ShineYatraAdmin/Controllers/DashboardController.cs

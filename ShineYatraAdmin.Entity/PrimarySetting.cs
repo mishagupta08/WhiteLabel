@@ -12,6 +12,7 @@ namespace ShineYatraAdmin.Entity
         public IList<CompanyCommissionGroup> structure { get; set; }
         public DefaultRechargeSetting defaultRechargeSetting { get; set; }
         public IList<SubCategory> bill_services { get; set; }
+        public string memberid { get; set; }
     }
 
     public class DefaultRechargeSetting

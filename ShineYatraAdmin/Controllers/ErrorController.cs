@@ -17,11 +17,8 @@ namespace ShineYatraAdmin.Controllers
 
         // GET: Error
         public ActionResult sessiontimeout()
-        {
-            ShineYatraSession.LoginUser = null;
-            ShineYatraSession.SelectedMenu = null;
+        {                       
             FormsAuthentication.SignOut();            
-
             return View();
         }
 

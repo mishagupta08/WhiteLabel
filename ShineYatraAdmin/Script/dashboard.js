@@ -31,55 +31,55 @@ function bindCompanyListLink() {
     });
 
     /*To set binding of page no. in paging*/
-    $("a[name=page]").unbind("click");
-    $("a[name=page]").bind("click", GetRecordsByPage);
+    //$("a[name=page]").unbind("click");
+    //$("a[name=page]").bind("click", GetRecordsByPage);
 
-    checkPreviousButton();
-    checkNextButton();
+    //checkPreviousButton();
+    //checkNextButton();
 
     /*For bind sorting sunctionality on column*/
-    $("th[role=columnheader]").unbind();
-    $("th[role=columnheader]").bind("click", SortList);
+    //$("th[role=columnheader]").unbind();
+    //$("th[role=columnheader]").bind("click", SortList);
 
-    var pageSlot = parseInt($("#pageSlot").val());
-    var pageIndex = parseInt($("#pageIndex").val());
+    //var pageSlot = parseInt($("#pageSlot").val());
+    //var pageIndex = parseInt($("#pageIndex").val());
 
-    if (pageSlot != 0) {
-        currentPageNumber = pageIndex;
-        currentPageSlot = pageSlot;
+    //if (pageSlot != 0) {
+    //    currentPageNumber = pageIndex;
+    //    currentPageSlot = pageSlot;
 
-        checkNextButton();
-        checkPreviousButton();
-    }
+    //    checkNextButton();
+    //    checkPreviousButton();
+    //}
 }
 
-function SortList() {
-    $(".preloader").show();
-    var columnName = $(this).attr("name");
-    var sortingOrder = "Asc";
-    var sortElement = $(this).find(".down-arrow");
-    if (sortElement.length == 0) {
-        sortingOrder = "Desc";
-    }
+//function SortList() {
+//    $(".preloader").show();
+//    var columnName = $(this).attr("name");
+//    var sortingOrder = "Asc";
+//    var sortElement = $(this).find(".down-arrow");
+//    if (sortElement.length == 0) {
+//        sortingOrder = "Desc";
+//    }
 
-    $.ajax({
-        url: 'GetSelectedMenu',
-        type: 'Post',
-        data: { menu: null, isRefresh: false, isBack: false, sortColumn: columnName, sortOrder: sortingOrder }
-    }).done(function (result) {
-        $(".preloader").hide();
-        AssignListView(result);
-        var element = $("th[name=" + columnName + "]");
+//    $.ajax({
+//        url: 'GetSelectedMenu',
+//        type: 'Post',
+//        data: { menu: null, isRefresh: false, isBack: false, sortColumn: columnName, sortOrder: sortingOrder }
+//    }).done(function (result) {
+//        $(".preloader").hide();
+//        AssignListView(result);
+//        var element = $("th[name=" + columnName + "]");
 
-        $('.up-arrow').remove();
-        if (sortingOrder == "Asc") {
-            element.append(sortArrow);
-        }
-        else {
-            element.append(sortDownArrow);
-        }        
-    });
-}
+//        $('.up-arrow').remove();
+//        if (sortingOrder == "Asc") {
+//            element.append(sortArrow);
+//        }
+//        else {
+//            element.append(sortDownArrow);
+//        }        
+//    });
+//}
 
 function SearchCompanyList() {
     $(".preloader").show();
@@ -245,172 +245,172 @@ function SaveAddFundDetail()
 
 /***Paging functions * Start***/
 
-function GetRecordsByPage(pageNumber, viewName) {
-    if ($(this).attr("data-page-index") != undefined) {
-        pageNumber = $(this).attr("data-page-index");
-        viewName = $(this).attr("data-view");
-        $(".pagination > li").removeClass('active');
-        $(this).parent('li').addClass('active');
-    }
-    var paging_count = parseInt($("#pagingCount").val());
-    var RecordCount = parseInt($("#RecordCount").val()); 
-    currentPageNumber = parseInt(pageNumber);
-    $.ajax({
-        url: 'GetRecordsByPageIndex',
-        type: 'Post',
-        data: { pageIndex: pageNumber, View: viewName, paging_count: paging_count, RecordCount: RecordCount }
-    }).done(function (result) {
-        $("#container").html("");
-        $("#container").html(result);
-        $(".pagination > li > a").attr("href", "#");
-        $("a[name=page]").unbind("click");
-        $("a[name=page]").bind("click", GetRecordsByPage);
+//function GetRecordsByPage(pageNumber, viewName) {
+//    if ($(this).attr("data-page-index") != undefined) {
+//        pageNumber = $(this).attr("data-page-index");
+//        viewName = $(this).attr("data-view");
+//        $(".pagination > li").removeClass('active');
+//        $(this).parent('li').addClass('active');
+//    }
+//    var paging_count = parseInt($("#pagingCount").val());
+//    var RecordCount = parseInt($("#RecordCount").val()); 
+//    currentPageNumber = parseInt(pageNumber);
+//    $.ajax({
+//        url: 'GetRecordsByPageIndex',
+//        type: 'Post',
+//        data: { pageIndex: pageNumber, View: viewName, paging_count: paging_count, RecordCount: RecordCount }
+//    }).done(function (result) {
+//        $("#container").html("");
+//        $("#container").html(result);
+//        $(".pagination > li > a").attr("href", "#");
+//        $("a[name=page]").unbind("click");
+//        $("a[name=page]").bind("click", GetRecordsByPage);
 
-        $("#fromPageIndex").html($("#fromPage").val());
-        $("#toPageIndex").html($("#toPage").val());
+//        $("#fromPageIndex").html($("#fromPage").val());
+//        $("#toPageIndex").html($("#toPage").val());
 
-        bindCompanyListLink();
-    });
+//        bindCompanyListLink();
+//    });
 
-    checkPreviousButton();
-    checkNextButton();
-}
+//    checkPreviousButton();
+//    checkNextButton();
+//}
 
-function checkPreviousButton() {
-    if (currentPageNumber == 1) {
-        $("#previous").parent('li').addClass('disabled');
-        $("#previous").unbind("click");
-    }
-    else {
-        $("#previous").parent('li').removeClass('disabled');
-        $("#previous").unbind("click");
-        $("#previous").bind("click", PreviousRecordsByPage);
-    }
+//function checkPreviousButton() {
+//    if (currentPageNumber == 1) {
+//        $("#previous").parent('li').addClass('disabled');
+//        $("#previous").unbind("click");
+//    }
+//    else {
+//        $("#previous").parent('li').removeClass('disabled');
+//        $("#previous").unbind("click");
+//        $("#previous").bind("click", PreviousRecordsByPage);
+//    }
 
-    if (currentPageSlot == 1) {
-        $("#previousPages").parent('li').addClass('disabled');
-        $("#previousPages").unbind("click");
-    }
-    else {
-        $("#previousPages").parent('li').removeClass('disabled');
-        $("#previousPages").unbind("click");
-        $("#previousPages").bind("click", GetPreviousPages);
-    }
-}
+//    if (currentPageSlot == 1) {
+//        $("#previousPages").parent('li').addClass('disabled');
+//        $("#previousPages").unbind("click");
+//    }
+//    else {
+//        $("#previousPages").parent('li').removeClass('disabled');
+//        $("#previousPages").unbind("click");
+//        $("#previousPages").bind("click", GetPreviousPages);
+//    }
+//}
 
-function checkNextButton() {
-    var total = parseInt($("#pagingCount").val());
-    if (currentPageNumber == total) {
-        $("#next").parent('li').addClass('disabled');
-        $("#next").unbind("click");
-    }
-    else {
-        $("#next").parent('li').removeClass('disabled');
-        $("#next").unbind("click");
-        $("#next").bind("click", NextRecordsByPage);
-    }
+//function checkNextButton() {
+//    var total = parseInt($("#pagingCount").val());
+//    if (currentPageNumber == total) {
+//        $("#next").parent('li').addClass('disabled');
+//        $("#next").unbind("click");
+//    }
+//    else {
+//        $("#next").parent('li').removeClass('disabled');
+//        $("#next").unbind("click");
+//        $("#next").bind("click", NextRecordsByPage);
+//    }
 
-    var totalPages = parseInt(total / 5);
-    if (total % 5) {
-        totalPages = totalPages + 1;
-    }
+//    var totalPages = parseInt(total / 5);
+//    if (total % 5) {
+//        totalPages = totalPages + 1;
+//    }
 
-    if (totalPages == 0 || totalPages == currentPageSlot) {
-        $("#nextPages").parent('li').addClass('disabled');
-        $("#nextPages").unbind("click");
-    }
-    else {
-        $("#nextPages").parent('li').removeClass('disabled');
-        $("#nextPages").unbind("click");
-        $("#nextPages").bind("click", GetNextPages);
-    }
+//    if (totalPages == 0 || totalPages == currentPageSlot) {
+//        $("#nextPages").parent('li').addClass('disabled');
+//        $("#nextPages").unbind("click");
+//    }
+//    else {
+//        $("#nextPages").parent('li').removeClass('disabled');
+//        $("#nextPages").unbind("click");
+//        $("#nextPages").bind("click", GetNextPages);
+//    }
 
-    return true;
-}
+//    return true;
+//}
 
-function GetPreviousPages() {
+//function GetPreviousPages() {
 
-    if (currentPageSlot == 1) {
-        return;
-    }
+//    if (currentPageSlot == 1) {
+//        return;
+//    }
 
-    var element = $("li[page-slot=" + currentPageSlot + "]");
-    for (var i = 0; i < element.length; i++) {
-        element[i].className = element[i].className.replace("db", "dn");
-    }
+//    var element = $("li[page-slot=" + currentPageSlot + "]");
+//    for (var i = 0; i < element.length; i++) {
+//        element[i].className = element[i].className.replace("db", "dn");
+//    }
 
-    currentPageSlot = currentPageSlot - 1;
-    currentPageNumber = currentPageSlot * 5;
-    var element = $("li[page-slot=" + currentPageSlot + "]");
-    for (var i = 0; i < element.length; i++) {
-        element[i].className = element[i].className.replace("dn", "db");
-    }
+//    currentPageSlot = currentPageSlot - 1;
+//    currentPageNumber = currentPageSlot * 5;
+//    var element = $("li[page-slot=" + currentPageSlot + "]");
+//    for (var i = 0; i < element.length; i++) {
+//        element[i].className = element[i].className.replace("dn", "db");
+//    }
 
-    checkPreviousButton();
-    checkNextButton();
-    PreviousSlotLastRecord();
-}
+//    checkPreviousButton();
+//    checkNextButton();
+//    PreviousSlotLastRecord();
+//}
 
-function GetNextPages() {
+//function GetNextPages() {
 
-    var total = parseInt($("#pagingCount").val());
-    if (currentPageSlot == total / 5) {
-        return;
-    }
+//    var total = parseInt($("#pagingCount").val());
+//    if (currentPageSlot == total / 5) {
+//        return;
+//    }
 
-    var element = $("li[page-slot=" + currentPageSlot + "]");
-    for (var i = 0; i < element.length; i++) {
-        element[i].className = element[i].className.replace("db", "dn")
-    }
+//    var element = $("li[page-slot=" + currentPageSlot + "]");
+//    for (var i = 0; i < element.length; i++) {
+//        element[i].className = element[i].className.replace("db", "dn")
+//    }
 
-    currentPageNumber = currentPageSlot * 5;
-    currentPageSlot = currentPageSlot + 1;
-    var element = $("li[page-slot=" + currentPageSlot + "]");
+//    currentPageNumber = currentPageSlot * 5;
+//    currentPageSlot = currentPageSlot + 1;
+//    var element = $("li[page-slot=" + currentPageSlot + "]");
 
-    for (var i = 0; i < element.length; i++) {
-        element[i].className = element[i].className.replace("dn", "db")
-    }
+//    for (var i = 0; i < element.length; i++) {
+//        element[i].className = element[i].className.replace("dn", "db")
+//    }
 
-    checkPreviousButton();
-    checkNextButton();
-    NextSlotFirstRecords();
-}
+//    checkPreviousButton();
+//    checkNextButton();
+//    NextSlotFirstRecords();
+//}
 
-function NextRecordsByPage() {
-    var element = $("li.active").next();
-    $(".pagination > li").removeClass('active');
-    element.addClass("active");
-    currentPageNumber = currentPageNumber + 1;
-    var viewName = $("#next").attr("data-view");
-    GetRecordsByPage(currentPageNumber, viewName);
-}
+//function NextRecordsByPage() {
+//    var element = $("li.active").next();
+//    $(".pagination > li").removeClass('active');
+//    element.addClass("active");
+//    currentPageNumber = currentPageNumber + 1;
+//    var viewName = $("#next").attr("data-view");
+//    GetRecordsByPage(currentPageNumber, viewName);
+//}
 
-function PreviousRecordsByPage() {
-    var preElement = $("li.active").prev();
-    $(".pagination > li").removeClass('active');
-    preElement.addClass("active");
+//function PreviousRecordsByPage() {
+//    var preElement = $("li.active").prev();
+//    $(".pagination > li").removeClass('active');
+//    preElement.addClass("active");
 
-    currentPageNumber = currentPageNumber - 1;
-    var viewName = $("#previous").attr("data-view");
-    GetRecordsByPage(currentPageNumber, viewName);
-}
+//    currentPageNumber = currentPageNumber - 1;
+//    var viewName = $("#previous").attr("data-view");
+//    GetRecordsByPage(currentPageNumber, viewName);
+//}
 
-function NextSlotFirstRecords() {
-    currentPageNumber = currentPageNumber + 1;
-    $(".pagination > li").removeClass('active');
-    var element = $("a[data-page-index=" + currentPageNumber + "]").parent();
-    element.addClass("active");
-    var viewName = $("#nextPages").attr("data-view");
-    GetRecordsByPage(currentPageNumber, viewName);
-}
+//function NextSlotFirstRecords() {
+//    currentPageNumber = currentPageNumber + 1;
+//    $(".pagination > li").removeClass('active');
+//    var element = $("a[data-page-index=" + currentPageNumber + "]").parent();
+//    element.addClass("active");
+//    var viewName = $("#nextPages").attr("data-view");
+//    GetRecordsByPage(currentPageNumber, viewName);
+//}
 
-function PreviousSlotLastRecord() {
-    var preElement = $("a[data-page-index=" + currentPageNumber + "]").parent();
-    $(".pagination > li").removeClass('active');
-    preElement.addClass("active");
-    var viewName = $("#previousPages").attr("data-view");
-    GetRecordsByPage(currentPageNumber, viewName);
-}
+//function PreviousSlotLastRecord() {
+//    var preElement = $("a[data-page-index=" + currentPageNumber + "]").parent();
+//    $(".pagination > li").removeClass('active');
+//    preElement.addClass("active");
+//    var viewName = $("#previousPages").attr("data-view");
+//    GetRecordsByPage(currentPageNumber, viewName);
+//}
 
 function SubmitCompanySetting(settingName) {
     $(".preloader").show();

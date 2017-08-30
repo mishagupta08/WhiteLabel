@@ -121,6 +121,16 @@ namespace ShineYatraAdmin.Entity
         /// <summary>
         /// get and set flight, bus and hotel group id for the member
         /// </summary>
-        public Member_Allotted_group membergroups { get; set; }
+        public IList<Member_Allotted_group> membergroups { get; set; }
+
+        public string category { get; set; }
+        public string sub_category { get; set; }
+    }
+
+    public class AllottedGroupViewModel
+    {
+        public Member_Allotted_group allottedGoup { get; set; }
+        public IList<CompanyCommissionGroup> commissionstucture { get; set; }
+        public string service_id { get; set; }
     }
 }

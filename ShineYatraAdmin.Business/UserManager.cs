@@ -24,10 +24,30 @@ namespace ShineYatraAdmin.Business
         /// </summary>
         /// <param name="memberId,companyId"></param>
         /// <returns></returns>
-        public async Task<Member_Allotted_group> GetUserAllottedGroups(string memberId, string companyId)
+        public async Task<IList<Member_Allotted_group>> GetUserAllottedGroups(string memberId, string companyId,string serviceid,string category,string sub_category)
         {
-            IList<Member_Allotted_group> List = await Program.GetMemberAllottedGroup(memberId, companyId);
-            return List.FirstOrDefault();
+            IList<Member_Allotted_group> List = await Program.GetMemberAllottedGroup(memberId, companyId,serviceid,category,sub_category);
+            return List;
+        }
+
+        /// <summary>
+        /// function to get usr wallet balance
+        /// </summary>
+        /// <param name="bookticket"></param>
+        /// <returns></returns>
+        public async Task<WalletResponse> GET_WALLET_BALANCE(WalletRequest request)
+        {
+            List<WalletResponse> response = null;
+            EticketDetails eticketDetail = new EticketDetails();
+            try
+            {
+                response = await Program.GET_WALLET_BALANCE(request);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response.FirstOrDefault();
         }
     }
 }

@@ -22,21 +22,24 @@
                             @foreach (var service in groups)
                             {
                                 string action = "";
+
+                                var group_id = (from r in Model.membergroups where r.sub_category.ToLower() == service.ToLower() || r.category.ToLower() == service.ToLower() select r.comp_group_id).FirstOrDefault();
+
                                 if (service.ToLower().IndexOf("flight") != -1)
                                 {
-                                    action = "getCommissionGroupDetails('" + Model.membergroups.flight_group_id + "','section-bar-" + count + "','flight')";
+                                    action = "getCommissionGroupDetails('" + group_id + "','section-bar-" + count + "','flight','domestic')";
                                 }
                                 else if (service.ToLower().IndexOf("bus") != -1)
                                 {
-                                    action = "getCommissionGroupDetails('" + Model.membergroups.bus_group_id + "', 'section-bar-" + count + "','bus')";
+                                    action = "getCommissionGroupDetails('" + group_id + "', 'section-bar-" + count + "','bus','bus')";
                                 }
                                 else if (service.ToLower().IndexOf("hotel") != -1)
                                 {
-                                    action = "getCommissionGroupDetails('" + Model.membergroups.hotel_group_id + "','section-bar-" + count + "','hotel')";
+                                    action = "getCommissionGroupDetails('" + group_id + "','section-bar-" + count + "','hotel','hotels')";
                                 }
                                 else if (service.ToLower().IndexOf("recharge") != -1)
                                 {
-                                   // action = "getCommissionGroupDetails('" + Model.membergroups. + "','section-bar-" + count + "','recharge')";
+                                    // action = "getCommissionGroupDetails('" + Model.membergroups. + "','section-bar-" + count + "','recharge')";
                                 }
                                 <li id="tab-@count" onclick="@action"><a href="#section-bar-@count"><span>@service</span></a></li>
                                 count = count + 1;
@@ -75,6 +78,7 @@
                                     <span style="color:red;" id="pricegroupError"></span>
                                     <input type="hidden" id="companyid" value="">
                                     <input type="hidden" id="serviceid" value="">
+                                    <input type="hidden" id="serviceName" value="">
                                 </div>
 
                             </div>

@@ -16,6 +16,7 @@ namespace ShineYatraAdmin.Controllers
         GroupManager groupManager = new GroupManager();
         ServiceManager serviceManager = new ServiceManager();
         CompanyManager companyManager = new CompanyManager();
+        UserManager userManager = new UserManager();
         GroupModel group;
         // GET: Group
         public async Task<ActionResult> Index(string category)
@@ -24,6 +25,7 @@ namespace ShineYatraAdmin.Controllers
             string sub_category = string.Empty;
             try
             {
+                string[] userData = User.Identity.Name.Split('|');
                 group.service_name = category;
                 group.service_id = Common.Common.getIdbyServiceName(category);
                 if (group.service_id == "1")
@@ -42,7 +44,7 @@ namespace ShineYatraAdmin.Controllers
                 {
                     group.sub_service_name = group.service_name;
                 }
-                group.service_group_list = await this.serviceManager.GetServiceGroupList(group.service_id, ShineYatraSession.LoginUser.member_id, ShineYatraSession.LoginUser.company_id, category, group.sub_service_name);
+                group.service_group_list = await this.serviceManager.GetServiceGroupList(group.service_id, userData[1], userData[2], category, group.sub_service_name);
             }
             catch (Exception ex)
             {
@@ -51,13 +53,71 @@ namespace ShineYatraAdmin.Controllers
             return View(group);
         }
 
+
+        public async Task<ActionResult> AllottedGroup(string category)
+        {
+            AllottedGroupViewModel viewModel = new AllottedGroupViewModel();
+            try
+            {                
+
+                viewModel.allottedGoup = await GetAllottedGroup(category,"");
+                viewModel.service_id = group.service_id;               
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return View(viewModel);
+        }
+
+        public async Task<Member_Allotted_group> GetAllottedGroup(string category,string sub_category)
+        {
+            group = new GroupModel();
+            Member_Allotted_group Servicegroup = new Member_Allotted_group();
+            try
+            {
+                group.service_name = category;
+                group.service_id = Common.Common.getIdbyServiceName(category);
+
+                if (string.IsNullOrEmpty(sub_category))
+                {
+
+                    if (group.service_id == "1")
+                    {
+                        group.sub_service_name = "DOMESTIC";
+                    }
+                    else if (group.service_id == "2")
+                    {
+                        group.sub_service_name = "Hotels";
+                    }
+                    else if (group.service_id == "4")
+                    {
+                        group.sub_service_name = "Prepaid";
+                    }
+                    else
+                    {
+                        group.sub_service_name = group.service_name;
+                    }
+                }
+                string[] userData = User.Identity.Name.Split('|');
+                var groups = await this.userManager.GetUserAllottedGroups(userData[1], userData[2], group.service_id,category, group.sub_service_name);
+                Servicegroup = groups.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return (Servicegroup);
+        }
+
         public async Task<ActionResult> Getgrouplist(string category,string subcategory)
         {
             string service_id = Common.Common.getIdbyServiceName(category);
             group = new GroupModel();             
             try
-            {               
-                group.service_group_list = await this.serviceManager.GetServiceGroupList(service_id, ShineYatraSession.LoginUser.member_id, ShineYatraSession.LoginUser.company_id, category, subcategory);
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                group.service_group_list = await this.serviceManager.GetServiceGroupList(service_id, userData[1], userData[2], category, subcategory);                
             }
             catch (Exception ex)
             {
@@ -75,24 +135,9 @@ namespace ShineYatraAdmin.Controllers
         {
             try {
 
-                newGroup.company_id = ShineYatraSession.LoginUser.company_id;
-                newGroup.member_id = ShineYatraSession.LoginUser.member_id;
-                //if (newGroup.service_id == "1")
-                //{
-                //    newGroup.sub_category = "DOMESTIC";
-                //}
-                //else if (newGroup.service_id == "2")
-                //{
-                //    newGroup.sub_category = "Hotels";
-                //}
-                //else if (newGroup.service_id == "4")
-                //{
-                //    newGroup.sub_category = "Prepaid";
-                //}
-                //else
-                //{
-                //    newGroup.sub_category = newGroup.category;
-                //}
+                string[] userData = User.Identity.Name.Split('|');
+                newGroup.company_id = userData[2];
+                newGroup.member_id = userData[1];
                 string result = await this.groupManager.AddNewGroup(newGroup);
                 return Json(result);
             }
@@ -102,11 +147,13 @@ namespace ShineYatraAdmin.Controllers
             return null;
         }
 
+        
+
         /// <summary>
         /// method to get structure
         /// </summary>      
         /// <returns></returns>
-        public async Task<ActionResult> getCommissionGroupDetails(string service_id,string currentGroupId,string sub_service)
+        public async Task<ActionResult> getCommissionGroupDetails(string service_id,string currentGroupId,string sub_service,string type)
         {
             group = new GroupModel();
             try
@@ -118,7 +165,14 @@ namespace ShineYatraAdmin.Controllers
             {
                 Console.WriteLine(ex.InnerException);
             }
-            return PartialView("groupstructure", group);
+            if (type.ToLower() == "custom")
+            {
+                return PartialView("groupstructure", group);
+            }
+            else
+            {
+                return PartialView("allottedgroupstructure", group);
+            }
         }
 
         /// <summary>
@@ -131,19 +185,8 @@ namespace ShineYatraAdmin.Controllers
             group = new GroupModel();
             try
             {
-                UpdatedRow.member_id = ShineYatraSession.LoginUser.member_id;
-                //if (UpdatedRow.service_id == 1)
-                //{
-                //    UpdatedRow.sub_category = "DOMESTIC";
-                //}
-                //else if (UpdatedRow.service_id == 2)
-                //{
-                //    UpdatedRow.sub_category = "Hotels";
-                //}
-                //else
-                //{
-                //    UpdatedRow.sub_category = UpdatedRow.category;
-                //}
+                string[] userData = User.Identity.Name.Split('|');
+                UpdatedRow.member_id = userData[1];
                 var result = await groupManager.UpdateGroupRow(UpdatedRow);
                 return Json(result);
             }

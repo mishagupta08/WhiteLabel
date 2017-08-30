@@ -19227,3 +19227,11 @@ a.fc-event:not([href]):not([tabindex]) {
         top: 47%;
         left: 47%;
     }
+
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+    background-color: #ffffff;
+}
+
+table.dataTable thead th, table.dataTable tfoot th {
+    font-weight: 500;
+}

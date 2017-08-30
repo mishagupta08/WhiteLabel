@@ -40,9 +40,7 @@
         public ActionResult LogOut()
         {
             try
-            {
-                ShineYatraSession.LoginUser = null;
-                ShineYatraSession.SelectedMenu = null;
+            {               
                 FormsAuthentication.SignOut();
             }
             catch (Exception ex) {

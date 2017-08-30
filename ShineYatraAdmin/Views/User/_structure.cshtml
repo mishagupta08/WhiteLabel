@@ -8,22 +8,23 @@
         <div align="right" style="float: right;">
             @if (service.service_id != 4)
             {
-                string currentgroup = "0";
+                int currentgroup = 0;
 
-                if (service.service_id == 1)
-                {
-                    currentgroup = Model.membergroups.flight_group_id;
-                }
-                else if (service.service_id == 2)
-                {
-                    currentgroup = Model.membergroups.hotel_group_id;
-                }
-                else if (service.service_id == 3)
-                {
-                    currentgroup = Model.membergroups.bus_group_id;
-                }
+                //if (service.service_id == 1)
+                //{
+                currentgroup =  (from r in Model.membergroups where r.service_id == service.service_id select r.comp_group_id).FirstOrDefault();
 
-                <button id="demo-btn-addrow" data-service-id="@service.service_id" onclick="getGrouplist('@service.service_id','@currentgroup')" class="btn btn-outline btn-rounded btn-info">
+                //}
+                //else if (service.service_id == 2)
+                //{
+                //    currentgroup = Model.membergroups.hotel_group_id;
+                //}
+                //else if (service.service_id == 3)
+                //{
+                //    currentgroup = Model.membergroups.bus_group_id;
+                //}
+
+                <button id="demo-btn-addrow" data-service-id="@service.service_id" onclick="getGrouplist('@service.service_id','@currentgroup','@Model.category')" class="btn btn-outline btn-rounded btn-info">
                     <i class="icon wb-plus" aria-hidden="true"></i>
                     Change Price Group
                 </button>

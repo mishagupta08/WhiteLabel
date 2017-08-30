@@ -1,22 +1,30 @@
 ﻿@model ShineYatraAdmin.Entity.CompanyViewModel
 @using ShineYatraAdmin.Properties
 
+<style>
+    table.dataTable thead .sorting, 
+table.dataTable thead .sorting_asc, 
+table.dataTable thead .sorting_desc {
+    background : none;
+}
+
+</style>
 
 <script src="~/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
 <script src="~/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js"></script>
 
 @if (Model.CompanyList != null && Model.CompanyList.Count > 0)
 {
-    <table class="table">
+    <table id="MyTable" class="display table" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th role="columnheader" name="company_id">System ID </th>
-                <th role="columnheader" name="company_logo">Logo</th>
-                <th role="columnheader" name="company_name">Company Name</th>
-                <th role="columnheader" name="company_website">Web Site</th>
-                <th role="columnheader" name="utility_domain">Utility Site</th>
-                <th role="columnheader" name="company_mobile">Contact No.</th>                
-                <th role="columnheader" name="active_status">Active</th>
+                <th  name="company_id">System ID </th>
+                <th  name="company_logo">Logo</th>
+                <th  name="company_name">Company Name</th>
+                <th  name="company_website">Web Site</th>
+                <th  name="utility_domain">Utility Site</th>
+                <th  name="company_mobile">Contact No.</th>                
+                <th  name="active_status">Active</th>
                 <th class="text-nowrap">Action</th>
             </tr>
         </thead>
@@ -63,77 +71,45 @@ else
     <div> No Company Found.</div>
 }
 
-@if (Model != null && Model.CompanyList != null && Model.CompanyList.Count() > 0)
-{
-    var pageSize = Convert.ToInt32(Resources.PageSize);
-    var pageShowCount = 1;
-    <nav aria-label="~.">
-        <ul class="pagination pull-left">
-            <p> Showing <span id="fromPageIndex">@Model.FromPage</span> to <span id="toPageIndex">@Model.ToPage</span> of @Model.RecordCount entries </p>
-        </ul>
-    </nav>
-
-                    <nav aria-label="~.">
-                        <ul class="pagination pull-right">
-                            <li class="page-item">
-                                <a class="page-link" id="previousPages" data-view='@Resources.ManageCompanies' tabindex="-1" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous Pages</span>
-                                </a>
-                            </li>
-                            @*<li class="page-item">
-                                    <a class="page-link" id="previous" data-view=@Resources.ClaimListView tabindex="-1" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>*@
-                            @for (var i = 1; i <= Model.PagingCount; i++)
-                            {
-                                var className = (@i == Model.CurrentPageIndex ? "active" : string.Empty);
-                                var displayClass = (@i <= pageSize ? "db" : "dn");
-
-                                /*******Code run in case of back or refresh*****/
-                                if (Model.PageSlot != 0)
-                                {
-                                    if (Model.PageSlot == pageShowCount)
-                                    {
-                                        displayClass = "db";
-                                    }
-                                    else
-                                    {
-                                        displayClass = "dn";
-                                    }
-                                }
-
-                                <li class="page-item @className @displayClass" page-slot="@pageShowCount">
-                                    <a class="page-link" name="page" data-view='@Resources.ManageCompanies' data-page-index=@i href="#">@i</a>
-                                </li>
-                                if (i % pageSize == 0)
-                                {
-                                    pageShowCount = pageShowCount + 1;
-                                }
-                            }
-
-                            @*<li class="page-item">
-                                    <a class="page-link" data-view=@Resources.ClaimListView id="next" aria-label="Next" href="#">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>*@
-                            <li class="page-item">
-                                <a class="page-link" id="nextPages" data-view='@Resources.ManageCompanies' aria-label="Next" href="#">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next Pages</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-}
-
-@Html.HiddenFor(m => m.PagingCount, new { @id = "pagingCount" })
-@Html.HiddenFor(m => m.PageSlot, new { @id = "pageSlot" })
-@Html.HiddenFor(m => m.CurrentPageIndex, new { @id = "pageIndex" })
-@Html.HiddenFor(m => m.RecordCount,new {@id= "RecordCount" })
 
 @********end pagination code************@
 
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#MyTable').DataTable({
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            //to select and search from grid  
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            },
+            "bLengthChange": false,
+            "language": {
+                "paginate": {
+                    "previous": "<<",
+                    "next": ">>"
+                }
+            },
+            "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [7] }
+            ],
+            stateSave: true
+        });
+    });
+
+</script>

@@ -72,6 +72,7 @@ namespace ShineYatraAdmin.Entity
         public float back_discount_amount { get; set; }        
         public float gap_discount_per { get; set; }
         public float gap_discount_amount { get; set; }
+        public float distribution_per { get; set; }
     }  
     
 }

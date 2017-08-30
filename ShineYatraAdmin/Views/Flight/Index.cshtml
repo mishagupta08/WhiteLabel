@@ -6,14 +6,8 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
-<div id="dashboardContent">
-    @if (Model != null)
-    {
-        if (Model.SelectedMenu == Resources.FlightBooking)
-        {
-            @Html.Partial("~/Views/Flight/FlightMenu/SearchFlight.cshtml", Model)
-        }
-    }
+<div id="dashboardContent">   
+    @Html.Partial("~/Views/Flight/FlightMenu/SearchFlight.cshtml", Model)        
 </div>
 
 

@@ -1,5 +1,5 @@
 ﻿
-function getGrouplist(service_id, currentGroupId)
+function getGrouplist(service_id, currentGroupId,serviceName)
 {
     $(".preloader").show();
 
@@ -24,6 +24,7 @@ function getGrouplist(service_id, currentGroupId)
         }
         $("#price_group_list").html(optionlist);       
         $("#serviceid").val(service_id);
+        $("#serviceName").val(serviceName);
 
         $("#change-group").addClass("white-popup-block");
         $("#openchangepopup").click();
@@ -47,6 +48,7 @@ function EditCompanyPriceGroup()
 
         var company_id = $("#companyid").val();
         var service_id = $("#serviceid").val();
+        var service_name = $("#serviceName").val();
         currentTab = $('.tablist .tab-current').attr("id");                       
        
         $.ajax({
@@ -61,8 +63,7 @@ function EditCompanyPriceGroup()
                     $(".mfp-close").click();
                 })
             }
-            else {
-                
+            else {                
                     swal({
                         title: "Success",
                         text: "Record Updated Successfully",
@@ -71,7 +72,7 @@ function EditCompanyPriceGroup()
                         $(".mfp-close").click();
                         var arr = currentTab.split("-");
                         $("#section-bar-" + arr[1]).addClass("content-current");
-                        getCommissionGroupDetails(price_group_id, "section-bar-" + arr[1])                        
+                        getCommissionGroupDetails(price_group_id, "section-bar-" + arr[1], service_name)
                     });                
             }           
             $(".mfp-close").click();

@@ -114,10 +114,23 @@
         public IList<SubCategory> GET_SERVICE_SUB_CATEGORY_LIST { get; set; }
 
         /// <summary>
+        /// gets or sets flight booking details to database
+        /// </summary>
+        public List<INSERT_SERVICE_BOOKING_REQUEST> INSERT_SERVICE_BOOKING_REQUEST { get; set; }
+
+        /// <summary>
+        /// gets or sets Recharge details to database
+        /// </summary>
+        public List<RechargeDBTxnResponse> INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY { get; set; }
+
+        /// <summary>
+        /// gets or sets company wallet balance
+        /// </summary>
+        public List<WalletResponse> GET_WALLET_BALANCE { get; set; }
+
+        /// <summary>
         /// gets or sets white label theme for domain
         /// </summary>
         public List<CompanyTheme> GET_DOMAININFO { get; set; }
-
-
     }
 }

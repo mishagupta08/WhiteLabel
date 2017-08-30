@@ -469,6 +469,7 @@
     <Content Include="Script\hotel.js" />
     <Content Include="Script\login.js" />
     <Content Include="Script\PrimarySetting.js" />
+    <Content Include="Script\recharge.js" />
     <Content Include="Script\shared.js" />
     <Content Include="Script\User.js" />
     <Content Include="Views\Company\Index.cshtml" />
@@ -607,7 +608,13 @@
     <Content Include="Views\Recharge\prepaid.cshtml" />
     <Content Include="Views\Flight\BookingResponse.cshtml" />
     <Content Include="Views\Flight\CancelFlight.cshtml" />
+    <Content Include="Views\Recharge\postpaid.cshtml" />
+    <Content Include="Views\Recharge\dth.cshtml" />
+    <Content Include="Views\PayU\Return.cshtml" />
+    <Content Include="Views\Recharge\Index.cshtml" />
     <Content Include="Views\Login\elite_login.cshtml" />
+    <Content Include="Views\Group\AllottedGroup.cshtml" />
+    <Content Include="Views\Group\allottedgroupstructure.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

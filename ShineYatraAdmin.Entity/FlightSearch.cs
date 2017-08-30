@@ -39,12 +39,18 @@ namespace ShineYatraAdmin.Entity
         public string Creditcardno { get; set; }
         [XmlElement(ElementName = "emailAddress")]
         public string EmailAddress { get; set; }
+        public string PaymentMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets trip mode
+        /// </summary>
+        public List<KeyValuePair> FlightClass { get; set; }
 
         /// <summary>
         /// Gets or sets trip mode
         /// </summary>
         public List<KeyValuePair> TripMode { get; set; }
-        
+        public float AdultFare { get; set; }
         /// <summary>
         /// Method to assign trip mode
         /// </summary>
@@ -64,6 +70,20 @@ namespace ShineYatraAdmin.Entity
                 Value = "Return"
             });
         }
+
+        /// <summary>
+        /// Method to assign Flight Class
+        /// </summary>
+        public void AssignFlightClass()
+        {
+            this.FlightClass = new List<KeyValuePair>();
+
+            this.FlightClass.Add(new KeyValuePair
+            {
+                Id = "E",
+                Value = "Economy"
+            });            
+        }
     }
 
     [XmlRoot(ElementName = "CustomerInfo")]
@@ -80,6 +100,10 @@ namespace ShineYatraAdmin.Entity
 
         [XmlElement(ElementName = "psgrtype")]
         public string psgrtype { get; set; }
+
+        [XmlElement(ElementName = "dob")]
+        public string dob { get; set; }
+
     }
 
     [XmlRoot(ElementName = "personName")]
@@ -154,14 +178,15 @@ namespace ShineYatraAdmin.Entity
 
     public class SearchPageViewModel
     {
+        public float walletBalance { get; set; }
         public ArrayOfFlightsDetail arrayOfSearchedFlights { get; set; }
         public Request flightSearch { get; set; }
         public Request FlightBookingDetail { get; set; }
         public FlightsDetail flightsDetail { get; set; }
         public List<KeyValuePair> NameReferenceList { get; set; }
-
+        public List<KeyValuePair> ChildNameReferenceList { get; set; }
         /// <summary>
-        /// Method to assign trip mode
+        /// Method to assign Name References
         /// </summary>
         public void AssignNameReference()
         {
@@ -184,19 +209,28 @@ namespace ShineYatraAdmin.Entity
                 Id = "Mrs.",
                 Value = "Mrs."
             });
+        }
 
-            this.NameReferenceList.Add(new KeyValuePair
+        /// <summary>
+        /// Method to assign Name References
+        /// </summary>
+        public void AssignChildNameReference()
+        {
+            this.ChildNameReferenceList = new List<KeyValuePair>();
+            
+            this.ChildNameReferenceList.Add(new KeyValuePair
             {
                 Id = "Mstr.",
                 Value = "Mstr."
             });
-            this.NameReferenceList.Add(new KeyValuePair
+            this.ChildNameReferenceList.Add(new KeyValuePair
             {
                 Id = "Miss.",
                 Value = "Miss."
             });
-        }        
         }
+
+    }
     [XmlRoot(ElementName = "Bookingresponse")]
     public class Bookingresponse
     {
@@ -212,6 +246,8 @@ namespace ShineYatraAdmin.Entity
         public string Xsi { get; set; }
         [XmlAttribute(AttributeName = "xsd", Namespace = "http://www.w3.org/2000/xmlns/")]
         public string Xsd { get; set; }
+
+        public string txn_id { get; set; }
     }
 
     [XmlRoot(ElementName = "EticketRequest")]
@@ -298,5 +334,56 @@ namespace ShineYatraAdmin.Entity
         [XmlAttribute(AttributeName = "xsd", Namespace = "http://www.w3.org/2000/xmlns/")]
         public string Xsd { get; set; }
     }
+
+    public class Passengers
+    {
+        public string passenger_category { get; set; }
+        public string dob {get; set; }
+        public string title { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public string extra_field_1 { get; set; }
+        public string extra_field_2 { get; set; }
+        public string extra_field_3 { get; set; }
+        public string extra_field_4 { get; set; }
+        public string extra_field_5 { get; set; }
+    }
+
+    public class BookingDetail
+    {
+        public string action { get; set; }
+        public string request_token { get; set; }
+        public int service_id { get; set; }
+        public string sub_service_id { get; set; }
+        public string trip_category { get; set; }
+        public string category { get; set; }
+        public string txn_type { get; set; }
+        public string member_id { get; set; }
+        public string travel_from { get; set; }
+        public string travel_to { get; set; }
+        public string travel_start_Date { get; set; }
+        public string travel_return_date { get; set; }
+        public string company_id { get; set; }
+        public string trip_mode { get; set; }
+        public string email { get; set; }
+        public string mobile_no { get; set; }
+        public int adult { get; set; }
+        public int child { get; set; }
+        public int infant { get; set; }
+        public float amount { get; set; }
+        public string status { get; set; }
+        public string deposit_mode { get; set; }
+        public string remarks { get; set; }
+        public string airline_code { get; set; }
+        public string trip_class { get; set; }
+        
+        public List<Passengers> bookflight { get; set; }
+    }
+
+    public class INSERT_SERVICE_BOOKING_REQUEST
+    {
+        public int txn_id { get; set; }
+        public string MSG { get; set; }
+}
 }
 

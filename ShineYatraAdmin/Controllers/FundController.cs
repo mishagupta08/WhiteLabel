@@ -21,8 +21,9 @@ namespace ShineYatraAdmin.Controllers
             try
             {
 
-                this.companyFund.member_id = ShineYatraSession.LoginUser.member_id;
-                this.companyFund.company_id = ShineYatraSession.LoginUser.company_id;
+                string[] userData = User.Identity.Name.Split('|');
+                this.companyFund.member_id = userData[1];
+                this.companyFund.company_id = userData[2];
                 this.companyFund.service_id = 0;
                 this.companyFund.cancel_request_id = 0;
                 this.companyFund.txn_type = "FUND";

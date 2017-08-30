@@ -48,6 +48,23 @@
         /// </summary>
         const string FlightAuthKey = "e969da44-91f8-4d51-b138-0ace0980d519";
 
+
+        /// <summary>
+        /// method to update primay setting margin for airline bus and hotel
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<List<CompanyTheme>> GetWhitLabelTheme(string domain)
+        {
+            string data = "{\"action\":\"GET_DOMAININFO\",\"domain_name\":\"" + domain + "\"}";
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS == SUCCESS && response.GET_DOMAININFO != null)
+            {
+                return response.GET_DOMAININFO;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Method to invoke api function
         /// </summary>
@@ -203,23 +220,6 @@
             }
             return null;
         }
-
-        /// <summary>
-        /// method to update primay setting margin for airline bus and hotel
-        /// </summary>
-        /// <param name="serviceId"></param>
-        /// <returns></returns>
-        public static async Task<List<CompanyTheme>> GetWhitLabelTheme(string domain)
-        {            
-            string data = "{\"action\":\"GET_DOMAININFO\",\"domain_name\":\""+domain+"\"}";
-            var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.GET_DOMAININFO != null)
-            {
-                return response.GET_DOMAININFO;
-            }           
-            return null;
-        }
-        
 
         /// <summary>
         /// get list of subservices for a service
@@ -457,9 +457,9 @@
         /// method to update commission structure group
         /// </summary>        
         /// <returns></returns>
-        public static async Task<string> EditCompanyServiceGroup(int company_id, int price_group_id, int service_id, string member_id)
+        public static async Task<string> EditCompanyServiceGroup(int company_id, int price_group_id, int service_id, string member_id,string category,string sub_category)
         {
-            string data = "{\"action\":\"UPDATE_ALLOTMENT_COMMISSION_GROUP\",\"company_id\": " + company_id + ",\"price_group_id\":" + price_group_id + ",\"service_id\": " + service_id + ",\"member_id\": " + member_id + "}";
+            string data = "{\"action\":\"UPDATE_ALLOTMENT_COMMISSION_GROUP\",\"company_id\": " + company_id + ",\"price_group_id\":" + price_group_id + ",\"service_id\": " + service_id + ",\"member_id\": " + member_id + ",\"category\": \"" + category + "\",\"sub_category\": \"" + sub_category + "\"}";            
             var response = await CallFunction(data);
             if (response != null && response.APISTATUS == SUCCESS)
             {
@@ -545,6 +545,10 @@
             {
                 return response.APISTATUS;
             }
+            else if (response != null)
+            {
+                return response.MSG;
+            }
             return null;
         }
         #endregion Service Group API
@@ -581,9 +585,24 @@
         /// Get Flight, bus and hotel commission groups alloted to member
         /// </summary>
         /// <returns></returns>
-        public static async Task<IList<Member_Allotted_group>> GetMemberAllottedGroup(string memberId, string companyId)
+        public static async Task<IList<Member_Allotted_group>> GetMemberAllottedGroup(string memberId, string companyId,string serviceid,string category,string sub_category)
         {
-            var data = "{\"action\":\"GET_MEMBER_ALLOTED_GROUPS\",\"member_id\":" + memberId + ",\"company_id\":" + companyId + "}";
+            var data = "{\"action\":\"GET_MEMBER_ALLOTED_GROUPS\",\"member_id\":" + memberId + ",\"company_id\":" + companyId ;
+            if (!string.IsNullOrEmpty(serviceid))
+            {
+                data = data + ",\"service_id\":" + serviceid ;
+            }
+            if (!string.IsNullOrEmpty(category))
+            {
+                data = data + ",\"category\":\"" + category + "\"";
+            }
+            if (!string.IsNullOrEmpty(sub_category))
+            {
+                data = data + ",\"sub_category\":\"" + sub_category + "\"";
+            }
+
+            data = data + "}";
+            
             var response = await CallFunction(data);
             if (response != null && response.GET_MEMBER_ALLOTED_GROUPS != null)
             {
@@ -882,6 +901,70 @@
             }
             return cancelResponse;
         }
+        
+        /// <summary>
+        /// method to save booking details to database
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<List<INSERT_SERVICE_BOOKING_REQUEST>> InsertServiceBookingRequest(BookingDetail bookticket)
+        {
+            string data = JsonConvert.SerializeObject(bookticket);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_BOOKING_REQUEST!=null)
+            {
+                return response.INSERT_SERVICE_BOOKING_REQUEST;
+            }
+            else if (response != null && response.INSERT_SERVICE_BOOKING_REQUEST != null)
+            {
+                return response.INSERT_SERVICE_BOOKING_REQUEST;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// method to get company wallet balance
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<List<WalletResponse>> GET_WALLET_BALANCE(WalletRequest request)
+        {
+            string data = JsonConvert.SerializeObject(request);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS == SUCCESS && response.GET_WALLET_BALANCE != null)
+            {
+                return response.GET_WALLET_BALANCE;
+            }
+            else if (response != null)
+            {
+                return null;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// method to save rehargee details to database
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<List<RechargeDBTxnResponse>> SaveRechargeRequest(RechargeDetails request)
+        {
+            string data = JsonConvert.SerializeObject(request);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY != null)
+            {
+                return response.INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY;
+            }
+            else if (response != null)
+            {
+                return null;
+            }
+            return null;
+        }
+
 
 
         #endregion  Flight API

@@ -106,14 +106,22 @@
         /// <summary>
         /// get and set allotted flight group
         /// </summary>
-        public string flight_group_id { get; set; }
+        public int service_id { get; set; }
         /// <summary>
         /// get and set allotted hotel group
         /// </summary>
-        public string hotel_group_id { get; set; }
+        public int comp_group_id { get; set; }
+
+        public string comp_group_name { get; set; }
         /// <summary>
         /// get and set allotted bus group
         /// </summary>
-        public string bus_group_id { get; set; }
+        public string category { get; set; }
+
+        /// <summary>
+        /// get and set allotted bus group
+        /// </summary>
+        public string sub_category { get; set; }
+       
     }
 }

@@ -19,3 +19,16 @@ function viewRule(divId)
 {
     $("#"+divId).toggle();
 }
+
+function displayReturn(type)
+{
+    //var type = $("#modeDropDown").val();
+    if (type == "ONE") {
+        $("#ReturnDateField").hide();
+        $("#returnDate").prop('required', false);
+    }
+    else {
+        $("#ReturnDateField").show();
+        $("#returnDate").prop('required', true);
+    }
+}

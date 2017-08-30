@@ -1,0 +1,90 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.RechargeViewModel
+
+@{
+    ViewBag.Title = "Recharge";
+    Layout = "~/Views/Shared/Layout.cshtml";
+    string RechargeType = Model.rechargeType;
+}
+
+<h3>@RechargeType Recharge</h3>
+
+<form class="form-horizontal form-material" id="RechargeForm" action="Recharge/Transaction" method="post" onsubmit="return doRecharge()">
+    <div class="form-body">
+        <div class="form-group">
+            <label class="control-label col-md-3">Mobile Number</label>
+            <div class="col-md-3">
+                @Html.TextBox("account", "", new { @required = "", @id = "MobileNumber", @class = "form-control", @placeholder = "Mobile" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-3">Operator</label>
+            <div class="col-md-3">
+                <select id="operator" name="spkey" onchange="setvalue()" required>
+                    <option value="0">Please Select</option>
+                </select>
+                <input type="hidden" id="ProviderName" name="ProviderName" value="" />
+                <input type="hidden" id="rechargeType" name="rechargeType" value="@Model.rechargeType" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-3">Amount</label>
+            <div class="col-md-3">
+                @Html.TextBox("amount", "10", new { @readonly = "", @id = "Amount", @required = "", @class = "form-control", @placeholder = "Amount" })
+            </div>
+        </div>
+
+        <div class="row">
+            <label>NOTE :- Your current wallet balance is :- @Model.walletBalance</label><br/>
+            <input type="hidden" name="walletBalance" value="@Model.walletBalance">
+            <label class="control-label col-md-3">Choose Payment Mode:</label>
+            <div class="col-md-3">
+                <label>@Html.RadioButton("PaymentMode", "wallet", new { @required = "required" })Wallet</label>
+                <label>@Html.RadioButton("PaymentMode", "bank", new { @required = "required" })Bank</label>
+             </div>              
+        </div>
+
+        <br />
+
+        @if (!string.IsNullOrEmpty(Model.status))
+        {
+            <div class="row">
+                <h4 style="color:red;"> @Model.status</h4>
+                </div>
+         }
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" class="btn btn-success"> <i class="fa"></i> Proceed to recharge</button>
+                    </div>
+                </div>
+
+            </div>
+</form>
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Script/recharge.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $(".preloader").show();
+        getServiceProviderList("@RechargeType");
+        if("@ViewBag.tansactionStatus"!="")
+        {
+            if ("@ViewBag.tansactionStatus" == "success") {
+                        ClearForm("RechargeForm");
+                        swal("Success", "Transaction Successfull", "success");
+                    }
+                    else {
+                        swal("Status", transaction_resut , "error");
+                    }
+        }
+    });
+
+</script>
+
+
+
+

@@ -24,7 +24,9 @@ namespace ShineYatraAdmin.Controllers
             primarySetting = new PrimarySetting();
             try
             {
-                primarySetting.structure = await this.primarySettingManager.GetPrimarySetting("1","");
+                string[] userData = User.Identity.Name.Split('|');
+                primarySetting.structure = await this.primarySettingManager.GetPrimarySetting("1", "");
+                primarySetting.memberid = userData[1];
             }
             catch (Exception ex)
             {
@@ -82,9 +84,11 @@ namespace ShineYatraAdmin.Controllers
             primarySetting = new PrimarySetting();
             try
             {
-                primarySetting.structure = await primarySettingManager.GetPrimarySetting("4","");
+                primarySetting.structure = await primarySettingManager.GetPrimarySetting("4", "");
                 primarySetting.bill_services = new List<SubCategory>();
                 primarySetting.defaultRechargeSetting = await primarySettingManager.GetRechargeDefaultSetting();
+                string[] userData = User.Identity.Name.Split('|');
+                primarySetting.memberid = userData[1];
             }
             catch (Exception ex)
             {

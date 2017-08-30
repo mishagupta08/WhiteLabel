@@ -6,11 +6,8 @@
 
     <div id="dashboardContent">
         @if (Model != null)
-        {
-            if (Model.SelectedMenu == Resources.ManageCompanies)
-            {
-                @Html.Partial("~/Views/Company/ManageCompany/companies.cshtml", Model)
-            }
+        {            
+                @Html.Partial("~/Views/Company/ManageCompany/companies.cshtml", Model)            
         }
     </div>
 

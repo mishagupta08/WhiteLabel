@@ -30,9 +30,9 @@
         /// </summary>
         /// <param name="company"></param>
         /// <returns></returns>
-        public async Task<string> EditCompanyServiceGroup(int company_id, int price_group_id, int service_id, string member_id)
+        public async Task<string> EditCompanyServiceGroup(int company_id, int price_group_id, int service_id, string member_id,string category,string sub_category)
         {
-            return await Program.EditCompanyServiceGroup(company_id, price_group_id, service_id, member_id);
+            return await Program.EditCompanyServiceGroup(company_id, price_group_id, service_id, member_id,category,sub_category);
         }
 
         /// <summary>

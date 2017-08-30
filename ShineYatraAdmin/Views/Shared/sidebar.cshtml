@@ -21,10 +21,21 @@
             </li>
             <li>
                 <a href="inbox.html" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Commission Structure<span class="fa arrow"></span></span></a>
-                <ul class="nav nav-second-level collapse">
-                    
+                <ul class="nav nav-second-level collapse">                    
                     <li>
-                        <a href="javascript:void(0)" class="waves-effect">Commission Groups<span class="fa arrow"></span></a>
+                        <a href="javascript:void(0)" class="waves-effect">Allotted Commission Group&nbsp;<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Flight">@Resources.FlightGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Hotel">@Resources.HotelGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Bus">@Resources.BUSGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Recharge">Recharge</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Bill">Bill Services</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Cab">CAB</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0)" class="waves-effect">Custom Commission Groups&nbsp;<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse">
                             <li> <a data-preloader="preloader" href="~/Group/Index?category=Flight">@Resources.FlightGroups</a> </li>
                             <li> <a data-preloader="preloader" href="~/Group/Index?category=Hotel">@Resources.HotelGroups</a> </li>
@@ -41,8 +52,7 @@
                 <a href="inbox.html" class="waves-effect"><i data-icon="" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">@Resources.Administration<span class="fa arrow"></span></span></a>
 
                 <ul class="nav nav-second-level collapse">
-                    <li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>
-                    <li><a data-preloader="preloader" href="@Url.Action("wl_primary_users", "User")">@Resources.ManageWhiteLabelUser</a></li>
+                    <li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>                    
                     <li> <a href="index.php?mod=wl_users">Manage Users</a></li>
 
                 </ul>
@@ -70,9 +80,9 @@
             <li>
                 <a href="forms.html" class="waves-effect"><i data-icon="" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Recharge<span class="fa arrow"></span></span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li> <a href="contact.html">PostPaid</a></li>
-                    <li> <a href="contact2.html">PrePaid</a></li>
-                    <li> <a href="contact-detail.html">DTH</a></li>
+                    <li> <a href="@Url.Action("Index", "Recharge",new {type="Prepaid"})">Prepaid</a></li>
+                    <li> <a href="@Url.Action("Index", "Recharge",new {type="Postpaid"})">PostPaid</a></li>                    
+                    <li> <a href="@Url.Action("Index", "Recharge",new {type="DTH"})">DTH</a></li>
                     <li>
                         <a href="javascript:void(0)" class="waves-effect">Reports<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse">

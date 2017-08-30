@@ -14,8 +14,7 @@
                     <div style="float: right;">
                         <div class="form-group" style="float: left;">
                             <label>Service Groups </label>
-                            <select class="form-control" id="bill_service" onchange="changeBillService()">
-                                <option value="">--Please Select--</option>
+                            <select class="form-control" id="bill_service" onchange="changeBillService()">                                
                                 @foreach (var service in Model.bill_services)
                                 {
                                     <option value="@service.sub_category">@service.sub_category</option>
@@ -33,7 +32,12 @@
     </div>
 </div>
 
-
-
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/Script/PrimarySetting.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".preloader").show();
+        changeBillService();
+    });
+</script>

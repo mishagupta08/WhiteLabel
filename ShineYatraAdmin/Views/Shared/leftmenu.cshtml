@@ -11,7 +11,15 @@
         <!-- /input-group -->
     </li>
     <li class="nav-small-cap m-t-10">--- Master Settings </li>
-   
+    <li>
+        <a href="index" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu"> Primary Settings <span class="fa arrow"></span></span></a>
+        <ul class="nav nav-second-level">
+            <li> <a data-preloader="preloader" href="@Url.Action("master_airline_structure", "PrimarySetting")">@Resources.AirlinesStructure</a> </li>
+            <li> <a data-preloader="preloader" href="@Url.Action("master_recharge_structure", "PrimarySetting")">@Resources.RechargeStructure</a> </li>
+            <li> <a data-preloader="preloader" href="@Url.Action("master_bus_structure", "PrimarySetting")">@Resources.BusStructure</a> </li>
+            <li> <a data-preloader="preloader" href="@Url.Action("master_hotel_structure", "PrimarySetting")">@Resources.HotelStructure</a> </li>
+        </ul>
+    </li>
     <li>
         <a href="javascript:void(0);" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu">@Resources.ManageGroups<span class="fa arrow"></span></span></a>
         <ul class="nav nav-second-level">

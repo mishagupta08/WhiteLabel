@@ -34,33 +34,14 @@
         /// <summary>
         /// object for access Company functions
         /// </summary>
-        CompanyViewModel companyViewModel;
-
-        /// <summary>
-        /// Constant for ascending order
-        /// </summary>
-        public const string Asc = "Asc";
-
-        /// <summary>
-        /// Constant for Descending order
-        /// </summary>
-        public const string Desc = "Desc";
+        CompanyViewModel companyViewModel;        
 
         /// <summary>
         /// constant for active status
         /// </summary>
         private const string Active = "Y";
 
-        /// <summary>
-        /// hold page size.
-        /// </summary>
-        private static int PAGESIZE = Convert.ToInt32(Resources.PageSize);
-
-        /// <summary>
-        /// hold page show count
-        /// </summary>
-        private static int PAGESHOWCOUNT = Convert.ToInt32(Resources.PageSize);
-
+        
         /// <summary>
         /// method to get selected menu
         /// </summary>
@@ -72,65 +53,14 @@
             try
 
             {
-                companyViewModel.LoginUserName = ShineYatraSession.LoginUser.first_name;
-                ShineYatraSession.SortCoulmn = sortColumn;
-                ShineYatraSession.SortOrder = sortOrder;
-                if (string.IsNullOrEmpty(menu))
-                {
-                    if (ShineYatraSession.SelectedMenu == null)
-                    {
-                        return null;
-                    }
+                    //companyViewModel.LoginUserName = Convert.ToString(Session["LogInFirstName"]);
+                
 
-                    menu = ShineYatraSession.SelectedMenu;
-                }
-
-                if (ShineYatraSession.LoginUser == null)
-                {
-                    return null;
-                }
-
-                this.companyViewModel.SelectedMenu = menu;
-                ShineYatraSession.SelectedMenu = menu;
-
-                /******Paging setting start*****/
-                var loadPageIndex = isRefresh || isBack ? ShineYatraSession.PageIndex : 1;
-                if (isRefresh || isBack)
-                {
-                    companyViewModel.PageSlot = ShineYatraSession.PageIndex / PAGESIZE;
-                    if (ShineYatraSession.PageIndex % PAGESIZE != 0)
-                    {
-                        companyViewModel.PageSlot++;
-                    }
-                }
-                else
-                {
-                    companyViewModel.PageSlot = 0;
-                }
-
-                /******Paging setting end*****/
-
-                if (menu == Resources.ManageCompanies)
-                {
-                    ShineYatraSession.TempCompanyList = null;
-                    this.companyViewModel.SelectedMenu = menu;
+                    this.companyViewModel.SelectedMenu = menu;                                                                 
                     this.companyViewModel.SearchListParameter = new SearchParameter();
                     this.companyViewModel.AssignSearchList();
-                    await GetCompanyListByPageIndex(loadPageIndex);
-
-                    if (ShineYatraSession.TempCompanyList != null)
-                    {
-                        CalculatePageCount(companyViewModel, ShineYatraSession.TempCompanyList.Count);
-                    }
-                }
-
-                if (sortColumn != null && sortOrder != null)
-                {
-                    if (companyViewModel.SelectedMenu == Resources.ManageCompanies)
-                    {
-                        return PartialView("ManageCompany\\companies", this.companyViewModel);
-                    }
-                }
+                    string[] userData = User.Identity.Name.Split('|');
+                    this.companyViewModel.CompanyList = await this.companyManager.GetCompany(userData[1], string.Empty);
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.InnerException);
@@ -149,118 +79,14 @@
 
             try
             {
-                this.companyViewModel.CurrentPageIndex = pageIndex;
-                ShineYatraSession.PageIndex = pageIndex;
-                if (ShineYatraSession.TempCompanyList == null)
-                {
-                    ShineYatraSession.TempCompanyList = await this.companyManager.GetCompany(ShineYatraSession.LoginUser.member_id, string.Empty);
-                }
-
-                if (string.IsNullOrEmpty(ShineYatraSession.SortCoulmn))
-                {
-                    ShineYatraSession.SortCoulmn = "company_id";
-                    ShineYatraSession.SortOrder = Asc;
-                }
-
-                if (ShineYatraSession.TempCompanyList != null && ShineYatraSession.SortCoulmn != null)
-                {
-                    var sortExpression = ShineYatraSession.SortCoulmn + " " + ShineYatraSession.SortOrder;
-                    var companyList = ShineYatraSession.TempCompanyList.OrderBy(sortExpression);
-                    if (companyList != null)
-                    {
-                        ShineYatraSession.TempCompanyList = companyList.ToList();
-                    }
-
-                    var list = await Task.Run(() => ShineYatraSession.TempCompanyList.Skip((pageIndex - 1) * PAGESIZE).Take(PAGESIZE));
-                    if (list != null)
-                    {
-                        this.companyViewModel.CompanyList = list.ToList();
-                        this.companyViewModel.FromPage = (PAGESIZE * (pageIndex - 1)) + 1;
-                        this.companyViewModel.ToPage = this.companyViewModel.FromPage + list.Count() - 1;
-                    }
-                }
+                string[] userData = User.Identity.Name.Split('|');
+                this.companyViewModel.CompanyList = await this.companyManager.GetCompany(userData[1], string.Empty);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
             }
-        }
-
-        /// <summary>
-        /// method to calculate page size
-        /// </summary>
-        /// <param name="listData"></param>
-        /// <returns></returns>
-        public void CalculatePageCount(CompanyViewModel listData, int recordCount)
-        {
-            try
-            {
-                listData.RecordCount = recordCount;
-                if (recordCount == 0)
-                {
-                    listData.PagingCount = 0;
-                }
-                else
-                {
-                    listData.PagingCount = recordCount / PAGESIZE;
-                    if (recordCount % PAGESIZE > 0)
-                    {
-                        listData.PagingCount = listData.PagingCount + 1;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
-}
-
-        /// <summary>
-        /// method to search company list
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ActionResult> SearchCompanyList(CompanyViewModel searchParameter)
-        {
-            this.companyViewModel = new CompanyViewModel();
-            try { 
-            this.companyViewModel.CompanyList = await this.companyManager.GetCompany(ShineYatraSession.LoginUser.member_id, string.Empty);
-            this.companyViewModel.AssignSearchList();
-            this.companyViewModel.SearchListParameter = searchParameter.SearchListParameter;
-            if (this.companyViewModel.CompanyList != null && this.companyViewModel.CompanyList.Count > 0)
-            {
-                if (!string.IsNullOrEmpty(this.companyViewModel.SearchListParameter.CompanyName))
-                {
-                    var companyName = this.companyViewModel.SearchListParameter.CompanyName.ToLower();
-                    var list = this.companyViewModel.CompanyList.Where(c => c.company_name != null && c.company_name.ToLower().Contains(companyName));
-                    if (list != null)
-                    {
-                        this.companyViewModel.CompanyList = list.ToList();
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(this.companyViewModel.SearchListParameter.Status) && !this.companyViewModel.SearchListParameter.Status.Equals("All"))
-                {
-                    var list = this.companyViewModel.CompanyList.Where(c => c.active_status != null && c.active_status.Contains(this.companyViewModel.SearchListParameter.Status));
-                    if (list != null)
-                    {
-                        this.companyViewModel.CompanyList = list.ToList();
-                    }
-                }
-            }
-
-            ShineYatraSession.TempCompanyList = this.companyViewModel.CompanyList;
-            await GetCompanyListByPageIndex(1);
-            if (ShineYatraSession.TempCompanyList != null)
-            {
-                CalculatePageCount(this.companyViewModel, ShineYatraSession.TempCompanyList.Count);
-            }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
-            return PartialView("ManageCompany\\companies", this.companyViewModel);
-        }
+        }    
 
         /// <summary>
         /// method to get insert company view
@@ -274,10 +100,10 @@
             {
                 this.companyViewModel.AssignCountryList();
                 if (!string.IsNullOrEmpty(companyId) && !companyId.Equals("0"))
-
-                    this.companyViewModel.CompanyList = await this.companyManager.GetCompany(ShineYatraSession.LoginUser.member_id, companyId);
-
-
+                {
+                    string[] userData = User.Identity.Name.Split('|');
+                    this.companyViewModel.CompanyList = await this.companyManager.GetCompany(userData[1], companyId);
+                }
                 if (this.companyViewModel.CompanyList != null && this.companyViewModel.CompanyList.Count > 0)
                 {
                     this.companyViewModel.CompanyDetail = this.companyViewModel.CompanyList.FirstOrDefault();
@@ -308,6 +134,7 @@
         {
             try
             {
+                string[] userData = User.Identity.Name.Split('|');
                 if (companyDashboard == null || companyDashboard.CompanyDetail == null)
                 {
                     return Json(string.Empty);
@@ -317,17 +144,17 @@
                 if (companyDashboard.CompanyDetail.company_id == 0)
                 {
                     companyDashboard.CompanyDetail.action = "InsertCompany";
-                    companyDashboard.CompanyDetail.add_user_id = ShineYatraSession.LoginUser.member_id;
-                    companyDashboard.CompanyDetail.member_id = ShineYatraSession.LoginUser.member_id;
+                    companyDashboard.CompanyDetail.add_user_id = userData[1];
+                    companyDashboard.CompanyDetail.member_id = userData[1];
                 }
                 else
                 {
                     companyDashboard.CompanyDetail.action = "UpdateCompany";
-                    companyDashboard.CompanyDetail.update_user_id = ShineYatraSession.LoginUser.member_id;
+                    companyDashboard.CompanyDetail.update_user_id = userData[1];
                 }
 
                 companyDashboard.CompanyDetail.active_status = Active;
-                companyDashboard.CompanyDetail.member_id = ShineYatraSession.LoginUser.member_id;
+                companyDashboard.CompanyDetail.member_id = userData[1];
                 var result = await this.companyManager.AddEditCompany(companyDashboard.CompanyDetail);
 
                 if (result == null)
@@ -335,7 +162,7 @@
                     return Json(string.Empty);
                 }
                 return Json(result);
-            }            
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
@@ -402,35 +229,7 @@
             }
             return PartialView("ManageCompany\\companySetting", this.companyViewModel);
         }
-
-        /// <summary>
-        /// Method to get record by page index for all views
-        /// </summary>
-        /// <param name="pageIndex"></param>
-        /// <param name="View"></param>
-        /// <returns></returns>
-        public async Task<ActionResult> GetRecordsByPageIndex(int pageIndex, string View, int paging_count, int RecordCount)
-        {
-            try
-            {
-                this.companyViewModel = new CompanyViewModel();
-                this.companyViewModel.CurrentPageIndex = pageIndex;
-                this.companyViewModel.PagingCount = paging_count;
-                this.companyViewModel.RecordCount = RecordCount;
-                ShineYatraSession.PageIndex = pageIndex;
-
-                if (View != null && View == Resources.ManageCompanies)
-                {
-                    await GetCompanyListByPageIndex(pageIndex);
-                    return PartialView("ManageCompany\\companyList", this.companyViewModel);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
-            return null;
-        }
+        
 
         /// <summary>
         /// method to submit company setting

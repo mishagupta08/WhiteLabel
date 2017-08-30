@@ -78,7 +78,7 @@
                     <form action="#" name="edit-primary-margin" id="edit-primary-margin" onsubmit="return UpdatePrimaryMargin();">
                         <input type="hidden" name="sub_service_id">
                         <input type="hidden" name="service_id">
-                        <input type="hidden" name="member_id" value="@ShineYatraSession.LoginUser.member_id">
+                        <input type="hidden" name="member_id" value="@Model.memberid">
                         <div class="form-body">
                             <h3 class="box-title" id="title" name="airlineName"></h3>
                             <hr>
@@ -86,7 +86,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Front Margin(%)</label>
-                                        <input id="frontmargin_per" step="any" name="front_discount_per" required="required" class="form-control" placeholder="Margin %" type="number">
+                                        <input id="frontmargin_per" step="any" name="front_discount_per" required="required" min="0" max="100" class="form-control" placeholder="Margin %" type="number">
                                     </div>
                                 </div>
                                 <!--/span-->
@@ -103,7 +103,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Disribution Margin(%)</label>
-                                        <input id="agent_per" step="any" class="form-control" name="back_discount_per" required="required" placeholder="Margin %" type="number">
+                                        <input id="agent_per" step="any" class="form-control" name="back_discount_per" min="0" max="100" required="required" placeholder="Margin %" type="number">
                                     </div>
                                 </div>
                                 <!--/span-->

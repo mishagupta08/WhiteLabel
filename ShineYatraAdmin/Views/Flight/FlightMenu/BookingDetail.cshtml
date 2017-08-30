@@ -7,6 +7,14 @@
     int count = 0;
 }
 
+<style>
+    .ui-autocomplete {
+        z-index: 100;
+    }
+</style>
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+
+
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-info">
@@ -36,7 +44,9 @@
                         @Html.HiddenFor(m => m.FlightBookingDetail.Id)
 
                         @Html.HiddenFor(m => m.FlightBookingDetail.FlightNumber)
-                        @Html.HiddenFor(m => m.FlightBookingDetail.Preferredclass)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.Preferredclass)                        
+                        <input type="hidden" name="FlightBookingDetail.AdultFare" value="@Model.arrayOfSearchedFlights.FlightsDetail.First().BookingClassFare.AdultFare">
+                        @Html.HiddenFor(m=>m.walletBalance)
 
 
                         <hr>
@@ -64,20 +74,23 @@
                                 <label class="col-sm-2 control-label">@Resources.Adult @(i + 1)</label><br />
                                 <div class="col-sm-10">
                                     <div class="row">
-                                        <div class="form-group col-xs-4">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
-                                        </div>
-
-                                        <div class="form-group col-xs-4">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
-                                        </div>
 
                                         <div class="form-group col-xs-4">
                                             @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.NameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
                                         </div>
 
+                                        <div class="form-group col-xs-4">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                        <div class="form-group col-xs-4">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                      
+
                                         <div class="form-group col-xs-6">
-                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { Value = Resources.AdultCode })                                           
+                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.AdultCode })                                           
                                         </div>
                                     </div>
                                 </div>
@@ -94,20 +107,25 @@
                                 <label class="col-sm-2 control-label">@Resources.Child @(i + 1)</label><br />
                                 <div class="col-sm-10">
                                     <div class="row">
-                                        <div class="form-group col-xs-4">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+
+                                        <div class="form-group col-xs-3">
+                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.ChildNameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
                                         </div>
 
-                                        <div class="form-group col-xs-4">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        <div class="form-group col-xs-3">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
                                         </div>
 
-                                        <div class="form-group col-xs-4">
-                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.NameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                        <div class="form-group col-xs-3">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+                                        
+                                        <div class="form-group col-xs-3">
+                                            @Html.TextBoxFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].dob, new { @required = "", @id = "dateinput1", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })                                            
                                         </div>
 
-                                        <div class="form-group col-xs-6">
-                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { Value = Resources.ChildCode })
+                                        <div class="form-group col-xs-3">
+                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.ChildCode })
                                         </div>
                                     </div>
                                 </div>
@@ -121,20 +139,25 @@
                                 <label class="col-sm-2 control-label">@Resources.Infant @(i + 1)</label><br />
                                 <div class="col-sm-10">
                                     <div class="row">
-                                        <div class="form-group col-xs-4">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+
+                                        <div class="form-group col-xs-3">
+                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.ChildNameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
                                         </div>
 
-                                        <div class="form-group col-xs-4">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        <div class="form-group col-xs-3">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "",@placeholder = "First Name", @class = "form-control input-group-md reg_name" })
                                         </div>
 
-                                        <div class="form-group col-xs-4">
-                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.NameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                        <div class="form-group col-xs-3">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
                                         </div>
 
+                                        <div class="form-group col-xs-3">
+                                            @Html.TextBoxFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].dob, new { @required = "", @id = "dateinput2", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
+                                        </div>
+                                     
                                         <div class="form-group col-xs-6">
-                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { Value = Resources.InfantCode })
+                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.InfantCode })
                                         </div>
                                     </div>
                                 </div>
@@ -155,18 +178,31 @@
                         <hr>
 
                         <div class="row">
-                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PhoneNumber, new { @placeholder = "Mobile No." })
+                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PhoneNumber, new { @placeholder = "Mobile No.", @required = "" })
                         </div>
 
                         <br />
 
                         <div class="row">
-                            @Html.TextBoxFor(x => Model.FlightBookingDetail.EmailAddress, new { @placeholder = "Email Adress" })
+                            @Html.TextBoxFor(x => Model.FlightBookingDetail.EmailAddress, new { @placeholder = "Email Adress", @required = "" })
                         </div>
 
+                        <br/>
+                        
+
                         <br />
-                        <div><label>Your booking details will be mailed to this address</label></div>
+                        <div class="row">
+                            <h3> NOTE :- Your current wallet balance is :- @Model.walletBalance</h3>
+                            <label>Choose Payment Mode:</label>
+                             
+                            <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet" , new {@required="required"})Wallet</label>
+                            <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required" })Bank</label>
+                           <br/>
+                                                  
+                        </div>
                         <br />
+
+                        <div><label id="ErrorMessage"></label></div>
 
                         <div class="td">
                             <input type="submit" value="Proceed To Booking">
@@ -177,4 +213,29 @@
         </div>
     </div>
 </div>
+<script src="~/Script/flight.js"></script>
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+        // Date Picker
+        jq('#dateinput1').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"        
+        });
+
+        jq('#dateinput2').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        });
+    });
+</script>
 

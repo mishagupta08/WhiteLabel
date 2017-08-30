@@ -36,9 +36,17 @@ z-index: 100;
                             <div class="form-group">
                                 <label class="control-label col-md-3">Trip Mode</label>
                                 <div class="col-md-9">
-                                    @Html.DropDownListFor(m => m.FlightSearchDetail.Mode, new SelectList(Model.FlightSearchDetail.TripMode, "Id", "Value"), new { @required = "0", id = "modeDropDown", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.FlightSearchDetail.Mode, new SelectList(Model.FlightSearchDetail.TripMode, "Id", "Value"), new { @required = "0", id = "modeDropDown", @class = "form-control", @onclick= "displayReturn(this.value)" })
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Class</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(m => m.FlightSearchDetail.Preferredclass, new SelectList(Model.FlightSearchDetail.FlightClass, "Id", "Value"), new { @required = "0", id = "flightClass", @class = "form-control" })
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="control-label col-md-3">From</label>
                                 <div class="col-md-9">
@@ -56,7 +64,14 @@ z-index: 100;
                             <div class="form-group">
                                 <label class="control-label col-md-3">Depart On</label>
                                 <div class="col-md-3">
-                                    @Html.TextBoxFor(m => m.FlightSearchDetail.DepartDate, new { @id = "dateinput", @required = "", @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" })
+                                    @Html.TextBoxFor(m => m.FlightSearchDetail.DepartDate, new { @id = "dateinput", @required = "", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="ReturnDateField" style="display:none;">
+                                <label class="control-label col-md-3">Return On</label>
+                                <div class="col-md-3">
+                                    @Html.TextBoxFor(m => m.FlightSearchDetail.ReturnDate, new { @id = "returnDate", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
                                 </div>
                             </div>
 
@@ -105,7 +120,18 @@ z-index: 100;
         jq('#dateinput').datepicker({
             autoclose: true,
             todayHighlight: true,
-            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy",
+            minDate: 0
+        });
+
+        jq('#returnDate').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy",
             minDate: 0
         });
 

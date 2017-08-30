@@ -24,7 +24,7 @@ namespace ShineYatraAdmin.Controllers
 
         private System.Collections.Specialized.NameValueCollection Inputs = new System.Collections.Specialized.NameValueCollection();
 
-        public string Url = "";
+        public string Url = ConfigurationManager.AppSettings["PAYU_BASE_URL"];
 
         public string Method = "post";
 
