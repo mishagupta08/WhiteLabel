@@ -18,6 +18,16 @@ namespace ShineYatraAdmin.Business
         {
             return await Program.GetCompanyUserList(memberId);
         }
+        
+        /// <summary>
+        /// Function to get user list 
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        public async Task<IList<UserDetail>> GetMemberUsersList(string memberId,string roleId)
+        {
+            return await Program.GetMemberUsersList(memberId,roleId);
+        }
 
         /// <summary>
         /// method to get flight bus and hotel allotted groups

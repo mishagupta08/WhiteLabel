@@ -13,24 +13,28 @@
             <th name="member_id">
                 System ID
             </th>
+            
+            <th name="company_id">
+                User Name
+            </th>
+
             <th name="user_name">
                 Login ID
             </th>
-            <th name="company_id">
-                Company ID
-            </th>
+            
 
             <th name="company_name">
                 Company Name
             </th>
 
             <th name="wallet_balance">
-                Wallet Balance
+                Last Login
             </th>
 
             <th name="credit_limit">
-                Cr. Limit
+                Contact No.
             </th>
+
             <th name="active_status">
                 Active Status
             </th>
@@ -58,11 +62,11 @@
                     <td>@Html.DisplayFor(modelItem => item.company_name)</td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.wallet_balance)
+                       
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.credit_limit)
+                       
                     </td>
                     <td>
                         @if (item.active_status.ToUpper().Trim() == "Y")
@@ -79,10 +83,10 @@
                         <a href="#" onclick="setSessionForSelectedUser('@item.member_id','@item.company_id')" data-toggle="tooltip" title="Company Commission Structure" data-original-title="Company Commission Structure">
                             <i class="fa fa-life-ring text-inverse m-r-10"></i>
                         </a>
-                        &nbsp;
+                        @*&nbsp;
                         <a onclick="getFundForm('@item.member_id','@item.company_id','@item.company_name','@item.user_name')" data-toggle="tooltip" data-original-title="Add Fund Request">
                             <i class="fa fa-shopping-bag text-inverse m-r-10"></i>
-                        </a>
+                        </a>*@
                     </td>
                 </tr>
             }

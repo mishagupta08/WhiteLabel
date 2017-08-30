@@ -615,6 +615,7 @@
     <Content Include="Views\Login\elite_login.cshtml" />
     <Content Include="Views\Group\AllottedGroup.cshtml" />
     <Content Include="Views\Group\allottedgroupstructure.cshtml" />
+    <Content Include="Views\User\MemberUsers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

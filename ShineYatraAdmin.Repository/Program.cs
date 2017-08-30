@@ -581,6 +581,28 @@
             return null;
         }
 
+
+        /// <summary>
+        /// method to get Recharge Commission Structure
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<IList<UserDetail>> GetMemberUsersList(string memberId,string roleId)
+        {
+            var data = string.Empty;
+            if (!string.IsNullOrEmpty(memberId))
+            {                
+                data = "{\"action\":\"GET_USERS_LIST\",\"ref_id\":" + memberId + ",\"role_id\":" + roleId + "}";
+            }            
+
+            var response = await CallFunction(data);
+            if (response != null && response.GET_USERS_LIST != null)
+            {
+                return response.GET_USERS_LIST;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Get Flight, bus and hotel commission groups alloted to member
         /// </summary>

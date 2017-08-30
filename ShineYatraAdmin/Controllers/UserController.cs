@@ -38,6 +38,25 @@ namespace ShineYatraAdmin.Controllers
             return View(userViewModel);
         }
 
+        /// <summary>
+        /// GET: User list for company
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> MemberUsers()
+        {
+            userViewModel = new UserViewModel();
+            string[] userData = User.Identity.Name.Split('|');
+            try
+            {
+                userViewModel.AssignSearchList();
+                userViewModel.userDetailList = await userManager.GetMemberUsersList(userData[1],"5");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return View(userViewModel);
+        }
 
         public ActionResult setSessionForSelectedUser(string member_id, string company_id) {
         try
