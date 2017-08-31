@@ -20,6 +20,11 @@
 
         public string furl { get; set; }
 
+        public string udf1 { get; set; }
+
+        public string memberId { get; set; }
+        
+
         //public string Address1 { get; set; }
 
         //public string Address2 { get; set; }

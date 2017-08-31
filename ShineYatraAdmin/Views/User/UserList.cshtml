@@ -53,10 +53,11 @@
                         @Html.DisplayFor(modelItem => item.member_id)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.user_name)
+                        @item.first_name &nbsp; @item.last_name
+                        
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.company_id)
+                        @Html.DisplayFor(modelItem => item.user_name)
                     </td>
 
                     <td>@Html.DisplayFor(modelItem => item.company_name)</td>

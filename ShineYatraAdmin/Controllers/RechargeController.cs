@@ -4,8 +4,7 @@ using ShineYatraAdmin.Business;
 using ShineYatraAdmin.Entity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
-using ShineYatraAdmin.Properties;
+using System.Web.Script.Serialization;
 
 namespace ShineYatraAdmin.Controllers
 {
@@ -14,9 +13,7 @@ namespace ShineYatraAdmin.Controllers
     {
 
         UserManager userManager;
-        RechargeManager rechargeManager;
-        CompanyManager companyManager;
-        ServiceManager serviceManager;       
+        RechargeManager rechargeManager;     
 
         public async Task<ActionResult> Index(string type)
         {
@@ -134,11 +131,13 @@ namespace ShineYatraAdmin.Controllers
                 mobileDetails.amount = 10;
                 mobileDetails.account = Convert.ToString(frmCollection["account"]);
                 mobileDetails.spkey = Convert.ToString(frmCollection["spkey"]);
+                
                 string serviceProvider = Convert.ToString(frmCollection["ProviderName"]);
                 string paymentMode = Convert.ToString(frmCollection["PaymentMode"]);
                 double walletBalance = Convert.ToDouble(frmCollection["walletBalance"]);
                 rechargeType = Convert.ToString(frmCollection["rechargeType"]);
-                if (paymentMode  == "bank" || (paymentMode=="wallet" && walletBalance < mobileDetails.amount))
+                mobileDetails.type = rechargeType;
+                if (paymentMode == "bank" || (paymentMode == "wallet" && walletBalance < mobileDetails.amount))
                 {
                     PayUController cntrl = new PayUController();
                     PayuRequest payrequest = new PayuRequest();
@@ -147,10 +146,13 @@ namespace ShineYatraAdmin.Controllers
                     payrequest.Email = "guptamisha88@gmail.com";
                     payrequest.Phone = "8107737208";
                     payrequest.ProductInfo = "Recharge Payment";
-                    payrequest.surl = "http://" + Request.Url.Authority + "/PayU/Return";
-                    payrequest.furl = "http://" + Request.Url.Authority + "/PayU/Return";
+                    payrequest.udf1 = new JavaScriptSerializer().Serialize(mobileDetails);
+                    payrequest.surl = "http://" + Request.Url.Authority + "/Recharge/Return";
+                    payrequest.furl = "http://" + Request.Url.Authority + "/Recharge/Return";
                     cntrl.Payment(payrequest);
-                }               
+                }
+                else
+                {
                     TransactionStatus transactionResponse = await rechargeManager.Transaction(mobileDetails);
                     if (transactionResponse != null)
                     {
@@ -170,16 +172,65 @@ namespace ShineYatraAdmin.Controllers
                             }
 
                         }
-                    TempData["status"] = response;
-                    }                
+                        TempData["status"] = response;
+                    }
+                }               
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
             }
-            return RedirectToAction("Index",new {type=rechargeType});
+            return RedirectToAction("Index","Recharge",new {type=rechargeType});
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Return(FormCollection form)
+        {            
+            string order_id = string.Empty;
+            string status = string.Empty;
+            ServicesRequest mobileDetails = new ServicesRequest();
+            rechargeManager = new RechargeManager();
 
+            try
+            {
+                if (form["status"].ToString() == "success")
+                {                    
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    mobileDetails = (ServicesRequest)serializer.DeserializeObject(form["requestJson"].ToString());
+                    
+                    TransactionStatus transactionResponse = await rechargeManager.Transaction(mobileDetails);
+                    if (transactionResponse != null)
+                    {
+                        if (transactionResponse.status != null && transactionResponse.status.ToLower().Equals("success"))
+                        {
+                            status = "success";
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(transactionResponse.status))
+                            {
+                                status = transactionResponse.status;
+                            }
+                            else
+                            {
+                                status = transactionResponse.ipay_errordesc;
+                            }
+
+                        }
+                       
+                    }
+                }
+                else
+                {
+                    status = "Some problem occured while making your transaction, please try after some time";
+                }
+                TempData["status"] = status;
+            }                                
+            catch (Exception ex)
+            {
+                Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+            }
+            return RedirectToAction("Index","Recharge", new { type = mobileDetails.type });
+        }       
     }
 }

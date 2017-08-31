@@ -120,6 +120,21 @@ namespace ShineYatraAdmin.Business
 
         
 
+        public async Task<List<BookingDetail>> getBookingDetails(string transactionId,string memberId)
+        {
+            List<BookingDetail> response = null;
+            try
+            {
+                response = await Program.GetServiceBookingRequest(transactionId,memberId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+
         /// <summary>
         /// function to cALL book ticket api
         /// </summary>

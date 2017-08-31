@@ -134,5 +134,11 @@
         public List<CompanyTheme> GET_DOMAININFO { get; set; }
 
         public List<CompanyCommissionGroup> GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES { get; set; }
+
+        /// <summary>
+        /// gets or sets flight booking details
+        /// </summary>
+        public List<BookingDetail> GET_FLIGHT_TRANSACTIONS { get; set; }
+        
     }
 }

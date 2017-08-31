@@ -9,6 +9,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Script.Serialization;
 
     #endregion namespace
 
@@ -140,6 +141,9 @@
             {
                 request = bookingDetail.FlightBookingDetail;
                 request.Creditcardno = "4111111111111111";
+                string[] userData = User.Identity.Name.Split('|');
+
+
                 INSERT_SERVICE_BOOKING_REQUEST response = await saveBookingDetail(bookingDetail);
                 if (response != null)
                 {
@@ -157,20 +161,24 @@
                             payrequest.TransactionAmount = "1.0";
                             payrequest.Email = request.EmailAddress;
                             payrequest.Phone = request.PhoneNumber;
+                            payrequest.udf1 = Convert.ToString(response.txn_id);
+                            payrequest.memberId = userData[1];
                             payrequest.ProductInfo = "Booking Flght " + request.FlightNumber + ": " + " For Name : " + request.PersonName.CustomerInfo.FirstOrDefault().givenName;
-                            payrequest.surl = "http://" + Request.Url.Authority + "/PayU/Return";
-                            payrequest.furl = "http://" + Request.Url.Authority + "/PayU/Return";
+                            payrequest.surl = "http://" + Request.Url.Authority + "/Flight/Return";
+                            payrequest.furl = "http://" + Request.Url.Authority + "/Flight/Return";
                             cntrl.Payment(payrequest);
-                        }                         
-                       
-                        bookResponse.txn_id = Convert.ToString(response.txn_id);
-                        bookResponse = await flightManager.BookTicket(request);
-                        if (bookResponse.Status.ToLower() == "success")
-                            status = "Ticket Booked successfully";
+                        }
                         else
-                            status = bookResponse.Error;
-                            
-
+                        {
+                            bookResponse.txn_id = Convert.ToString(response.txn_id);
+                            bookResponse = await flightManager.BookTicket(request);
+                            if (bookResponse != null && bookResponse.Status.ToLower() == "success")
+                                status = "Ticket Booked successfully";
+                            else if (bookResponse != null && !string.IsNullOrEmpty(bookResponse.Error))
+                                status = bookResponse.Error;
+                            else
+                                status = "There is some problem, Please try after some time";
+                        }                           
                     }
                 }
 
@@ -179,7 +187,57 @@
             {
                 Console.WriteLine(ex.InnerException);
             }
-            ViewBag.status = status;
+            return RedirectToAction("BookingStatus","Flight",new {status= status });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Return(FormCollection form)
+        {
+            string merc_hash_string = string.Empty;
+            string merc_hash = string.Empty;
+            string order_id = string.Empty;
+            string status = string.Empty;
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                if (form["status"].ToString() == "success")
+                {
+                    Bookingresponse bookResponse = new Bookingresponse();
+                    
+                    FlightManager flightManager = new FlightManager();
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    string txnId = form["udf1"].ToString();
+
+                    //getbooking 
+                    List<BookingDetail> ticketDetail = new List<BookingDetail>();
+                    ticketDetail = await flightManager.getBookingDetails(txnId, userData[1]);
+                    //bookResponse = await flightManager.BookTicket(request);
+                    if (bookResponse != null && bookResponse.Status.ToLower() == "success")
+                        status = "Ticket Booked successfully";
+                    else if (bookResponse != null && !string.IsNullOrEmpty(bookResponse.Error))
+                        status = bookResponse.Error;
+                    else
+                        status = "There is some problem, Please try after some time";
+                }
+                else
+                {
+                    status = form["status"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+            }
+            return RedirectToAction("BookingStatus", "Flight", new { status = status });
+        }
+
+        public ActionResult BookingStatus(string status) {
+            try {
+                ViewBag.status = status;
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.InnerException);
+            }
             return View();
         }      
 

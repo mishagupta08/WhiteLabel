@@ -53,7 +53,7 @@
             try
 
             {
-                    //companyViewModel.LoginUserName = Convert.ToString(Session["LogInFirstName"]);
+                companyViewModel.LoginUserName = User.Identity.Name;
                 
 
                     this.companyViewModel.SelectedMenu = menu;                                                                 
