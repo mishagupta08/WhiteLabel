@@ -616,6 +616,7 @@
     <Content Include="Views\Group\AllottedGroup.cshtml" />
     <Content Include="Views\Group\allottedgroupstructure.cshtml" />
     <Content Include="Views\User\MemberUsers.cshtml" />
+    <Content Include="Views\Flight\BookingStatus.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
