@@ -132,5 +132,7 @@
         /// gets or sets white label theme for domain
         /// </summary>
         public List<CompanyTheme> GET_DOMAININFO { get; set; }
+
+        public List<CompanyCommissionGroup> GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES { get; set; }
     }
 }

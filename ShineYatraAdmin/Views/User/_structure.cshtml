@@ -2,148 +2,115 @@
 @model ShineYatraAdmin.Entity.UserViewModel
 @if (Model != null && Model.commissionstucture != null)
 {
-    var service = (from r in Model.commissionstucture select r).FirstOrDefault();
-    if (service != null)
+    var currentgroup = (from r in Model.membergroups select r).FirstOrDefault();
+
+    <div align="right" style="float: right;">
+
+        <button id="demo-btn-addrow" data-service-id="@currentgroup.service_id" onclick="getGrouplist('@currentgroup.service_id','@currentgroup.comp_group_id','@Model.category.ToLower()','@Model.sub_category.ToLower()')" class="btn btn-outline btn-rounded btn-info">
+            <i class="icon wb-plus" aria-hidden="true"></i>
+            Change Price Group
+        </button>
+    </div>
+
+    <h3>Group : @currentgroup.comp_group_name</h3>
+
+
+    var groupedCustomerList = Model.commissionstucture
+        .GroupBy(u => u.sub_category)
+        .Select(grp => grp.ToList())
+        .ToList();
+
+    foreach (var list in groupedCustomerList)
     {
-        <div align="right" style="float: right;">
-            @if (service.service_id != 4)
-            {
-                int currentgroup = 0;
-
-                //if (service.service_id == 1)
-                //{
-                currentgroup =  (from r in Model.membergroups where r.service_id == service.service_id select r.comp_group_id).FirstOrDefault();
-
-                //}
-                //else if (service.service_id == 2)
-                //{
-                //    currentgroup = Model.membergroups.hotel_group_id;
-                //}
-                //else if (service.service_id == 3)
-                //{
-                //    currentgroup = Model.membergroups.bus_group_id;
-                //}
-
-                <button id="demo-btn-addrow" data-service-id="@service.service_id" onclick="getGrouplist('@service.service_id','@currentgroup','@Model.category')" class="btn btn-outline btn-rounded btn-info">
-                    <i class="icon wb-plus" aria-hidden="true"></i>
-                    Change Price Group
-                </button>
-            }
-            else
-            {
-                <button id="demo-btn-addrow" data-service-id="@service.service_id" onclick="getCurrentRechargeComissionStructure(' ')" class="btn btn-outline btn-rounded btn-info">
-                    <i class="icon wb-plus" aria-hidden="true"></i>
-                    Update Commission Percentage
-                </button>
-            }
-
-        </div>
-        if (service.service_id != 4)
-        {
-            <h3>Group : @service.comp_group_name</h3>
-        }
-        else
-        {
-            <h3>RECHARGE - Company Commission Structure</h3>
-        }
-
-        var groupedCustomerList = Model.commissionstucture
-            .GroupBy(u => u.sub_category)
-            .Select(grp => grp.ToList())
-            .ToList();
-
-        foreach (var list in groupedCustomerList)
-        {
-            <table class="table table-bordered table-responsive color-bordered-table color-table">
-                <thead>
-                    <tr>
-                        @if (service.service_id == 1)
-                        {
-                                <th>Logo</th>
-                                <th>Airline Name</th>
-                                <th colspan="2">Front Margin</th>
-                                <th colspan="2">Distribution Margin</th>
-                        }
-                        else if (service.service_id == 4)
-                        {
-                                <th>Logo</th>
-                                <th>Service Provider</th>
+        <table class="table table-bordered table-responsive color-bordered-table color-table">
+            <thead>
+                <tr>
+                    @if (currentgroup.service_id == 1)
+                    {
+                        <th>Logo</th>
+                        <th>Airline Name</th>
+                                <th colspan="2">Front</th>
+                                <th colspan="2">Distribution</th>
+                    }
+                    else if (currentgroup.service_id == 4)
+                    {
+                        <th>Logo</th>
+                        <th>Service Provider</th>
                                 <th>Service Type</th>
-                                <th>Master %</th>
-                                <th>Company %</th>
+                                <th>Self%</th>
+                                <th>Distribution%</th>
                                 <th>Active Status</th>
-                        }
-                        else
-                        {
-                                <th colspan="2">Front Margin</th>
-                                <th colspan="2">Distribution Margin</th>
-                        }
-                    </tr>
-                    <tr>
-                        @if (service.service_id != 4 && service.service_id == 1)
-                        {
-                            <th colspan="1"></th>
-                            <th colspan="1"></th>
-                        }
-                        @if (service.service_id != 4)
-                        {
+                    }
+                    else
+                    {
+                        <th colspan="2">Front</th>
+                        <th colspan="2">Distribution</th>
+                    }
+                </tr>
+                <tr>
+                    @if (currentgroup.service_id != 4 && currentgroup.service_id == 1)
+                    {
+                        <th colspan="1"></th>
+                        <th colspan="1"></th>
+                    }
+                    @if (currentgroup.service_id != 4)
+                    {
 
+
+                        <th>%</th>
+                        <th>Amt</th>
 
                                 <th>%</th>
                                 <th>Amt</th>
-
-                                <th>%</th>
-                                <th>Amt</th>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    @{ var new_list = list;}
-                    @if (new_list != null && new_list.Count > 0)
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{ var new_list = list;}
+                @if (new_list != null && new_list.Count > 0)
                     {
                         foreach (var structure in new_list)
                         {
-                            <tr>
-                                @if (structure.service_id == 1)
-                                {
-                                    <td> <img src="plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
-                                        <td>@structure.sub_service_name (@structure.sub_service_code)</td>
+                        <tr>
+                            @if (structure.service_id == 1)
+                            {
+                                <td> <img src="plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
+                                <td>@structure.sub_service_name (@structure.sub_service_code)</td>
                                         <td>@structure.front_discount_per</td>
                                         <td>@structure.front_discount_amount</td>
                                         <td>@structure.back_discount_per</td>
-                                        <td>@structure.back_discount_amount</td>                                        
-                                }
-                                else if (structure.service_id == 4)
-                                {
-                                    <td> <img src="plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
-                                        <td>@structure.service_name</td>
-                                        <td>@structure.sub_category</td>
-                                        <td>@structure.back_discount_per</td>
                                         <td>@structure.back_discount_amount</td>
+                            }
+                            else if (structure.service_id == 4)
+                            {
+                                <td> <img src="plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
+                                <td>@structure.sub_service_name</td>
+                                        <td>@structure.sub_category</td>
+                                        <td>@structure.SELF_COMM_PER</td>
+                                        <td>@structure.DIST_COMM_PER</td>
                                         <td><div class="label label-table label-success">@structure.active_status</div></td>
-                                }
-                                else
-                                {
-                                    <td>@structure.front_discount_per</td>
-                                        <td>@structure.front_discount_amount</td>
-                                        <td>@structure.back_discount_per</td>
-                                        <td>@structure.back_discount_amount</td>                                        
-                                }
-                            </tr>
+                            }
+                            else
+                            {
+                                <td>@structure.front_discount_per</td>
+                                <td>@structure.front_discount_amount</td>
+                                    <td>@structure.back_discount_per</td>
+                                        <td>@structure.back_discount_amount</td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <br /><br />
                         }
                     }
-                </tbody>
-            </table>
-                <br /><br />
-                                }
-                            }
-                        }
-                        else
-                        {
-                            <table>
-                                <tr>
-                                    <td>No data available</td>
-                                </tr>
-                            </table>
-                        }
+                    else
+                    {
+                        <table>
+                            <tr>
+                                <td>No data available</td>
+                            </tr>
+                        </table>
+                    }
 

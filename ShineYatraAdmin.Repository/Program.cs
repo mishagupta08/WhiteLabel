@@ -154,6 +154,26 @@
             return newText;
         }
 
+        /// <summary>
+        /// method to get all the price groups (commission structures group) for a service
+        /// </summary>        
+        /// <returns></returns>
+
+        public static async Task<IList<CompanyCommissionGroup>> GetGroupList(string serviceId, string memberId, string service_type, string sub_category)
+        {
+            var data = string.Empty;
+            if (!string.IsNullOrEmpty(serviceId) && !string.IsNullOrEmpty(memberId))
+            {
+                data = "{\"action\":\"GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES\",\"service_id\":\"" + serviceId + "\",\"category\":\"" + service_type + "\",\"member_id\":\"" + memberId + "\",\"sub_category\":\"" + sub_category + "\"}";
+            }
+            var response = await CallFunction(data);
+            if (response != null && response.GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES != null)
+            {
+                return response.GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES;
+            }
+            return null;
+        }
+
         #region Login API
 
         /// <summary>

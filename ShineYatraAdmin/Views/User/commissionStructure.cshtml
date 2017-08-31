@@ -3,7 +3,6 @@
 @model ShineYatraAdmin.Entity.UserViewModel
 @{
     Layout = "~/Views/Shared/Layout.cshtml";
-    int count = 1;
 }
 
 <div class="row">
@@ -27,33 +26,60 @@
 
                                 if (service.ToLower().IndexOf("flight") != -1)
                                 {
-                                    action = "getCommissionGroupDetails('" + group_id + "','section-bar-" + count + "','flight','domestic')";
+                                    action = "getCommissionGroupDetails('" + group_id + "','section-bar-" + service.ToLower() + "','flight','domestic')";
                                 }
                                 else if (service.ToLower().IndexOf("bus") != -1)
                                 {
-                                    action = "getCommissionGroupDetails('" + group_id + "', 'section-bar-" + count + "','bus','bus')";
+                                    action = "getCommissionGroupDetails('" + group_id + "', 'section-bar-" + service.ToLower() + "','bus','bus')";
                                 }
                                 else if (service.ToLower().IndexOf("hotel") != -1)
                                 {
-                                    action = "getCommissionGroupDetails('" + group_id + "','section-bar-" + count + "','hotel','hotels')";
+                                    action = "getCommissionGroupDetails('" + group_id + "','section-bar-" + service.ToLower() + "','hotel','hotels')";
                                 }
                                 else if (service.ToLower().IndexOf("recharge") != -1)
                                 {
-                                    // action = "getCommissionGroupDetails('" + Model.membergroups. + "','section-bar-" + count + "','recharge')";
+                                    action = "getCommissionGroupDetails('" + group_id + "','section-bar-prepaid','recharge','prepaid')";
                                 }
-                                <li id="tab-@count" onclick="@action"><a href="#section-bar-@count"><span>@service</span></a></li>
-                                count = count + 1;
+                                <li id="tab-@service.ToLower()" onclick="@action"><a href="#section-bar-@service.ToLower()"><span>@service</span></a></li>
                             }
                         </ul>
                     </nav>
                     <div class="content-wrap">
 
-                        @{ count = 1;}
                         @foreach (var g in groups)
                         {
-                            <section id="section-bar-@count"><br /><br /><br /><p>Loading please wait...</p></section>
-                            count = count + 1;
-                        }
+                            if (g.ToLower().IndexOf("recharge") != -1)
+                            {
+                                <section class="nested" id="section-bar-@g.ToLower()">
+                                    <section style="display: block;">
+                                        <div class="sttabs tabs-style-bar">
+                                            <nav>
+                                                <ul class="tablist">
+
+                                                    @{var group_id = (from r in Model.membergroups where r.sub_category.ToLower() == "prepaid" select r.comp_group_id).FirstOrDefault();}
+                                                    <li id="tab-prepaid" onclick="getCommissionGroupDetails('@group_id','section-bar-prepaid','recharge','prepaid')"><a href="#section-bar-prepaid"><span>Prepaid</span></a></li>
+
+                                                    @{ group_id = (from r in Model.membergroups where r.sub_category.ToLower() == "postpaid" select r.comp_group_id).FirstOrDefault();}
+                                                    <li id="tab-postpaid" onclick="getCommissionGroupDetails('@group_id','section-bar-postpaid','recharge','postpaid')"><a href="#section-bar-postpaid"><span>Postpaid</span></a></li>
+
+                                                    @{ group_id = (from r in Model.membergroups where r.sub_category.ToLower() == "dth" select r.comp_group_id).FirstOrDefault();}
+                                                    <li id="tab-dth" onclick="getCommissionGroupDetails('@group_id','section-bar-dth','recharge','dth')"><a href="#section-bar-dth"><span>DTH</span></a></li>
+                                                </ul>
+                                            </nav>
+                                            <div class="content-wrap">
+                                                <section id="section-bar-prepaid"><br /><br /><br /><p>Loading please wait...</p></section>
+                                                <section id="section-bar-postpaid"><br /><br /><br /><p>Loading please wait...</p></section>
+                                                <section id="section-bar-dth"><br /><br /><br /><p>Loading please wait...</p></section>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </section>
+                                                        }
+                                                        else
+                                                        {
+                                                            <section id="section-bar-@g.ToLower()"><br /><br /><br /><p>Loading please wait...</p></section>
+                                                            }
+                                                        }
                     </div>
                 </div>
             </section>
@@ -79,6 +105,7 @@
                                     <input type="hidden" id="companyid" value="">
                                     <input type="hidden" id="serviceid" value="">
                                     <input type="hidden" id="serviceName" value="">
+                                    <input type="hidden" id="sub_category" value="">
                                 </div>
 
                             </div>
@@ -111,19 +138,19 @@
 <script src="~/Script/companyCommision.js"></script>
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {      
-        $("#tab-1").click();
+    $(document).ready(function () {
+        $("#tab-flight").click();
         $(".preloader").show();
-    //    var currentTab = sessionStorage.getItem('currentTab');
-    //    if (currentTab != undefined && currentTab != "" && currentTab != null)
-    //        {
-    //            $('.tablist .tab-current').removeClass('tab-current');
-    //            $("#" + currentTab).addClass("tab-current");
-    //            var arr = currentTab.split("-");
-    //            $('.content-wrap .content-current').removeClass('content-current');
-    //            $("#section-bar-" + arr[1]).addClass("content-current");
-    //            $("#" + currentTab).click();
-    //            sessionStorage.setItem("currentTab",'');
-    //        }
+        //    var currentTab = sessionStorage.getItem('currentTab');
+        //    if (currentTab != undefined && currentTab != "" && currentTab != null)
+        //        {
+        //            $('.tablist .tab-current').removeClass('tab-current');
+        //            $("#" + currentTab).addClass("tab-current");
+        //            var arr = currentTab.split("-");
+        //            $('.content-wrap .content-current').removeClass('content-current');
+        //            $("#section-bar-" + arr[1]).addClass("content-current");
+        //            $("#" + currentTab).click();
+        //            sessionStorage.setItem("currentTab",'');
+        //        }
     });
 </script>

@@ -88,8 +88,8 @@ namespace ShineYatraAdmin.Controllers
                 string company_id = Session["company_id"].ToString();
                 userViewModel.services = await this.companyManager.GetCompanyServices("");
                 userList = await this.userManager.GetCompanyUserList(member_id);
-                userViewModel.userDetail = (from r in userList select r).FirstOrDefault();               
-                userViewModel.membergroups = await this.userManager.GetUserAllottedGroups(member_id, company_id,"","","");                
+                userViewModel.userDetail = (from r in userList select r).FirstOrDefault();
+                userViewModel.membergroups = await this.userManager.GetUserAllottedGroups(member_id, company_id, "", "", "");
             }
             catch (Exception ex)
             {
@@ -102,7 +102,7 @@ namespace ShineYatraAdmin.Controllers
         /// method to change commission or price group of a service for particular company
         /// </summary>      
         /// <returns></returns>
-        public async Task<ActionResult> getCommissionGroupDetails(string currentGroupId, string sectionName,string subSection)
+        public async Task<ActionResult> getCommissionGroupDetails(string currentGroupId, string category, string sub_category)
         {
             userViewModel = new UserViewModel();
             try
@@ -110,36 +110,37 @@ namespace ShineYatraAdmin.Controllers
                 userViewModel.commissionstucture = null;
                 string member_id = Session["member_id"].ToString();
                 string company_id = Session["company_id"].ToString();
-                string service_id = Common.Common.getIdbyServiceName(sectionName);
-                if (string.IsNullOrEmpty(subSection))
+                string service_id = Common.Common.getIdbyServiceName(category);
+                if (string.IsNullOrEmpty(sub_category))
                 {
-                    if (sectionName.ToLower().Trim() == "flight")
+                    if (category.ToLower().Trim() == "flight")
                     {
-                        subSection = "domestic";
+                        sub_category = "domestic";
                     }
-                    else if (sectionName.ToLower().Trim() == "hotel")
+                    else if (category.ToLower().Trim() == "hotel")
                     {
-                        subSection = "hotels";
+                        sub_category = "hotels";
                     }
-                    else if (sectionName.ToLower().Trim() == "bus")
+                    else if (category.ToLower().Trim() == "bus")
                     {
-                        subSection = "bus";
+                        sub_category = "bus";
                     }
-                    else if (sectionName.ToLower().Trim() == "recharge")
+                    else if (category.ToLower().Trim() == "recharge")
                     {
-                        subSection = "prepaid";
+                        sub_category = "prepaid";
                     }
                 }
-                                
+
                 if (!string.IsNullOrEmpty(currentGroupId))
                 {
-                    userViewModel.commissionstucture = await this.companyManager.GetCompanyCommissionStructure(currentGroupId, service_id, subSection);
-                    userViewModel.membergroups = await this.userManager.GetUserAllottedGroups(member_id, company_id,"","","");
-                    userViewModel.category = sectionName;
-                    userViewModel.sub_category = subSection;
+                    userViewModel.commissionstucture = await this.companyManager.GetCompanyCommissionStructure(currentGroupId, service_id, sub_category);
+                    userViewModel.membergroups = await this.userManager.GetUserAllottedGroups(member_id, company_id, service_id, category, sub_category);
+                    userViewModel.category = category;
+                    userViewModel.sub_category = sub_category;
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.InnerException);
             }
             return PartialView("_structure", userViewModel);
@@ -149,23 +150,29 @@ namespace ShineYatraAdmin.Controllers
         /// method to get list of all price or commission group and create a slect item list for it. 
         /// </summary>      
         /// <returns></returns>
-        public async Task<ActionResult>  GetServiceGroupList(string serviceId, string currentGroupId)
+        public async Task<ActionResult> GetServiceGroupList(string serviceId, string currentGroupId, string sub_category)
         {
 
             this.serviceModel = new Service();
             List<SelectListItem> groupList = new List<SelectListItem>();
-            
+
             try
             {
                 string service_name = Common.Common.getServiceNamebyId(serviceId);
-                string sub_category = service_name;
-                if (service_name.ToUpper() == "FLIGHT")
+                if (string.IsNullOrEmpty(sub_category))
                 {
-                    sub_category = "DOMESTIC";
+                    if (service_name.ToUpper() == "FLIGHT")
+                    {
+                        sub_category = "DOMESTIC";
+                    }
+                    else if (service_name.ToUpper() == "HOTEL")
+                    {
+                        sub_category = "HOTELS";
+                    }
                 }
                 string member_id = Session["member_id"].ToString();
                 string company_id = Session["company_id"].ToString();
-                this.serviceModel.service_group_list = await this.serviceManager.GetServiceGroupList(serviceId, member_id, company_id, service_name, sub_category);
+                this.serviceModel.service_group_list = await this.serviceManager.GetGroupList(serviceId, member_id, service_name, sub_category);
                 foreach (var group in this.serviceModel.service_group_list)
                 {
 
@@ -202,11 +209,11 @@ namespace ShineYatraAdmin.Controllers
         /// </summary>      
         /// <returns></returns>
         public async Task<ActionResult> EditCompanyPriceGroup(int price_group_id, int service_id)
-        {            
+        {
             try
             {
-                string member_id = Session["member_id"].ToString();                
-                int company_id = int.Parse(!String.IsNullOrEmpty(Session["company_id"].ToString())? Session["company_id"].ToString():"0");
+                string member_id = Session["member_id"].ToString();
+                int company_id = int.Parse(!String.IsNullOrEmpty(Session["company_id"].ToString()) ? Session["company_id"].ToString() : "0");
                 string cat = ShineYatraAdmin.Common.Common.getServiceNamebyId(Convert.ToString(service_id));
                 string subSection = string.Empty;
                 if (!string.IsNullOrEmpty(cat))
@@ -228,7 +235,7 @@ namespace ShineYatraAdmin.Controllers
                         subSection = "prepaid";
                     }
                 }
-                var result = await this.companyManager.EditCompanyServiceGroup(company_id, price_group_id, service_id, member_id,cat, subSection);
+                var result = await this.companyManager.EditCompanyServiceGroup(company_id, price_group_id, service_id, member_id, cat, subSection);
                 if (result == null)
                 {
                     return Json(string.Empty);
@@ -242,11 +249,11 @@ namespace ShineYatraAdmin.Controllers
             return Json(string.Empty);
         }
 
-      
 
-        
 
-        
+
+
+
 
         public ActionResult FundRequest()
         {            
