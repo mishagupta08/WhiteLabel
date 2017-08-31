@@ -14,20 +14,25 @@ namespace ShineYatraAdmin.Controllers
     {
         FundManager fundManger = new FundManager();
         CompanyFund companyFund = null;
-        // GET: Fund
+
         public ActionResult FundRequest()
         {
-            this.companyFund = new CompanyFund();
+            CompanyFund companyFund = new CompanyFund();
             try
             {
-
                 string[] userData = User.Identity.Name.Split('|');
-                this.companyFund.member_id = userData[1];
-                this.companyFund.company_id = userData[2];
-                this.companyFund.service_id = 0;
-                this.companyFund.cancel_request_id = 0;
-                this.companyFund.txn_type = "FUND";
-                this.companyFund.AssignDepositModeList();
+                companyFund.member_id = userData[1];
+                companyFund.company_id = userData[2];
+                companyFund.service_id = 0;
+                companyFund.cancel_request_id = 0;
+                Guid g = Guid.NewGuid();
+                string GuidString = Convert.ToBase64String(g.ToByteArray());
+                GuidString = GuidString.Replace("=", "");
+                GuidString = GuidString.Replace("+", "");
+                companyFund.request_token = GuidString;
+                companyFund.txn_type = "FUND";
+                companyFund.domain_name = "whitelabel.bisplindia.in";
+                companyFund.AssignDepositModeList();
             }
             catch (Exception ex)
             {
@@ -38,10 +43,11 @@ namespace ShineYatraAdmin.Controllers
 
         public async Task<ActionResult> SaveFundDetail(CompanyFund fundModel)
         {
+            FundManager fundManger = new FundManager();
             try
             {
-                fundModel.action = "INSERT_TRANSACTION_REQUEST";
-                var response = await this.fundManger.SaveFundDetail(fundModel);
+                fundModel.action = "INSERT_FUND_REQUEST";
+                var response = await fundManger.SaveFundDetail(fundModel);
                 return Json(response);
             }
             catch (Exception ex)
