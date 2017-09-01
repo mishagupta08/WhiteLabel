@@ -44,6 +44,7 @@
                         @Html.HiddenFor(m => m.FlightBookingDetail.Id)
 
                         @Html.HiddenFor(m => m.FlightBookingDetail.FlightNumber)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.OperatingAirlineCode)
                         @Html.HiddenFor(m => m.FlightBookingDetail.Preferredclass)                        
                         <input type="hidden" name="FlightBookingDetail.AdultFare" value="@Model.arrayOfSearchedFlights.FlightsDetail.First().BookingClassFare.AdultFare">
                         @Html.HiddenFor(m=>m.walletBalance)

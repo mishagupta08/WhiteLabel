@@ -30,7 +30,8 @@ namespace ShineYatraAdmin.Entity
         [XmlElement(ElementName = "Id")]
         public string Id { get; set; }
         [XmlElement(ElementName = "FlightNumber")]
-        public string FlightNumber { get; set; }
+        public string FlightNumber { get; set; }                    
+        public string OperatingAirlineCode { get; set; }
         [XmlElement(ElementName = "personName")]
         public personName PersonName { get; set; }
         [XmlElement(ElementName = "phoneNumber")]
@@ -376,8 +377,11 @@ namespace ShineYatraAdmin.Entity
         public string remarks { get; set; }
         public string airline_code { get; set; }
         public string trip_class { get; set; }
-        
-        public List<Passengers> bookflight { get; set; }
+        public string flight_id { get; set; }
+        public string flight_no { get; set; }
+        public string ref_code { get; set; }
+        public string api_txn_id { get; set; }
+        public List<Passengers> passenger_details { get; set; }
     }
 
     public class INSERT_SERVICE_BOOKING_REQUEST

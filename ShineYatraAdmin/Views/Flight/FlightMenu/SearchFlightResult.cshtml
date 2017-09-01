@@ -64,6 +64,7 @@
                                         <div class="col-md-1">
                                             <input type="hidden" value="@flightrow.First().Id" name="Id">
                                             <input type="hidden" value="@flightrow.First().FlightNumber" name="FlightNumber">
+                                            <input type="hidden" value="@flightrow.First().OperatingAirlineCode" name="OperatingAirlineCode">
                                             <span>@flightrow.First().AirLineName</span><span class="td">@flightrow.First().Id</span>
                                         </div>
                                         <div class="col-md-3"><span class="td">@flightrow.First().DepartureDateTime (@flightrow.First().DepartureAirportCode)</span></div>

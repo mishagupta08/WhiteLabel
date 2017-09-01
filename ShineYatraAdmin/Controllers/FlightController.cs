@@ -268,7 +268,7 @@
                 ticketDetail.adult = bookingDetail.FlightBookingDetail.AdultPax;
                 ticketDetail.travel_from = bookingDetail.FlightBookingDetail.Origin;
                 ticketDetail.travel_to = bookingDetail.FlightBookingDetail.Destination;
-                ticketDetail.travel_start_Date = bookingDetail.FlightBookingDetail.DepartDate;
+                ticketDetail.travel_date = bookingDetail.FlightBookingDetail.DepartDate;
                 ticketDetail.travel_return_date = bookingDetail.FlightBookingDetail.ReturnDate;
                 ticketDetail.trip_mode = bookingDetail.FlightBookingDetail.Mode;
                 ticketDetail.deposit_mode = "NEFT";
@@ -277,16 +277,18 @@
                 ticketDetail.status = "Pending";
                 ticketDetail.remarks = "flight booking";
                 ticketDetail.category = "DOMESTIC";
-                ticketDetail.airline_code = "AI";
+                ticketDetail.flight_id = bookingDetail.FlightBookingDetail.Id;
+                ticketDetail.flight_no = bookingDetail.FlightBookingDetail.FlightNumber;
+                ticketDetail.ref_code = bookingDetail.FlightBookingDetail.OperatingAirlineCode;
                 ticketDetail.amount = 10000;
-                ticketDetail.member_id = userData[1];
+                ticketDetail.member_id =userData[1];
                 ticketDetail.company_id = userData[2];
                 ticketDetail.trip_class = bookingDetail.FlightBookingDetail.Preferredclass;
-                ticketDetail.bookflight = new List<Passengers>();
+                ticketDetail.passenger_details = new List<Passengers>();
                 foreach (var passenger in bookingDetail.FlightBookingDetail.PersonName.CustomerInfo)
 
                 {
-                    ticketDetail.bookflight.Add(new Passengers
+                    ticketDetail.passenger_details.Add(new Passengers
                     {
                         passenger_category = passenger.psgrtype,
                         dob = passenger.dob,
