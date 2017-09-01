@@ -99,13 +99,9 @@
                     return Json(Resources.LoginError);
                 }
 
-                //Session["LogInFirstName"] = result.first_name;
-                //Session["LogInLastName"] = result.last_name;
-                //Session["LogInMemberId"] = result.member_id;
-                //Session["LogInCompanyId"] = result.company_id;
-
-                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id + "|" + result.first_name + " " + result.last_name;
+                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name;
                 FormsAuthentication.SetAuthCookie(userIdentity, false);
+                
             }
             catch (Exception ex)
             {

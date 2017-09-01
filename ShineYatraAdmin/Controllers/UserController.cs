@@ -247,48 +247,6 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(ex.InnerException);
             }
             return Json(string.Empty);
-        }
-
-
-
-
-
-
-
-        public ActionResult FundRequest()
-        {            
-            CompanyFund companyFund = new CompanyFund();
-            try
-            {                
-                companyFund.member_id = Session["member_id"].ToString();
-                companyFund.company_id = Session["company_id"].ToString();               
-                companyFund.service_id = 0;
-                companyFund.cancel_request_id = 0;
-                companyFund.txn_type = "FUND";
-                companyFund.AssignDepositModeList();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
-            return PartialView(companyFund);
-        }
-
-        public async Task<ActionResult> SaveFundDetail(CompanyFund fundModel)
-        {
-            FundManager fundManger = new FundManager();
-            try
-            {
-                fundModel.action = "INSERT_TRANSACTION_REQUEST";
-                var response = await fundManger.SaveFundDetail(fundModel);
-                return Json(response);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
-            return Json(string.Empty);
-        }
-
+        }              
     }
 }

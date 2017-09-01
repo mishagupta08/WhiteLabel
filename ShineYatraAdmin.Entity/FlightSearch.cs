@@ -105,6 +105,21 @@ namespace ShineYatraAdmin.Entity
         [XmlElement(ElementName = "dob")]
         public string dob { get; set; }
 
+        [XmlElement(ElementName = "extra_field_1")]
+        public string extra_field_1 { get; set; }
+
+        [XmlElement(ElementName = "extra_field_2")]
+        public string extra_field_2 { get; set; }
+
+        [XmlElement(ElementName = "extra_field_3")]
+        public string extra_field_3 { get; set; }
+
+        [XmlElement(ElementName = "extra_field_4")]
+        public string extra_field_4 { get; set; }
+
+        [XmlElement(ElementName = "extra_field_5")]
+        public string extra_field_5 { get; set; }
+
     }
 
     [XmlRoot(ElementName = "personName")]
@@ -362,12 +377,13 @@ namespace ShineYatraAdmin.Entity
         public string member_id { get; set; }
         public string travel_from { get; set; }
         public string travel_to { get; set; }
-        public string travel_start_Date { get; set; }
+        public string travel_date { get; set; }
         public string travel_return_date { get; set; }
         public string company_id { get; set; }
         public string trip_mode { get; set; }
         public string email { get; set; }
         public string mobile_no { get; set; }
+        public string mobile { get; set; }
         public int adult { get; set; }
         public int child { get; set; }
         public int infant { get; set; }

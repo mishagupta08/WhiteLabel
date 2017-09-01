@@ -197,21 +197,56 @@
             string merc_hash = string.Empty;
             string order_id = string.Empty;
             string status = string.Empty;
+            Bookingresponse bookResponse = new Bookingresponse();
+            Request request = new Request();
+            FlightManager flightManager = new FlightManager();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
             try
             {
                 string[] userData = User.Identity.Name.Split('|');
                 if (form["status"].ToString() == "success")
                 {
-                    Bookingresponse bookResponse = new Bookingresponse();
                     
-                    FlightManager flightManager = new FlightManager();
-                    JavaScriptSerializer serializer = new JavaScriptSerializer();
                     string txnId = form["udf1"].ToString();
-
                     //getbooking 
-                    List<BookingDetail> ticketDetail = new List<BookingDetail>();
-                    ticketDetail = await flightManager.getBookingDetails(txnId, userData[1]);
-                    //bookResponse = await flightManager.BookTicket(request);
+                    List<BookingDetail> getticketDetailList = new List<BookingDetail>();
+
+                    getticketDetailList = await flightManager.getBookingDetails(txnId, userData[1]);
+                    var ticketDetail= (from r in getticketDetailList select r).FirstOrDefault();
+                    request.Origin = ticketDetail.travel_from;
+                    request.Destination = ticketDetail.travel_to;
+                    request.DepartDate = ticketDetail.travel_date;
+                    request.AdultPax = ticketDetail.adult;
+                    request.ChildPax = ticketDetail.child;
+                    request.InfantPax = ticketDetail.infant;
+                    request.Preferredclass = ticketDetail.trip_class;
+                    request.Mode = ticketDetail.trip_mode;
+                    request.Id = ticketDetail.flight_id;
+                    request.FlightNumber = ticketDetail.flight_no;
+                    request.PhoneNumber = ticketDetail.mobile;
+                    request.EmailAddress = ticketDetail.email;
+                    request.Creditcardno = "4111111111111111";
+                    request.PersonName = new personName();
+                    request.PersonName.CustomerInfo = new List<CustomerInfo>();
+                    foreach (var passenger in ticketDetail.passenger_details)
+                    {
+                        request.PersonName.CustomerInfo.Add(new CustomerInfo
+                        {
+                            psgrtype = passenger.passenger_category,
+                            dob = passenger.dob,
+                            givenName = passenger.first_name,
+                            surName = passenger.last_name,
+                            nameReference = passenger.title,
+                            extra_field_1= passenger.extra_field_1,
+                            extra_field_2 = passenger.extra_field_2,
+                            extra_field_3 = passenger.extra_field_3,
+                            extra_field_4 = passenger.extra_field_4,
+                            extra_field_5 = passenger.extra_field_5
+
+                        });
+                    }
+                    
+                    bookResponse = await flightManager.BookTicket(request);
                     if (bookResponse != null && bookResponse.Status.ToLower() == "success")
                         status = "Ticket Booked successfully";
                     else if (bookResponse != null && !string.IsNullOrEmpty(bookResponse.Error))
@@ -239,7 +274,7 @@
                 Console.WriteLine(ex.InnerException);
             }
             return View();
-        }      
+        }
 
         /// <summary>
         /// Method to save booked flight details to datbase

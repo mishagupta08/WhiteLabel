@@ -15,6 +15,11 @@ namespace ShineYatraAdmin.Controllers
         UserManager userManager;
         RechargeManager rechargeManager;     
 
+        /// <summary>
+        /// Get prepaid,postpaid, dth recharge page
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public async Task<ActionResult> Index(string type)
         {
             userManager = new UserManager();
@@ -57,6 +62,11 @@ namespace ShineYatraAdmin.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Get service provider list for the selected recharge type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public async Task<ActionResult> getServiceProviderList(string type)
         {
             List<ServiceDetail> serviceDetail = new List<ServiceDetail>();
@@ -72,6 +82,11 @@ namespace ShineYatraAdmin.Controllers
             return Json(serviceDetail);
         }
 
+        /// <summary>
+        /// validate the recharge before final transaction occur
+        /// </summary>
+        /// <param name="frmCollection"></param>
+        /// <returns></returns>
         public async Task<ActionResult> ValidateTransaction(FormCollection frmCollection)
         {
             string response = string.Empty;
@@ -117,6 +132,11 @@ namespace ShineYatraAdmin.Controllers
             return Json(response);
         }
 
+        /// <summary>
+        /// Make final transaction after validation
+        /// </summary>
+        /// <param name="frmCollection"></param>
+        /// <returns></returns>
         public async Task<ActionResult> Transaction(FormCollection frmCollection)
         {
             ServicesRequest mobileDetails = new ServicesRequest();
@@ -183,6 +203,11 @@ namespace ShineYatraAdmin.Controllers
             return RedirectToAction("Index","Recharge",new {type=rechargeType});
         }
 
+        /// <summary>
+        /// Return method after payment transaction
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> Return(FormCollection form)
         {            
