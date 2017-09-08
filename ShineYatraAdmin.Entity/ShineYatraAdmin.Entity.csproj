@@ -51,6 +51,7 @@
     <Compile Include="CompanySmsSetting.cs" />
     <Compile Include="CompanyViewModel.cs" />
     <Compile Include="DashboardModel.cs" />
+    <Compile Include="DTUserDetails.cs" />
     <Compile Include="FlightSearch.cs" />
     <Compile Include="FlightViewModel.cs" />
     <Compile Include="GroupModel.cs" />

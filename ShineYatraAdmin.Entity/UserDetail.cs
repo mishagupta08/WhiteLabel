@@ -12,6 +12,26 @@
         public string member_id { get; set; }
 
         /// <summary>
+        /// gets or sets mobileNo
+        /// </summary>
+        public string mobileNo { get; set; }
+
+        /// <summary>
+        /// gets or sets doj
+        /// </summary>
+        public string doj { get; set; }
+
+        /// <summary>
+        /// gets or sets kitid
+        /// </summary>
+        public string kitid { get; set; }
+
+        /// <summary>
+        /// gets or sets role_id
+        /// </summary>
+        public string emailId { get; set; }
+
+        /// <summary>
         /// gets or sets role_id
         /// </summary>
         public string role_id { get; set; }
@@ -30,6 +50,11 @@
         /// gets or sets user_name
         /// </summary>
         public string user_name { get; set; }
+
+        /// <summary>
+        /// gets or sets user_type
+        /// </summary>
+        public string user_type { get; set; }
 
         /// <summary>
         /// gets or sets smart_card_no
@@ -104,24 +129,28 @@
         /// </summary>
         public int member_id { get; set; }
         /// <summary>
-        /// get and set allotted flight group
+        /// get and set service id
         /// </summary>
         public int service_id { get; set; }
         /// <summary>
-        /// get and set allotted hotel group
+        /// get and set allotted group id
         /// </summary>
         public int comp_group_id { get; set; }
 
-        public string comp_group_name { get; set; }
         /// <summary>
-        /// get and set allotted bus group
+        /// get and set allotted grup name
+        /// </summary>
+        public string comp_group_name { get; set; }
+
+        /// <summary>
+        /// get and set category
         /// </summary>
         public string category { get; set; }
 
         /// <summary>
-        /// get and set allotted bus group
+        /// get and set sub category
         /// </summary>
         public string sub_category { get; set; }
-       
+
     }
 }

@@ -617,6 +617,7 @@
     <Content Include="Views\Group\allottedgroupstructure.cshtml" />
     <Content Include="Views\User\MemberUsers.cshtml" />
     <Content Include="Views\Flight\BookingStatus.cshtml" />
+    <None Include="Properties\PublishProfiles\Whitelablepublish.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

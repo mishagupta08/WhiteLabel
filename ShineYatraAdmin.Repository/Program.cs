@@ -16,6 +16,7 @@
     using System.Xml.Serialization;
     using System.IO;
     using System.Xml.Linq;
+    using System.Configuration;
 
     #endregion namespace
 
@@ -32,6 +33,11 @@
         /// Constant for success status
         /// </summary>
         private const string SUCCESS = "SUCCESS";
+
+        /// <summary>
+        /// Base url of API
+        /// </summary>
+        const string LoginApiUrl = "http://wlapi.bisplindia.in/api/Login/ValidateUser";
 
         /// <summary>
         /// Base url of API
@@ -163,18 +169,112 @@
         /// <returns></returns>
         public static async Task<UserDetail> ValidateUser(LoginModel loginDetail)
         {
+            bool ApiIntegrated = Convert.ToBoolean(ConfigurationManager.AppSettings["ApiIntegrated"]);
+            bool isLocalApiRun = false;
+            UserDetail userDetail = null;
             string data = JsonConvert.SerializeObject(loginDetail);
-            var response = await CallFunction(data);
 
-            if (response != null && response.VALIDATELOGIN != null && response.VALIDATELOGIN.Count > 0)
+            if (ApiIntegrated)
             {
-                return response.VALIDATELOGIN.FirstOrDefault();
+                var response = await CallLoginFunction(data);
+                if (response != null && response.Status == true)
+                {
+                    var dtUser = JsonConvert.DeserializeObject<DTUserDetails>(response.ResponseValue);
+                    if (dtUser != null)
+                    {
+                        userDetail = new UserDetail();
+                        userDetail.user_name = dtUser.loginid;
+                        userDetail.pwd = loginDetail.password;
+                        userDetail.member_id = dtUser.loginid;
+                        userDetail.first_name = dtUser.name;
+                        userDetail.emailId = dtUser.email;
+                        userDetail.mobileNo = dtUser.mobileno;
+                        userDetail.kitid = dtUser.kitid;
+                        userDetail.doj = dtUser.doj;
+                    }
+                    //userDetail.user_name + "|" + result.member_id + "|" + result.company_id + "|" + result.first_name + " " + result.last_name;
+                }
+                else
+                {
+                    isLocalApiRun = true;
+                }
+            }
+
+            if (isLocalApiRun)
+            {
+                var response = await CallFunction(data);
+                if (response != null && response.VALIDATELOGIN != null && response.VALIDATELOGIN.Count > 0)
+                {
+                    userDetail = new UserDetail();
+                    userDetail = response.VALIDATELOGIN.FirstOrDefault();
+                    userDetail.pwd = loginDetail.password;
+                }
+            }
+
+            if (userDetail != null)
+            {
+                userDetail.doj = DateTime.Now.ToString("dd-MMM-yyyy");
+                if (string.IsNullOrEmpty(userDetail.kitid))
+                {
+                    userDetail.kitid = "0";
+                }
+
+                if (string.IsNullOrEmpty(userDetail.ref_id))
+                {
+                    userDetail.ref_id = "0";
+                }
+
+                userDetail.user_type = "DISTB";
+                var loginDetailJson = "{'action':'USER_LOGIN_UPDATE','domain_name':'" + ConfigurationManager.AppSettings["DomainName"] + "','user_type':'" + userDetail.user_type + "','ref_id':'" + userDetail.ref_id + "','user_name':'" + userDetail.user_name + "','password':'" + userDetail.pwd + "','first_name':'" + userDetail.first_name + "','last_name':'','mobileno':'" + userDetail.mobileNo + "','email':'" + userDetail.emailId + "','doj':'" + userDetail.doj + "','kitid':" + userDetail.kitid + "}";
+                //data = JsonConvert.SerializeObject(loginDetail);
+                var response = await CallFunction(loginDetailJson);
+                if (response == null)
+                {
+                    return null;
+                }
+            }
+
+            return userDetail;
+        }
+
+        #endregion Login API
+
+        /// <summary>
+        /// Method to invoke api function
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private static async Task<Response> CallLoginFunction(string data)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    // Wrap our JSON inside a StringContent which then can be used by the HttpClient class
+                    var httpContent = new StringContent(data, Encoding.UTF8, "application/json");
+                    //httpClient.DefaultRequestHeaders.Add("Key", AuthKey);
+
+                    // Do the actual request and await the response
+                    var httpResponse = await httpClient.PostAsync(LoginApiUrl, httpContent);
+
+                    // If the response contains content we want to read it!
+
+                    if (httpResponse.Content != null)
+                    {
+                        var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                        Console.WriteLine(responseContent);
+                        var response = JsonConvert.DeserializeObject<Response>(responseContent);
+                        return response;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
 
             return null;
         }
-
-        #endregion Login API
 
         #region Primary Setting API
         /// <summary>
