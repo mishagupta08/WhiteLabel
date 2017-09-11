@@ -13,15 +13,18 @@ namespace ShineYatraAdmin.Entity
         /// </summary>
         public string action { get; set; }
         public int service_id { get; set; }
-        public string txn_type{ get; set; }
+        public string txn_type { get; set; }
         public string company_id { get; set; }
-        public string  member_id{ get; set; }
+        public string member_id { get; set; }
         public float amount { get; set; }
         public string deposit_mode { get; set; }
-        public string remarks{ get; set; }
+        public string remarks { get; set; }
         public string domain_name { get; set; }
         public string request_token { get; set; }
         public int cancel_request_id { get; set; }
+
+        public TransactionDetail TransactionDetail { get; set; }
+
         /// <summary>
         /// gets or sets search list
         /// </summary>
@@ -31,7 +34,7 @@ namespace ShineYatraAdmin.Entity
         /// method to assign setting 
         /// </summary>
         public void AssignDepositModeList()
-        {                                                                                           
+        {
             this.DepositModeList = new List<KeyValuePair>();
 
             this.DepositModeList.Add(new KeyValuePair

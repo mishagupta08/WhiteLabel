@@ -37,7 +37,7 @@
         /// <summary>
         /// Base url of API
         /// </summary>
-        const string LoginApiUrl = "http://wlapi.bisplindia.in/api/Login/ValidateUser";
+        const string LoginApiUrl = "http://wlapi.bisplindia.in/api/Login/";
 
         /// <summary>
         /// Base url of API
@@ -53,6 +53,8 @@
         /// Authentication key
         /// </summary>
         const string FlightAuthKey = "e969da44-91f8-4d51-b138-0ace0980d519";
+
+        const string ValidateUserAction = "ValidateUser";
 
 
         /// <summary>
@@ -172,11 +174,12 @@
             bool ApiIntegrated = Convert.ToBoolean(ConfigurationManager.AppSettings["ApiIntegrated"]);
             bool isLocalApiRun = false;
             UserDetail userDetail = null;
+            loginDetail.action = ValidateUserAction;
             string data = JsonConvert.SerializeObject(loginDetail);
 
             if (ApiIntegrated)
             {
-                var response = await CallLoginFunction(data);
+                var response = await CallLoginFunction(data, ValidateUserAction);
                 if (response != null && response.Status == true)
                 {
                     var dtUser = JsonConvert.DeserializeObject<DTUserDetails>(response.ResponseValue);
@@ -244,7 +247,7 @@
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        private static async Task<Response> CallLoginFunction(string data)
+        private static async Task<Response> CallLoginFunction(string data, string action)
         {
             using (var httpClient = new HttpClient())
             {
@@ -255,7 +258,7 @@
                     //httpClient.DefaultRequestHeaders.Add("Key", AuthKey);
 
                     // Do the actual request and await the response
-                    var httpResponse = await httpClient.PostAsync(LoginApiUrl, httpContent);
+                    var httpResponse = await httpClient.PostAsync(LoginApiUrl + action, httpContent);
 
                     // If the response contains content we want to read it!
 
@@ -544,7 +547,7 @@
             var data = string.Empty;
             if (!string.IsNullOrEmpty(serviceId) && !string.IsNullOrEmpty(memberId))
             {
-               data = "{\"action\":\"GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES\",\"service_id\":\"" + serviceId + "\",\"category\":\"" + service_type + "\",\"member_id\":\"" + memberId + "\",\"sub_category\":\"" + sub_category + "\"}";
+                data = "{\"action\":\"GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES\",\"service_id\":\"" + serviceId + "\",\"category\":\"" + service_type + "\",\"member_id\":\"" + memberId + "\",\"sub_category\":\"" + sub_category + "\"}";
             }
             var response = await CallFunction(data);
             if (response != null && response.GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES != null)
@@ -577,9 +580,9 @@
         /// method to update commission structure group
         /// </summary>        
         /// <returns></returns>
-        public static async Task<string> EditCompanyServiceGroup(int company_id, int price_group_id, int service_id, string member_id,string category,string sub_category)
+        public static async Task<string> EditCompanyServiceGroup(int company_id, int price_group_id, int service_id, string member_id, string category, string sub_category)
         {
-            string data = "{\"action\":\"UPDATE_ALLOTMENT_COMMISSION_GROUP\",\"company_id\": " + company_id + ",\"price_group_id\":" + price_group_id + ",\"service_id\": " + service_id + ",\"member_id\": " + member_id + ",\"category\": \"" + category + "\",\"sub_category\": \"" + sub_category + "\"}";            
+            string data = "{\"action\":\"UPDATE_ALLOTMENT_COMMISSION_GROUP\",\"company_id\": " + company_id + ",\"price_group_id\":" + price_group_id + ",\"service_id\": " + service_id + ",\"member_id\": " + member_id + ",\"category\": \"" + category + "\",\"sub_category\": \"" + sub_category + "\"}";
             var response = await CallFunction(data);
             if (response != null && response.APISTATUS == SUCCESS)
             {
@@ -707,13 +710,13 @@
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        public static async Task<IList<UserDetail>> GetMemberUsersList(string memberId,string roleId)
+        public static async Task<IList<UserDetail>> GetMemberUsersList(string memberId, string roleId)
         {
             var data = string.Empty;
             if (!string.IsNullOrEmpty(memberId))
-            {                
+            {
                 data = "{\"action\":\"GET_USERS_LIST\",\"ref_id\":" + memberId + ",\"role_id\":" + roleId + "}";
-            }            
+            }
 
             var response = await CallFunction(data);
             if (response != null && response.GET_USERS_LIST != null)
@@ -727,12 +730,12 @@
         /// Get Flight, bus and hotel commission groups alloted to member
         /// </summary>
         /// <returns></returns>
-        public static async Task<IList<Member_Allotted_group>> GetMemberAllottedGroup(string memberId, string companyId,string serviceid,string category,string sub_category)
+        public static async Task<IList<Member_Allotted_group>> GetMemberAllottedGroup(string memberId, string companyId, string serviceid, string category, string sub_category)
         {
-            var data = "{\"action\":\"GET_MEMBER_ALLOTED_GROUPS\",\"member_id\":" + memberId + ",\"company_id\":" + companyId ;
+            var data = "{\"action\":\"GET_MEMBER_ALLOTED_GROUPS\",\"member_id\":" + memberId + ",\"company_id\":" + companyId;
             if (!string.IsNullOrEmpty(serviceid))
             {
-                data = data + ",\"service_id\":" + serviceid ;
+                data = data + ",\"service_id\":" + serviceid;
             }
             if (!string.IsNullOrEmpty(category))
             {
@@ -744,7 +747,7 @@
             }
 
             data = data + "}";
-            
+
             var response = await CallFunction(data);
             if (response != null && response.GET_MEMBER_ALLOTED_GROUPS != null)
             {
@@ -897,7 +900,7 @@
                 httpClient.DefaultRequestHeaders.Add("authKey", FlightAuthKey);
                 var stringwriter = new System.IO.StringWriter();
                 serializer.Serialize(stringwriter, BookTicket);
-                
+
                 var httpContent = new StringContent(stringwriter.ToString(), Encoding.UTF8, "application/xml");
                 var httpResponse = await httpClient.PostAsync("http://wlapi.bisplindia.in/api/Flight/BookTicket", httpContent);
 
@@ -1043,7 +1046,7 @@
             }
             return cancelResponse;
         }
-        
+
         /// <summary>
         /// method to save booking details to database
         /// </summary>
@@ -1054,7 +1057,7 @@
             string data = JsonConvert.SerializeObject(bookticket);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_BOOKING_REQUEST!=null)
+            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_BOOKING_REQUEST != null)
             {
                 return response.INSERT_SERVICE_BOOKING_REQUEST;
             }
@@ -1070,14 +1073,14 @@
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        public static async Task<List<BookingDetail>> GetServiceBookingRequest(string TransactionId,string memberId)
+        public static async Task<List<BookingDetail>> GetServiceBookingRequest(string TransactionId, string memberId)
         {
-            string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS\",\"member_id\":"+ memberId + ",\"txn_id\":"+ TransactionId+"}";
+            string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS\",\"member_id\":" + memberId + ",\"txn_id\":" + TransactionId + "}";
             var response = await CallFunction(data);
             if (response != null && response.APISTATUS == SUCCESS && response.GET_FLIGHT_TRANSACTIONS != null)
             {
                 return response.GET_FLIGHT_TRANSACTIONS;
-            }           
+            }
             return null;
         }
 
@@ -1126,6 +1129,26 @@
 
 
         #endregion  Flight API
+
+        /************/
+
+        /// <summary>
+        /// Method to validate user
+        /// </summary>
+        /// <param name="loginDetail"></param>
+        /// <returns></returns>
+        public static async Task<DTUserDetails> WalletFunction(TransactionDetail detail)
+        {
+            string data = JsonConvert.SerializeObject(detail);
+            DTUserDetails result = null;
+            var response = await CallLoginFunction(data, detail.action);
+            if (response != null && response.Status == true)
+            {
+                result = JsonConvert.DeserializeObject<DTUserDetails>(response.ResponseValue);
+            }
+
+            return result;
+        }
 
     }
 }

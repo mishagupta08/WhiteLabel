@@ -18,6 +18,7 @@ namespace ShineYatraAdmin.Controllers
         public ActionResult FundRequest()
         {
             CompanyFund companyFund = new CompanyFund();
+            companyFund.TransactionDetail = new TransactionDetail();
             try
             {
                 string[] userData = User.Identity.Name.Split('|');
@@ -54,6 +55,54 @@ namespace ShineYatraAdmin.Controllers
             {
                 Console.WriteLine(ex.InnerException);
             }
+            return Json(string.Empty);
+        }
+
+        public async Task<ActionResult> FundTransfer(CompanyFund fundModel)
+        {
+            if (fundModel == null || fundModel.TransactionDetail == null || string.IsNullOrEmpty(fundModel.TransactionDetail.username) || string.IsNullOrEmpty(fundModel.TransactionDetail.password))
+            {
+                return Json("Please fill Complete detail.");
+            }
+
+            FundManager fundManger = new FundManager();
+            try
+            {
+                //fundModel.action = "INSERT_FUND_REQUEST";
+                fundModel.TransactionDetail.action = "GetWalletAmount";
+                var userDetail = await fundManger.WalletFunction(fundModel.TransactionDetail);
+                if (userDetail == null || string.IsNullOrEmpty(userDetail.msg) || !userDetail.msg.Contains("success"))
+                {
+                    return Json("Invalid Credential");
+                }
+                else
+                {
+                    var walletAmount = Convert.ToDecimal(userDetail.swallet);
+                    if (walletAmount < fundModel.TransactionDetail.amount)
+                    {
+                        return Json("Insufficient balance.");
+                    }
+                    else
+                    {
+                        fundModel.TransactionDetail.action = "DeductAmount";
+                        fundModel.TransactionDetail.txnData = Guid.NewGuid().ToString();
+                        var response = await fundManger.WalletFunction(fundModel.TransactionDetail);
+                        if(response == null || string.IsNullOrEmpty(response.msg) || !response.msg.Contains("success"))
+                        {
+                            return Json("Something went wrong, Please try again later.");
+                        }
+
+                        // save voucher no. code here
+                    }
+                }
+
+                //return Json(response);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.InnerException);
+            }
+
             return Json(string.Empty);
         }
     }

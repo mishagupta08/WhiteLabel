@@ -38,3 +38,31 @@
     }
     return false;
 }
+
+function FundTransfer() {
+    var fundDetail = $('#addfunds').serialize();
+    $(".preloader").show();
+    $.ajax({
+        url: 'FundTransfer',
+        type: 'Post',
+        data: fundDetail
+    }).done(function (result) {
+        if (result == null || result == "") {
+            swal("Status", "There is some error please try again later.", "error")
+            $(".confirm").click(function () {
+                //$(".mfp-close").click();
+            });
+        }
+        else {
+            $(".mfp-close").click();
+            swal("Status", result)
+            $(".confirm").click(function () {
+                ClearForm("add-company_funds");
+            });
+        }
+        $(".preloader").hide();
+        return false;
+    });
+
+    return false;
+}

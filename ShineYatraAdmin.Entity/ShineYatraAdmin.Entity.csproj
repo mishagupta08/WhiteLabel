@@ -70,6 +70,7 @@
     <Compile Include="SearchParameter.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Theme.cs" />
+    <Compile Include="TransactionDetail.cs" />
     <Compile Include="UserDetail.cs" />
     <Compile Include="UserViewModel.cs" />
     <Compile Include="Wallet.cs" />

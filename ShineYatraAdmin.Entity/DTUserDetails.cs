@@ -29,5 +29,6 @@ namespace ShineYatraAdmin.Entity
         public string msg { get; set; }
         public string point { get; set; }
         public string deductamount { get; set; }
+        public string voucherno { get; set; }
     }
 }

@@ -20,5 +20,15 @@ namespace ShineYatraAdmin.Business
         {
             return await Program.SaveFundDetail(companyFund);
         }
+
+        /// <summary>
+        /// method to add fund details company list
+        /// </summary>
+        /// <param name="CompanyFund"></param>
+        /// <returns></returns>
+        public async Task<DTUserDetails> WalletFunction(TransactionDetail fundDetail)
+        {
+            return await Program.WalletFunction(fundDetail);
+        }
     }
 }

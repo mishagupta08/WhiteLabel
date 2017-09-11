@@ -5,67 +5,195 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-info">
-            <div class="panel-heading"> Add Fund Request</div>
-            <div class="panel-wrapper collapse in" aria-expanded="true">
-                <div class="panel-body">
-                    <form class="form-horizontal form-bordered" name="AddFund" id="add-company_funds" onsubmit="return false;">
+<div class="white-box">
+    <h3 class="box-title"> Add Fund Request</h3>
 
-                        <div class="form-body">
-                            <div class="form-group">
-                                @Html.HiddenFor(m => m.company_id)
-                                @Html.HiddenFor(m => m.member_id)
-                                @Html.HiddenFor(m => m.cancel_request_id)
-                                @Html.HiddenFor(m => m.service_id)
-                                @Html.HiddenFor(m => m.txn_type)
-                                @Html.HiddenFor(m => m.domain_name)
-                                @Html.HiddenFor(m => m.request_token)
+    <section>
+        <div class="sttabs tabs-style-bar">
+            <nav>
+                <ul class="tablist">
+                    <li id="tab-1"><a href="#section-bar-1"><span>Company Wallet</span></a></li>
+                    <li id="tab-2"><a href="#section-bar-2"><span>3rd Party Wallet</span></a></li>
+                </ul>
+            </nav>
+            <div class="content-wrap">
+                <section id="section-bar-1">
+                    <br /><br />
+                    <div id="Prepaid_structure">
+                        <div class="panel-body">
+                            <form class="form-horizontal form-bordered" name="AddFund" id="add-company_funds" onsubmit="return false;">
 
-                                <label class="control-label col-md-3">Amount</label>
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        @Html.HiddenFor(m => m.company_id)
+                                        @Html.HiddenFor(m => m.member_id)
+                                        @Html.HiddenFor(m => m.cancel_request_id)
+                                        @Html.HiddenFor(m => m.service_id)
+                                        @Html.HiddenFor(m => m.txn_type)
+                                        @Html.HiddenFor(m => m.domain_name)
+                                        @Html.HiddenFor(m => m.request_token)
 
-                                <div class="col-md-9">
-                                    @Html.TextBoxFor(m => m.amount, new { @required = "required", @id = "amount", @class = "form-control" })
-                                    <span style="color:red;display:none;" id="amountError">Please enter valid amount.</span>
+                                        <label class="control-label col-md-3">Amount</label>
+
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(m => m.amount, new { @required = "required", @id = "amount", @class = "form-control" })
+                                            <span style="color:red;display:none;" id="amountError">Please enter valid amount.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Payment Mode</label>
+
+                                        <div class="col-md-9">
+                                            @Html.DropDownListFor(m => m.deposit_mode, new SelectList(Model.DepositModeList, "Id", "Value"), new { @required = "required", @id = "deposit_mode", @class = "form-control" })
+                                            <span style="color:red;display:none;" id="paymentModeError">Please select a deposit type.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Remarks</label>
+
+                                        <div class="col-md-9">
+                                            @Html.TextAreaFor(m => m.remarks, new { @rows = "5", @cols = "30", @required = "", @id = "remarks", @class = "form-control" })
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="control-label col-md-3">Payment Mode</label>
-
-                                <div class="col-md-9">
-                                    @Html.DropDownListFor(m => m.deposit_mode, new SelectList(Model.DepositModeList, "Id", "Value"), new { @required = "required", @id = "deposit_mode", @class = "form-control" })
-                                    <span style="color:red;display:none;" id="paymentModeError">Please select a deposit type.</span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label col-md-3">Remarks</label>
-
-                                <div class="col-md-9">
-                                    @Html.TextAreaFor(m => m.remarks, new { @rows = "5", @cols = "30", @required = "", @id = "remarks", @class = "form-control" })
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-md-12">
+                                <div class="form-actions">
                                     <div class="row">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <button type="button" class="btn btn-success" onclick="AddEditFund();"> <i class="fa fa-check"></i> Submit</button>
-                                            <button type="button" class="btn btn-default">Cancel</button>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="button" class="btn btn-success" onclick="AddEditFund();"> <i class="fa fa-check"></i> Submit</button>
+                                                    <button type="button" class="btn btn-default">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                @********3rd Party wallet ***********@
+                <section id="section-bar-2">
+                    <br /><br />
+                    <div id="Prepaid_structure">
+                        <div class="panel-body">
+                            <form class="form-horizontal form-bordered" id="addfunds" onsubmit="return FundTransfer();">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Username</label>
+
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(m => m.TransactionDetail.username, new { @required = "required", @id = "username", @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Password</label>
+
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(m => m.TransactionDetail.password, new { @required = "required", @type = "password", @id = "password", @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Amount</label>
+
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(m => m.TransactionDetail.amount, new { @required = "required", @type = "Number", @id = "amount", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                                                    <button type="reset" class="btn btn-default">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+@*******Add fund html start********@
+@*<div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading"> Add Fund Request</div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <form class="form-horizontal form-bordered" name="AddFund" id="add-company_funds" onsubmit="return false;">
+
+                            <div class="form-body">
+                                <div class="form-group">
+                                    @Html.HiddenFor(m => m.company_id)
+                                    @Html.HiddenFor(m => m.member_id)
+                                    @Html.HiddenFor(m => m.cancel_request_id)
+                                    @Html.HiddenFor(m => m.service_id)
+                                    @Html.HiddenFor(m => m.txn_type)
+                                    @Html.HiddenFor(m => m.domain_name)
+                                    @Html.HiddenFor(m => m.request_token)
+
+                                    <label class="control-label col-md-3">Amount</label>
+
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(m => m.amount, new { @required = "required", @id = "amount", @class = "form-control" })
+                                        <span style="color:red;display:none;" id="amountError">Please enter valid amount.</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Payment Mode</label>
+
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(m => m.deposit_mode, new SelectList(Model.DepositModeList, "Id", "Value"), new { @required = "required", @id = "deposit_mode", @class = "form-control" })
+                                        <span style="color:red;display:none;" id="paymentModeError">Please select a deposit type.</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Remarks</label>
+
+                                    <div class="col-md-9">
+                                        @Html.TextAreaFor(m => m.remarks, new { @rows = "5", @cols = "30", @required = "", @id = "remarks", @class = "form-control" })
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-offset-3 col-md-9">
+                                                <button type="button" class="btn btn-success" onclick="AddEditFund();"> <i class="fa fa-check"></i> Submit</button>
+                                                <button type="button" class="btn btn-default">Cancel</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </div>*@
+@*******Add fund html end********@
 <script src="~/Script/Fund.js"></script>
