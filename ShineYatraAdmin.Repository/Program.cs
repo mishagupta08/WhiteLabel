@@ -56,6 +56,8 @@
 
         const string ValidateUserAction = "ValidateUser";
 
+        const string ValidateLoginAction = "ValidateLogin";
+
 
         /// <summary>
         /// method to update primay setting margin for airline bus and hotel
@@ -174,11 +176,11 @@
             bool ApiIntegrated = Convert.ToBoolean(ConfigurationManager.AppSettings["ApiIntegrated"]);
             bool isLocalApiRun = false;
             UserDetail userDetail = null;
-            loginDetail.action = ValidateUserAction;
-            string data = JsonConvert.SerializeObject(loginDetail);
 
             if (ApiIntegrated)
             {
+                loginDetail.action = ValidateUserAction;
+                string data = JsonConvert.SerializeObject(loginDetail);
                 var response = await CallLoginFunction(data, ValidateUserAction);
                 if (response != null && response.Status == true)
                 {
@@ -205,6 +207,8 @@
 
             if (isLocalApiRun)
             {
+                loginDetail.action = ValidateLoginAction;
+                string data = JsonConvert.SerializeObject(loginDetail);
                 var response = await CallFunction(data);
                 if (response != null && response.VALIDATELOGIN != null && response.VALIDATELOGIN.Count > 0)
                 {
