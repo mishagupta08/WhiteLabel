@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ShineYatraAdmin.Entity
 {
@@ -22,7 +18,6 @@ namespace ShineYatraAdmin.Entity
         public string domain_name { get; set; }
         public string request_token { get; set; }
         public int cancel_request_id { get; set; }
-
         public TransactionDetail TransactionDetail { get; set; }
 
         /// <summary>

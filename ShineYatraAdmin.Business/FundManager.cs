@@ -30,5 +30,25 @@ namespace ShineYatraAdmin.Business
         {
             return await Program.WalletFunction(fundDetail);
         }
+
+        /// <summary>
+        /// method to add fund details company list
+        /// </summary>
+        /// <param name="CompanyFund"></param>
+        /// <returns></returns>
+        public async Task<string> WalletCreditRequest(FundRequestContainer fundDetail)
+        {
+            return await Program.WalletCreditRequest(fundDetail);
+        }
+
+        /// <summary>
+        /// method to add fund details company list
+        /// </summary>
+        /// <param name="CompanyFund"></param>
+        /// <returns></returns>
+        public async Task<string> UpdateWalletCreditRequest(FundRequestContainer fundDetail)
+        {
+            return await Program.UpdateWalletCreditRequest(fundDetail);
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using ShineYatraAdmin.Entity;
 using System.Threading.Tasks;
 using ShineYatraAdmin.Business;
+using System.Configuration;
 
 namespace ShineYatraAdmin.Controllers
 {
@@ -84,15 +85,73 @@ namespace ShineYatraAdmin.Controllers
                     }
                     else
                     {
-                        fundModel.TransactionDetail.action = "DeductAmount";
-                        fundModel.TransactionDetail.txnData = Guid.NewGuid().ToString();
-                        var response = await fundManger.WalletFunction(fundModel.TransactionDetail);
-                        if(response == null || string.IsNullOrEmpty(response.msg) || !response.msg.Contains("success"))
+                        /**Insert into database for fund request.**/
+
+                        var fundDetail = new FundRequestContainer();
+                        string[] userData = User.Identity.Name.Split('|');
+
+                        fundDetail.action = "WALLET_CREDIT_3RD_PARTY_REQUEST";
+                        fundDetail.domain_name = ConfigurationManager.AppSettings["DomainName"];
+                        fundDetail.request_token = "wt_" + Guid.NewGuid().ToString().Substring(0, 4);
+                        fundDetail.txn_type = "FUND_WALLET";
+                        fundDetail.member_id = userData[1];
+                        fundDetail.amount = (float)(fundModel.TransactionDetail.amount);
+                        fundDetail.remarks = "Fund transfer";
+
+                        fundDetail.status = string.Empty;
+                        fundDetail.ref_no = string.Empty;
+                        fundDetail.txn_id = string.Empty;
+
+                        var refNO = await fundManger.WalletCreditRequest(fundDetail);
+                        if (refNO == null)
                         {
                             return Json("Something went wrong, Please try again later.");
                         }
+                        else
+                        {
+                            fundModel.TransactionDetail.action = "DeductAmount";
+                            fundModel.TransactionDetail.txnData = refNO;
+                            fundModel.TransactionDetail.remark = "DealPortal";
 
-                        // save voucher no. code here
+                            var response = await fundManger.WalletFunction(fundModel.TransactionDetail);
+                            if (response == null || string.IsNullOrEmpty(response.msg) || !response.msg.Contains("success") || string.IsNullOrEmpty(response.voucherno))
+                            {
+                                return Json("Something went wrong, Please try again later.");
+                            }
+                            else
+                            {
+                                // ceck transaction confirmation status
+                                fundModel.TransactionDetail.action = "WalletDeductConfirmation";
+                                fundModel.TransactionDetail.voucherNo = response.voucherno;
+
+
+                                var status = await fundManger.WalletFunction(fundModel.TransactionDetail);
+
+                                if (status == null || string.IsNullOrEmpty(status.response) || !(status.response.Contains("OK")))
+                                {
+                                    return Json("Something went wrong, Please try again later.");
+                                }
+                                else
+                                {
+                                    // update 3rd party req. status
+                                    fundDetail = new FundRequestContainer();
+                                    fundDetail.action = "UPDATE_3RD_PARTY_WALLET_REQUEST";
+                                    fundDetail.member_id = userData[1];
+                                    fundDetail.ref_no = response.voucherno;
+                                    fundDetail.status = "approved";
+                                    fundDetail.txn_id = refNO;
+
+                                    fundDetail.txn_type = string.Empty;
+                                    fundDetail.amount = (float)(fundModel.TransactionDetail.amount);
+                                    fundDetail.remarks = string.Empty;
+                                    fundDetail.domain_name = string.Empty;
+                                    fundDetail.request_token = string.Empty;
+
+                                    var res = await fundManger.UpdateWalletCreditRequest(fundDetail);
+                                    return Json(res);
+                                }
+                            }
+                        }
                     }
                 }
 

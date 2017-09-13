@@ -72,7 +72,7 @@
         /// gets or sets company service list
         /// </summary>
         public IList<Service> GET_SERVICES { get; set; }
-        
+
         /// <summary>
         /// gets or sets company Master price group list
         /// </summary>
@@ -118,10 +118,12 @@
         /// </summary>
         public string FLIGHT_SEARCH { get; set; }
 
-		/// <summary>
+        /// <summary>
         /// gets or sets list of sub categories
         /// </summary>
         public IList<SubCategory> GET_SERVICE_SUB_CATEGORY_LIST { get; set; }
+
+        public List<FundRequestContainer> WALLET_CREDIT_3RD_PARTY_REQUEST { get; set; }
 
         /// <summary>
         /// gets or sets flight booking details to database
@@ -149,6 +151,6 @@
         /// gets or sets flight booking details
         /// </summary>
         public List<BookingDetail> GET_FLIGHT_TRANSACTIONS { get; set; }
-        
+
     }
 }

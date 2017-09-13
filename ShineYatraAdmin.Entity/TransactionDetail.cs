@@ -34,5 +34,7 @@ namespace ShineYatraAdmin.Entity
         /// gets or sets amount
         /// </summary>
         public decimal amount { get; set; }
+
+        public string remark { get; set; }
     }
 }

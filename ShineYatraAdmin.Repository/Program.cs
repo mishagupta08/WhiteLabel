@@ -1154,5 +1154,46 @@
             return result;
         }
 
+        /// <summary>
+        /// get list of subservices for a service
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<string> WalletCreditRequest(FundRequestContainer fundDetail)
+        {
+            string data = JsonConvert.SerializeObject(fundDetail);
+
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS == SUCCESS && response.WALLET_CREDIT_3RD_PARTY_REQUEST != null && response.WALLET_CREDIT_3RD_PARTY_REQUEST.Count > 0)
+            {
+                var txnId = response.WALLET_CREDIT_3RD_PARTY_REQUEST.FirstOrDefault().txn_id;
+                return txnId;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// get list of subservices for a service
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<string> UpdateWalletCreditRequest(FundRequestContainer fundDetail)
+        {
+            string data = JsonConvert.SerializeObject(fundDetail);
+
+            var response = await CallFunction(data);
+            if (response != null)
+            {
+                if (response.APISTATUS == SUCCESS)
+                {
+                    return "Fund Transfer successfully.";
+                }
+
+                return response.MSG;
+            }
+
+            return "No Result Found.";
+        }
     }
 }
