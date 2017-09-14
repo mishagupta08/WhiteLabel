@@ -13,8 +13,7 @@ namespace ShineYatraAdmin.Controllers
     [Authorize]
     public class FundController : Controller
     {
-        FundManager fundManger = new FundManager();
-        CompanyFund companyFund = null;
+        FundManager fundManger = new FundManager();        
 
         public ActionResult FundRequest()
         {
@@ -163,6 +162,23 @@ namespace ShineYatraAdmin.Controllers
             }
 
             return Json(string.Empty);
+        }
+
+        /// <summary>
+        /// Get list of fund request from members
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> MemberFundRequest() {
+
+            List<CompanyFund> fundRequestList = new List<CompanyFund>();
+            try {
+                string[] userData = User.Identity.Name.Split('|');
+                fundRequestList = await fundManger.getFundRequestList(userData[1]);
+            }
+            catch (Exception Ex) {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View(fundRequestList);
         }
     }
 }

@@ -619,6 +619,7 @@
     <Content Include="Views\User\MemberUsers.cshtml" />
     <Content Include="Views\Flight\BookingStatus.cshtml" />
     <None Include="Properties\PublishProfiles\Whitelablepublish.pubxml" />
+    <Content Include="Views\Fund\MemberFundRequest.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,138 @@
+﻿@using ShineYatraAdmin.Properties;
+@model IEnumerable<ShineYatraAdmin.Entity.CompanyFund>
+@{
+    ViewBag.Title = "wl_primary_users";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+</style>
+<div class="white-box">
+    <h3 class="box-title"> Manage Fund Request</h3>
+
+    <table id="FundRequestList" class="display table" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>
+                    System ID
+                </th>
+                <th>
+                    Txn Date
+                </th>
+                <th>
+                    Member Name
+                </th>
+                <th>
+                    User Name
+                </th>
+                <th>
+                    Requested Amount
+                </th>
+                <th>
+                    Deposit Mode
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Remark
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.txn_id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.txn_date)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.first_name)
+                            <span>&nbsp;</span>
+                            @Html.DisplayFor(modelItem => item.last_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.user_name)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.amount)
+                        </td>
+
+                        <td>@Html.DisplayFor(modelItem => item.deposit_mode)</td>
+                        <td>
+                            @if (item.status.ToUpper().Trim() == "Y")
+                    {
+                                <div class="label label-table label-success">@Html.DisplayFor(modelItem => item.status)</div>
+                            }
+                            else
+                            {
+                                <div class="label label-table label-danger">@Html.DisplayFor(modelItem => item.status)</div>
+                            }
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.remarks)
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td>No Fund Request Found</td></tr>
+            }
+        </tbody>
+    </table>
+    </div>
+    <a class="popup-with-form btn btn-success" href="#add-company_funds" id="popupfundForm" style="display:none;">Open form</a>
+    <form id="add-company_funds" class="form-horizontal mfp-hide white-popup-block" style="width: 90%;" onsubmit="return false;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading"> Add Fund Request</div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <div id="addcompanyfunds"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- Add Funds Request -->
+
+    <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#FundRequestList').DataTable({
+                "bLengthChange": false,
+                "language": {
+                    "paginate": {
+                        "previous": "<<",
+                        "next": ">>"
+                    }
+                },
+                "aoColumnDefs": [
+              { 'bSortable': false, 'aTargets': [7] }
+                ],
+
+                stateSave: true
+            });
+        });
+
+    </script>

@@ -17,6 +17,13 @@ namespace ShineYatraAdmin.Entity
         public string remarks { get; set; }
         public string domain_name { get; set; }
         public string request_token { get; set; }
+        public int txn_id { get; set; }
+        public string txn_date { get; set; }              
+        public string status { get; set; }        
+        public string user_name { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public string sub_service_name { get; set; }
         public int cancel_request_id { get; set; }
         public TransactionDetail TransactionDetail { get; set; }
 

@@ -162,5 +162,10 @@
         /// </summary>
         public UPDATE_TRANSACTION_STATUS UPDATE_TRANSACTION_STATUS { get; set; }
 
+        /// <summary>
+        /// gets or sets member fund request list
+        /// </summary>
+        public List<CompanyFund> MEMBER_FUND_REQUEST_LIST { get; set; }
+
     }
 }
