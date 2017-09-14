@@ -114,6 +114,11 @@
         public IList<Member_Allotted_group> GET_MEMBER_ALLOTED_GROUPS { get; set; }
 
         /// <summary>
+        /// gets or sets service allotted group details
+        /// </summary>
+        public IList<CompanyCommissionGroup> GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS { get; set; }
+
+        /// <summary>
         /// gets or sets flight details according to search parameter
         /// </summary>
         public string FLIGHT_SEARCH { get; set; }
@@ -151,6 +156,11 @@
         /// gets or sets flight booking details
         /// </summary>
         public List<BookingDetail> GET_FLIGHT_TRANSACTIONS { get; set; }
+
+        /// <summary>
+        /// gets or sets update flight booking details
+        /// </summary>
+        public UPDATE_TRANSACTION_STATUS UPDATE_TRANSACTION_STATUS { get; set; }
 
     }
 }

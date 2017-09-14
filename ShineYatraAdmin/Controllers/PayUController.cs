@@ -27,7 +27,7 @@ namespace ShineYatraAdmin.Controllers
         {
            
             string firstName = request.FirstName;
-            string amount = request.TransactionAmount;
+            string amount = Convert.ToString(request.TransactionAmount);
             string productInfo = request.ProductInfo;
             string email = request.Email;
             string phone = request.Phone;

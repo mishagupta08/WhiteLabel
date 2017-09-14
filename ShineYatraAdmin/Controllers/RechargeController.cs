@@ -162,7 +162,7 @@ namespace ShineYatraAdmin.Controllers
                     PayUController cntrl = new PayUController();
                     PayuRequest payrequest = new PayuRequest();
                     payrequest.FirstName = "Misha";
-                    payrequest.TransactionAmount = "1.0";
+                    payrequest.TransactionAmount = 1;
                     payrequest.Email = "guptamisha88@gmail.com";
                     payrequest.Phone = "8107737208";
                     payrequest.ProductInfo = "Recharge Payment";

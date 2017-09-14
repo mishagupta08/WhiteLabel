@@ -14,26 +14,101 @@
 </style>
 <link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 
+@{
+    var flight = Model.flightfaredetails.FlightsDetailList.FirstOrDefault();
+    var Lastflight = Model.flightfaredetails.FlightsDetailList.LastOrDefault();
+
+    var totatlfare = Model.flightfaredetails.FareDetail.ChargeableFares.Tax + Model.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare;
+ }
 
 <div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-info">
-            <div class="panel-heading">Flight Search REsult</div>
-            <div class="panel-wrapper collapse in" aria-expanded="true">
-                <div class="panel-body">
+    <div class="panel panel-info">        
+        <div class="panel-wrapper collapse in" aria-expanded="true">
+            <div class="panel-body">
+                <div class="col-md-3" style="border-right:1px solid aliceblue;">
+                    <div class="col-lg-12">
+                        <div class="col-lg-12" style="background-color:cadetblue;color:white;">Your Booking Details</div>
+                        <div class="col-lg-12">
+                            <h5>@flight.DepartureAirportCode - @flight.ArrivalAirportCode</h5>
+                            <hr />
+                            <h5 style="color:darkblue;">Traveller Details</h5>
+                            <hr />
+                            <h5 style="color:darkblue;">Air Fair</h5>
+                            <h5>Base fare, fuel & transaction charge</h5>
+                            <br />
+                            <span style="margin-left:30px;">Adult Count @Model.flightSearch.AdultPax :</span>
+                            <span style="float:right">@Model.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare</span>
+                            <h5>Fees & taxes</h5>
+                            <br />
+                            <span style="margin-left:30px;">Tax :</span>
+                            <span style="float:right">@Model.flightfaredetails.FareDetail.ChargeableFares.Tax</span>
+                            <hr />
+                            <h5 style="color:darkblue;">Total</h5>
+                            <span style="float:right">@totatlfare</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <hr />
+                        <hr />
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-12" style="background-color:cadetblue;color:white;">Agent Invoice</div>
+                        <div class="col-lg-12">
+                            <h5>@flight.DepartureAirportCode - @flight.ArrivalAirportCode</h5>
+                            <hr />
+                            <h5 style="color:darkblue;">Traveller Details</h5>
+                            <hr />
+                            <h5 style="color:darkblue;">Air Fair</h5>
+                            <h5>Base fare, fuel & transaction charge</h5>
+                            <br />
+                            <span style="margin-left:30px;">
+                                @if (Model.flightSearch.AdultPax > 0)
+                                {
+                                    <span>Adult Count @Model.flightSearch.AdultPax&nbsp;</span> 
+                                }
+                                @if (Model.flightSearch.ChildPax > 0)
+                                {
+                                    <span>Child Count @Model.flightSearch.ChildPax&nbsp;</span>
+                                }
+                                @if (Model.flightSearch.InfantPax > 0)
+                                {
+                                    <span>Infant Count @Model.flightSearch.InfantPax&nbsp;</span>
+                                }
+                             :</span>
+                            <span style="float:right">@Model.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare</span>
+                            <h5>Fees & taxes</h5>
+                            <br />
+                            <span style="margin-left:30px;">Tax :</span>
+                            <span style="float:right">@Model.flightfaredetails.FareDetail.ChargeableFares.Tax</span>                            
+                            <hr />
+                            <h5 style="color:darkblue;">Total</h5>
+                            <span style="float:right">@totatlfare</span> <br/>
+                            <hr/>
+                            <h5  style="color:darkblue;">Discount</h5>
+                            <br />
+                            <span style="margin-left:30px;">Discount :</span>
+                            <span style="float:right">@Model.flightfaredetails.FareDetail.discountedFare</span>
+                            <hr />
+                            <h5 style="color:darkblue;">Total</h5>
+                            <span style="float:right">@{var discountfare = totatlfare - Model.flightfaredetails.FareDetail.discountedFare;} @discountfare</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+
                     <form class="tr" method="post" action="BookingResponse">
                         <hr>
                         <h4>Flight Details</h4>
                         <hr>
-                        <h3>@Model.flightSearch.Origin - @Model.flightSearch.Destination</h3>
-                        <h3>Total Fare - Rs @Model.arrayOfSearchedFlights.FlightsDetail.First().BookingClassFare.AdultFare</h3>
+                        <h3>@flight.DepartureAirportCode - @flight.ArrivalAirportCode</h3>
+                        <h3>Total Fare - Rs @totatlfare </h3>
 
-                        <h4>Depart from origin:-  @Model.arrayOfSearchedFlights.FlightsDetail.First().DepartureDateTime</h4>
-                        <h4>Arrival at destination:-  @Model.arrayOfSearchedFlights.FlightsDetail.Last().ArrivalDateTime</h4>
+                        <h4>Depart from origin:-  @flight.DepartureDateTime.ToString("ddd, dd MMM HH:mm:ss")</h4>
+                        <h4>Arrival at destination:-  @Lastflight.ArrivalDateTime.ToString("ddd, dd MMM HH:mm:ss")</h4>
 
-                        @Html.HiddenFor(m=>m.FlightBookingDetail.Origin)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.Origin)
                         @Html.HiddenFor(m => m.FlightBookingDetail.Destination)
-                        @Html.HiddenFor(m=>m.FlightBookingDetail.DepartDate)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.DepartDate)
                         @Html.HiddenFor(m => m.FlightBookingDetail.ReturnDate)
                         @Html.HiddenFor(m => m.FlightBookingDetail.AdultPax)
 
@@ -45,21 +120,21 @@
 
                         @Html.HiddenFor(m => m.FlightBookingDetail.FlightNumber)
                         @Html.HiddenFor(m => m.FlightBookingDetail.OperatingAirlineCode)
-                        @Html.HiddenFor(m => m.FlightBookingDetail.Preferredclass)                        
-                        <input type="hidden" name="FlightBookingDetail.AdultFare" value="@Model.arrayOfSearchedFlights.FlightsDetail.First().BookingClassFare.AdultFare">
-                        @Html.HiddenFor(m=>m.walletBalance)
+                        @Html.HiddenFor(m => m.FlightBookingDetail.Preferredclass)
+                        <input type="hidden" name="FlightBookingDetail.AdultFare" value="@totatlfare">
+                        @Html.HiddenFor(m => m.walletBalance)
 
 
                         <hr>
                         <table width="600" border="1">
-                            @foreach (var flight in Model.arrayOfSearchedFlights.FlightsDetail)
-                            {
-                                <tr>
-                                    <td><span>@flight.AirLineName</span><span>&nbsp;(@flight.Id)</span></td>
-                                    <td><span>@flight.DepartureDateTime &nbsp; (@flight.DepartureAirportCode)</span></td>
-                                    <td><span>@flight.ArrivalDateTime &nbsp; (@flight.ArrivalAirportCode)</span></td>
-                                </tr>
-                            }
+                            @foreach (var flightdetail in Model.flightfaredetails.FlightsDetailList)
+                                {
+                                    <tr>
+                                        <td><span>@flightdetail.AirLineName</span><span>&nbsp;(@flightdetail.OperatingAirlineCode - @flightdetail.FlightNumber)</span></td>
+                                        <td><span>@flightdetail.DepartureDateTime.ToString("ddd, dd MMM HH:mm:ss") &nbsp; (@flightdetail.DepartureAirportCode)</span></td>
+                                        <td><span>@flightdetail.ArrivalDateTime.ToString("ddd, dd MMM HH:mm:ss") &nbsp; (@flightdetail.ArrivalAirportCode)</span></td>
+                                    </tr>
+                                }
                         </table>
 
                         <hr>
@@ -76,22 +151,24 @@
                                 <div class="col-sm-10">
                                     <div class="row">
 
-                                        <div class="form-group col-xs-4">
+                                        <div class="form-group col-xs-3">
                                             @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.NameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
                                         </div>
 
-                                        <div class="form-group col-xs-4">
+                                        <div class="form-group col-xs-3">
                                             @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
                                         </div>
 
-                                        <div class="form-group col-xs-4">
+                                        <div class="form-group col-xs-3">
                                             @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
                                         </div>
+                                        <div class="form-group col-xs-3">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].age, new { @required = "", type = "number", @placeholder = "age", @class = "form-control input-group-md reg_name" })
+                                        </div>
 
-                                      
 
                                         <div class="form-group col-xs-6">
-                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.AdultCode })                                           
+                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.AdultCode })
                                         </div>
                                     </div>
                                 </div>
@@ -106,30 +183,34 @@
             {
                                 <br />
                                 <label class="col-sm-2 control-label">@Resources.Child @(i + 1)</label><br />
-                                <div class="col-sm-10">
-                                    <div class="row">
+                                    <div class="col-sm-10">
+                                        <div class="row">
 
-                                        <div class="form-group col-xs-3">
-                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.ChildNameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
-                                        </div>
+                                            <div class="form-group col-xs-3">
+                                                @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.ChildNameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                            </div>
 
-                                        <div class="form-group col-xs-3">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
-                                        </div>
+                                            <div class="form-group col-xs-3">
+                                                @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                            </div>
 
-                                        <div class="form-group col-xs-3">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
-                                        </div>
-                                        
-                                        <div class="form-group col-xs-3">
-                                            @Html.TextBoxFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].dob, new { @required = "", @id = "dateinput1", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })                                            
-                                        </div>
+                                            <div class="form-group col-xs-3">
+                                                @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                            </div>
 
-                                        <div class="form-group col-xs-3">
-                                            @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.ChildCode })
+                                            <div class="form-group col-xs-3">
+                                                @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].age, new { @required = "", type = "number", @placeholder = "age", @class = "form-control input-group-md reg_name" })
+                                            </div>
+
+                                            <div class="form-group col-xs-3">
+                                                @Html.TextBoxFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].dob, new { @required = "", @id = "dateinput1", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
+                                            </div>
+
+                                            <div class="form-group col-xs-3">
+                                                @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.ChildCode })
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 count++;
                             }
                         </div>
@@ -146,7 +227,7 @@
                                         </div>
 
                                         <div class="form-group col-xs-3">
-                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "",@placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
                                         </div>
 
                                         <div class="form-group col-xs-3">
@@ -154,9 +235,13 @@
                                         </div>
 
                                         <div class="form-group col-xs-3">
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].age, new { @required = "", type = "number", @placeholder = "age", @class = "form-control input-group-md reg_name" })
+                                        </div>
+
+                                        <div class="form-group col-xs-3">
                                             @Html.TextBoxFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].dob, new { @required = "", @id = "dateinput2", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
                                         </div>
-                                     
+
                                         <div class="form-group col-xs-6">
                                             @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.InfantCode })
                                         </div>
@@ -188,18 +273,18 @@
                             @Html.TextBoxFor(x => Model.FlightBookingDetail.EmailAddress, new { @placeholder = "Email Adress", @required = "" })
                         </div>
 
-                        <br/>
-                        
+                        <br />
+
 
                         <br />
                         <div class="row">
                             <h3> NOTE :- Your current wallet balance is :- @Model.walletBalance</h3>
                             <label>Choose Payment Mode:</label>
-                             
-                            <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet" , new {@required="required"})Wallet</label>
+
+                            <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required" })Wallet</label>
                             <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required" })Bank</label>
-                           <br/>
-                                                  
+                            <br />
+
                         </div>
                         <br />
 
@@ -214,7 +299,7 @@
         </div>
     </div>
 </div>
-<script src="~/Script/flight.js"></script>
+
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
 
@@ -227,7 +312,7 @@
             todayHighlight: true,
             changeMonth: true,
             changeYear: true,
-            dateFormat: "dd-M-yy"        
+            dateFormat: "dd-M-yy"
         });
 
         jq('#dateinput2').datepicker({

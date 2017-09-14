@@ -759,12 +759,34 @@
             }
             return null;
         }
+
+        /// <summary>
+        /// Get Flight, bus and hotel commission groups alloted to member
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IList<CompanyCommissionGroup>> GetServiceAllottedGroupDetails(string memberId, string service_code, string serviceid, string category, string sub_category)
+        {
+            var data = "{\"action\":\"GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS\",\"member_id\":"+memberId+",\"service_id\":1,\"category\":\"FLIGHT\",\"sub_category\":\"DOMESTIC\",\"service_code\":\"\"}";
+
+            var response = await CallFunction(data);
+            if (response != null && response.GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS != null)
+            {
+                return response.GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS;
+            }
+            return null;
+        }
+
         #endregion White Label USer API
 
         #region Flight API
-        public static async Task<ArrayOfFlightsDetail> FlightPricing(Request searchflight)
+        /// <summary>
+        /// get details of Fare for a particular flight
+        /// </summary>
+        /// <param name="searchflight"></param>
+        /// <returns></returns>
+        public static async Task<OriginDestinationOption> FlightPricing(Request searchflight)
         {
-            var flightprice = new ArrayOfFlightsDetail();
+            var flightprice = new OriginDestinationOption();
             using (var httpClient = new HttpClient())
             {
                 string xmlstring = string.Empty;
@@ -788,13 +810,19 @@
                     }
                     else
                     {
-                        var serializer1 = new XmlSerializer(typeof(ArrayOfFlightsDetail));
+                        var serializer1 = new XmlSerializer(typeof(OriginDestinationOption));
                         string searchResponse = RemoveAllNamespacesPost(responseContent);
                         searchResponse = HttpUtility.HtmlDecode(searchResponse);
                         searchResponse = ReplaceBRwithNewline(searchResponse);
                         using (TextReader reader = new StringReader(searchResponse))
                         {
-                            flightprice = (ArrayOfFlightsDetail)serializer1.Deserialize(reader);
+                            try
+                            {
+                                flightprice = (OriginDestinationOption)serializer1.Deserialize(reader);
+                            }
+                            catch (Exception ex) {
+                                Console.WriteLine(ex.InnerException);
+                            }
                         }
 
                         //return response;
@@ -805,9 +833,14 @@
             return flightprice;
         }
 
-        public static async Task<ArrayOfFlightsDetail> SearchFlight(Request searchflight)
+        /// <summary>
+        /// search flight btn source and destination
+        /// </summary>
+        /// <param name="searchflight"></param>
+        /// <returns></returns>
+        public static async Task<ArrayOfOrigindestinationoption> SearchFlight(Request searchflight)
         {
-            var flightList = new ArrayOfFlightsDetail();
+            var flightList = new ArrayOfOrigindestinationoption();
             using (var httpClient = new HttpClient())
             {
                 string xmlstring = string.Empty;
@@ -833,14 +866,14 @@
                     else
                     {
 
-                        var serializer1 = new XmlSerializer(typeof(ArrayOfFlightsDetail));
+                        var serializer1 = new XmlSerializer(typeof(ArrayOfOrigindestinationoption));
                         string searchResponse = RemoveAllNamespacesPost(responseContent);
                         searchResponse = HttpUtility.HtmlDecode(searchResponse);
                         searchResponse = ReplaceBRwithNewline(searchResponse);
 
                         using (TextReader reader = new StringReader(searchResponse))
                         {
-                            flightList = (ArrayOfFlightsDetail)serializer1.Deserialize(reader);
+                            flightList = (ArrayOfOrigindestinationoption)serializer1.Deserialize(reader);
                         }
                     }
                 }
@@ -892,7 +925,11 @@
             }
             return cityList;
         }
-
+        /// <summary>
+        /// flight ticket booking
+        /// </summary>
+        /// <param name="BookTicket"></param>
+        /// <returns></returns>
         public static async Task<Bookingresponse> BookTicket(Request BookTicket)
         {
             var bookResponse = new Bookingresponse();
@@ -1085,6 +1122,29 @@
             {
                 return response.GET_FLIGHT_TRANSACTIONS;
             }
+            return null;
+        }
+
+        /// <summary>
+        /// method to get booking details to database
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId,string api_txn_id, string status)
+        {
+            string data = "{\"action\":\"UPDATE_TRANSACTION_STATUS\",\"update_member_id\":\"" + memberId + "\",\"txn_id\":\"" + TransactionId + "\",\"status\":\"" + status + "\",\"api_txn_id\":\"" + api_txn_id + "\"}";
+            var response = await CallFunction(data);
+            UPDATE_TRANSACTION_STATUS updatestatus = new UPDATE_TRANSACTION_STATUS();
+        
+            if (response != null && response.APISTATUS == SUCCESS && response.UPDATE_TRANSACTION_STATUS != null)
+            {
+                return response.UPDATE_TRANSACTION_STATUS;
+            }
+            else if (response != null && response.MSG != null)
+            {
+                updatestatus.MSG =  response.MSG;
+                return updatestatus;
+            }            
             return null;
         }
 

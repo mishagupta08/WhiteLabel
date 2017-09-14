@@ -61,10 +61,10 @@ namespace ShineYatraAdmin
          );
 
             routes.MapRoute(
-       name: "GetFlightMenu",
-       url: "{controller}/{action}",
-       defaults: new { controller = "Flight", action = "GetFlightMenu" }
-       );
+           name: "GetFlightMenu",
+           url: "{controller}/{action}",
+           defaults: new { controller = "Flight", action = "GetFlightMenu" }
+           );
 
             routes.MapRoute(
           name: "SearchFlight",

@@ -299,7 +299,7 @@
                             PayUController cntrl = new PayUController();
                             PayuRequest request = new PayuRequest();
                             request.FirstName = bookingModel.ProvisionalBookingDetail.GuestInformation.FirstName;
-                            request.TransactionAmount = "1.0";
+                            request.TransactionAmount = 1;
                             request.Email = bookingModel.ProvisionalBookingDetail.GuestInformation.Email;
                             request.Phone = bookingModel.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Number;
                             request.ProductInfo = "Booking Hotel " + ShineYatraSession.HotelRequest.hotelid + ": " + ShineYatraSession.SelectedHotel.Hoteldetail.Hotelname + " For Name : " + request.FirstName;

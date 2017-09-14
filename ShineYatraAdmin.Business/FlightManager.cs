@@ -17,9 +17,9 @@ namespace ShineYatraAdmin.Business
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
-        public async Task<ArrayOfFlightsDetail> SearchFlight(Request search)
+        public async Task<ArrayOfOrigindestinationoption> SearchFlight(Request search)
         {
-            ArrayOfFlightsDetail arrayOfFlightsDetail  = new ArrayOfFlightsDetail();
+            ArrayOfOrigindestinationoption arrayOfFlightsDetail  = new ArrayOfOrigindestinationoption();
             try
             {
                  arrayOfFlightsDetail = await Program.SearchFlight(search);               
@@ -29,32 +29,16 @@ namespace ShineYatraAdmin.Business
                 Console.WriteLine(ex.InnerException);
             }
             return arrayOfFlightsDetail;
-        }
-
-
-        public async Task<ArrayOfFlightsDetail> SearchFlightOnID(Request search)
-        {
-            ArrayOfFlightsDetail arrayOfFlightsDetail = new ArrayOfFlightsDetail();
-            try
-            {
-                arrayOfFlightsDetail = await Program.SearchFlight(search);
-                arrayOfFlightsDetail.FlightsDetail = arrayOfFlightsDetail.FlightsDetail.Where(o => o.Id == search.Id).ToList();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
-            return arrayOfFlightsDetail;
-        }
+        }       
 
         /// <summary>
         /// Searchflight details from source to destination
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
-        public async Task<ArrayOfFlightsDetail> FlightPricing(Request search)
+        public async Task<OriginDestinationOption> FlightPricing(Request search)
         {
-            var flightsDetail = new ArrayOfFlightsDetail();
+            var flightsDetail = new OriginDestinationOption();
 
             try
             {
@@ -117,7 +101,6 @@ namespace ShineYatraAdmin.Business
             }
             return response;
         }
-
         
 
         public async Task<List<BookingDetail>> getBookingDetails(string transactionId,string memberId)
@@ -155,8 +138,18 @@ namespace ShineYatraAdmin.Business
             return bookresponse;
         }
 
-        
-
-
+        public async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId, string api_txn_id, string status)
+        {
+            UPDATE_TRANSACTION_STATUS updateresponse = null;
+            try
+            {
+                updateresponse = await Program.UpdateServiceBookingRequest(TransactionId,memberId,api_txn_id,status);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return updateresponse;
+        }
     }
 }

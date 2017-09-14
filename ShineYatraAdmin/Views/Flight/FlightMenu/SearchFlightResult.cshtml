@@ -1,129 +1,289 @@
-﻿@model ShineYatraAdmin.Entity.SearchPageViewModel
+﻿@using System.Globalization;
+@model ShineYatraAdmin.Entity.SearchPageViewModel
 @{
     ViewBag.Title = "SearchFlightResult";
     Layout = "~/Views/Shared/Layout.cshtml";
     int i = 0, count = 0;
 }
 <style>
-    DIV.table {
-        display: table;
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
     }
 
-    FORM.tr, DIV.tr {
-        display: table-row;
-    }
-
-    SPAN.td {
-        display: table-cell;
+    .dataTables_filter, .dataTables_info {
+        display: none;
     }
 </style>
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 
 <div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-info">
-            <div class="panel-heading">Flight Search REsult</div>
-            <div class="panel-wrapper collapse in" aria-expanded="true">
-                <div class="panel-body">
-                    <h6>@Model.flightSearch.Origin - @Model.flightSearch.Destination</h6>
-                    <h6>Depart :- @Model.flightSearch.DepartDate</h6>
-                    @*<h6>Arrival :- @Model.flightSearch.ArrivalDateTime</h6>*@
-                    <h6>@Model.flightSearch.FlightType</h6>
-                    <h6>@Model.flightSearch.AdultPax Adult, @Model.flightSearch.ChildPax Children, @Model.flightSearch.InfantPax InfantPaxs</h6>
 
-                    <div class="table">
+    <div class="panel panel-info">
+        <div class="panel-heading">Flight Search Result</div>
+        <div class="panel-wrapper collapse in" aria-expanded="true">
+            <div class="panel-body">
+                <div class="col-lg-12">
+                    <label>@Model.flightSearch.Origin - @Model.flightSearch.Destination</label> |
+                    <label style="font-weight:100">Depart :- @Model.flightSearch.DepartDate</label> |
+                    <label style="font-weight:100">@Model.flightSearch.FlightType</label> |
+                    <label style="font-weight:100">@Model.flightSearch.AdultPax Adult, @Model.flightSearch.ChildPax Children, @Model.flightSearch.InfantPax InfantPaxs</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Modify Search" onclick="modifyflightsearch('modifyflightsearch')" />
+                    <div class="col-md-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10" id="modifyflightsearch" style="display:none;">
+                            @Html.Partial("~/Views/Flight/FlightMenu/SearchFlight.cshtml", Model.flightSearch)
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
 
-                                @if (Model.arrayOfSearchedFlights.FlightsDetail == null)
-                                {
-                                 <div class="col-md-12">No Flights Available</div>
-                                }
-                                else
-                                {
-                                var FlightList = Model.arrayOfSearchedFlights.FlightsDetail
-                                .GroupBy(u => u.Id)
-                                .Select(grp => grp.ToList())
-                                .ToList();
+                <hr />
+                <hr />
 
-                                foreach (var flightrow in FlightList)
-                                {
-                                count = flightrow.Count();
-                                count = count - 1;
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                    </div>
+                    <div class="col-lg-10">
+                        @{
+                            DateTime departdate = new DateTime();
+                            departdate = DateTime.ParseExact(Model.flightSearch.DepartDate, "dd-MMM-yyyy", CultureInfo.InvariantCulture);
+                            departdate = departdate.AddDays(-5);
+                        }
+                        @for (int c = 1; c <= 9; c++)
+                        {
+                            var departdate1 = departdate.AddDays(c).ToString("dd-MMM-yyyy");
+                            <form action="SearchFlight" method="post" class="form-horizontal form-bordered" style="float:left;">
+                                <input type="hidden" name="DepartDate" value="@departdate1">
+                                @Html.Hidden("FlightType", Model.flightSearch.FlightType)
+                                @Html.Hidden("Mode", Model.flightSearch.Mode)
+                                @Html.Hidden("Preferredclass", Model.flightSearch.Preferredclass)
+                                @Html.Hidden("Origin", Model.flightSearch.Origin)
+                                @Html.Hidden("Destination", Model.flightSearch.Destination)
+                                @Html.Hidden("ReturnDate", Model.flightSearch.ReturnDate)
+                                @Html.Hidden("AdultPax", Model.flightSearch.AdultPax)
+                                @Html.Hidden("ChildPax", Model.flightSearch.ChildPax)
+                                @Html.Hidden("InfantPax", Model.flightSearch.InfantPax)
+                                <button type="submit">@departdate1</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <br /><br />
+
+                        <div class="col-lg-12" id="priceRange"></div>
+                        <label id="minprice"></label>
+                        <label id="maxprice" style="float:right;"></label>
+
+                        <br /><hr /><br />
+                        <table>
+                            <tr><b>Stops</b></tr>
+                            <tr>
+                                <td id="stopsCheckbox">
+                                    <label><input type="checkbox" checked name="Stops" class="Stops" value="0">&nbsp;0</label><br />
+                                    <label><input type="checkbox" checked name="Stops" class="Stops" value="1">&nbsp;1 </label><br />
+                                    <label><input type="checkbox" checked name="Stops" class="Stops" value="2">&nbsp;2</label>
+                                </td>
+                            </tr>
+                        </table>
+                        <br /><hr /><br />
+                        <table>
+                            <tr><b>Airlines</b></tr>
+                            <tr>
+                                <td id="AirlineNameCheckbox">
+                                    <label><input type="checkbox" checked name="type" class="airlinetype" value="Air India">&nbsp;Air India</label><br />
+                                    <label><input type="checkbox" checked name="type" class="airlinetype" value="Jet Airways">&nbsp;Jet Airways</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="col-lg-10">
+                        @if (Model.arrayOfSearchedFlights.Origindestinationoption == null)
+                        {
+                            <div class="col-md-12">No Flights Available</div>
+                        }
+                        else
+                        {
+                            <table id="flightsearchResult" class="display table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Airline Name
+                                        </th>
+                                        <th>
+                                            Departure Time
+                                        </th>
+                                        <th>
+                                            Destination Arrival Time
+                                        </th>
+                                        <th>
+                                            duration
+                                        </th>
+                                        <th>
+                                            Stops
+                                        </th>
+                                        <th>
+                                            Available Seats
+                                        </th>
+                                        <th>
+                                            Fare
+                                        </th>
+                                        <th>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var flightrows in Model.arrayOfSearchedFlights.Origindestinationoption)
+                                    {
+                                        var flightrow = flightrows.FlightsDetailList.FlightsDetail.First();
+                                        var flightlastrow = flightrows.FlightsDetailList.FlightsDetail.Last();
+                                        var duration = flightlastrow.ArrivalDateTime.Subtract(flightrow.DepartureDateTime);
+                                        var calFare = flightrows.FareDetail.ChargeableFares.ActualBaseFare + flightrows.FareDetail.ChargeableFares.Tax;
+                                        count = flightrows.FlightsDetailList.FlightsDetail.Count();
+                                        count = count - 1;
+                                        <tr>
+                                            <td>
+                                                @flightrow.AirLineName<breakit>
+                                                    <br />
+                                                    <span>@flightrow.OperatingAirlineCode - @flightrow.FlightNumber</span>
+                                            </td>
+                                            <td><span class="td">@flightrow.DepartureDateTime.ToString("HH:mm") <br /> @flightrow.DepartureDateTime.ToString("ddd, dd MMM") <br /> (@flightrow.DepartureAirportCode)</span></td>
+                                            <td>@flightlastrow.ArrivalDateTime.ToString("HH:mm") <br />@flightlastrow.ArrivalDateTime.ToString("ddd, dd MMM")<br /> (@flightlastrow.ArrivalAirportCode)</td>
+                                            <td>@duration.Hours.@duration.Minutes</td>
+                                            <td>@count  </td>
+                                            <td>@flightrow.Availability seats</td>
+                                            <td>
+                                                @calFare<breakit>
+                                                    <br>
+                                                    <a class="popup-with-form" href="#notefor_@i">View Rules</a>
+                                                    <div id="notefor_@i" class="col-lg-12 form-horizontal mfp-hide white-popup-block" style="max-width:80%;margin-left:10%;">
+                                                        @if (count > 0)
+                                                        {
+                                                            <div class="col-md-8" >
+                                                                <div class="col-md-12">
+                                                                    <h4>Stop Details</h4>
+                                                                </div>
+                                                                @foreach (var flight in flightrows.FlightsDetailList.FlightsDetail)
+                                                                {
+                                                                    <div class="col-md-12">
+
+                                                                        <div class="col-md-4">
+                                                                            <span>@flight.AirLineName - @flight.FlightNumber</span>
+                                                                        </div>
+
+                                                                        <div class="col-md-4"><span class="td">@flight.DepartureDateTime (@flight.DepartureAirportCode)</span></div>
+
+                                                                        <div class="col-md-4"><span class="td">@flight.ArrivalDateTime (@flight.ArrivalAirportCode)</span></div>
 
 
-                                <form class="tr" method="post" action="BookFlight">
-                                    <input type="hidden" value="@Model.flightSearch.AdultPax" name="AdultPax">
-                                    <input type="hidden" value="@Model.flightSearch.ChildPax" name="ChildPax">
-                                    <input type="hidden" value="@Model.flightSearch.InfantPax" name="InfantPax">
-                                    <input type="hidden" value="@Model.flightSearch.Origin" name="Origin">
-                                    <input type="hidden" value="@Model.flightSearch.DepartDate" name="DepartDate">
-                                    <input type="hidden" value="@Model.flightSearch.FlightType" name="FlightType">
-                                    <input type="hidden" value="@Model.flightSearch.Mode" name="Mode">
-                                    <input type="hidden" value="@Model.flightSearch.Destination" name="Destination">
-                                    <input type="hidden" value="@Model.flightSearch.Preferredclass" name="Preferredclass" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                            <div class="col-md-4" style="border-left:1px solid #c6c1c1;">
+                                                                <div class="col-md-12">
+                                                                    <h4>Fare Details</h4>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div style="float:left;">Base Fare</div><div style="float:right;">@flightrows.FareDetail.ChargeableFares.ActualBaseFare</div><br />
+                                                                    <div style="float:left;">Tax</div><div style="float:right;">@flightrows.FareDetail.ChargeableFares.Tax</div><br/>
+                                                                    <hr/>
+                                                                    <div style="float:left;">Total</div><div style="float:right;">@calFare</div><br />
+                                                                </div>
+                                                            </div>
 
-                                    <div class="col-md-12">
-                                        <div class="col-md-1">
-                                            <input type="hidden" value="@flightrow.First().Id" name="Id">
-                                            <input type="hidden" value="@flightrow.First().FlightNumber" name="FlightNumber">
-                                            <input type="hidden" value="@flightrow.First().OperatingAirlineCode" name="OperatingAirlineCode">
-                                            <span>@flightrow.First().AirLineName</span><span class="td">@flightrow.First().Id</span>
-                                        </div>
-                                        <div class="col-md-3"><span class="td">@flightrow.First().DepartureDateTime (@flightrow.First().DepartureAirportCode)</span></div>
-                                        <div class="col-md-2"> ----@count stops---- </div>
-                                        <div class="col-md-3"><span class="td">@flightrow.Last().ArrivalDateTime (@flightrow.Last().ArrivalAirportCode)</span></div>
-                                        <div class="col-md-1">
-                                            <span class="td">@flightrow.First().Availability seats </span>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <span class="td" style="float:left;">Price :- @flightrow.First().BookingClassFare.AdultFare</span><br />
-                                            <span class="td" style="float:right;">
-                                                <input type="submit" value="Book Ticket">
-                                            </span>
-                                            <a id="viewRuleLink_@i" onclick="viewRule('notefor_@i','viewRuleLink_@i')">Rule</a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12" id="notefor_@i" style="display:none;padding:3%;">
-                                        @if (count > 0)
-                                        {
-                                            <div class="col-md-12">
-                                                <h4>Stop Details</h4>
-                                            </div>
-                                            foreach (var flight in flightrow)
-                                            {
-                                                <div class="col-md-12">
-                                                    <div class="col-md-2">  </div>
-                                                    <div class="col-md-2">
-                                                        <span>@flight.AirLineName - @flight.FlightNumber</span>
+                                                                
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="col-md-12">
+                                                                <div class="col-md-12">
+                                                                    <h4>Fare Details</h4>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div style="float:left;">Base Fare</div><div style="float:right;">@flightrows.FareDetail.ChargeableFares.ActualBaseFare</div><br />
+                                                                    <div style="float:left;">Tax</div><div style="float:right;">@flightrows.FareDetail.ChargeableFares.Tax</div><br />
+                                                                    <hr />
+                                                                    <div style="float:left;">Total</div><div style="float:right;">@calFare</div><br />
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        <div class="col-lg-12"><hr></div>
+                                                        <div class="col-md-12">
+                                                            <h4>Flight Rules</h4>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            @flightrow.BookingClassFare.Rule
+                                                        </div>
+
                                                     </div>
-
-                                                    <div class="col-md-3"><span class="td">@flight.DepartureDateTime (@flight.DepartureAirportCode)</span></div>
-
-                                                    <div class="col-md-3"><span class="td">@flight.ArrivalDateTime (@flight.ArrivalAirportCode)</span></div>
-
-                                                    <div class="col-md-2">
-                                                    </div>
-                                                </div>
-                                            }
-
-                                            <div class="col-lg-12"><hr></div>
-                                        }
-                                        <div class="col-md-12">
-                                            <h4>Flight Rules</h4>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            @flightrow.First().BookingClassFare.Rule
-                                        </div>
-                                    </div>
-                                </form>
-                                <div class="col-md-12">
-                                    <hr>
-                                </div>
-                                i = i + 1;
-                                }
-                             }
-                            </div>
+                                            </td>
+                                            <td>
+                                                <form method="post" action="BookFlight">
+                                                    <input type="hidden" value="@Model.flightSearch.AdultPax" name="AdultPax">
+                                                    <input type="hidden" value="@Model.flightSearch.ChildPax" name="ChildPax">
+                                                    <input type="hidden" value="@Model.flightSearch.InfantPax" name="InfantPax">
+                                                    <input type="hidden" value="@Model.flightSearch.Origin" name="Origin">
+                                                    <input type="hidden" value="@Model.flightSearch.DepartDate" name="DepartDate">
+                                                    <input type="hidden" value="@Model.flightSearch.FlightType" name="FlightType">
+                                                    <input type="hidden" value="@Model.flightSearch.Mode" name="Mode">
+                                                    <input type="hidden" value="@Model.flightSearch.Destination" name="Destination">
+                                                    <input type="hidden" value="@Model.flightSearch.Preferredclass" name="Preferredclass" />
+                                                    <input type="hidden" value="@flightrow.Id" name="Id">
+                                                    <input type="hidden" value="@flightrow.FlightNumber" name="FlightNumber">
+                                                    <input type="hidden" value="@flightrow.OperatingAirlineCode" name="OperatingAirlineCode">
+                                                    <input type="hidden" value="@flightrows.FareDetail.back_discount_per" name="back_discount_per">
+                                                    <input type="hidden" value="@flightrows.FareDetail.back_discount_amount" name="back_discount_amount">
+                                                    <input type="hidden" value="@flightrows.FareDetail.front_discount_per" name="front_discount_per">
+                                                    <input type="hidden" value="@flightrows.FareDetail.front_discount_amount" name="front_discount_amount">
+                                                    <input type="submit" value="Book Ticket">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        i = i + 1;
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
 <script src="~/Script/flight.js"></script>
+
+
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {        
+        jq("#priceRange").slider({
+            range: true,
+            step: 1,
+            values: [minvalue, maxvalue],
+            min: minvalue,
+            max: maxvalue
+        });
+
+        jq("#minprice").html(jq("#priceRange").slider("values", 0));
+        jq("#maxprice").html(jq("#priceRange").slider("values", 1));
+
+        jq("#priceRange").on("slide", function (event, ui) {
+            jq("#minprice").html(ui.values[0]);
+            jq("#maxprice").html(ui.values[1]);
+        });
+
+        jq("#priceRange").on("slidestop", function (event, ui) {
+            oTable.draw();
+        });
+    });
+
+
+</script>

@@ -469,6 +469,7 @@
     <Content Include="Script\hotel.js" />
     <Content Include="Script\login.js" />
     <Content Include="Script\PrimarySetting.js" />
+    <Content Include="Script\rangeFiltering.js" />
     <Content Include="Script\recharge.js" />
     <Content Include="Script\shared.js" />
     <Content Include="Script\User.js" />

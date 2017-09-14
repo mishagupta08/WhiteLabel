@@ -30,5 +30,15 @@
         {
             return await Program.GetGroupList(serviceId, memberId, type, sub_category);
         }
+
+        /// <summary>
+        /// method to get service allotted group details for a paticular service
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns> list of company services</returns>
+        public async Task<IList<CompanyCommissionGroup>> GetSErviceAllottedGroupDetails(string memberId, string service_code, string serviceid, string category, string sub_category)
+        {
+            return await Program.GetServiceAllottedGroupDetails(memberId,"","","","");
+        }
     }
 }

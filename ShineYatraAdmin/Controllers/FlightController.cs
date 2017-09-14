@@ -53,21 +53,48 @@
                 Console.WriteLine(e.InnerException);
 
             }
-            return View("Index", flightModel);
+            return View("Index", flightModel.FlightSearchDetail);
         }
         /// <summary>
         /// method to call search flight from source to destination
         /// </summary>
         /// <param name="flightDetail"></param>
         /// <returns></returns>
-        public async Task<ActionResult> SearchFlight(FlightViewModel flightDetail)
+        public async Task<ActionResult> SearchFlight(Request flightDetail)
         {
             flightManager = new FlightManager();
+            ServiceManager serviceManager = new ServiceManager();
             SearchPageViewModel searchPageViewModel = new SearchPageViewModel();
             try
             {
-                searchPageViewModel.flightSearch = flightDetail.FlightSearchDetail;
-                searchPageViewModel.arrayOfSearchedFlights = await flightManager.SearchFlight(flightDetail.FlightSearchDetail);
+                searchPageViewModel.flightSearch = flightDetail;
+                searchPageViewModel.flightSearch.AssignTripMode();
+                searchPageViewModel.flightSearch.AssignFlightClass();
+                searchPageViewModel.arrayOfSearchedFlights = await flightManager.SearchFlight(flightDetail);
+
+                IList<CompanyCommissionGroup> AllflightDiscountDetails = await serviceManager.GetSErviceAllottedGroupDetails("1", "", "", "", "");
+
+                ArrayOfOrigindestinationoption newarray = new ArrayOfOrigindestinationoption();
+                newarray.Origindestinationoption = new List<Origindestinationoption>();
+
+                foreach (var flight in searchPageViewModel.arrayOfSearchedFlights.Origindestinationoption) {
+                    CompanyCommissionGroup flightdiscount = AllflightDiscountDetails.Where(o => o.sub_service_code.Equals(flight.FlightsDetailList.FlightsDetail.First().OperatingAirlineCode)).FirstOrDefault();
+                    double totalFare = flight.FareDetail.ChargeableFares.ActualBaseFare;
+                    if (Convert.ToDouble(flightdiscount.front_discount_per) != 0)
+                    {
+                        flight.FareDetail.ChargeableFares.ActualBaseFare = totalFare - ((totalFare / 100) * Convert.ToDouble(flightdiscount.front_discount_per));
+                    }
+                    else
+                    {
+                        flight.FareDetail.ChargeableFares.ActualBaseFare = totalFare - Convert.ToDouble(flightdiscount.front_discount_amount);
+                    }
+                    flight.FareDetail.front_discount_per = flightdiscount.front_discount_per;
+                    flight.FareDetail.front_discount_amount = flightdiscount.front_discount_amount;
+                    flight.FareDetail.back_discount_per = flightdiscount.back_discount_per;
+                    flight.FareDetail.back_discount_amount = flightdiscount.back_discount_amount;
+                    newarray.Origindestinationoption.Add(flight);
+                }
+                searchPageViewModel.arrayOfSearchedFlights = newarray;
             }
             catch (Exception ex)
             {
@@ -86,6 +113,7 @@
         {
             flightManager = new FlightManager();
             userManager = new UserManager();
+            
             SearchPageViewModel searchPageViewModel = new SearchPageViewModel();
             searchPageViewModel.flightSearch = passengerDetails;
             searchPageViewModel.FlightBookingDetail = passengerDetails;
@@ -118,8 +146,31 @@
 
             searchPageViewModel.AssignNameReference();
             searchPageViewModel.AssignChildNameReference();
+            searchPageViewModel.flightfaredetails = await flightManager.FlightPricing(searchPageViewModel.flightSearch);
 
-            searchPageViewModel.arrayOfSearchedFlights = await flightManager.SearchFlightOnID(searchPageViewModel.flightSearch);
+            double totalFare =  searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare;
+
+            if (Convert.ToDouble(passengerDetails.front_discount_per) != 0)
+            {
+                searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare = totalFare - ((totalFare / 100) * Convert.ToDouble(passengerDetails.front_discount_per));
+            }
+            else
+            {
+                searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare = totalFare - Convert.ToDouble(passengerDetails.front_discount_amount);
+            }
+
+            totalFare = searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare;
+
+            if (Convert.ToDouble(passengerDetails.back_discount_per) != 0)
+            {
+                searchPageViewModel.flightfaredetails.FareDetail.discountedFare = ((totalFare / 100) * Convert.ToDouble(passengerDetails.back_discount_per));
+            }
+            else
+            {
+                searchPageViewModel.flightfaredetails.FareDetail.discountedFare =  Convert.ToDouble(passengerDetails.back_discount_amount);
+            }
+
+
             return View("FlightMenu//BookingDetail", searchPageViewModel);
         }
 
@@ -149,7 +200,7 @@
                 {
                     if (!string.IsNullOrEmpty(response.MSG))
                     {
-                        status = response.MSG;
+                        status = response.MSG; 
                     }
                     else
                     {
@@ -158,12 +209,12 @@
                             PayUController cntrl = new PayUController();
                             PayuRequest payrequest = new PayuRequest();
                             payrequest.FirstName = request.PersonName.CustomerInfo.FirstOrDefault().givenName;
-                            payrequest.TransactionAmount = "1.0";
+                            payrequest.TransactionAmount = request.PaymentMode == "bank" ? request.AdultFare : request.AdultFare - bookingDetail.walletBalance;
                             payrequest.Email = request.EmailAddress;
                             payrequest.Phone = request.PhoneNumber;
                             payrequest.udf1 = Convert.ToString(response.txn_id);
                             payrequest.memberId = userData[1];
-                            payrequest.ProductInfo = "Booking Flght " + request.FlightNumber + ": " + " For Name : " + request.PersonName.CustomerInfo.FirstOrDefault().givenName;
+                            payrequest.ProductInfo = "Booking Flight " + request.FlightNumber + ": " + " For Name : " + request.PersonName.CustomerInfo.FirstOrDefault().givenName;
                             payrequest.surl = "http://" + Request.Url.Authority + "/Flight/Return";
                             payrequest.furl = "http://" + Request.Url.Authority + "/Flight/Return";
                             cntrl.Payment(payrequest);
@@ -172,12 +223,22 @@
                         {
                             bookResponse.txn_id = Convert.ToString(response.txn_id);
                             bookResponse = await flightManager.BookTicket(request);
+                            
                             if (bookResponse != null && bookResponse.Status.ToLower() == "success")
+                            {
                                 status = "Ticket Booked successfully";
+                                UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(bookResponse.txn_id, userData[1], bookResponse.Transid, "confirmed");
+                            }
                             else if (bookResponse != null && !string.IsNullOrEmpty(bookResponse.Error))
+                            {
                                 status = bookResponse.Error;
+                                UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(bookResponse.txn_id, userData[1], bookResponse.Transid, bookResponse.Error);
+                            }
                             else
+                            {
                                 status = "There is some problem, Please try after some time";
+                                UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(bookResponse.txn_id, userData[1], bookResponse.Transid, "error");
+                            }
                         }                           
                     }
                 }
@@ -203,16 +264,14 @@
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             try
             {
+                string txnId = form["udf1"].ToString();
+                //getbooking 
+                List<BookingDetail> getticketDetailList = new List<BookingDetail>();
                 string[] userData = User.Identity.Name.Split('|');
+                getticketDetailList = await flightManager.getBookingDetails(txnId, userData[1]);
+                var ticketDetail = (from r in getticketDetailList select r).FirstOrDefault();
                 if (form["status"].ToString() == "success")
-                {
-                    
-                    string txnId = form["udf1"].ToString();
-                    //getbooking 
-                    List<BookingDetail> getticketDetailList = new List<BookingDetail>();
-
-                    getticketDetailList = await flightManager.getBookingDetails(txnId, userData[1]);
-                    var ticketDetail= (from r in getticketDetailList select r).FirstOrDefault();
+                {                                        
                     request.Origin = ticketDetail.travel_from;
                     request.Destination = ticketDetail.travel_to;
                     request.DepartDate = ticketDetail.travel_date;
@@ -225,6 +284,7 @@
                     request.FlightNumber = ticketDetail.flight_no;
                     request.PhoneNumber = ticketDetail.mobile;
                     request.EmailAddress = ticketDetail.email;
+                    request.PartnerRefId = ticketDetail.unique_ref_no;
                     request.Creditcardno = "4111111111111111";
                     request.PersonName = new personName();
                     request.PersonName.CustomerInfo = new List<CustomerInfo>();
@@ -237,6 +297,7 @@
                             givenName = passenger.first_name,
                             surName = passenger.last_name,
                             nameReference = passenger.title,
+                            age = passenger.age,
                             extra_field_1= passenger.extra_field_1,
                             extra_field_2 = passenger.extra_field_2,
                             extra_field_3 = passenger.extra_field_3,
@@ -248,15 +309,25 @@
                     
                     bookResponse = await flightManager.BookTicket(request);
                     if (bookResponse != null && bookResponse.Status.ToLower() == "success")
+                    {
                         status = "Ticket Booked successfully";
+                        UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "confirmed");
+                    }
                     else if (bookResponse != null && !string.IsNullOrEmpty(bookResponse.Error))
+                    {
                         status = bookResponse.Error;
+                        UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, bookResponse.Error);
+                    }
                     else
+                    {
                         status = "There is some problem, Please try after some time";
+                        UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "error");
+                    }
                 }
                 else
                 {
                     status = form["status"].ToString();
+                    UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(txnId, userData[1], "", form["status"].ToString());
                 }
             }
             catch (Exception ex)
@@ -306,7 +377,7 @@
                 ticketDetail.travel_date = bookingDetail.FlightBookingDetail.DepartDate;
                 ticketDetail.travel_return_date = bookingDetail.FlightBookingDetail.ReturnDate;
                 ticketDetail.trip_mode = bookingDetail.FlightBookingDetail.Mode;
-                ticketDetail.deposit_mode = "NEFT";
+                ticketDetail.deposit_mode = bookingDetail.FlightBookingDetail.PaymentMode;
                 ticketDetail.trip_category = "DOMESTIC";
                 ticketDetail.txn_type = "TEST";
                 ticketDetail.status = "Pending";
@@ -315,11 +386,29 @@
                 ticketDetail.flight_id = bookingDetail.FlightBookingDetail.Id;
                 ticketDetail.flight_no = bookingDetail.FlightBookingDetail.FlightNumber;
                 ticketDetail.ref_code = bookingDetail.FlightBookingDetail.OperatingAirlineCode;
-                ticketDetail.amount = 10000;
+                ticketDetail.amount = bookingDetail.FlightBookingDetail.AdultFare;
                 ticketDetail.member_id =userData[1];
                 ticketDetail.company_id = userData[2];
                 ticketDetail.trip_class = bookingDetail.FlightBookingDetail.Preferredclass;
                 ticketDetail.passenger_details = new List<Passengers>();
+                if (bookingDetail.FlightBookingDetail.PaymentMode.ToLower().Trim() == "bank")
+                {
+                    ticketDetail.pg_amount = bookingDetail.FlightBookingDetail.AdultFare;
+                }
+                else
+                {
+                    if (bookingDetail.walletBalance < bookingDetail.FlightBookingDetail.AdultFare)
+                    {
+                        ticketDetail.pg_amount = bookingDetail.FlightBookingDetail.AdultFare - bookingDetail.walletBalance;
+                    }
+                    else
+                    {
+                        ticketDetail.pg_amount = 0;
+                    }                    
+                }
+                
+                ticketDetail.other_amount = 0;
+                ticketDetail.total_paid_amount = 0;
                 foreach (var passenger in bookingDetail.FlightBookingDetail.PersonName.CustomerInfo)
 
                 {
@@ -330,6 +419,7 @@
                         first_name = passenger.givenName,
                         last_name = passenger.surName,
                         title = passenger.nameReference,
+                        age = passenger.age,
                         extra_field_1 = "A",
                         extra_field_2 = "B",
                         extra_field_3 = "C",
@@ -380,9 +470,7 @@
             try
             {
                 List<KeyValuePair> cityName = await flightManager.GetFlightCityList(true);
-
-                cityName = cityName.Where(o => o.Id.ToLower().Trim().StartsWith(Prefix.ToLower().Trim())).ToList();
-               
+                cityName = (from r in cityName where r.Value.ToLower().Trim().StartsWith(Prefix.ToLower().Trim()) || r.Id.ToLower().Trim().StartsWith(Prefix.ToLower().Trim()) select r).ToList();
                 return Json(cityName, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
