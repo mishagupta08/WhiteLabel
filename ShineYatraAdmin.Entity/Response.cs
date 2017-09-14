@@ -165,7 +165,7 @@
         /// <summary>
         /// gets or sets member fund request list
         /// </summary>
-        public List<CompanyFund> MEMBER_FUND_REQUEST_LIST { get; set; }
+        public List<CompanyFund> GET_FUND_REQUEST { get; set; }
 
     }
 }

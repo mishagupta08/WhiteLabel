@@ -1267,9 +1267,9 @@
             var response = await CallFunction(data);
             if (response != null)
             {
-                if (response.APISTATUS == SUCCESS && response.MEMBER_FUND_REQUEST_LIST!=null)
+                if (response.APISTATUS == SUCCESS && response.GET_FUND_REQUEST!=null)
                 {
-                    return response.MEMBER_FUND_REQUEST_LIST;
+                    return response.GET_FUND_REQUEST;
                 }
                 return null;
             }
