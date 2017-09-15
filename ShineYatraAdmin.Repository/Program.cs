@@ -1276,6 +1276,32 @@
             return null;
         }
 
+        /// <summary>
+        ///  update fund request status
+        /// </summary>
+        /// <param name="txnid"></param>
+        /// <param name="memberid"></param>
+        /// <param name="status"></param>
+        /// <param name="remarks"></param>
+        /// <returns></returns>
+        public static async Task<string> UpdateFundRequest(int txnid,string memberid,string status,string remarks)
+        {
+            string data = "{\"action\":\"UPDATE_FUND_REQUEST\",\"txn_id\":"+txnid+",\"member_id\":"+ memberid +",\"status\":\"" + status + "\",\"remarks\":\""+ remarks + "\"}";
+
+            var response = await CallFunction(data);
+            if (response != null)
+            {
+                if (response.APISTATUS == SUCCESS)
+                {
+                    return "SUCCESS";
+                }
+
+                return response.MSG;
+            }
+
+            return "No Result Found.";
+        }
+
 
     }
 }
