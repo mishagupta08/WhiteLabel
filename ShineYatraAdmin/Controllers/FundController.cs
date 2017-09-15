@@ -180,5 +180,27 @@ namespace ShineYatraAdmin.Controllers
             }
             return View(fundRequestList);
         }
+
+        /// <summary>
+        /// Update fund request from members
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> UpdateMemberFundRequest(FormCollection frm)
+        {
+            string response = string.Empty;
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                int txnid = Convert.ToInt16(frm.GetValue("txnid").AttemptedValue);
+                string status = frm.GetValue("fundstatus").AttemptedValue;
+                string remark = frm.GetValue("fundremark").AttemptedValue;
+                response = await fundManger.UpdateFundRequest(txnid, userData[1], status, remark);
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return Json(response);
+        }
     }
 }

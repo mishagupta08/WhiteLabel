@@ -57,20 +57,45 @@ namespace ShineYatraAdmin.Controllers
         public async Task<ActionResult> AllottedGroup(string category)
         {
             AllottedGroupViewModel viewModel = new AllottedGroupViewModel();
+            group = new GroupModel();
+            Member_Allotted_group Servicegroup = new Member_Allotted_group();
             try
-            {                
+            {
+                group.service_name = category;
+                group.service_id = Common.Common.getIdbyServiceName(category);
 
-                viewModel.allottedGoup = await GetAllottedGroup(category,"");
-                viewModel.service_id = group.service_id;               
+                
+
+                    if (group.service_id == "1")
+                    {
+                        group.sub_service_name = "DOMESTIC";
+                    }
+                    else if (group.service_id == "2")
+                    {
+                        group.sub_service_name = "Hotels";
+                    }
+                    else if (group.service_id == "4")
+                    {
+                        group.sub_service_name = "Prepaid";
+                    }
+                    else
+                    {
+                        group.sub_service_name = group.service_name;
+                    }
+               
+                string[] userData = User.Identity.Name.Split('|');
+                var groups = await this.userManager.GetUserAllottedGroups(userData[1], userData[2], group.service_id, category, group.sub_service_name);
+                viewModel.service_id = group.service_id;
+                viewModel.allottedGoup = groups.FirstOrDefault();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
-            }
+            }           
             return View(viewModel);
         }
 
-        public async Task<Member_Allotted_group> GetAllottedGroup(string category,string sub_category)
+        public async Task<ActionResult> GetAllottedGroup(string category,string sub_category)
         {
             group = new GroupModel();
             Member_Allotted_group Servicegroup = new Member_Allotted_group();
@@ -99,6 +124,10 @@ namespace ShineYatraAdmin.Controllers
                         group.sub_service_name = group.service_name;
                     }
                 }
+                else
+                {
+                    group.sub_service_name = sub_category;
+                        }
                 string[] userData = User.Identity.Name.Split('|');
                 var groups = await this.userManager.GetUserAllottedGroups(userData[1], userData[2], group.service_id,category, group.sub_service_name);
                 Servicegroup = groups.FirstOrDefault();
@@ -107,7 +136,7 @@ namespace ShineYatraAdmin.Controllers
             {
                 Console.WriteLine(ex.InnerException);
             }
-            return (Servicegroup);
+            return Json(Servicegroup, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> Getgrouplist(string category,string subcategory)

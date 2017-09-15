@@ -33,11 +33,10 @@ function GetAllottedGroup(category, subcategory) {
         url: '/Group/GetAllottedGroup',
         type: 'get',
         datatype: 'Json',
-        data: { category: category, subcategory: subcategory }
-    }).done(function (result) {
-        
+        data: { category: category, sub_category: subcategory }
+    }).done(function (result) {        
         $("#displayAllottedGroup").html(result.comp_group_name);
-
+        $("#serviceGroupList").val(result.comp_group_id);
         getStructure(subcategory + "_structure");
         $(".preloader").hide();
     }).fail(function (xhr) {
