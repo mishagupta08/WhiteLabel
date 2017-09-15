@@ -1263,7 +1263,7 @@
         /// <returns></returns>
         public static async Task<List<CompanyFund>> getFundRequestList(string memberId)
         {
-            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\"7\",\"member_id\":"+ "1" + ",\"txn_type\":\"FUND_WALLET\"}";
+            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\"7\",\"member_id\":"+ memberId + ",\"txn_type\":\"FUND_WALLET\"}";
             var response = await CallFunction(data);
             if (response != null)
             {
