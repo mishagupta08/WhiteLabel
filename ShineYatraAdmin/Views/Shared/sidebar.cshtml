@@ -12,13 +12,13 @@
                 </div>
                 <!-- /input-group -->
             </li>
-            <li>
+            @*<li>
                 <a href="index.html" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu"> Dashboard <span class="fa arrow"></span> </span></a>
                 <ul class="nav nav-second-level collapse" aria-expanded="true">
                     <li> <a href="index.html">Basic</a> </li>
                     <li> <a href="index2.html">Pending Approvals</a> </li>
                 </ul>
-            </li>
+            </li>*@
             <li>
                 <a href="inbox.html" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Commission Structure<span class="fa arrow"></span></span></a>
                 <ul class="nav nav-second-level collapse">                    
@@ -52,7 +52,7 @@
                 <a href="inbox.html" class="waves-effect"><i data-icon="" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">@Resources.Administration<span class="fa arrow"></span></span></a>
 
                 <ul class="nav nav-second-level collapse">
-                    <li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>                    
+                    @*<li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>*@                    
                     <li><a data-preloader="preloader" href="@Url.Action("MemberUsers", "User")">Manage User</a></li>  
                     <li><a data-preloader="preloader" href="@Url.Action("FundRequest", "Fund")">Add Fund Request</a></li>                  
                     <li><a data-preloader="preloader" href="@Url.Action("MemberFundRequest", "Fund")">Manage Fund Request</a></li> 
@@ -126,6 +126,11 @@
                         </ul>
                     </li>
                 </ul>
+            </li>
+            <li style="float:right">
+                <h3 >
+                    <i  data-icon="" class="linea-icon linea-basic fa-fw"></i> 
+                        <span id="usercurrentbalance" style="color:RED">Current Balance   :</span></h3>
             </li>
         </ul>
     </div>

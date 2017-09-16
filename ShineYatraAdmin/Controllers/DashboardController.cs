@@ -34,6 +34,30 @@
             return View();
         }
 
+        public async Task<ActionResult> GetUserBalance()
+        {
+            UserManager userManager = new UserManager();
+            float Balance = 0;
+            try
+            {
+                WalletRequest balrequest = new WalletRequest();
+                string[] userData = User.Identity.Name.Split('|');
+                balrequest.action = "GET_WALLET_BALANCE";
+                balrequest.domain_name = "nbfcp.bisplindia.in";
+                balrequest.ledger_id = "100";
+                balrequest.company_id = userData[2];
+                WalletResponse bal_response = await userManager.GET_WALLET_BALANCE(balrequest);
+                if (bal_response != null)
+                {
+                    Balance = bal_response.wallet_balance;
+                }
+             }
+            catch(Exception Ex){
+                Console.WriteLine(Ex.InnerException);
+            }
+            return Json(Balance);
+        }
+
         /// <summary>
         /// Method for signout
         /// </summary>

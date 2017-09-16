@@ -7,6 +7,7 @@ $(document).ready(function () {
     $("#insertCompany").unbind();
     $("#insertCompany").bind("click", GetInsertCompanyView);
     bindCompanyListLink();
+    getuserbalance();
 });
 
 function bindCompanyListLink() {
@@ -80,6 +81,18 @@ function bindCompanyListLink() {
 //        }        
 //    });
 //}
+
+function getuserbalance() {
+    $(".preloader").show();    
+    $.ajax({
+        url: 'GetUserBalance',
+        type: 'Post'
+    }).done(function (result) {
+        $("#usercurrentbalance").html("Current Balance   :  "+result);
+    }).fail(function (xhr) {
+        alert(xhr);
+    });
+}
 
 function SearchCompanyList() {
     $(".preloader").show();
