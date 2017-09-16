@@ -47,9 +47,13 @@
             string domain = Request.Url.Authority;
             try
             {
-                domain = "nbfcp.bisplindia.in";
+                domain = ConfigurationManager.AppSettings["DomainName"];
                 List<CompanyTheme> ltheme = await theme.GetCompanyTheme(domain);
                 Session["CompanyTheme"] = (from r in ltheme select r.theme_name).FirstOrDefault();
+                if (string.IsNullOrEmpty(Convert.ToString(Session["CompanyTheme"])))
+                {
+                    Session["CompanyTheme"] = "elite";
+                }
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
                     ViewBag.returnUrl = returnUrl;
@@ -99,7 +103,7 @@
                     return Json(Resources.LoginError);
                 }
 
-                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name;
+                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name+"|"+result.ledger_id;
                 FormsAuthentication.SetAuthCookie(userIdentity, false);
                 
             }

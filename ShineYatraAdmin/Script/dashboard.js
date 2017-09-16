@@ -85,7 +85,7 @@ function bindCompanyListLink() {
 function getuserbalance() {
     $(".preloader").show();    
     $.ajax({
-        url: 'GetUserBalance',
+        url: '/Dashboard/GetUserBalance',
         type: 'Post'
     }).done(function (result) {
         $("#usercurrentbalance").html("Current Balance   :  "+result);

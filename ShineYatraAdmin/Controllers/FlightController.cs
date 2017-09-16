@@ -10,6 +10,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Script.Serialization;
+    using System.Configuration;
 
     #endregion namespace
 
@@ -125,8 +126,8 @@
                 WalletRequest balrequest = new WalletRequest();
                 string[] userData = User.Identity.Name.Split('|');
                 balrequest.action = "GET_WALLET_BALANCE";
-                balrequest.domain_name = "nbfcp.bisplindia.in";
-                balrequest.ledger_id = "100";
+                balrequest.domain_name = ConfigurationManager.AppSettings["DomainName"];
+                balrequest.ledger_id = userData[4];
                 balrequest.company_id = userData[2];
                 WalletResponse bal_response = await userManager.GET_WALLET_BALANCE(balrequest);
                 if (bal_response != null)
