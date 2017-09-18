@@ -204,6 +204,10 @@
                     isLocalApiRun = true;
                 }
             }
+            else
+            {
+                isLocalApiRun = true;
+            }
 
             if (isLocalApiRun)
             {

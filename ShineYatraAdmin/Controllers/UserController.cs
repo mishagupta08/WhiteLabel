@@ -99,7 +99,7 @@ namespace ShineYatraAdmin.Controllers
         }
 
         /// <summary>
-        /// method to change commission or price group of a service for particular company
+        /// get commission group structure for the allotted group
         /// </summary>      
         /// <returns></returns>
         public async Task<ActionResult> getCommissionGroupDetails(string currentGroupId, string category, string sub_category)

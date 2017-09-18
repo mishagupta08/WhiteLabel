@@ -46,6 +46,19 @@
                 </th>
             </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <th>System ID</th>
+                <th>Txn Date</th>
+                <th>Member Name</th>
+                <th>User Name</th>
+                <th>Requested Amount</th>
+                <th>Deposit Mode</th>
+                <th>Status</th>
+                <th>Remark</th>
+                <th>Action</th>            
+            </tr>
+        </tfoot>
         <tbody>
             @if (Model != null)
             {
@@ -131,7 +144,15 @@
 
     <script>
         $(document).ready(function () {
-            $('#FundRequestList').DataTable({
+            $('#FundRequestList tfoot th').each( function () {
+                var title = $(this).text();
+                if(title.indexOf("Remark")==-1 && title.indexOf("Action")==-1)
+                {
+                    $(this).html( '<input type="text" style="width:100%;" placeholder="Search '+title+'" />' );
+                }
+            });
+                        
+            var fundTable = $('#FundRequestList').DataTable({
                 "bLengthChange": false,
                 "language": {
                     "paginate": {
@@ -145,6 +166,21 @@
 
                 stateSave: true
             });
+
+
+            // Apply the search
+            fundTable.columns().every( function () {
+                var that = this;
+ 
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+
         });
 
         function EditfundRequest(status,txnid)

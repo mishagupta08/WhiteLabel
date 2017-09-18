@@ -19,7 +19,7 @@
         /// <summary>
         /// object to  hold Comapny details
         /// </summary>
-        Company companyModel;          
+        Company companyModel;
 
         /// <summary>
         /// object for access Comapny functions
@@ -34,14 +34,14 @@
         /// <summary>
         /// object for access Company functions
         /// </summary>
-        CompanyViewModel companyViewModel;        
+        CompanyViewModel companyViewModel;
 
         /// <summary>
         /// constant for active status
         /// </summary>
         private const string Active = "Y";
 
-        
+
         /// <summary>
         /// method to get selected menu
         /// </summary>
@@ -51,18 +51,17 @@
         {
             this.companyViewModel = new CompanyViewModel();
             try
-
             {
-                companyViewModel.LoginUserName = User.Identity.Name;
+                string[] userData = User.Identity.Name.Split('|');
+                companyViewModel.LoginUserName = userData[0];
+                this.companyViewModel.SelectedMenu = menu;
+                this.companyViewModel.SearchListParameter = new SearchParameter();
+                this.companyViewModel.AssignSearchList();
                 
-
-                    this.companyViewModel.SelectedMenu = menu;                                                                 
-                    this.companyViewModel.SearchListParameter = new SearchParameter();
-                    this.companyViewModel.AssignSearchList();
-                    string[] userData = User.Identity.Name.Split('|');
-                    this.companyViewModel.CompanyList = await this.companyManager.GetCompany(userData[1], string.Empty);
+                this.companyViewModel.CompanyList = await this.companyManager.GetCompany(userData[1], string.Empty);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.InnerException);
             }
             return View("Index", this.companyViewModel);
@@ -224,12 +223,13 @@
 
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.InnerException);
             }
             return PartialView("ManageCompany\\companySetting", this.companyViewModel);
         }
-        
+
 
         /// <summary>
         /// method to submit company setting
@@ -279,11 +279,12 @@
         {
             this.companyModel = new Company();
             try
-            {               
+            {
                 this.companyModel.commissionstucture = await this.companyManager.GetRechargeCommissionStructure(companyId);
                 return PartialView("_structure", this.companyModel);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.InnerException);
             }
             return PartialView("_structure", this.companyModel);
@@ -311,7 +312,8 @@
 
                 return PartialView("RechargeCommissionPercentage", CompanyCommissionSetting);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.InnerException);
             }
             return PartialView("RechargeCommissionPercentage", CompanyCommissionSetting);
@@ -339,7 +341,7 @@
             {
                 Console.WriteLine(ex.InnerException);
             }
-            return null;            
+            return null;
         }
     }
 }

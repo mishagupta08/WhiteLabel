@@ -5,6 +5,7 @@ using ShineYatraAdmin.Entity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using System.Configuration;
 
 namespace ShineYatraAdmin.Controllers
 {
@@ -31,10 +32,11 @@ namespace ShineYatraAdmin.Controllers
                     viewModel.rechargeType = type;
 
                     WalletRequest balrequest = new WalletRequest();
+                    string[] userData = User.Identity.Name.Split('|');
                     balrequest.action = "GET_WALLET_BALANCE";
-                    balrequest.domain_name = "nbfcp.bisplindia.in";
-                    balrequest.ledger_id = "100";
-                    balrequest.company_id = "1";
+                    balrequest.domain_name = ConfigurationManager.AppSettings["DomainName"];
+                    balrequest.member_id = userData[1];
+                    balrequest.company_id = userData[2];
                     WalletResponse bal_response = await userManager.GET_WALLET_BALANCE(balrequest);
                     if (bal_response != null)
                     {

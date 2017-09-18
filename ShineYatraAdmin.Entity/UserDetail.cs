@@ -17,6 +17,17 @@
         public string mobileNo { get; set; }
 
         /// <summary>
+        /// gets or sets ledger_id
+        /// </summary>
+        public string ledger_id { get; set; }
+
+        /// <summary>
+        /// gets or sets user_type
+        /// </summary>
+        public string user_type { get; set; }
+        
+
+        /// <summary>
         /// gets or sets doj
         /// </summary>
         public string doj { get; set; }
@@ -49,12 +60,7 @@
         /// <summary>
         /// gets or sets user_name
         /// </summary>
-        public string user_name { get; set; }
-
-        /// <summary>
-        /// gets or sets user_type
-        /// </summary>
-        public string user_type { get; set; }
+        public string user_name { get; set; }       
 
         /// <summary>
         /// gets or sets smart_card_no

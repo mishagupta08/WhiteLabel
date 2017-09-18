@@ -9,7 +9,7 @@ namespace ShineYatraAdmin.Entity
     public class WalletRequest
     {
         public string action { get; set; }
-        public string ledger_id { get; set; }
+        public string member_id { get; set; }
         public string company_id { get; set; }
         public string domain_name { get; set; }
     }
