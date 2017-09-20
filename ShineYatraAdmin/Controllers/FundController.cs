@@ -32,7 +32,7 @@ namespace ShineYatraAdmin.Controllers
                 GuidString = GuidString.Replace("+", "");
                 companyFund.request_token = GuidString;
                 companyFund.txn_type = "FUND_WALLET";
-                companyFund.domain_name = "whitelabel.bisplindia.in";
+                companyFund.domain_name = ConfigurationManager.AppSettings["DomainName"];
                 companyFund.AssignDepositModeList();
             }
             catch (Exception ex)
