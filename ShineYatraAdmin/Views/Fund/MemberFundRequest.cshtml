@@ -277,6 +277,15 @@
         });
 
         var fundTable = $('#FundRequestList').DataTable({
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    column
+                        .search('', true, false)
+                        .draw();
+                });
+            },
+            "destroy": true,
             "bLengthChange": false,
             "language": {
                 "paginate": {
