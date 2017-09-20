@@ -11,108 +11,179 @@
         background: none;
     }
 </style>
-<div class="white-box">
-    <h3 class="box-title"> Manage Fund Request</h3>
 
-    <table id="FundRequestList" class="display table" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>
-                    System ID
-                </th>
-                <th>
-                    Txn Date
-                </th>
-                <th>
-                    Member Name
-                </th>
-                <th>
-                    User Name
-                </th>
-                <th>
-                    Amount
-                </th>
-                <th>
-                    Deposit Mode
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    Remark
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>System ID</th>
-                <th>Txn Date</th>
-                <th>Member Name</th>
-                <th>User Name</th>
-                <th>Amount</th>
-                <th>Deposit Mode</th>
-                <th>Status</th>
-                <th>Remark</th>
-                <th>Action</th>
-            </tr>
-        </tfoot>
-        <tbody>
-            @if (Model != null)
+<div class="row">
+    <div class="col-lg-12">
+        <div class="white-box">
+            <h3 class="box-title"> Manage Fund Request</h3>
+            <div class="table-responsive">
+                <div class="panel">
+                    <div class="panel-heading" style="padding: 4%;">
+                        <div class="panel-action">
+                            <a href="#" data-perform="panel-collapse">
+                                <button class="btn btn-block btn-info">@Resources.AdvanceSearch</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="panel-wrapper collapse out">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="white-box">
+                                        @*<h3 class="box-title m-b-0">@Resources.SearchParameters</h3>
+                                            <p class="text-muted m-b-30 font-13">@Resources.CustomSearchParameters</p>*@
+
+                                        <form class="form-horizontal form-material" id="SearchUserList" method="post" action="MemberFundRequestList">
+                                            <div class="form-group">
+                                                <label class="col-md-3">Status</label>
+                                                <div class="col-md-9">
+                                                    <select name="status" style="width:400px;">
+                                                        <option value="All">All</option>
+                                                        <option value="pending">Pending</option>
+                                                        <option value="approved">Approved</option>
+                                                        <option value="rejected">Rejected</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3">&nbsp;</label>
+                                                <div class="col-md-9">
+                                                    <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">@Resources.Submit</button>
+
+                                                    <a href="#" data-perform="panel-collapse">
+                                                        <button type="reset" class="btn btn-inverse waves-effect waves-light">@Resources.Cancel</button>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Usercontainer" style="min-height:305px;">
+                    <table id="FundRequestList" class="display table" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    System ID
+                                </th>
+                                <th>
+                                    Txn Date
+                                </th>
+                                <th>
+                                    Member Name
+                                </th>
+                                <th>
+                                    User Name
+                                </th>
+                                <th>
+                                    Amount
+                                </th>
+                                <th>
+                                    Deposit Mode
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Remark
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>System ID</th>
+                                <th>Txn Date</th>
+                                <th>Member Name</th>
+                                <th>User Name</th>
+                                <th>Amount</th>
+                                <th>Deposit Mode</th>
+                                <th>Status</th>
+                                <th>Remark</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @if (Model != null)
             {
                 foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.txn_id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.txn_date)
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.txn_id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.txn_date)
 
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.first_name)
-                            <span>&nbsp;</span>
-                            @Html.DisplayFor(modelItem => item.last_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.user_name)
-                        </td>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.first_name)
+                                            <span>&nbsp;</span>
+                                            @Html.DisplayFor(modelItem => item.last_name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.user_name)
+                                        </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.amount)
-                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.amount)
+                                        </td>
 
-                        <td>@Html.DisplayFor(modelItem => item.deposit_mode)</td>
-                        <td>
-                            @if (item.status.ToUpper().Trim() == "Y")
-                    {
-                                <div class="label label-table label-success">@Html.DisplayFor(modelItem => item.status)</div>
+                                        <td>@Html.DisplayFor(modelItem => item.deposit_mode)</td>
+                                        <td>
+                                            @if (item.status.ToUpper().Trim() == "PENDING")
+                                            {
+                                                <div class="label label-table label-default">@Html.DisplayFor(modelItem => item.status)</div>
+                                            }
+                                            else if (item.status.ToUpper().Trim() == "APPROVED")
+                                            {
+                                                <div class="label label-table label-success">@Html.DisplayFor(modelItem => item.status)</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="label label-table label-danger">@Html.DisplayFor(modelItem => item.status)</div>
+                                            }
+
+
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.remarks)
+                                        </td>
+                                        <td>
+                                            @if (item.status.ToUpper().Trim() == "PENDING")
+                                            {
+                                                var name = item.first_name + ' ' + item.last_name;
+                                                <a class="popup-with-form" href="#EditFundRequest" onclick="EditfundRequest('APPROVED','@item.txn_id','@name','@item.amount')"><i class="fa fa-pencil text-inverse m-r-10"></i></a>
+                                                <a class="popup-with-form" href="#EditFundRequest" onclick="EditfundRequest('REJECTED','@item.txn_id','@name','@item.amount')"><i class="fa fa-close text-danger"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <span>&nbsp;</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
                             }
                             else
                             {
-                                <div class="label label-table label-danger">@Html.DisplayFor(modelItem => item.status)</div>
+                                <tr><td>No Fund Request Found</td></tr>
                             }
-
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.remarks)
-                        </td>
-                        <td>
-                            <a class="popup-with-form" href="#EditFundRequest" onclick="EditfundRequest('APPROVED', @item.txn_id,@item.first_name+' '+@item.last_name, @item.amount)"><i class="fa fa-pencil text-inverse m-r-10"></i></a>
-                            <a class="popup-with-form" href="#EditFundRequest" onclick="EditfundRequest('REJECTED', @item.txn_id,@item.first_name+' '+@item.last_name, @item.amount)"><i class="fa fa-close text-danger sa-disable"></i></a>
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr><td>No Fund Request Found</td></tr>
-            }
-        </tbody>
-    </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -124,7 +195,7 @@
                     <div class="panel-heading"> Manage Fund Request</div>
                     <div class="panel-wrapper collapse in" aria-expanded="true">
                     </div>
-
+                    <br />
                     <div class="form-group">
                         <label class="control-label col-md-3">
                             System Id
@@ -133,7 +204,7 @@
                         <div class="col-md-9">
                             <input type="text" readonly id="Systemid">
                         </div>
-                        <input class="btn btn-success" type="submit" value="submit" />
+
                     </div>
 
                     <div class="form-group">
@@ -141,24 +212,24 @@
                         <input type="hidden" id="txnid" name="txnid">
 
                         <label class="control-label col-md-3">
-                            Amount Requested by:
+                            Amount Requested by
                         </label>
 
                         <div class="col-md-9">
                             <input type="text" readonly id="username">
                         </div>
-                        <input class="btn btn-success" type="submit" value="submit" />
+
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-3">
-                            Requested Amount:
+                            Requested Amount
                         </label>
 
                         <div class="col-md-9">
                             <input type="text" readonly id="amount">
                         </div>
-                        <input class="btn btn-success" type="submit" value="submit" />
+
                     </div>
 
                     <div class="form-group">
@@ -170,8 +241,20 @@
                         <div class="col-md-9">
                             <textarea id="fundremark" name="fundremark"></textarea>
                         </div>
-                        <input class="btn btn-success" type="submit" value="submit" />
+
                     </div>
+                    <div class="form-group">
+
+                        <label class="control-label col-md-3">
+                            &nbsp;
+                        </label>
+
+                        <div class="col-md-9">
+                            <input class="btn btn-success" type="submit" value="submit" />
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -189,7 +272,7 @@
                 $(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
             }
             else {
-                $(this).html('');
+                $(this).html('              ');
             }
         });
 
@@ -253,7 +336,7 @@
                     }, function () {
                         ClearForm("EditFundRequest");
                         $(".mfp-close").click();
-                        window.location.reload();                        
+                        window.location.reload();
                     });
                 }
                 else {

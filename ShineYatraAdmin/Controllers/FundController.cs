@@ -202,5 +202,31 @@ namespace ShineYatraAdmin.Controllers
             }
             return Json(response);
         }
+
+        
+        /// <summary>
+        /// Get list of fund request from members
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> MemberFundRequestList(FormCollection frm)
+        {
+            List<CompanyFund> fundRequestList = new List<CompanyFund>();
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                string status = Convert.ToString(frm.GetValue("status").AttemptedValue);
+                fundRequestList = await fundManger.getFundRequestList(userData[1]);
+                if (!string.IsNullOrEmpty(status) && !status.ToLower().Equals("all"))
+                {
+                    var searchedlist = (from r in fundRequestList where r.status.ToLower() == status select r).ToList();
+                    fundRequestList = searchedlist;
+                }
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View("MemberFundRequest", fundRequestList);
+        }
     }
 }
