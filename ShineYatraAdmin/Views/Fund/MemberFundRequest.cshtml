@@ -30,7 +30,7 @@
                     User Name
                 </th>
                 <th>
-                    Requested Amount
+                    Amount
                 </th>
                 <th>
                     Deposit Mode
@@ -52,11 +52,11 @@
                 <th>Txn Date</th>
                 <th>Member Name</th>
                 <th>User Name</th>
-                <th>Requested Amount</th>
+                <th>Amount</th>
                 <th>Deposit Mode</th>
                 <th>Status</th>
                 <th>Remark</th>
-                <th>Action</th>            
+                <th>Action</th>
             </tr>
         </tfoot>
         <tbody>
@@ -101,8 +101,8 @@
                             @Html.DisplayFor(modelItem => item.remarks)
                         </td>
                         <td>
-                            <a  class="popup-with-form btn btn-success" href="#EditFundRequest" onclick="EditfundRequest('APPROVED', @item.txn_id)">Approve</a>
-                            <a  class="popup-with-form btn btn-success" href="#EditFundRequest" onclick="EditfundRequest('REJECTED', @item.txn_id)">Reject</a>
+                            <a class="popup-with-form" href="#EditFundRequest" onclick="EditfundRequest('APPROVED', @item.txn_id,@item.first_name+' '+@item.last_name, @item.amount)"><i class="fa fa-pencil text-inverse m-r-10"></i></a>
+                            <a class="popup-with-form" href="#EditFundRequest" onclick="EditfundRequest('REJECTED', @item.txn_id,@item.first_name+' '+@item.last_name, @item.amount)"><i class="fa fa-close text-danger sa-disable"></i></a>
                         </td>
                     </tr>
                 }
@@ -113,120 +113,163 @@
             }
         </tbody>
     </table>
-    </div>
-    <form id="EditFundRequest" class="form-horizontal mfp-hide white-popup-block" style="width: 90%;" onsubmit="return UpdateFundRequest();">
+</div>
+
+
+<form id="EditFundRequest" class="form-horizontal form-bordered mfp-hide white-popup-block" style="width: 90%;" onsubmit="return UpdateFundRequest();">
+    <div class="form-body">
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-info">
                     <div class="panel-heading"> Manage Fund Request</div>
                     <div class="panel-wrapper collapse in" aria-expanded="true">
-                        <div class="panel-body">
-                            <input type="hidden" id="fundstatus" name="fundstatus">
-                            <input type="hidden" id="txnid" name="txnid">
-                            <div class="col-md-12">
-                                <div class="col-md-3">
-                                    Remark
-                                </div>
-                                <div class="col-md-9">
-                                    <textarea id="fundremark" name="fundremark"></textarea>
-                                </div>
-                                <input type="submit" value="submit"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            System Id
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text" readonly id="Systemid">
+                        </div>
+                        <input class="btn btn-success" type="submit" value="submit" />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="hidden" id="fundstatus" name="fundstatus">
+                        <input type="hidden" id="txnid" name="txnid">
+
+                        <label class="control-label col-md-3">
+                            Amount Requested by:
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text" readonly id="username">
+                        </div>
+                        <input class="btn btn-success" type="submit" value="submit" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            Requested Amount:
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text" readonly id="amount">
+                        </div>
+                        <input class="btn btn-success" type="submit" value="submit" />
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="control-label col-md-3">
+                            Remark
+                        </label>
+
+                        <div class="col-md-9">
+                            <textarea id="fundremark" name="fundremark"></textarea>
+                        </div>
+                        <input class="btn btn-success" type="submit" value="submit" />
                     </div>
                 </div>
             </div>
         </div>
-                </div>
-            </div>
-    </form>
-    <!-- Add Funds Request -->
+    </div>
+</form>
+<!-- Add Funds Request -->
 
-    <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#FundRequestList tfoot th').each( function () {
-                var title = $(this).text();
-                if(title.indexOf("Remark")==-1 && title.indexOf("Action")==-1)
-                {
-                    $(this).html( '<input type="text" style="width:100%;" placeholder="Search '+title+'" />' );
-                }
-            });
-                        
-            var fundTable = $('#FundRequestList').DataTable({
-                "bLengthChange": false,
-                "language": {
-                    "paginate": {
-                        "previous": "<<",
-                        "next": ">>"
-                    }
-                },
-                "aoColumnDefs": [
-              { 'bSortable': false, 'aTargets': [7,8] }
-                ],
-
-                stateSave: true
-            });
-
-
-            // Apply the search
-            fundTable.columns().every( function () {
-                var that = this;
- 
-                $( 'input', this.footer() ).on( 'keyup change', function () {
-                    if ( that.search() !== this.value ) {
-                        that
-                            .search( this.value )
-                            .draw();
-                    }
-                } );
-            } );
-
+<script>
+    $(document).ready(function () {
+        $('#FundRequestList tfoot th').each(function () {
+            var title = $(this).text();
+            if (title.indexOf("Remark") == -1 && title.indexOf("Action") == -1) {
+                $(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
+            }
+            else {
+                $(this).html('');
+            }
         });
 
-        function EditfundRequest(status,txnid)
-        {
-            $("#EditFundRequest").find("input[id='txnid']").val(txnid);
-            $("#EditFundRequest").find("input[id='fundstatus']").val(status);
+        var fundTable = $('#FundRequestList').DataTable({
+            "bLengthChange": false,
+            "language": {
+                "paginate": {
+                    "previous": "<<",
+                    "next": ">>"
+                }
+            },
+            "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [7, 8] }
+            ],
 
-        }
+            stateSave: true
+        });
 
-        function UpdateFundRequest() {
-            var fundRequest = $("#EditFundRequest").serialize();
-           
-            $(".preloader").show();
-            $.ajax({
-                url: '/Fund/UpdateMemberFundRequest',
-                type: 'Post',
-                data: fundRequest
-            }).done(function (result) {
-                if (result == null || result == "") {
-                    swal("Status", "There is some error please try again later.", "error")
+
+        // Apply the search
+        fundTable.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+    });
+
+    function EditfundRequest(status, txnid, name, amount) {
+        $("#EditFundRequest").find("input[id='txnid']").val(txnid);
+        $("#EditFundRequest").find("input[id='fundstatus']").val(status);
+        $("#EditFundRequest").find("input[id='username']").val(name);
+        $("#EditFundRequest").find("input[id='amount']").val(amount);
+        $("#EditFundRequest").find("input[id='Systemid']").val(txnid);
+    }
+
+    function UpdateFundRequest() {
+        var fundRequest = $("#EditFundRequest").serialize();
+
+        $(".preloader").show();
+        $.ajax({
+            url: '/Fund/UpdateMemberFundRequest',
+            type: 'Post',
+            data: fundRequest
+        }).done(function (result) {
+            if (result == null || result == "") {
+                swal("Status", "There is some error please try again later.", "error")
+            }
+            else {
+                if (result.indexOf("SUCCESS") != -1) {
+                    swal({
+                        title: "Success",
+                        text: "Record updated Successfully",
+                        type: "success"
+                    }, function () {
+                        ClearForm("EditFundRequest");
+                        $(".mfp-close").click();
+                        window.location.reload();                        
+                    });
                 }
                 else {
-                    if (result.indexOf("SUCCESS") != -1) {
-                        swal({
-                            title: "Success",
-                            text: "Record updated Successfully",
-                            type: "success"
-                        }, function () {                            
-                            ClearForm("EditFundRequest");
-                            $(".mfp-close").click();
-                        });
-                    }
-                    else {
-                        swal({
-                            title: "Fail",
-                            text: result,
-                            type: "error"
-                        }, function () {
-                            ClearForm("EditFundRequest");
-                            $(".preloader").hide();
-                        });
-                    }
+                    swal({
+                        title: "Fail",
+                        text: result,
+                        type: "error"
+                    }, function () {
+                        ClearForm("EditFundRequest");
+                        $(".preloader").hide();
+                    });
                 }
-                $(".preloader").hide();
-                return false;
-            });
+            }
+            $(".preloader").hide();
             return false;
-        }
-    </script>
+        });
+        return false;
+    }
+</script>
