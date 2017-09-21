@@ -96,7 +96,7 @@
                 </div>
                 <div class="col-md-9">
 
-                    <form class="tr" method="post" action="BookingResponse">
+                    <form class="tr" method="post" id="bookfightform" action="BookingResponse">
                         <hr>
                         <h4>Flight Details</h4>
                         <hr>
@@ -291,7 +291,7 @@
                         <div><label id="ErrorMessage"></label></div>
 
                         <div class="td">
-                            <input type="submit" value="Proceed To Booking">
+                            <input type="button" class="btn btn-success" value="Proceed To Booking" onclick="openotpform()">
                         </div>
                     </form>
                 </div>
@@ -299,6 +299,46 @@
         </div>
     </div>
 </div>
+
+<a class="popup-with-form btn btn-success" href="#VerifyOTP" id="showverifyOTPform" style="display:none;">test</a>
+<form id="VerifyOTP" class="form-horizontal mfp-hide white-popup-block" method="post" style="width: 90%;" onsubmit="return VerifyOTP();">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading"> Verify OTP</div> 
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">                        
+                        
+                        <div class="form-group">
+
+                            <label class="control-label col-md-3">
+                                Enter OTP:
+                            </label>
+
+                            <div class="col-md-9">
+                                <input type="text" id="otp" name="otp"/>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+
+                            <label class="control-label col-md-3">
+                                &nbsp;
+                            </label>
+
+                            <div class="col-md-9">
+                                <input class="btn btn-success" type="submit" value="submit" />
+                            </div>
+
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
 
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
@@ -323,5 +363,44 @@
             dateFormat: "dd-M-yy"
         });
     });
+
+    function openotpform() {
+        $(".preloader").show();
+        $.ajax({
+            url: '/OTP/GenerateOTP',
+            type: 'GET'
+        }).done(function (result) {
+            if (result != null && result != "") {
+                $("#showverifyOTPform").click();
+                $(".preloader").hide();
+            }
+            return false;
+        }).fail(function (xhr) {
+            alert(xhr);
+            $(".preloader").hide();
+        });
+        return false;
+    }
+
+    function VerifyOTP() {
+        var userOtp = $("#VerifyOTP").serialize();
+        $.ajax({
+            url: '/OTP/VerifyOTP',
+            type: 'POST',
+            data: userOtp
+        }).done(function (result) {
+            if (result != null && result != "" && result.indexOf("success")!=-1) {
+                ClearForm("VerifyOTP");
+                $(".mfp-close").click();                
+                $("#bookfightform").submit();
+            }
+            return false;
+        }).fail(function (xhr) {
+            alert(xhr);
+            $(".preloader").hide();
+            return false;
+        });
+        return false;
+    }
 </script>
 
