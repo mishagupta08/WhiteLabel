@@ -11,6 +11,7 @@
     using System.Linq;
     using System.Web.Script.Serialization;
     using System.Configuration;
+    using System.Web;
 
     #endregion namespace
 
@@ -78,7 +79,8 @@
                 ArrayOfOrigindestinationoption newarray = new ArrayOfOrigindestinationoption();
                 newarray.Origindestinationoption = new List<Origindestinationoption>();
 
-                foreach (var flight in searchPageViewModel.arrayOfSearchedFlights.Origindestinationoption) {
+                foreach (var flight in searchPageViewModel.arrayOfSearchedFlights.Origindestinationoption)
+                {
                     CompanyCommissionGroup flightdiscount = AllflightDiscountDetails.Where(o => o.sub_service_code.Equals(flight.FlightsDetailList.FlightsDetail.First().OperatingAirlineCode)).FirstOrDefault();
                     double totalFare = flight.FareDetail.ChargeableFares.ActualBaseFare;
                     if (Convert.ToDouble(flightdiscount.front_discount_per) != 0)
@@ -114,13 +116,13 @@
         {
             flightManager = new FlightManager();
             userManager = new UserManager();
-            
+
             SearchPageViewModel searchPageViewModel = new SearchPageViewModel();
             searchPageViewModel.flightSearch = passengerDetails;
             searchPageViewModel.FlightBookingDetail = passengerDetails;
             searchPageViewModel.FlightBookingDetail.PersonName = new personName();
             searchPageViewModel.FlightBookingDetail.PersonName.CustomerInfo = new List<CustomerInfo>();
-            
+
             try
             {
                 WalletRequest balrequest = new WalletRequest();
@@ -150,7 +152,7 @@
             searchPageViewModel.AssignChildNameReference();
             searchPageViewModel.flightfaredetails = await flightManager.FlightPricing(searchPageViewModel.flightSearch);
 
-            double totalFare =  searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare;
+            double totalFare = searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare;
 
             if (Convert.ToDouble(passengerDetails.front_discount_per) != 0)
             {
@@ -169,14 +171,14 @@
             }
             else
             {
-                searchPageViewModel.flightfaredetails.FareDetail.discountedFare =  Convert.ToDouble(passengerDetails.back_discount_amount);
+                searchPageViewModel.flightfaredetails.FareDetail.discountedFare = Convert.ToDouble(passengerDetails.back_discount_amount);
             }
 
 
             return View("FlightMenu//BookingDetail", searchPageViewModel);
         }
 
-        
+
 
         /// <summary>
         /// Method save  to book flight ticket
@@ -188,7 +190,7 @@
         {
             flightManager = new FlightManager();
             Request request = new Request();
-            string status = "";
+            string status = "There is some problem, Please try after some time";
             Bookingresponse bookResponse = new Bookingresponse();
             try
             {
@@ -197,51 +199,80 @@
                 string[] userData = User.Identity.Name.Split('|');
 
 
-                INSERT_SERVICE_BOOKING_REQUEST response = await saveBookingDetail(bookingDetail);
-                if (response != null)
+                //INSERT_SERVICE_BOOKING_REQUEST response = await saveBookingDetail(bookingDetail);
+                string cookieId = saveBookingDetail(bookingDetail);
+
+                if (request.PaymentMode == "bank" || bookingDetail.walletBalance < request.AdultFare)
                 {
-                    if (!string.IsNullOrEmpty(response.MSG))
+
+                    CompanyFund paymentDetail = new CompanyFund();
+
+                    paymentDetail.action = "INSERT_PG_REQUEST_FOR_SERVICE";
+                    paymentDetail.member_id = userData[1];
+                    paymentDetail.domain_name = ConfigurationManager.AppSettings["DomainName"];
+                    Guid g = Guid.NewGuid();
+                    string GuidString = Convert.ToBase64String(g.ToByteArray());
+                    GuidString = GuidString.Replace("=", "");
+                    GuidString = GuidString.Replace("+", "");
+                    paymentDetail.request_token = GuidString;
+                    paymentDetail.txn_type = "PG_REQUEST";
+                    paymentDetail.deposit_mode = "PG";
+                    paymentDetail.remarks = "Flight booking payment by payment gateway";
+                    paymentDetail.amount = request.PaymentMode == "bank" ? request.AdultFare : request.AdultFare - bookingDetail.walletBalance;
+                    string BalanceTxnId = await FlightManager.SavePaymntGatewayTransactions(paymentDetail);
+                    if (!BalanceTxnId.ToLower().Contains("failed"))
                     {
-                        status = response.MSG; 
+                        
+                        PayUController cntrl = new PayUController();
+                        PayuRequest payrequest = new PayuRequest();
+                        payrequest.FirstName = request.PersonName.CustomerInfo.FirstOrDefault().givenName;
+                        payrequest.TransactionAmount = request.PaymentMode == "bank" ? request.AdultFare : request.AdultFare - bookingDetail.walletBalance;
+                        payrequest.Email = request.EmailAddress;
+                        payrequest.Phone = request.PhoneNumber;
+                        payrequest.udf1 = Convert.ToString(cookieId);
+                        payrequest.udf2 = Convert.ToString(BalanceTxnId);
+                        payrequest.memberId = userData[1];
+                        payrequest.ProductInfo = "Booking Flight " + request.FlightNumber + ": " + " For Name : " + request.PersonName.CustomerInfo.FirstOrDefault().givenName;
+                        payrequest.surl = "http://" + Request.Url.Authority + "/Flight/Return";
+                        payrequest.furl = "http://" + Request.Url.Authority + "/Flight/Return";
+                        cntrl.Payment(payrequest);
                     }
                     else
                     {
-                        if (request.PaymentMode == "bank" || bookingDetail.walletBalance < request.AdultFare)
+                        status = BalanceTxnId;
+                    }
+                }
+                else
+                {
+                    if (bookingDetail.walletBalance >= request.AdultFare)
+                    {
+                        HttpCookie myCookie = new HttpCookie("Cookie-" + cookieId);
+                        myCookie = Request.Cookies["Cookie-" + cookieId];
+                        JavaScriptSerializer serializer = new JavaScriptSerializer();
+                        var ticketDetail = serializer.Deserialize<BookingDetail>(myCookie.Value);
+                        List<INSERT_SERVICE_BOOKING_REQUEST> response = await flightManager.InsertServiceBookingRequest(ticketDetail);
+                        var saveBookingResonse = response.FirstOrDefault();
+                        int txnId = saveBookingResonse.txn_id;
+                        bookResponse = await flightManager.BookTicket(request);
+
+                        if (bookResponse != null && bookResponse.Status.ToLower() == "success")
                         {
-                            PayUController cntrl = new PayUController();
-                            PayuRequest payrequest = new PayuRequest();
-                            payrequest.FirstName = request.PersonName.CustomerInfo.FirstOrDefault().givenName;
-                            payrequest.TransactionAmount = request.PaymentMode == "bank" ? request.AdultFare : request.AdultFare - bookingDetail.walletBalance;
-                            payrequest.Email = request.EmailAddress;
-                            payrequest.Phone = request.PhoneNumber;
-                            payrequest.udf1 = Convert.ToString(response.txn_id);
-                            payrequest.memberId = userData[1];
-                            payrequest.ProductInfo = "Booking Flight " + request.FlightNumber + ": " + " For Name : " + request.PersonName.CustomerInfo.FirstOrDefault().givenName;
-                            payrequest.surl = "http://" + Request.Url.Authority + "/Flight/Return";
-                            payrequest.furl = "http://" + Request.Url.Authority + "/Flight/Return";
-                            cntrl.Payment(payrequest);
+                            status = "Ticket Booked successfully";
+                            UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "confirmed");
+                        }
+                        else if (bookResponse != null && !string.IsNullOrEmpty(bookResponse.Error))
+                        {
+                            status = bookResponse.Error;
+                            UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, bookResponse.Error);
                         }
                         else
                         {
-                            bookResponse.txn_id = Convert.ToString(response.txn_id);
-                            bookResponse = await flightManager.BookTicket(request);
-                            
-                            if (bookResponse != null && bookResponse.Status.ToLower() == "success")
-                            {
-                                status = "Ticket Booked successfully";
-                                UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(bookResponse.txn_id, userData[1], bookResponse.Transid, "confirmed");
-                            }
-                            else if (bookResponse != null && !string.IsNullOrEmpty(bookResponse.Error))
-                            {
-                                status = bookResponse.Error;
-                                UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(bookResponse.txn_id, userData[1], bookResponse.Transid, bookResponse.Error);
-                            }
-                            else
-                            {
-                                status = "There is some problem, Please try after some time";
-                                UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(bookResponse.txn_id, userData[1], bookResponse.Transid, "error");
-                            }
-                        }                           
+                            status = "There is some problem, Please try after some time";
+                            UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "error");
+                        }
+                    }
+                    else {
+                        status = "Your wallet balance is less than flight fare.";
                     }
                 }
 
@@ -250,7 +281,7 @@
             {
                 Console.WriteLine(ex.InnerException);
             }
-            return RedirectToAction("BookingStatus","Flight",new {status= status });
+            return RedirectToAction("BookingStatus", "Flight", new { status = status });
         }
 
         [HttpPost]
@@ -259,21 +290,39 @@
             string merc_hash_string = string.Empty;
             string merc_hash = string.Empty;
             string order_id = string.Empty;
-            string status = string.Empty;
+            string status = "There is some problem, Please try after some time";
+            int txnId = 0;
             Bookingresponse bookResponse = new Bookingresponse();
             Request request = new Request();
             FlightManager flightManager = new FlightManager();
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();           
             try
             {
-                string txnId = form["udf1"].ToString();
+                string cookieId = form["udf1"].ToString();
+                string balanceTxId = form["udf2"].ToString();
                 //getbooking 
-                List<BookingDetail> getticketDetailList = new List<BookingDetail>();
+                BookingDetail getticketDetailList = new BookingDetail();
                 string[] userData = User.Identity.Name.Split('|');
-                getticketDetailList = await flightManager.getBookingDetails(txnId, userData[1]);
-                var ticketDetail = (from r in getticketDetailList select r).FirstOrDefault();
+                //getticketDetailList = await flightManager.getBookingDetails(txnId, userData[1]);
+
+
+                HttpCookie myCookie = new HttpCookie("Cookie-" + cookieId);
+                myCookie = Request.Cookies["Cookie-" + cookieId];
+
+                // Read the cookie information and display it.
+                if (myCookie != null)
+                {
+                    getticketDetailList = serializer.Deserialize<BookingDetail>(myCookie.Value);
+                }
+
+                var ticketDetail = getticketDetailList;
                 if (form["status"].ToString() == "success")
-                {                                        
+                {
+                    ticketDetail.my_info = "PG_REQUEST,"+ balanceTxId + ","+ Convert.ToString(form["mode"]) + ","+ Convert.ToString(form["txnid"]) + ","+ Convert.ToString(form["bank_ref_num"]) ;
+                    List<INSERT_SERVICE_BOOKING_REQUEST> response = await flightManager.InsertServiceBookingRequest(ticketDetail);
+                    var saveBookingResonse = response.FirstOrDefault();
+                    txnId = saveBookingResonse.txn_id;
+
                     request.Origin = ticketDetail.travel_from;
                     request.Destination = ticketDetail.travel_to;
                     request.DepartDate = ticketDetail.travel_date;
@@ -286,7 +335,7 @@
                     request.FlightNumber = ticketDetail.flight_no;
                     request.PhoneNumber = ticketDetail.mobile;
                     request.EmailAddress = ticketDetail.email;
-                    request.PartnerRefId = ticketDetail.unique_ref_no;
+                    request.PartnerRefId = saveBookingResonse.unique_ref_no;
                     request.Creditcardno = "4111111111111111";
                     request.PersonName = new personName();
                     request.PersonName.CustomerInfo = new List<CustomerInfo>();
@@ -300,7 +349,7 @@
                             surName = passenger.last_name,
                             nameReference = passenger.title,
                             age = passenger.age,
-                            extra_field_1= passenger.extra_field_1,
+                            extra_field_1 = passenger.extra_field_1,
                             extra_field_2 = passenger.extra_field_2,
                             extra_field_3 = passenger.extra_field_3,
                             extra_field_4 = passenger.extra_field_4,
@@ -308,7 +357,7 @@
 
                         });
                     }
-                    
+
                     bookResponse = await flightManager.BookTicket(request);
                     if (bookResponse != null && bookResponse.Status.ToLower() == "success")
                     {
@@ -328,8 +377,7 @@
                 }
                 else
                 {
-                    status = form["status"].ToString();
-                    UPDATE_TRANSACTION_STATUS updatestatus = await flightManager.UpdateServiceBookingRequest(txnId, userData[1], "", form["status"].ToString());
+                    status = form["status"].ToString();                    
                 }
             }
             catch (Exception ex)
@@ -339,11 +387,14 @@
             return RedirectToAction("BookingStatus", "Flight", new { status = status });
         }
 
-        public ActionResult BookingStatus(string status) {
-            try {
+        public ActionResult BookingStatus(string status)
+        {
+            try
+            {
                 ViewBag.status = status;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.InnerException);
             }
             return View();
@@ -354,7 +405,7 @@
         /// </summary>
         /// <param name="bookingDetail"></param>
         /// <returns></returns>
-        public async Task<INSERT_SERVICE_BOOKING_REQUEST> saveBookingDetail(SearchPageViewModel bookingDetail)
+        public string saveBookingDetail(SearchPageViewModel bookingDetail)
         {
             flightManager = new FlightManager();
             BookingDetail ticketDetail = new BookingDetail();
@@ -389,9 +440,10 @@
                 ticketDetail.flight_no = bookingDetail.FlightBookingDetail.FlightNumber;
                 ticketDetail.ref_code = bookingDetail.FlightBookingDetail.OperatingAirlineCode;
                 ticketDetail.amount = bookingDetail.FlightBookingDetail.AdultFare;
-                ticketDetail.member_id =userData[1];
+                ticketDetail.member_id = userData[1];
                 ticketDetail.company_id = userData[2];
                 ticketDetail.trip_class = bookingDetail.FlightBookingDetail.Preferredclass;
+                ticketDetail.my_info = "";
                 ticketDetail.passenger_details = new List<Passengers>();
                 if (bookingDetail.FlightBookingDetail.PaymentMode.ToLower().Trim() == "bank")
                 {
@@ -406,9 +458,9 @@
                     else
                     {
                         ticketDetail.pg_amount = 0;
-                    }                    
+                    }
                 }
-                
+
                 ticketDetail.other_amount = 0;
                 ticketDetail.total_paid_amount = 0;
                 foreach (var passenger in bookingDetail.FlightBookingDetail.PersonName.CustomerInfo)
@@ -430,8 +482,17 @@
 
                     });
                 }
-                List<INSERT_SERVICE_BOOKING_REQUEST> response = await flightManager.InsertServiceBookingRequest(ticketDetail);
-                return response.FirstOrDefault();
+
+                string ticketDetailJson = new JavaScriptSerializer().Serialize(ticketDetail);
+                var cookie = new HttpCookie("Cookie-" + GuidString, ticketDetailJson)
+                {
+                    Expires = DateTime.Now.AddYears(1)
+                };
+                HttpContext.Response.Cookies.Add(cookie);
+
+                //List<INSERT_SERVICE_BOOKING_REQUEST> response = await flightManager.InsertServiceBookingRequest(ticketDetail);
+                //return response.FirstOrDefault();
+                return GuidString;
             }
             catch (Exception ex)
             {

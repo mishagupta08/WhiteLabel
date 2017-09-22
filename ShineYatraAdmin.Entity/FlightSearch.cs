@@ -734,6 +734,7 @@ namespace ShineYatraAdmin.Entity
         public string ref_code { get; set; }
         public string api_txn_id { get; set; }
         public string unique_ref_no { get; set; }
+        public string my_info { get; set; }
         public List<Passengers> passenger_details { get; set; }
     }
 
@@ -748,6 +749,12 @@ namespace ShineYatraAdmin.Entity
     {        
         public string MSG { get; set; }        
     }
+
+    public class INSERT_PG_REQUEST_FOR_SERVICE
+    {
+        public int payment_txn_id { get; set; }        
+    }
+
 
 
 }

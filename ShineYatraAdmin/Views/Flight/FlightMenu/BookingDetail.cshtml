@@ -1,10 +1,12 @@
 ﻿@using ShineYatraAdmin.Properties;
+@using System.Configuration;;
 @model ShineYatraAdmin.Entity.SearchPageViewModel
 
 @{
     ViewBag.Title = "BookingDetail";
     Layout = "~/Views/Shared/Layout.cshtml";
     int count = 0;
+    bool askOTP = Convert.ToBoolean(ConfigurationManager.AppSettings["askOTP"]);
 }
 
 <style>
@@ -291,7 +293,14 @@
                         <div><label id="ErrorMessage"></label></div>
 
                         <div class="td">
-                            <input type="button" class="btn btn-success" value="Proceed To Booking" onclick="openotpform()">
+                            @if (askOTP)
+                            {
+                             <input type="button" class="btn btn-success" value="Proceed To Booking" onclick="openotpform()">
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn btn-success" value="Proceed To Booking">
+                            }
                         </div>
                     </form>
                 </div>

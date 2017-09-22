@@ -1134,9 +1134,9 @@
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        public static async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId,string api_txn_id, string status)
+        public static async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(int TransactionId, string memberId,string api_txn_id, string status)
         {
-            string data = "{\"action\":\"UPDATE_TRANSACTION_STATUS\",\"update_member_id\":\"" + memberId + "\",\"txn_id\":\"" + TransactionId + "\",\"status\":\"" + status + "\",\"api_txn_id\":\"" + api_txn_id + "\"}";
+            string data = "{\"action\":\"UPDATE_TRANSACTION_STATUS\",\"update_member_id\":\"" + memberId + "\",\"txn_id\":" + TransactionId + ",\"status\":\"" + status + "\",\"api_txn_id\":\"" + api_txn_id + "\"}";
             var response = await CallFunction(data);
             UPDATE_TRANSACTION_STATUS updatestatus = new UPDATE_TRANSACTION_STATUS();
         
@@ -1306,6 +1306,26 @@
             return "No Result Found.";
         }
 
-
+        /// <summary>
+        /// method to save fund detail while payment from payment gateway
+        /// </summary>
+        /// <param name="fundDetail"></param>
+        /// <returns></returns>
+        public static async Task<string> SavePaymntGatewayTransactions(CompanyFund fundDetail)
+        {
+            string data = JsonConvert.SerializeObject(fundDetail);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS)
+            {
+                var transaction = response.INSERT_PG_REQUEST_FOR_SERVICE.FirstOrDefault();
+                return Convert.ToString(transaction.payment_txn_id);                
+            }
+            else if (response != null)
+            {
+                return "Failed-" + response.MSG;
+            }
+            return null;
+        }
     }
 }

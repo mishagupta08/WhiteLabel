@@ -88,7 +88,8 @@ function getuserbalance() {
         url: '/Dashboard/GetUserBalance',
         type: 'Post'
     }).done(function (result) {
-        $("#usercurrentbalance").html("Current Balance   :  "+result);
+        $("#usercurrentbalance").html("Current Balance   :  " + result);
+        $(".preloader").hide();
     }).fail(function (xhr) {
         alert(xhr);
     });

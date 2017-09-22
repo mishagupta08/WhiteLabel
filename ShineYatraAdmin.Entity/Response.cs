@@ -167,5 +167,13 @@
         /// </summary>
         public List<CompanyFund> GET_FUND_REQUEST { get; set; }
 
+        /// <summary>
+        /// gets or sets INSERT_PG_REQUEST_FOR_SERVICE
+        /// </summary>
+        public List<INSERT_PG_REQUEST_FOR_SERVICE> INSERT_PG_REQUEST_FOR_SERVICE { get; set; }
+
+
+
+
     }
 }

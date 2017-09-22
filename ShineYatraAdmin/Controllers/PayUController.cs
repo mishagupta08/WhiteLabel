@@ -53,10 +53,11 @@ namespace ShineYatraAdmin.Controllers
             myremotepost.Add("phone", phone);
             myremotepost.Add("email", email);
             myremotepost.Add("udf1", request.udf1);
+            myremotepost.Add("udf2", request.udf2);
             myremotepost.Add("surl", myremotepost.SUrl);//Change the success url here depending upon the port number of your local system.
             myremotepost.Add("furl", myremotepost.FUrl);//Change the failure url here depending upon the port number of your local system.            
             myremotepost.Add("service_provider", "payu_paisa");
-            string hashString = key + "|" + txnid + "|" + amount + "|" + productInfo + "|" + firstName + "|" + email + "|"+request.udf1+"||||||||||" + salt;
+            string hashString = key + "|" + txnid + "|" + amount + "|" + productInfo + "|" + firstName + "|" + email + "|"+request.udf1+"|"+ request.udf2 + "|||||||||" + salt;
             //string hashString = "3Q5c3q|2590640|3053.00|OnlineBooking|vimallad|ladvimal@gmail.com|||||||||||mE2RxRwx";
             string hash = Generatehash512(hashString);
             myremotepost.Add("hash", hash);
