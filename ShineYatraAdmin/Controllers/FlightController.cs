@@ -228,7 +228,7 @@
                         payrequest.FirstName = request.PersonName.CustomerInfo.FirstOrDefault().givenName;
                         payrequest.TransactionAmount = request.PaymentMode == "bank" ? request.AdultFare : request.AdultFare - bookingDetail.walletBalance;
                         payrequest.Email = request.EmailAddress;
-                        payrequest.Phone = request.PhoneNumber;
+                        payrequest.Phone = request.phoneNumber;
                         payrequest.udf1 = Convert.ToString(cookieId);
                         payrequest.udf2 = Convert.ToString(BalanceTxnId);
                         payrequest.memberId = userData[1];
@@ -333,7 +333,7 @@
                     request.Mode = ticketDetail.trip_mode;
                     request.Id = ticketDetail.flight_id;
                     request.FlightNumber = ticketDetail.flight_no;
-                    request.PhoneNumber = ticketDetail.mobile;
+                    request.phoneNumber = ticketDetail.mobile_no;
                     request.EmailAddress = ticketDetail.email;
                     request.PartnerRefId = saveBookingResonse.unique_ref_no;
                     request.Creditcardno = "4111111111111111";
@@ -349,11 +349,11 @@
                             surName = passenger.last_name,
                             nameReference = passenger.title,
                             age = passenger.age,
-                            extra_field_1 = passenger.extra_field_1,
-                            extra_field_2 = passenger.extra_field_2,
-                            extra_field_3 = passenger.extra_field_3,
-                            extra_field_4 = passenger.extra_field_4,
-                            extra_field_5 = passenger.extra_field_5
+                            //extra_field_1 = passenger.extra_field_1,
+                            //extra_field_2 = passenger.extra_field_2,
+                            //extra_field_3 = passenger.extra_field_3,
+                            //extra_field_4 = passenger.extra_field_4,
+                            //extra_field_5 = passenger.extra_field_5
 
                         });
                     }
@@ -420,7 +420,7 @@
                 ticketDetail.request_token = GuidString;
                 ticketDetail.service_id = 1;
                 ticketDetail.sub_service_id = "11";
-                ticketDetail.mobile_no = bookingDetail.FlightBookingDetail.PhoneNumber;
+                ticketDetail.mobile_no = bookingDetail.FlightBookingDetail.phoneNumber;
                 ticketDetail.email = bookingDetail.FlightBookingDetail.EmailAddress;
                 ticketDetail.infant = bookingDetail.FlightBookingDetail.InfantPax;
                 ticketDetail.child = bookingDetail.FlightBookingDetail.ChildPax;
@@ -474,11 +474,11 @@
                         last_name = passenger.surName,
                         title = passenger.nameReference,
                         age = passenger.age,
-                        extra_field_1 = "A",
-                        extra_field_2 = "B",
-                        extra_field_3 = "C",
-                        extra_field_4 = "D",
-                        extra_field_5 = "E",
+                        //extra_field_1 = "A",
+                        //extra_field_2 = "B",
+                        //extra_field_3 = "C",
+                        //extra_field_4 = "D",
+                        //extra_field_5 = "E",
 
                     });
                 }

@@ -36,7 +36,7 @@ namespace ShineYatraAdmin.Entity
         [XmlElement(ElementName = "personName")]
         public personName PersonName { get; set; }
         [XmlElement(ElementName = "phoneNumber")]
-        public string PhoneNumber { get; set; }
+        public string phoneNumber { get; set; }
         [XmlElement(ElementName = "creditcardno")]
         public string Creditcardno { get; set; }
         [XmlElement(ElementName = "emailAddress")]
@@ -113,20 +113,20 @@ namespace ShineYatraAdmin.Entity
         [XmlElement(ElementName = "age")]
         public string age { get; set; }
 
-        [XmlElement(ElementName = "extra_field_1")]
-        public string extra_field_1 { get; set; }
+        //[XmlElement(ElementName = "extra_field_1")]
+        //public string extra_field_1 { get; set; }
 
-        [XmlElement(ElementName = "extra_field_2")]
-        public string extra_field_2 { get; set; }
+        //[XmlElement(ElementName = "extra_field_2")]
+        //public string extra_field_2 { get; set; }
 
-        [XmlElement(ElementName = "extra_field_3")]
-        public string extra_field_3 { get; set; }
+        //[XmlElement(ElementName = "extra_field_3")]
+        //public string extra_field_3 { get; set; }
 
-        [XmlElement(ElementName = "extra_field_4")]
-        public string extra_field_4 { get; set; }
+        //[XmlElement(ElementName = "extra_field_4")]
+        //public string extra_field_4 { get; set; }
 
-        [XmlElement(ElementName = "extra_field_5")]
-        public string extra_field_5 { get; set; }
+        //[XmlElement(ElementName = "extra_field_5")]
+        //public string extra_field_5 { get; set; }
 
     }
 
@@ -691,11 +691,11 @@ namespace ShineYatraAdmin.Entity
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string age { get; set; }
-        public string extra_field_1 { get; set; }
-        public string extra_field_2 { get; set; }
-        public string extra_field_3 { get; set; }
-        public string extra_field_4 { get; set; }
-        public string extra_field_5 { get; set; }
+        //public string extra_field_1 { get; set; }
+        //public string extra_field_2 { get; set; }
+        //public string extra_field_3 { get; set; }
+        //public string extra_field_4 { get; set; }
+        //public string extra_field_5 { get; set; }
     }
 
     public class BookingDetail
