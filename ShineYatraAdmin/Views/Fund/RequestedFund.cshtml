@@ -1,7 +1,7 @@
 ﻿@using ShineYatraAdmin.Properties;
 @model IEnumerable<ShineYatraAdmin.Entity.CompanyFund>
 @{
-    ViewBag.Title = "Fund Request";
+    ViewBag.Title = "Requested Fund";
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 <style>
@@ -34,7 +34,7 @@
                                         @*<h3 class="box-title m-b-0">@Resources.SearchParameters</h3>
                                             <p class="text-muted m-b-30 font-13">@Resources.CustomSearchParameters</p>*@
 
-                                        <form class="form-horizontal form-material" id="SearchUserList" method="post" action="MemberFundRequestList">
+                                        <form class="form-horizontal form-material" id="SearchUserList" method="post" action="RequestedFundList">
                                             <div class="form-group">
                                                 <label class="col-md-3">Status</label>
                                                 <div class="col-md-9">
@@ -95,9 +95,9 @@
                                 <th>
                                     Remark
                                 </th>
-                                <th>
+                                @*<th>
                                     Action
-                                </th>
+                                </th>*@
                             </tr>
                         </thead>
                         <tfoot>
@@ -110,7 +110,7 @@
                                 <th>Deposit Mode</th>
                                 <th>Status</th>
                                 <th>Remark</th>
-                                <th>Action</th>
+                                @*<th>Action</th>*@
                             </tr>
                         </tfoot>
                         <tbody>
@@ -159,17 +159,17 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.remarks)
                                         </td>
-                                        <td>
+                                        @*<td>
                                             @if (item.status.ToUpper().Trim() == "PENDING")
                                             {
                                                 var name = item.first_name + ' ' + item.last_name;
-                                                <a class="popup-with-form" href="#EditFundRequest" onclick="EditfundRequest('@item.txn_date','@item.txn_id','@name','@item.amount')">Approve/Reject</a>                                                
+                                                <a class="popup-with-form" href="#EditFundRequest" onclick="EditfundRequest('@item.txn_date','@item.txn_id','@name','@item.amount')">Approve/Reject</a>
                                             }
                                             else
                                             {
                                                 <span>&nbsp;</span>
                                             }
-                                        </td>
+                                        </td>*@
                                     </tr>
                                 }
                             }
@@ -206,7 +206,7 @@
 
                     </div>
 
-                    <div class="form-group">                       
+                    <div class="form-group">
                         <input type="hidden" id="txnid" name="txnid">
 
                         <label class="control-label col-md-3">
@@ -240,15 +240,15 @@
                         </div>
                     </div>
 
-                    
+
                     <div class="form-group">
                         <label class="control-label col-md-3">
                             Action
                         </label>
 
                         <div class="col-md-9">
-                            <label><input type="radio" value="APPROVED" required = "required" name="fundstatus">Approve</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <label><input type="radio" value="REJECTED" required = "required" name="fundstatus">Reject</label>                            
+                            <label><input type="radio" value="APPROVED" required="required" name="fundstatus">Approve</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label><input type="radio" value="REJECTED" required="required" name="fundstatus">Reject</label>
                         </div>
                     </div>
 

@@ -54,8 +54,16 @@
                 <ul class="nav nav-second-level collapse">
                     @*<li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>*@                    
                     <li><a data-preloader="preloader" href="@Url.Action("MemberUsers", "User")">Manage User</a></li>  
-                    <li><a data-preloader="preloader" href="@Url.Action("FundRequest", "Fund")">Add Fund Request</a></li>                  
-                    <li><a data-preloader="preloader" href="@Url.Action("MemberFundRequest", "Fund")">Manage Fund Request</a></li> 
+                    <li><a data-preloader="preloader" href="@Url.Action("FundRequest", "Fund")">Add Fund Request</a></li>    
+                    @{
+                        string[] userData = User.Identity.Name.Split('|');
+                    }  
+                    @if (userData!=null && userData[6] != "5")
+                    {
+                        <li><a data-preloader="preloader" href="@Url.Action("MemberFundRequest", "Fund")">Manage Fund Request</a></li>
+                    }
+                    <li><a data-preloader="preloader" href="@Url.Action("RequestedFund", "Fund")">Requested Fund Request</a></li>
+                    
                 </ul>
             </li>
 
