@@ -499,6 +499,7 @@
     <Compile Include="Controllers\PayUController.cs" />
     <Compile Include="Controllers\PrimarySettingController.cs" />
     <Compile Include="Controllers\RechargeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -621,6 +622,7 @@
     <Content Include="Views\Flight\BookingStatus.cshtml" />
     <None Include="Properties\PublishProfiles\Whitelablepublish.pubxml" />
     <Content Include="Views\Fund\MemberFundRequest.cshtml" />
+    <Content Include="Views\Report\Ledger.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

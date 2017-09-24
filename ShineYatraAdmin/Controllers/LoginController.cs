@@ -103,7 +103,7 @@
                     return Json(Resources.LoginError);
                 }
 
-                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name+"|"+result.mobileNo;
+                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name+"|"+result.mobileNo +"|"+ result.ledger_id;
                 FormsAuthentication.SetAuthCookie(userIdentity, false);
                 
             }

@@ -1327,5 +1327,26 @@
             }
             return null;
         }
+
+
+        /// <summary>
+        /// method to save fund detail while payment from payment gateway
+        /// </summary>
+        /// <param name="fundDetail"></param>
+        /// <returns></returns>
+        public static async Task<List<DistributorLedger>> GetLedgerList(string ledgerId)
+        {
+            List<DistributorLedger> ledgerList = new List<DistributorLedger>();
+            string data = "{\"action\":\"DISTRIBUTOR_LEDGER\",\"LEDGER_ID\":\""+ ledgerId + "\"}";
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS && response.DISTRIBUTOR_LEDGER!=null)
+            {
+                return response.DISTRIBUTOR_LEDGER;                
+            }
+            else
+            {
+                return ledgerList;
+            }           
+        }
     }
 }

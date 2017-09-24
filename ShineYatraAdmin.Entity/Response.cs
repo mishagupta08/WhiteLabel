@@ -172,8 +172,10 @@
         /// </summary>
         public List<INSERT_PG_REQUEST_FOR_SERVICE> INSERT_PG_REQUEST_FOR_SERVICE { get; set; }
 
-
-
+        /// <summary>
+        /// gets or sets DISTRIBUTOR_LEDGER
+        /// </summary>
+        public List<DistributorLedger> DISTRIBUTOR_LEDGER { get; set; }
 
     }
 }
