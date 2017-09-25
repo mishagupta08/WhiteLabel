@@ -15,7 +15,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="white-box">
-            <h3 class="box-title"> Manage Fund Request</h3>
+            <h3 class="box-title"> View Requested Fund Status</h3>
             <div class="table-responsive">
                 <div class="panel">
                     <div class="panel-heading" style="padding: 4%;">
@@ -68,7 +68,7 @@
                 </div>
 
                 <div id="Usercontainer" style="min-height:305px;">
-                    <table id="FundRequestList" class="display table" cellspacing="0" width="100%">
+                    <table id="RequestedfundList" class="display table" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>
@@ -286,7 +286,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#FundRequestList tfoot th').each(function () {
+        $('#RequestedfundList tfoot th').each(function () {
             var title = $(this).text();
             if (title.indexOf("Remark") == -1 && title.indexOf("Action") == -1) {
                 $(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
@@ -296,7 +296,7 @@
             }
         });
 
-        var fundTable = $('#FundRequestList').DataTable({
+        var fundTable = $('#RequestedfundList').DataTable({
             initComplete: function () {
                 this.api().columns().every(function () {
                     var column = this;

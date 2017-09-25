@@ -28,7 +28,7 @@
             else {
                 $(".mfp-close").click();
                 var type = "success";
-                if (result.upper === "SUCCESS")
+                if (result.toUpperCase != "SUCCESS")
                 {
                     type = "error";
                 }
