@@ -288,7 +288,7 @@
     $(document).ready(function () {
         $('#RequestedfundList tfoot th').each(function () {
             var title = $(this).text();
-            if (title.indexOf("Remark") == -1 && title.indexOf("Action") == -1) {
+            if (title.indexOf("Remark") == -1) {
                 $(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
             }
             else {
@@ -314,7 +314,7 @@
                 }
             },
             "aoColumnDefs": [
-          { 'bSortable': false, 'aTargets': [7, 8] }
+          { 'bSortable': false, 'aTargets': [7] }
             ],
 
             stateSave: true
@@ -334,54 +334,5 @@
             });
         });
 
-    });
-
-    function EditfundRequest(date, txnid, name, amount) {
-        $("#EditFundRequest").find("input[id='txnid']").val(txnid);
-        $("#EditFundRequest").find("input[id='date']").val(date);
-        $("#EditFundRequest").find("input[id='username']").val(name);
-        $("#EditFundRequest").find("input[id='amount']").val(amount);
-        $("#EditFundRequest").find("input[id='Systemid']").val(txnid);
-    }
-
-    function UpdateFundRequest() {
-        var fundRequest = $("#EditFundRequest").serialize();
-
-        $(".preloader").show();
-        $.ajax({
-            url: '/Fund/UpdateMemberFundRequest',
-            type: 'Post',
-            data: fundRequest
-        }).done(function (result) {
-            if (result == null || result == "") {
-                swal("Status", "There is some error please try again later.", "error")
-            }
-            else {
-                if (result.indexOf("SUCCESS") != -1) {
-                    swal({
-                        title: "Success",
-                        text: "Record updated Successfully",
-                        type: "success"
-                    }, function () {
-                        ClearForm("EditFundRequest");
-                        $(".mfp-close").click();
-                        window.location.reload();
-                    });
-                }
-                else {
-                    swal({
-                        title: "Fail",
-                        text: result,
-                        type: "error"
-                    }, function () {
-                        ClearForm("EditFundRequest");
-                        $(".preloader").hide();
-                    });
-                }
-            }
-            $(".preloader").hide();
-            return false;
-        });
-        return false;
-    }
+    });   
 </script>

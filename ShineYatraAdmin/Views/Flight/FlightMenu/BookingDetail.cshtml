@@ -282,9 +282,19 @@
                         <div class="row">
                             <h3> NOTE :- Your current wallet balance is :- @Model.walletBalance</h3>
                             <label>Choose Payment Mode:</label>
-
-                            <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required" })Wallet</label>
-                            <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required" })Bank</label>
+                            @{
+                                string[] userData = User.Identity.Name.Split('|');
+                            }
+                           
+                            @if (userData != null && userData[6] != "3")
+                            {
+                                <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required" })Wallet</label>
+                               <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required" })Bank</label>
+                            }
+                            else
+                            {
+                                <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required",@checked="checked" })Wallet</label>                                
+                            }
                             <br />
 
                         </div>
