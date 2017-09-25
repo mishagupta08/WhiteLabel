@@ -27,10 +27,10 @@
             }
             else {
                 $(".mfp-close").click();
-                var type = "success";
-                if (result.toUpperCase != "SUCCESS")
+                var type = "error";
+                if (result.indexOf("SUCCESS")!=-1)
                 {
-                    type = "error";
+                    type = "success";
                 }
                 swal("Status", result, type)
                 $(".confirm").click(function () {

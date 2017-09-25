@@ -1265,9 +1265,18 @@
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        public static async Task<List<CompanyFund>> getFundRequestList(string member, string memberId)
+        public static async Task<List<CompanyFund>> getFundRequestList(string member, string memberId,string txn_type,string status)
         {
-            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\"7\",\""+ member + "\":"+ memberId + ",\"txn_type\":\"FUND_WALLET\"}";
+            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\"7\",\""+ member + "\":"+ memberId + ",\"txn_type\":\""+ txn_type + "\"";
+            if (!string.IsNullOrEmpty(status))
+            {
+                data += ",\"status\":\"" + status + "\"}";
+            }
+            else
+            {
+                data += "}";
+            }
+
             var response = await CallFunction(data);
             if (response != null)
             {

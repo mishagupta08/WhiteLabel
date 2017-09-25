@@ -56,9 +56,9 @@ namespace ShineYatraAdmin.Business
         /// </summary>
         /// <param name="memberId"></param>
         /// <returns></returns>
-        public async Task<List<CompanyFund>> getFundRequestList (string membertype,string memberId)
+        public async Task<List<CompanyFund>> getFundRequestList (string membertype,string memberId,string txn_type,string status)
         {
-            return await Program.getFundRequestList(membertype,memberId);
+            return await Program.getFundRequestList(membertype,memberId,txn_type,status);
         }
 
         /// <summary>
