@@ -86,7 +86,8 @@ function getuserbalance() {
     $(".preloader").show();    
     $.ajax({
         url: '/Dashboard/GetUserBalance',
-        type: 'Post'
+        type: 'Post',
+        async:false,
     }).done(function (result) {
         $("#usercurrentbalance").html("Current Balance   :  " + result);
         $(".preloader").hide();
