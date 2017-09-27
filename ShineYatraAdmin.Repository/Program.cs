@@ -1265,9 +1265,9 @@
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        public static async Task<List<CompanyFund>> getFundRequestList(string member, string memberId,string txn_type,string status)
+        public static async Task<List<CompanyFund>> getFundRequestList(string member, string memberId,string txn_type,string status,string id)
         {
-            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\"7\",\""+ member + "\":"+ memberId + ",\"txn_type\":\""+ txn_type + "\"";
+            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\""+ id + "\",\""+ member + "\":"+ memberId + ",\"txn_type\":\""+ txn_type + "\"";
             if (!string.IsNullOrEmpty(status))
             {
                 data += ",\"status\":\"" + status + "\"}";

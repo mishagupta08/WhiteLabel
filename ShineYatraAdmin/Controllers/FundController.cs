@@ -173,7 +173,7 @@ namespace ShineYatraAdmin.Controllers
             List<CompanyFund> fundRequestList = new List<CompanyFund>();
             try {
                 string[] userData = User.Identity.Name.Split('|');
-                fundRequestList = await fundManger.getFundRequestList("ref_id",userData[1], "FUND_WALLET","");
+                fundRequestList = await fundManger.getFundRequestList("ref_id",userData[1], "FUND_WALLET","","7");
             }
             catch (Exception Ex) {
                 Console.WriteLine(Ex.InnerException);
@@ -192,7 +192,7 @@ namespace ShineYatraAdmin.Controllers
             try
             {
                 string[] userData = User.Identity.Name.Split('|');
-                fundRequestList = await fundManger.getFundRequestList("member_id",userData[1],"FUND_WALLET", "");
+                fundRequestList = await fundManger.getFundRequestList("member_id",userData[1],"FUND_WALLET", "","7");
             }
             catch (Exception Ex)
             {
@@ -235,7 +235,7 @@ namespace ShineYatraAdmin.Controllers
             {
                 string[] userData = User.Identity.Name.Split('|');
                 string status = Convert.ToString(frm.GetValue("status").AttemptedValue);
-                fundRequestList = await fundManger.getFundRequestList("ref_id",userData[1], "FUND_WALLET", "");
+                fundRequestList = await fundManger.getFundRequestList("ref_id",userData[1], "FUND_WALLET", "","7");
                 if (!string.IsNullOrEmpty(status) && !status.ToLower().Equals("all"))
                 {
                     var searchedlist = (from r in fundRequestList where r.status.ToLower() == status select r).ToList();
@@ -261,7 +261,7 @@ namespace ShineYatraAdmin.Controllers
             {
                 string[] userData = User.Identity.Name.Split('|');
                 string status = Convert.ToString(frm.GetValue("status").AttemptedValue);
-                fundRequestList = await fundManger.getFundRequestList("member_id", userData[1], "FUND_WALLET", "");
+                fundRequestList = await fundManger.getFundRequestList("member_id", userData[1], "FUND_WALLET", "","7");
                 if (!string.IsNullOrEmpty(status) && !status.ToLower().Equals("all"))
                 {
                     var searchedlist = (from r in fundRequestList where r.status.ToLower() == status select r).ToList();
@@ -286,7 +286,7 @@ namespace ShineYatraAdmin.Controllers
             try
             {
                 string[] userData = User.Identity.Name.Split('|');
-                fundRequestList = await fundManger.getFundRequestList("ref_id", userData[1], "PG_REQUEST","Pending");
+                fundRequestList = await fundManger.getFundRequestList("ref_id", userData[1], "PG_REQUEST","Pending","8");
             }
             catch (Exception Ex)
             {

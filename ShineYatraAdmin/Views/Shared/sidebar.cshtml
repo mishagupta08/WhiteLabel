@@ -57,10 +57,9 @@
                     @{
                         string[] userData = User.Identity.Name.Split('|');
                     }  
-                    @if (userData!=null && userData[6] != "5")
-                    {
+                    
                         <li><a data-preloader="preloader" href="@Url.Action("MemberFundRequest", "Fund")">Pending Approvals</a></li>
-                    }
+                    
                     <li><a data-preloader="preloader" href="@Url.Action("RequestedFund", "Fund")">Fund Request</a></li>
                     @if (userData != null && userData[6] == "3")
                     {
