@@ -1,0 +1,344 @@
+﻿@model IEnumerable<ShineYatraAdmin.Entity.BookingDetail>
+@{
+    ViewBag.Title = "My Bookings";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="white-box">
+            <h3 class="box-title">My Flight Booking</h3>
+            <div class="table-responsive">
+                <div class="panel">
+                    @*<div class="panel-heading" style="padding: 4%;">
+                        <div class="panel-action">
+                            <a href="#" data-perform="panel-collapse">
+                                <button class="btn btn-block btn-info">@Resources.AdvanceSearch</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="panel-wrapper collapse out">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="white-box">                                        
+
+                                        <form class="form-horizontal form-material" id="SearchUserList" method="post" action="MemberFundRequestList">
+                                            <div class="form-group">
+                                                <label class="col-md-3">Status</label>
+                                                <div class="col-md-9">
+                                                    <select name="status" style="width:400px;">
+                                                        <option value="All">All</option>
+                                                        <option value="pending">Pending</option>
+                                                        <option value="approved">Approved</option>
+                                                        <option value="rejected">Rejected</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3">&nbsp;</label>
+                                                <div class="col-md-9">
+                                                    <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">@Resources.Submit</button>
+
+                                                    <a href="#" data-perform="panel-collapse">
+                                                        <button type="reset" class="btn btn-inverse waves-effect waves-light">@Resources.Cancel</button>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+
+                <div id="Usercontainer" style="min-height:305px;">
+                    <table cellspacing="0" class="display table" id="FundRequestList" width="100%">
+                        <thead>
+                            <tr>
+                                <th>System ID</th>
+                                <th>Travel Date</th>                                                              
+                                <th>Flight Name</th>
+                                <th>Travel To</th>
+                                <th>Travel From</th>
+                                <th>Mode</th> 
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>System ID</th>
+                                <th>Travel Date</th>
+                                <th>Flight Name</th>
+                                <th>Travel To</th>
+                                <th>Travel From</th>
+                                <th>Mode</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.txn_id) </td>
+                                        <td>@Html.DisplayFor(modelItem => item.travel_date)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.ref_code)<span>-</span>@Html.DisplayFor(modelItem => item.flight_no)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.travel_to)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.travel_from)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.trip_mode)</td>
+                                        <td>
+                                            @if (item.status.ToUpper().Trim() == "PENDING")
+                                            {
+                                                <div class="label label-table label-default">@Html.DisplayFor(modelItem => item.status)</div>
+                                            }
+                                            else if (item.status.ToUpper().Trim() == "CONFIRMED")
+                                            {
+                                                <div class="label label-table label-success">@Html.DisplayFor(modelItem => item.status)</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="label label-table label-danger">@Html.DisplayFor(modelItem => item.status)</div>
+                                            }
+                                        </td>                                        
+                                        <td>
+                                            
+                                            @if (item.status.ToUpper().Trim() == "CONFIRMED")
+                                            {
+                                                <a href="CancelFlight?transId=" + @item.transid + "&refId=" + @item.PartnerRefId> Cancel </a>
+                                            }
+                                            else
+                                            {
+                                                <span>&nbsp;</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td>No Fund Request Found</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form id="EditFundRequest" class="form-horizontal form-bordered mfp-hide white-popup-block" style="width: 90%;" onsubmit="return UpdateFundRequest();">
+    <div class="form-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading"> Manage Fund Request</div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            System Id
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text" readonly id="Systemid">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <input type="hidden" id="txnid" name="txnid">
+
+                        <label class="control-label col-md-3">
+                            Amount Requested by
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text" readonly id="username">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            Requested Amount
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text" readonly id="amount">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            Requested on Date
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text" readonly id="date">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            Action
+                        </label>
+
+                        <div class="col-md-9">
+                            <label><input type="radio" value="APPROVED" required="required" name="fundstatus">Approve</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label><input type="radio" value="REJECTED" required="required" name="fundstatus">Reject</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="control-label col-md-3">
+                            Remark
+                        </label>
+
+                        <div class="col-md-9">
+                            <textarea id="fundremark" name="fundremark"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+
+                        <label class="control-label col-md-3">
+                            &nbsp;
+                        </label>
+
+                        <div class="col-md-9">
+                            <input class="btn btn-success" type="submit" value="submit" />
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- Add Funds Request -->
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#FundRequestList tfoot th').each(function () {
+            var title = $(this).text();
+            if (title.indexOf("Remark") == -1 && title.indexOf("Action") == -1) {
+                $(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
+            }
+            else {
+                $(this).html('              ');
+            }
+        });
+
+        var fundTable = $('#FundRequestList').DataTable({
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    column
+                        .search('', true, false)
+                        .draw();
+                });
+            },
+            "destroy": true,
+            "bLengthChange": false,
+            "language": {
+                "paginate": {
+                    "previous": "<<",
+                    "next": ">>"
+                }
+            },
+            "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [7, 8] }
+            ],
+
+            stateSave: true
+        });
+
+
+        // Apply the search
+        fundTable.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+    });
+
+    function EditfundRequest(date, txnid, name, amount) {
+        $("#EditFundRequest").find("input[id='txnid']").val(txnid);
+        $("#EditFundRequest").find("input[id='date']").val(date);
+        $("#EditFundRequest").find("input[id='username']").val(name);
+        $("#EditFundRequest").find("input[id='amount']").val(amount);
+        $("#EditFundRequest").find("input[id='Systemid']").val(txnid);
+    }
+
+    function UpdateFundRequest() {
+        var fundRequest = $("#EditFundRequest").serialize();
+
+        $(".preloader").show();
+        $.ajax({
+            url: '/Fund/UpdateMemberFundRequest',
+            type: 'Post',
+            data: fundRequest
+        }).done(function (result) {
+            if (result == null || result == "") {
+                swal("Status", "There is some error please try again later.", "error")
+            }
+            else {
+                if (result.indexOf("SUCCESS") != -1) {
+                    swal({
+                        title: "Success",
+                        text: "Record updated Successfully",
+                        type: "success"
+                    }, function () {
+                        ClearForm("EditFundRequest");
+                        $(".mfp-close").click();
+                        window.location.reload();
+                    });
+                }
+                else {
+                    swal({
+                        title: "Fail",
+                        text: result,
+                        type: "error"
+                    }, function () {
+                        ClearForm("EditFundRequest");
+                        $(".preloader").hide();
+                    });
+                }
+            }
+            $(".preloader").hide();
+            return false;
+        });
+        return false;
+    }
+</script>

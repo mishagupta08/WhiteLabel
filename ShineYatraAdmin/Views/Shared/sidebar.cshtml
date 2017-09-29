@@ -12,25 +12,18 @@
                 </div>
                 <!-- /input-group -->
             </li>
-            @*<li>
-                <a href="index.html" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu"> Dashboard <span class="fa arrow"></span> </span></a>
-                <ul class="nav nav-second-level collapse" aria-expanded="true">
-                    <li> <a href="index.html">Basic</a> </li>
-                    <li> <a href="index2.html">Pending Approvals</a> </li>
-                </ul>
-            </li>*@
             <li>
-                <a href="inbox.html" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Commission Structure<span class="fa arrow"></span></span></a>
-                <ul class="nav nav-second-level collapse">                    
+                <a href="inbox.html" class="waves-effect"><i data-icon=")" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">@Resources.CommissionStructure<span class="fa arrow"></span></span></a>
+                <ul class="nav nav-second-level collapse">
                     <li>
                         <a href="javascript:void(0)" class="waves-effect">Allotted Commission Group&nbsp;<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse">
                             <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Flight">@Resources.FlightGroups</a> </li>
                             <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Hotel">@Resources.HotelGroups</a> </li>
                             <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Bus">@Resources.BUSGroups</a> </li>
-                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Recharge">Recharge</a></li>
-                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Bill">Bill Services</a></li>
-                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Cab">CAB</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Recharge">@Resources.Recharge</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Bill">@Resources.BillServices</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Cab">@Resources.Cab</a></li>
                         </ul>
                     </li>
 
@@ -40,9 +33,9 @@
                             <li> <a data-preloader="preloader" href="~/Group/Index?category=Flight">@Resources.FlightGroups</a> </li>
                             <li> <a data-preloader="preloader" href="~/Group/Index?category=Hotel">@Resources.HotelGroups</a> </li>
                             <li> <a data-preloader="preloader" href="~/Group/Index?category=Bus">@Resources.BUSGroups</a> </li>
-                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Recharge">Recharge</a></li>
-                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Bill">Bill Services</a></li>
-                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Cab">CAB</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Recharge">@Resources.Recharge</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Bill">@Resources.BillServices</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Cab">@Resources.Cab</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -51,20 +44,20 @@
             <li>
                 <a href="inbox.html" class="waves-effect"><i data-icon="" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">@Resources.Administration<span class="fa arrow"></span></span></a>
                 <ul class="nav nav-second-level collapse">
-                    @*<li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>*@                    
-                    <li><a data-preloader="preloader" href="@Url.Action("MemberUsers", "User")">Manage User</a></li>  
-                    <li><a data-preloader="preloader" href="@Url.Action("FundRequest", "Fund")">Add Fund Request</a></li>    
+                    @*<li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>*@
+                    <li><a data-preloader="preloader" href="@Url.Action("MemberUsers", "User")">Manage User</a></li>
+                    <li><a data-preloader="preloader" href="@Url.Action("FundRequest", "Fund")">Add Fund Request</a></li>
                     @{
                         string[] userData = User.Identity.Name.Split('|');
-                    }  
-                    
-                        <li><a data-preloader="preloader" href="@Url.Action("MemberFundRequest", "Fund")">Pending Approvals</a></li>
-                    
+                    }
+
+                    <li><a data-preloader="preloader" href="@Url.Action("MemberFundRequest", "Fund")">Pending Approvals</a></li>
+
                     <li><a data-preloader="preloader" href="@Url.Action("RequestedFund", "Fund")">Fund Request</a></li>
                     @if (userData != null && userData[6] == "3")
                     {
                         <li><a data-preloader="preloader" href="@Url.Action("pgpendingapprovals", "Fund")">PG Pending Approvals</a></li>
-                    }                    
+                    }
                 </ul>
             </li>
 
@@ -79,7 +72,10 @@
                     <li>
                         <a href="javascript:void(0)" class="waves-effect">Reports<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse">
-                            <li> <a href="javascript:void(0)">Flight Booking </a> </li>
+                            <
+                            <li>
+                                <a data-preloader="preloader" href="@Url.Action("MyFlightBookings", "Flight")">My Flight Bookings</a>
+                            </li>
                             <li> <a href="javascript:void(0)">Hotel Booking</a> </li>
                             <li> <a href="javascript:void(0)">Bus Booking</a> </li>
                         </ul>
@@ -90,7 +86,7 @@
                 <a href="forms.html" class="waves-effect"><i data-icon="" class="linea-icon linea-basic fa-fw"></i> <span class="hide-menu">Recharge<span class="fa arrow"></span></span></a>
                 <ul class="nav nav-second-level collapse">
                     <li> <a href="@Url.Action("Index", "Recharge",new {type="Prepaid"})">Prepaid</a></li>
-                    <li> <a href="@Url.Action("Index", "Recharge",new {type="Postpaid"})">PostPaid</a></li>                    
+                    <li> <a href="@Url.Action("Index", "Recharge",new {type="Postpaid"})">PostPaid</a></li>
                     <li> <a href="@Url.Action("Index", "Recharge",new {type="DTH"})">DTH</a></li>
                     <li>
                         <a href="javascript:void(0)" class="waves-effect">Reports<span class="fa arrow"></span></a>
@@ -137,8 +133,9 @@
             </li>
             <li style="margin-left: 30%;">
                 <h3 style="margin-top: 20px;">
-                    <i  data-icon="" class="linea-icon linea-basic fa-fw"></i> 
-                        <span id="usercurrentbalance" style="color:RED">Current Balance   :</span></h3>
+                    <i data-icon="" class="linea-icon linea-basic fa-fw"></i>
+                    <span id="usercurrentbalance" style="color:RED">Current Balance   :</span>
+                </h3>
             </li>
         </ul>
     </div>

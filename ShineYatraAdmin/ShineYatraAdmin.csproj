@@ -625,6 +625,7 @@
     <Content Include="Views\Report\Ledger.cshtml" />
     <Content Include="Views\Fund\RequestedFund.cshtml" />
     <Content Include="Views\Fund\pgpendingapprovals.cshtml" />
+    <Content Include="Views\Flight\MyFlightBookings.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

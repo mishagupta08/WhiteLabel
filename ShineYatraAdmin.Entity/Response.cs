@@ -128,6 +128,9 @@
         /// </summary>
         public IList<SubCategory> GET_SERVICE_SUB_CATEGORY_LIST { get; set; }
 
+        /// <summary>
+        /// WALLET_CREDIT_3RD_PARTY_REQUEST
+        /// </summary>
         public List<FundRequestContainer> WALLET_CREDIT_3RD_PARTY_REQUEST { get; set; }
 
         /// <summary>
@@ -176,6 +179,18 @@
         /// gets or sets DISTRIBUTOR_LEDGER
         /// </summary>
         public List<DistributorLedger> DISTRIBUTOR_LEDGER { get; set; }
+
+        /// <summary>
+        /// Get list of member flights
+        /// </summary>
+        public List<BookingDetail> GET_FLIGHT_TRANSACTIONS_SUMMARY { get; set; }
+        
+
+        /// <summary>
+        /// Get selected flight status and details
+        /// </summary>
+        public EticketDetails FlightTicketDetails { get; set; }
+
 
     }
 }

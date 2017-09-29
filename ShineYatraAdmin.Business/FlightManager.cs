@@ -2,10 +2,6 @@
 using ShineYatraAdmin.Entity;
 using System.Threading.Tasks;
 using ShineYatraAdmin.Repository;
-using System.Web;
-using System.Xml.Serialization;
-using System.IO;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace ShineYatraAdmin.Business
@@ -100,23 +96,7 @@ namespace ShineYatraAdmin.Business
                 Console.WriteLine(ex.InnerException);
             }
             return response;
-        }
-        
-
-        public async Task<List<BookingDetail>> getBookingDetails(string transactionId,string memberId)
-        {
-            List<BookingDetail> response = null;
-            try
-            {
-                response = await Program.GetServiceBookingRequest(transactionId,memberId);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
-            return response;
-        }
-
+        }             
 
         /// <summary>
         /// function to cALL book ticket api
@@ -125,8 +105,7 @@ namespace ShineYatraAdmin.Business
         /// <returns></returns>
         public async Task<CancelationDetails> CancelFlightTicket(EticketRequest bookticket)
         {
-            CancelationDetails bookresponse = null;
-            EticketDetails eticketDetail = new EticketDetails();
+            CancelationDetails bookresponse = null;            
             try
             {
                 bookresponse = await Program.CancelFlightTicket(bookticket);               
@@ -157,9 +136,30 @@ namespace ShineYatraAdmin.Business
         /// </summary>
         /// <param name="fundDetail"></param>
         /// <returns></returns>
-        public static async Task<string> SavePaymntGatewayTransactions(CompanyFund fundDetail)
+        public async Task<string> SavePaymntGatewayTransactions(CompanyFund fundDetail)
         {
             return await Program.SavePaymntGatewayTransactions(fundDetail);
+        }
+         
+        /// <summary>
+        /// Get flight ticket status
+        /// </summary>
+        /// <param name="statusRequest"></param>
+        /// <returns></returns>
+        public async Task<EticketDetails> GetFlightTicketStatus(EticketRequest statusRequest)
+        {
+            return await Program.FlightTicketStatus(statusRequest);
+        }
+
+        /// <summary>
+        /// Get Member Flight List
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public async Task<List<BookingDetail>> GetMemberFlightList(string memberId, string serviceId)
+        {
+            return await Program.GetMemberFlightList(memberId, serviceId);
         }
     }
 }
