@@ -117,7 +117,7 @@ namespace ShineYatraAdmin.Business
             return bookresponse;
         }
 
-        public async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(int TransactionId, string memberId, string api_txn_id, string status)
+        public async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId, string api_txn_id, string status)
         {
             UPDATE_TRANSACTION_STATUS updateresponse = null;
             try

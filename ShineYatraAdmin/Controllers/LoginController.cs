@@ -49,7 +49,7 @@
             {
                 domain = ConfigurationManager.AppSettings["DomainName"];
                 List<CompanyTheme> ltheme = await theme.GetCompanyTheme(domain);
-                Session["CompanyTheme"] = (from r in ltheme select r.theme_name).FirstOrDefault();
+                if (ltheme != null) Session["CompanyTheme"] = (from r in ltheme select r.theme_name).FirstOrDefault();
                 if (string.IsNullOrEmpty(Convert.ToString(Session["CompanyTheme"])))
                 {
                     Session["CompanyTheme"] = "elite";

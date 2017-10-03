@@ -986,7 +986,7 @@
                 serializer.Serialize(stringwriter, BookTicket);
 
                 var httpContent = new StringContent(stringwriter.ToString(), Encoding.UTF8, "application/xml");
-                var httpResponse = await httpClient.PostAsync("http://wlapi.bisplindia.in/api/Flight/CancelTicket", httpContent);
+                var httpResponse = await httpClient.PostAsync("http://wlapi.bisplindia.in/api/Flight/CancelRequest", httpContent);
 
                 // If the response contains content we want to read it!
 
@@ -1139,7 +1139,7 @@
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        public static async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(int TransactionId, string memberId,string api_txn_id, string status)
+        public static async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId,string api_txn_id, string status)
         {
             string data = "{\"action\":\"UPDATE_TRANSACTION_STATUS\",\"update_member_id\":\"" + memberId + "\",\"txn_id\":" + TransactionId + ",\"status\":\"" + status + "\",\"api_txn_id\":\"" + api_txn_id + "\"}";
             var response = await CallFunction(data);
