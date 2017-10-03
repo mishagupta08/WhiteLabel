@@ -366,10 +366,10 @@
         public async Task<ActionResult> BookingStatus(string txnId,string info)
         {
             BookingDetail eticket = null;
-
+            _flightManager = new FlightManager();
             try
             {
-                var bookResponse = (Bookingresponse) TempData["BookResponse"];         
+                var bookResponse = (Bookingresponse) TempData["BookingResponse"];         
                    
                 var userData = User.Identity.Name.Split('|');
                 var serializer = new JavaScriptSerializer();
@@ -513,6 +513,7 @@
             _flightManager = new FlightManager();
             try
             {
+                string[] userData = User.Identity.Name.Split('|');
                 EticketRequest cancelTicket = new EticketRequest();
                 cancelTicket.Transid = transId;
                 cancelTicket.PartnerRefId = partnerRefernceId;
@@ -521,6 +522,7 @@
                 if (cancelResponse != null)
                 {
                     result = "success";
+                    UPDATE_TRANSACTION_STATUS updatestatus = await _flightManager.UpdateServiceBookingRequest(txnId, userData[1], transId, "CANCELLED");
 
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
