@@ -1,0 +1,126 @@
+﻿@model IEnumerable<ShineYatraAdmin.Entity.DistributorLedger>
+<table id="LedgerList" class="display table" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Particulars</th>
+        <th>Service Type</th>
+        <th>Wallet Txn Id</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Remark</th>
+        <th>Txn ref No. </th>
+    </tr>
+    </thead>
+    @*<tfoot>
+            <tr>
+                <th>Date</th>
+                <th>Particulars</th>
+                <th>Service Type</th>
+                <th>Wallet Txn Id</th>
+                <th>Debit</th>
+                <th>Credit</th>
+                <th>Balance</th>
+                <th>Remark</th>
+                <th>Txn ref No. </th>
+            </tr>
+        </tfoot>*@
+    <tbody>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.wallet_txn_date.ToString("dd-MMM-yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.op_ledger_name)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.service_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.wallet_txn_id)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.debit)
+                </td>
+
+                <td>@Html.DisplayFor(modelItem => item.credit)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.balance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.remarks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ref_txn_id)
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr><td>No Fund Request Found</td></tr>
+    }
+    </tbody>
+</table>
+    
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //$('#LedgerList tfoot th').each(function () {
+        //    var title = $(this).text();
+        //    if (title.indexOf("Remark") == -1 && title.indexOf("Action") == -1) {
+        //        $(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
+        //    }
+        //    else {
+        //        $(this).html('              ');
+        //    }
+        //});
+
+        var LedgerList = $('#LedgerList').DataTable({
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    column
+                        .search('', true, false)
+                        .draw();
+                });
+            },
+            "destroy": true,
+            "bLengthChange": false,
+            "language": {
+                "paginate": {
+                    "previous": "<<",
+                    "next": ">>"
+                }
+            },
+          //  "aoColumnDefs": [
+          //{ 'bSortable': false, 'aTargets': [7, 8] }
+          //  ],
+
+            stateSave: true
+        });
+
+
+        // Apply the search
+        //LedgerList.columns().every(function () {
+        //    var that = this;
+
+        //    $('input', this.footer()).on('keyup change', function () {
+        //        if (that.search() !== this.value) {
+        //            that
+        //                .search(this.value)
+        //                .draw();
+        //        }
+        //    });
+        //});
+
+    });
+</script>

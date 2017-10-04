@@ -21,4 +21,13 @@ namespace ShineYatraAdmin.Entity
         public string service_name { get; set; }
         public int ref_txn_id { get; set; }
     }
+
+    public class DistributorLedgerRequest
+    {
+        public string action { get; set; }
+        public string Ledger_id { get; set; }
+        public string From_date { get; set; }
+        public string To_date { get; set; }
+    }
+
 }

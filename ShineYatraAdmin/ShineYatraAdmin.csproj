@@ -468,6 +468,7 @@
     <Content Include="Script\group.js" />
     <Content Include="Script\hotel.js" />
     <Content Include="Script\login.js" />
+    <Content Include="Script\otp.js" />
     <Content Include="Script\PrimarySetting.js" />
     <Content Include="Script\rangeFiltering.js" />
     <Content Include="Script\recharge.js" />
@@ -626,6 +627,8 @@
     <Content Include="Views\Fund\RequestedFund.cshtml" />
     <Content Include="Views\Fund\pgpendingapprovals.cshtml" />
     <Content Include="Views\Flight\MyFlightBookings.cshtml" />
+    <Content Include="Views\Shared\OTPpopup.cshtml" />
+    <Content Include="Views\Report\LedgerList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

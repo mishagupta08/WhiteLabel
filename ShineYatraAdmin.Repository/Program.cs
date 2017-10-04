@@ -1351,10 +1351,11 @@
         /// method to save fund detail while payment from payment gateway
         /// </summary>
         /// <returns></returns>
-        public static async Task<List<DistributorLedger>> GetLedgerList(string ledgerId)
+        public static async Task<List<DistributorLedger>> GetLedgerList(DistributorLedgerRequest request)
         {
-            List<DistributorLedger> ledgerList = new List<DistributorLedger>();
-            string data = "{\"action\":\"DISTRIBUTOR_LEDGER\",\"LEDGER_ID\":\""+ ledgerId + "\"}";
+            var ledgerList = new List<DistributorLedger>();
+            var data = JsonConvert.SerializeObject(request);
+            data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
             if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS && response.DISTRIBUTOR_LEDGER!=null)
             {

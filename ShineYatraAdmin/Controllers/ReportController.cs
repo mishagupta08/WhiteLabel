@@ -15,20 +15,41 @@ namespace ShineYatraAdmin.Controllers
         /// Get list of fund request from members
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> Ledger()
+        public ActionResult Ledger()
+        {            
+            try
+            {
+                
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View();
+        }
+
+        public async Task<ActionResult> GetLedgerList(FormCollection frm)
         {
             ReportManager reportManager = new ReportManager();
             List<DistributorLedger> ledgerList = new List<DistributorLedger>();
             try
             {
                 string[] userData = User.Identity.Name.Split('|');
-                ledgerList = await reportManager.GetLedgerList(userData[5]);
+                var request = new DistributorLedgerRequest
+                {
+                    Ledger_id = userData[5],
+                    action = "DISTRIBUTOR_LEDGER",
+                    To_date = frm.GetValue("toDate").AttemptedValue,
+                    From_date = frm.GetValue("fromDate").AttemptedValue
+                };
+
+                ledgerList = await reportManager.GetLedgerList(request);
             }
             catch (Exception Ex)
             {
                 Console.WriteLine(Ex.InnerException);
             }
-            return View(ledgerList);
-        }        
+            return PartialView("LedgerList",ledgerList);
+        }
     }
 }
