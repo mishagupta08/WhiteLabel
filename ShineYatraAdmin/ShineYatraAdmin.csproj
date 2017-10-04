@@ -609,11 +609,8 @@
     <Content Include="Views\Hotel\hotelDetailView.cshtml" />
     <Content Include="Views\Hotel\bookHotel.cshtml" />
     <Content Include="Views\Hotel\CancelHotelView.cshtml" />
-    <Content Include="Views\Recharge\prepaid.cshtml" />
     <Content Include="Views\Flight\BookingResponse.cshtml" />
     <Content Include="Views\Flight\CancelFlight.cshtml" />
-    <Content Include="Views\Recharge\postpaid.cshtml" />
-    <Content Include="Views\Recharge\dth.cshtml" />
     <Content Include="Views\PayU\Return.cshtml" />
     <Content Include="Views\Recharge\Index.cshtml" />
     <Content Include="Views\Login\elite_login.cshtml" />
