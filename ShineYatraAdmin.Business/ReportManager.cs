@@ -8,7 +8,7 @@ namespace ShineYatraAdmin.Business
 {
     public class ReportManager
     {
-        public async Task<List<DistributorLedger>> GetLedgerList(string ledgerId)
+        public async Task<List<DistributorLedger>> GetLedgerList(DistributorLedgerRequest ledgerId)
         {
             return await Program.GetLedgerList(ledgerId);
         }
