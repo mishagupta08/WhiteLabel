@@ -19,6 +19,7 @@ namespace ShineYatraAdmin.Entity
         public int balance { get; set; }
         public string remarks { get; set; }
         public string service_name { get; set; }
+        public string drcr { get; set; }
         public int ref_txn_id { get; set; }
     }
 

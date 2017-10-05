@@ -92,6 +92,11 @@
         /// gets or sets get recharge master commission structure
         /// </summary>
         public IList<CompanyCommissionGroup> GET_PRIMARY_RECHARGE_STRUCTURE { get; set; }
+        
+        /// <summary>
+        /// gets or sets service group list
+        /// </summary>
+        public IList<CompanyCommissionGroup> GET_MEMBER_SELF_AND_ALLOTED_GROUPS { get; set; }
 
         /// <summary>
         /// gets or sets get recharge master commission structure

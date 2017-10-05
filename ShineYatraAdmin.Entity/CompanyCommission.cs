@@ -50,7 +50,11 @@ namespace ShineYatraAdmin.Entity
 
         //Is the structure for service is active
         public string active_status { get; set; }
-        
+
+        //group created by
+        public int group_created_member_id { get; set; }
+
+
     }
 
     /// <summary>

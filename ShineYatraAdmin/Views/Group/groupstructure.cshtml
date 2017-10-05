@@ -1,5 +1,21 @@
 ﻿@model ShineYatraAdmin.Entity.GroupModel
 
+@{
+    var isAllotted = false;
+    var userData = User.Identity.Name.Split('|');
+    var memberId = Convert.ToInt32(userData[1]);
+    if (Model?.service_group_list != null)
+    {
+        var record = Model.service_group_list.FirstOrDefault();
+        if (record != null)
+        {
+            if (record.group_created_member_id != memberId)
+            {
+                isAllotted = true;
+            }
+        }
+    }
+}
 
 <!-- Magnific popup JavaScript -->
 <script src="~/plugins/bower_components/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
@@ -10,8 +26,10 @@
 <script src="~/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
 <script src="~/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js"></script>
 
-<table class="table table-bordered table-responsive color-bordered-table info-table">
-    <thead>
+@if (!isAllotted)
+{
+    <table class="table table-bordered table-responsive color-bordered-table info-table">
+        <thead>
         <tr>
             @if (Model.service_id == "1")
             {
@@ -35,7 +53,7 @@
                 <th colspan="2">Distribution</th>
                 <th class="text-nowrap">Action</th>
             }
-            
+
         </tr>
         <tr>
             @if (Model.service_id == "1")
@@ -44,22 +62,22 @@
                 <th colspan="1"></th>
                 <th colspan="1"></th>
             }
-            
-            @if(Model.service_id != "4")
-            {
-            <th>%</th>
-            <th>Amt</th>
 
-            <th>%</th>
-            <th>Amt</th>
-            <th>&nbsp;</th>
+            @if (Model.service_id != "4")
+            {
+                <th>%</th>
+                <th>Amt</th>
+
+                <th>%</th>
+                <th>Amt</th>
+                <th>&nbsp;</th>
             }
 
 
-            
+
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
 
         @if (Model.service_group_list != null)
         {
@@ -70,40 +88,129 @@
                     {
                         <td> <img src="~/plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
                         <td>
-                           
-                        <input type="hidden" name="airlineName" value="@t.sub_service_name (@t.sub_service_code)">@t.sub_service_name</td>
 
-                        <td>                            
+                            <input type="hidden" name="airlineName" value="@t.sub_service_name (@t.sub_service_code)">@t.sub_service_name</td>
+
+                        <td>
                             <input type="hidden" name="airlineCode" value="@t.sub_service_code">@t.sub_service_code
                         </td>
                     }
-@if (Model.service_id == "4")
-{
-    <td><input type="hidden" name="SELF_COMM_PER" value="@t.SELF_COMM_PER"><span class="row_value_@t.sub_service_id" name="SELF_COMM_PER">@t.SELF_COMM_PER</span></td>
-    <td><input type="hidden" name="DIST_COMM_PER" value="@t.DIST_COMM_PER"><span class="row_value_@t.sub_service_id" name="DIST_COMM_PER">@t.DIST_COMM_PER</span></td>
+                    @if (Model.service_id == "4")
+                    {
+                        <td><input type="hidden" name="SELF_COMM_PER" value="@t.SELF_COMM_PER"><span class="row_value_@t.sub_service_id" name="SELF_COMM_PER">@t.SELF_COMM_PER</span></td>
+                        <td><input type="hidden" name="DIST_COMM_PER" value="@t.DIST_COMM_PER"><span class="row_value_@t.sub_service_id" name="DIST_COMM_PER">@t.DIST_COMM_PER</span></td>
 
 
 
-}
-else
-{
-                    <td><input type="hidden" name="row_id" value="@t.row_id"><input type="hidden" name="sub_service_id" value="@t.sub_service_id">
-                    <input type="hidden" name="front_discount_per" value="@t.back_discount_per"><span class="row_value_@t.sub_service_id" name="front_discount_per">@t.back_discount_per</span></td>
-                    <td><input type="hidden" name="front_discount_amount" value="@t.back_discount_amount"><span class="row_value_@t.sub_service_id" name="front_discount_amount">@t.back_discount_amount</span></td>
-                    <td><input type="hidden" name="back_discount_per" value="@t.distb_back_discount_per"><span class="row_value_@t.sub_service_id" name="back_discount_per">@t.distb_back_discount_per</span></td>
-                    <td><input type="hidden" name="back_discount_amount" value="@t.distb_back_discount_amount"><span class="row_value_@t.sub_service_id" name="back_discount_amount">@t.distb_back_discount_amount</span></td>
-                    <td class="text-nowrap">
-                        <a href="#edit-group" data-toggle="tooltip" onclick="getRowEditform('@t.sub_service_id')" data-original-title="Edit" class="popup-with-form">
-                            <i class="fa fa-pencil text-inverse m-r-10"></i>
-                        </a>
-                        <a href="#" data-toggle="tooltip" data-original-title="Close">
-                            <i class="fa fa-close text-danger sa-disable"></i>
-                        </a>
-                    </td>
-}
-                   
+                    }
+                    else
+                    {
+                        <td><input type="hidden" name="row_id" value="@t.row_id"><input type="hidden" name="sub_service_id" value="@t.sub_service_id">
+                            <input type="hidden" name="front_discount_per" value="@t.back_discount_per"><span class="row_value_@t.sub_service_id" name="front_discount_per">@t.back_discount_per</span></td>
+                        <td><input type="hidden" name="front_discount_amount" value="@t.back_discount_amount"><span class="row_value_@t.sub_service_id" name="front_discount_amount">@t.back_discount_amount</span></td>
+                        <td><input type="hidden" name="back_discount_per" value="@t.distb_back_discount_per"><span class="row_value_@t.sub_service_id" name="back_discount_per">@t.distb_back_discount_per</span></td>
+                        <td><input type="hidden" name="back_discount_amount" value="@t.distb_back_discount_amount"><span class="row_value_@t.sub_service_id" name="back_discount_amount">@t.distb_back_discount_amount</span></td>
+                        <td class="text-nowrap">
+
+                            <a href="#edit-group" data-toggle="tooltip" onclick="getRowEditform('@t.sub_service_id')" data-original-title="Edit" class="popup-with-form">
+                                <i class="fa fa-pencil text-inverse m-r-10"></i>
+                            </a>
+                            <a href="#" data-toggle="tooltip" data-original-title="Close">
+                                <i class="fa fa-close text-danger sa-disable"></i>
+                            </a>
+                        </td>
+                    }
+
                 </tr>
             }
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table table-bordered table-responsive color-bordered-table info-table">
+        <thead>
+            <tr>
+                @if (Model.service_id == "1")
+                {
+                    <th>Logo</th>
+                    <th>Airline Name</th>
+                    <th>Airline Code</th>
+
+                }
+                @if (Model.service_id == "4")
+                {
+                    <th>Logo</th>
+                    <th>Service Provider</th>
+                    <th>Service Type</th>
+                    <th>Self</th>
+
+                }
+                else
+                {
+                    <th colspan="2">Self</th>
+                }
+
+            </tr>
+            <tr>
+                @if (Model.service_id == "1")
+                {
+                    <th colspan="1"></th>
+                    <th colspan="1"></th>
+                    <th colspan="1"></th>
+                }
+
+                @if (Model.service_id != "4")
+                {
+
+                    <th>%</th>
+                    <th>Amt</th>
+
+                }
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.service_group_list != null)
+            {
+                foreach (var t in Model.service_group_list)
+                {
+                    <tr id="row_@t.sub_service_id">
+                        @if (Model.service_id == "1" || Model.service_id == "4")
+                        {
+                            <td> <img src="~/plugins/images/property/prop1.jpg" alt="iMac" width="30"> </td>
+                            <td>
+
+                                <input type="hidden" name="airlineName" value="@t.sub_service_name (@t.sub_service_code)">@t.sub_service_name
+                            </td>
+
+                            <td>
+                                <input type="hidden" name="airlineCode" value="@t.sub_service_code">@t.sub_service_code
+                            </td>
+                        }
+                        @if (Model.service_id == "4")
+                        {
+                            <td><input type="hidden" name="SELF_COMM_PER" value="@t.SELF_COMM_PER"><span class="row_value_@t.sub_service_id" name="SELF_COMM_PER">@t.SELF_COMM_PER</span></td>
+                            <td><input type="hidden" name="DIST_COMM_PER" value="@t.DIST_COMM_PER"><span class="row_value_@t.sub_service_id" name="DIST_COMM_PER">@t.DIST_COMM_PER</span></td>
+
+
+
+                        }
+                        else
+                        {
+                            <td><input type="hidden" name="back_discount_per" value="@t.distb_back_discount_per"><span class="row_value_@t.sub_service_id" name="back_discount_per">@t.distb_back_discount_per</span></td>
+                            <td><input type="hidden" name="back_discount_amount" value="@t.distb_back_discount_amount"><span class="row_value_@t.sub_service_id" name="back_discount_amount">@t.distb_back_discount_amount</span></td>
+
+                        }
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}

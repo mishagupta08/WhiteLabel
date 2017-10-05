@@ -534,12 +534,12 @@
             var data = string.Empty;
             if (!string.IsNullOrEmpty(serviceId) && !string.IsNullOrEmpty(memberId) && !string.IsNullOrEmpty(companyId))
             {
-                data = "{\"action\":\"GET_COMMISSION_GROUPS\",\"service_id\":\"" + serviceId + "\",\"category\":\"" + service_type + "\",\"member_id\":\"" + memberId + "\",\"company_id\":\"" + companyId + "\",\"sub_category\":\"" + sub_category + "\"}";
+                data = "{\"action\":\"GET_MEMBER_SELF_AND_ALLOTED_GROUPS\",\"service_id\":\"" + serviceId + "\",\"category\":\"" + service_type + "\",\"member_id\":\"" + memberId + "\",\"sub_category\":\"" + sub_category + "\"}";
             }
             var response = await CallFunction(data);
-            if (response != null && response.GET_COMMISSION_GROUPS != null)
+            if (response != null && response.GET_MEMBER_SELF_AND_ALLOTED_GROUPS != null)
             {
-                return response.GET_COMMISSION_GROUPS;
+                return response.GET_MEMBER_SELF_AND_ALLOTED_GROUPS;
             }
             return null;
         }
