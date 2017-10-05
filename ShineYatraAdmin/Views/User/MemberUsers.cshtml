@@ -12,12 +12,14 @@
             <h3 class="box-title">@Resources.ManageWhiteLabelUser</h3>
             <div class="table-responsive">
                 <div class="panel">
+                    <button id="insertUSer" data-company-id="0" class="btn btn-outline btn-rounded btn-info" onclick="GetInsertUserView()">
+                        <i class="icon wb-plus" aria-hidden="true"></i>
+                        Add New
+                    </button>
                     <div class="panel-heading" style="padding: 4%;">
                         <div class="panel-action">
-                            <button style="display:none;" id="insertCompany" data-company-id="0" class="btn btn-outline btn-rounded btn-info">
-                                <i class="icon wb-plus" aria-hidden="true"></i>
-                                Add New
-                            </button>
+
+
                             <a href="#" data-perform="panel-collapse">
                                 <button class="btn btn-block btn-info">@Resources.AdvanceSearch</button>
                             </a>
@@ -36,12 +38,12 @@
                                             <div class="form-group">
                                                 <label class="col-md-12">@Resources.CompanyName</label>
                                                 <div class="col-md-12">
-                                                    @Html.TextBoxFor(m => m.SearchListParameter.CompanyName, new { @required = "", @id = "companyName", @class = "form-control", @placeholder = "Company Name" })
+                                                    @Html.TextBoxFor(m => m.SearchListParameter.CompanyName, new {@required = "", @id = "companyName", @class = "form-control", @placeholder = "Company Name"})
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                @Html.DropDownListFor(m => m.SearchListParameter.Status, new SelectList(Model.SearchStatusList, "Id", "Value"), new { @required = "required", id = "statusDropDown", @class = "form-control" })
+                                                @Html.DropDownListFor(m => m.SearchListParameter.Status, new SelectList(Model.SearchStatusList, "Id", "Value"), new {@required = "required", id = "statusDropDown", @class = "form-control"})
                                                 <span id="boardError"></span>
                                             </div>
 
@@ -68,6 +70,12 @@
     </div>
 </div>
 
+<a class="popup-with-form btn btn-success" href="#addUser" id="InsertUserForm" style="display:none;">Open form</a>
+<form id="addUser" class="form-horizontal mfp-hide white-popup-block" onsubmit="return AddUser();">
+    <div id="addformHtml">
+        
+    </div>
+</form>
 
 
 

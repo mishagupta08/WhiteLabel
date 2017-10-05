@@ -626,6 +626,7 @@
     <Content Include="Views\Flight\MyFlightBookings.cshtml" />
     <Content Include="Views\Shared\OTPpopup.cshtml" />
     <Content Include="Views\Report\LedgerList.cshtml" />
+    <Content Include="Views\User\AddUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

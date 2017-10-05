@@ -247,6 +247,62 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(ex.InnerException);
             }
             return Json(string.Empty);
-        }              
+        }
+
+        /// <summary>
+        /// Get add user form
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> GetInsertUserView()
+        {
+            UserDetail userDetail = null;
+            try
+            {
+                userDetail = new UserDetail();                                    
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }            
+            return PartialView("AddUser", userDetail);            
+        }
+
+        /// <summary>
+        /// method to add edit user
+        /// </summary>
+        /// <param name="companyDashboard"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> AddUser(UserDetail userDetail)
+        {
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                if (userDetail == null)
+                {
+                    return Json(string.Empty);
+                }
+                userDetail.action = "INSERT_USER";
+                userDetail.ref_id = userData[1];
+                userDetail.role_id = "5";
+                userDetail.user_type = "";
+                userDetail.company_id = userData[2];
+                userDetail.kit_id = 0;
+                
+                var result = await this.userManager.AddUser(userDetail);
+
+                if (result == null)
+                {
+                    return Json(string.Empty);
+                }
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return Json(string.Empty);
+        }
+
+
     }
 }

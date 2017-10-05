@@ -4,8 +4,12 @@
     /// Holds complete user detail
     /// </summary>
     public class UserDetail
-    {
-
+    {        
+        public string action { get; set; }
+        public string password { get; set; }   
+        public string mobile_number { get; set; }
+        public string email { get; set; }
+        public int kit_id { get; set; }                   
         /// <summary>
         /// gets or sets member_id
         /// </summary>

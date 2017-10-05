@@ -1396,5 +1396,22 @@
             }
             return flightSummary;
         }
+
+        /// <summary>
+        /// method to save fund detail while payment from payment gateway
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<string> AddUser(UserDetail userDetail)
+        {            
+            var data = JsonConvert.SerializeObject(userDetail);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS)
+                return response.APISTATUS;
+
+            return response.MSG;
+        }
+
+
     }
 }

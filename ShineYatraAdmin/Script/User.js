@@ -99,3 +99,63 @@ function AddEditFund() {
     }
     return false;
 }
+
+function GetInsertUserView() {
+    $("#addformHtml").html("");
+   $(".preloader").show();
+    $.ajax({
+        url: 'GetInsertUserView',
+        type: 'Post',
+        datatype: 'Json',
+        async: false
+    }).done(function (result) {
+        $("#addformHtml").html(result);
+        $("#addUser").addClass("white-popup-block");
+        $("#InsertUserForm").click();
+        $(".preloader").hide();
+    }).fail(function (xhr) {
+        alert(xhr);
+    });
+}
+
+function AddUser() {
+    var userDetail = $('#addUser').serialize();    
+    $(".preloader").show();
+    $.ajax({
+        url: 'AddUser',
+        type: 'Post',
+        datatype: 'Json',
+        async: false,
+        data: userDetail
+    }).done(function (result) {
+        if (result == null || result == "") {
+            swal("Status", "There is some error please try again later.", "error");
+            $(".confirm").click(function() {
+                $(".mfp-close").click();
+            });
+        }
+        else if (result.indexOf("SUCCESS") !== -1) {
+            swal({
+                title: "Success",
+                text: "Record Added Successfully",
+                type: "success"
+            }, function () {
+                ClearForm("addUser");
+                location.reload();              
+            });
+        }
+        else {
+            swal({
+                title: "FAILED",
+                text: result,
+                type: "error"
+            }, function () {
+                $(".preloader").hide();
+            });
+            return false;
+        }
+    }).fail(function (xhr) {
+        alert(xhr);
+    });
+    return false;
+}
