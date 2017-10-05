@@ -129,10 +129,13 @@ function AddUser() {
         data: userDetail
     }).done(function (result) {
         if (result == null || result == "") {
-            swal("Status", "There is some error please try again later.", "error");
-            $(".confirm").click(function() {
-                $(".mfp-close").click();
+            swal({
+                title: "FAILED",
+                text: "There is some problem, please try after some time.",
+                type: "error"
+            }, function () {               
             });
+            
         }
         else if (result.indexOf("SUCCESS") !== -1) {
             swal({
@@ -149,11 +152,11 @@ function AddUser() {
                 title: "FAILED",
                 text: result,
                 type: "error"
-            }, function () {
-                $(".preloader").hide();
+            }, function () {               
             });
-            return false;
+            $(".preloader").hide();
         }
+        return false;
     }).fail(function (xhr) {
         alert(xhr);
     });

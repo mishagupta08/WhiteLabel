@@ -271,6 +271,7 @@ namespace ShineYatraAdmin.Controllers
         /// method to add edit user
         /// </summary>
         /// <param name="companyDashboard"></param>
+        /// <param name="userDetail"></param>
         /// <returns></returns>
         public async Task<ActionResult> AddUser(UserDetail userDetail)
         {

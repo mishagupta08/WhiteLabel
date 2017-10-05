@@ -24,28 +24,46 @@
                     <table cellspacing="0" class="display table" id="FlightList" width="100%">
                         <thead>
                             <tr>
-                                <th>System ID</th>
-                                <th>Travel Date</th>                                                              
-                                <th>Flight Name</th>
-                                <th>Travel To</th>
-                                <th>Travel From</th>
-                                <th>Mode</th> 
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th style="white-space: nowrap;">System ID</th>
+                                <th style="white-space: nowrap;">Distributor</th>
+                                <th style="white-space: nowrap;">User Name</th>
+                                <th style="white-space: nowrap;">Mobile No</th>
+                                <th style="white-space: nowrap;">Origin</th>
+                                <th style="white-space: nowrap;">Destination</th>
+                                <th style="white-space: nowrap;">Passenger Name</th>
+                                <th style="white-space: nowrap;">Flight Amount</th>
+                                <th scope="col">DepartureDate</th>
+                                <th scope="col">BookingDate</th>                                                              
+                                <th scope="col">Print</th>
+                                <th style="white-space: nowrap;">Cancel Ticket</th>
+                                <th scope="col">AgentInvoice</th>
+                                <th scope="col">UserInvoice</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Remark</th>
+                                
                             </tr>
                         </thead>
-                        <tfoot>
+                        @*<tfoot>
                             <tr>
-                                <th>System ID</th>
-                                <th>Travel Date</th>
-                                <th>Flight Name</th>
-                                <th>Travel To</th>
-                                <th>Travel From</th>
-                                <th>Mode</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th scope="col">System ID</th>
+                                <th scope="col">Distributor</th>
+                                <th scope="col">User Name</th>
+                                <th scope="col">Mobile No</th>
+                                <th scope="col">Origin</th>
+                                <th scope="col">Destination</th>
+                                <th scope="col">Passenger Name</th>
+                                <th scope="col">Flight Amount</th>
+                                <th scope="col">DepartureDate</th>
+                                <th scope="col">BookingDate</th>
+                                <th scope="col">Print</th>
+                                <th scope="col">Cancel Ticket</th>
+                                <th scope="col">AgentInvoice</th>
+                                <th scope="col">UserInvoice</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Remark</th>
+                                
                             </tr>
-                        </tfoot>
+                        </tfoot>*@
                         <tbody>
                             @if (Model != null)
             {
@@ -53,19 +71,36 @@
                 {
                                     <tr>
                                         <td>@Html.DisplayFor(modelItem => item.txn_id) </td>
-                                        <td>@Html.DisplayFor(modelItem => item.travel_date)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.ref_code)<span>-</span>@Html.DisplayFor(modelItem => item.flight_no)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.travel_to)</td>
+                                        <td></td>
+                                        <td>@Html.DisplayFor(modelItem => item.user_name)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.mobile)</td>
                                         <td>@Html.DisplayFor(modelItem => item.travel_from)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.trip_mode)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.travel_to)</td>
+                                        <td></td>
+                                        <td>@Html.DisplayFor(modelItem => item.amount)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.travel_date)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.txn_date)</td>
+                                        <td></td>
+                                        <td>@if (item.status.ToUpper().Trim() == "COMPLETED")
+                                        {
+                                            <a href="#" data-toggle="tooltip" onclick="confirmCancel('@item.api_txn_id','@item.unique_ref_no','@item.txn_id')" data-original-title="Close" title="Close">
+                                                <i class="text-danger sa-disable">Cancel</i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span>&nbsp;</span>
+                                        }</td>
+                                        <td></td>
+                                        <td></td>
                                         <td>
-                                            @if (item.status.ToUpper().Trim() == "PENDING")
+                                            @if (item.status.ToUpper().Trim() == "FAILED")
                                             {
                                                 <div class="label label-table label-default">@Html.DisplayFor(modelItem => item.status)</div>
                                             }
-                                            else if (item.status.ToUpper().Trim() == "CONFIRMED")
+                                            else if (item.status.ToUpper().Trim() == "COMPLETED")
                                             {
-                                                <div class="label label-table label-success">@Html.DisplayFor(modelItem => item.status)</div>
+                                                <div class="label label-table label-success">BOOKED</div>
                                             }
                                             else
                                             {
@@ -73,17 +108,9 @@
                                             }
                                         </td>                                        
                                         <td>                                            
-                                            @if (item.status.ToUpper().Trim() == "COMPLETED")
-                                            {                                                
-                                                <a href="#" data-toggle="tooltip" onclick="confirmCancel('@item.api_txn_id','@item.unique_ref_no','@item.txn_id')" data-original-title="Close" title="Close">
-                                                    <i class="text-danger sa-disable">Cancel</i>
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <span>&nbsp;</span>
-                                            }
+                                            @Html.DisplayFor(modelItem => item.remarks)
                                         </td>
+                                                                             
                                     </tr>
                                 }
                             }
@@ -107,15 +134,15 @@
     var jq = $.noConflict();
     jq(document).ready(function () {    
 
-        jq('#FlightList tfoot th').each(function () {
-            var title = $(this).text();
-            if (title.indexOf("Remark") === -1 && title.indexOf("Action") === -1) {
-                jq(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
-            }
-            else {
-                jq(this).html('              ');
-            }
-        });
+        //jq('#FlightList tfoot th').each(function () {
+        //    var title = $(this).text();
+        //    if (title.indexOf("Remark") === -1 && title.indexOf("Action") === -1) {
+        //        jq(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
+        //    }
+        //    else {
+        //        jq(this).html('              ');
+        //    }
+        //});
 
         var flightList = jq('#FlightList').DataTable({
             initComplete: function () {

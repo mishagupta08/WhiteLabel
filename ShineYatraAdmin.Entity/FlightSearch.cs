@@ -663,6 +663,8 @@ namespace ShineYatraAdmin.Entity
         public string api_txn_id { get; set; }
         public string unique_ref_no { get; set; }
         public string my_info { get; set; }
+        public string user_name { get; set; }
+        public string txn_date { get; set; }        
         public List<Passengers> passenger_details { get; set; }
     }
 
