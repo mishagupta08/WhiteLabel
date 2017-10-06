@@ -97,8 +97,8 @@
             todayHighlight: true,
             changeMonth: true,
             changeYear: true,
-            dateFormat: "dd-M-yy"            
-        });
+            dateFormat: "dd-M-yy"
+        }).datepicker("setDate", new Date());
 
         jq('#todateinput').datepicker({
             autoclose: true,
@@ -106,8 +106,8 @@
             changeMonth: true,
             changeYear: true,
             dateFormat: "dd-M-yy"
-        });
-        ClearForm("LegderFliter");
+        }).datepicker("setDate", new Date());
+        GetLedgerList();
     });
 
     function GetLedgerList() {
