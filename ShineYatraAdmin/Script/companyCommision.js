@@ -98,7 +98,7 @@ function getCommissionGroupDetails(currentGroupId, divId, category, sub_category
         }).done(function (result) {
 
             $("#" + divId).html(result);
-            if (category == "recharge") {
+            if (category === "recharge") {
 
                 $("#categorysections section").removeClass("content-current");
 
