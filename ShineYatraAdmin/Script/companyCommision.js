@@ -82,8 +82,10 @@ function EditCompanyPriceGroup() {
 
 function getCommissionGroupDetails(currentGroupId, divId, category, sub_category) {
     $(".preloader").show();
-    if (currentGroupId == "0") {
-        $("#" + divId).html("No allotted group available.");
+    if (currentGroupId === "0") {
+        $("#categorysections section").removeClass("content-current");
+        $("#" + divId).html("No allotted group available.");        
+        $("#section-bar-" + category).addClass("content-current");
         $(".preloader").hide();
     }
     else {
@@ -97,6 +99,9 @@ function getCommissionGroupDetails(currentGroupId, divId, category, sub_category
 
             $("#" + divId).html(result);
             if (category == "recharge") {
+
+                $("#categorysections section").removeClass("content-current");
+
                 $("#section-bar-recharge").addClass("content-current");
 
                 $("#section-bar-prepaid").removeClass("content-current");
