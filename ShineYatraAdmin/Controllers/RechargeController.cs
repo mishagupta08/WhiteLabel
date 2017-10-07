@@ -110,15 +110,15 @@ namespace ShineYatraAdmin.Controllers
                 {
                     if (validateTransaction.ipay_errordesc.ToLower().Equals("transaction successful"))
                     {
-                        RechargeDetails details = new RechargeDetails();
-                        details.account_no = mobileDetails.account;
-                        details.action = "INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY";
-                        details.member_id = 1;
-                        details.request_token = GuidString;
-                        details.service_provider = serviceProvider;
-                        details.amount = mobileDetails.amount;
+                        //RechargeDetails details = new RechargeDetails();
+                        //details.account_no = mobileDetails.account;
+                        //details.action = "INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY";
+                        //details.member_id = 1;
+                        //details.request_token = GuidString;
+                        //details.service_provider = serviceProvider;
+                        //details.amount = mobileDetails.amount;
                         
-                        RechargeDBTxnResponse resp = await rechargeManager.SaveRechargeRequest(details);
+                        //RechargeDBTxnResponse resp = await rechargeManager.SaveRechargeRequest(details);
                         response = "success";                        
                     }
                     else
