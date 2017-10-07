@@ -474,6 +474,7 @@
     <Content Include="Script\group.js" />
     <Content Include="Script\hotel.js" />
     <Content Include="Script\login.js" />
+    <Content Include="Script\otp.js" />
     <Content Include="Script\PrimarySetting.js" />
     <Content Include="Script\rangeFiltering.js" />
     <Content Include="Script\recharge.js" />
@@ -504,9 +505,11 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HotelController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\OTPController.cs" />
     <Compile Include="Controllers\PayUController.cs" />
     <Compile Include="Controllers\PrimarySettingController.cs" />
     <Compile Include="Controllers\RechargeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -629,6 +632,13 @@
     <Content Include="Views\Flight\BookingStatus.cshtml" />
     <None Include="Properties\PublishProfiles\Whitelablepublish.pubxml" />
     <Content Include="Views\Fund\MemberFundRequest.cshtml" />
+    <Content Include="Views\Report\Ledger.cshtml" />
+    <Content Include="Views\Fund\RequestedFund.cshtml" />
+    <Content Include="Views\Fund\pgpendingapprovals.cshtml" />
+    <Content Include="Views\Flight\MyFlightBookings.cshtml" />
+    <Content Include="Views\Shared\OTPpopup.cshtml" />
+    <Content Include="Views\Report\LedgerList.cshtml" />
+    <Content Include="Views\User\AddUser.cshtml" />
     <Content Include="Views\CCAvenue\Payment.cshtml" />
     <Content Include="Views\CCAvenue\ccAvenue.cshtml" />
     <Content Include="Views\CCAvenue\PaymentCancelled.cshtml" />
