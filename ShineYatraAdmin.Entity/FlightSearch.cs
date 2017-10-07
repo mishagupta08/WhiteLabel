@@ -43,10 +43,9 @@ namespace ShineYatraAdmin.Entity
         public string EmailAddress { get; set; }
         public string PartnerRefId { get; set; }
         public string PaymentMode { get; set; }
-        public double back_discount_per { get; set; }
-        public double back_discount_amount { get; set; }
-        public double front_discount_per { get; set; }
-        public double front_discount_amount { get; set; }
+        public int SubServiceId { get; set; }
+        public double backdiscount { get; set; }
+        
         /// <summary>
         /// Gets or sets trip mode
         /// </summary>
@@ -184,13 +183,12 @@ namespace ShineYatraAdmin.Entity
         [XmlElement(ElementName = "AirLineName")]
         public string AirLineName { get; set; }
         [XmlElement(ElementName = "SubServiceId")]
-        public string SubServiceId { get; set; }        
+        public int SubServiceId { get; set; }        
         [XmlElement(ElementName = "IsReturnFlight")]
         public string IsReturnFlight { get; set; }
         [XmlElement(ElementName = "BookingClassFare")]
         public BookingClassFare BookingClassFare { get; set; }
-        public double back_discount_per { get; set; }
-        public double back_discount_amount { get; set; }
+        
     }
 
     [XmlRoot(ElementName = "ArrayOfFlightsDetail")]
@@ -342,11 +340,8 @@ namespace ShineYatraAdmin.Entity
 
         [XmlElement(ElementName = "NonchargeableFares")]
         public NonchargeableFares NonchargeableFares { get; set; }
-        public double front_discount_per { get; set; }
-        public double front_discount_amount { get; set; }
-        public double back_discount_per { get; set; }
-        public double back_discount_amount { get; set; }
-        public double discountedFare { get; set; }
+        
+        public double backdiscount { get; set; }        
     }
 
     [XmlRoot(ElementName = "BookingClass")]
@@ -633,7 +628,7 @@ namespace ShineYatraAdmin.Entity
         public string txn_id { get; set; }
         public string request_token { get; set; }
         public int service_id { get; set; }
-        public string sub_service_id { get; set; }
+        public int  sub_service_id { get; set; }
         public string trip_category { get; set; }
         public string category { get; set; }
         public string txn_type { get; set; }
@@ -666,7 +661,8 @@ namespace ShineYatraAdmin.Entity
         public string unique_ref_no { get; set; }
         public string my_info { get; set; }
         public string user_name { get; set; }
-        public string txn_date { get; set; }        
+        public string txn_date { get; set; }
+        public double discount { get; set; }
         public List<Passengers> passenger_details { get; set; }
     }
 

@@ -227,13 +227,12 @@
                                                     <input type="hidden" value="@Model.flightSearch.Mode" name="Mode">
                                                     <input type="hidden" value="@Model.flightSearch.Destination" name="Destination">
                                                     <input type="hidden" value="@Model.flightSearch.Preferredclass" name="Preferredclass" />
+                                                    <input type="hidden" value="@flightrow.SubServiceId" name="SubServiceId">
                                                     <input type="hidden" value="@flightrow.Id" name="Id">
                                                     <input type="hidden" value="@flightrow.FlightNumber" name="FlightNumber">
-                                                    <input type="hidden" value="@flightrow.OperatingAirlineCode" name="OperatingAirlineCode">
-                                                    <input type="hidden" value="@flightrows.FareDetail.back_discount_per" name="back_discount_per">
-                                                    <input type="hidden" value="@flightrows.FareDetail.back_discount_amount" name="back_discount_amount">
-                                                    <input type="hidden" value="@flightrows.FareDetail.front_discount_per" name="front_discount_per">
-                                                    <input type="hidden" value="@flightrows.FareDetail.front_discount_amount" name="front_discount_amount">
+                                                    <input type="hidden" value="@flightrow.OperatingAirlineCode" name="OperatingAirlineCode">                                                    
+                                                    <input type="hidden" value="@flightrows.FareDetail.backdiscount" name="backdiscount">
+                                                    
                                                     <input type="submit" value="Book Ticket">
                                                 </form>
                                             </td>

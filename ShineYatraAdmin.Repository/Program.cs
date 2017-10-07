@@ -767,9 +767,9 @@
         /// Get Flight, bus and hotel commission groups alloted to member
         /// </summary>
         /// <returns></returns>
-        public static async Task<IList<CompanyCommissionGroup>> GetServiceAllottedGroupDetails(string memberId, string service_code, string serviceid, string category, string sub_category)
+        public static async Task<IList<CompanyCommissionGroup>> GetServiceAllottedGroupDetails(string memberId, string service_code, string serviceid, string category, string sub_category,string sub_service_id)
         {
-            var data = "{\"action\":\"GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS\",\"member_id\":"+memberId+",\"service_id\":1,\"category\":\"FLIGHT\",\"sub_category\":\"DOMESTIC\",\"service_code\":\"\"}";
+            var data = "{\"action\":\"GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS\",\"member_id\":"+memberId+ ",\"service_id\":1,\"category\":\"FLIGHT\",\"sub_category\":\"DOMESTIC\",\"service_code\":\"0\",\"sub_service_id\":\""+ sub_service_id + "\"}";
 
             var response = await CallFunction(data);
             if (response != null && response.GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS != null)
