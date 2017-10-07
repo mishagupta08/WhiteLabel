@@ -57,9 +57,9 @@ namespace ShineYatraAdmin.Business
             return transactionStatus;
         }
 
-        public async Task<RechargeDBTxnResponse> SaveRechargeRequest(RechargeDetails search)
+        public async Task<InsertServiceRechargeResponse> SaveRechargeRequest(InsertServiceRechargeRequest search)
         {
-            List<RechargeDBTxnResponse> transactionStatus = new List<RechargeDBTxnResponse>();
+            List<InsertServiceRechargeResponse> transactionStatus = new List<InsertServiceRechargeResponse>();
             try
             {
                 transactionStatus = await Program.SaveRechargeRequest(search);

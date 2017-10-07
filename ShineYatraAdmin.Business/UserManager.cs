@@ -59,5 +59,23 @@ namespace ShineYatraAdmin.Business
             }
             return response.FirstOrDefault();
         }
+
+        /// <summary>
+        /// function to get usr wallet balance
+        /// </summary>
+        /// <param name="bookticket"></param>
+        /// <returns></returns>
+        public async Task<string> AddUser(UserDetail userDetail)
+        {            
+            try
+            {
+                return await Program.AddUser(userDetail);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return null;
+        }
     }
 }

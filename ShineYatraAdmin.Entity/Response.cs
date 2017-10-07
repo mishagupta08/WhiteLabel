@@ -92,6 +92,11 @@
         /// gets or sets get recharge master commission structure
         /// </summary>
         public IList<CompanyCommissionGroup> GET_PRIMARY_RECHARGE_STRUCTURE { get; set; }
+        
+        /// <summary>
+        /// gets or sets service group list
+        /// </summary>
+        public IList<CompanyCommissionGroup> GET_MEMBER_SELF_AND_ALLOTED_GROUPS { get; set; }
 
         /// <summary>
         /// gets or sets get recharge master commission structure
@@ -128,6 +133,9 @@
         /// </summary>
         public IList<SubCategory> GET_SERVICE_SUB_CATEGORY_LIST { get; set; }
 
+        /// <summary>
+        /// WALLET_CREDIT_3RD_PARTY_REQUEST
+        /// </summary>
         public List<FundRequestContainer> WALLET_CREDIT_3RD_PARTY_REQUEST { get; set; }
 
         /// <summary>
@@ -138,7 +146,7 @@
         /// <summary>
         /// gets or sets Recharge details to database
         /// </summary>
-        public List<RechargeDBTxnResponse> INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY { get; set; }
+        public List<InsertServiceRechargeResponse> INSERT_SERVICE_RECHARGE_REQUEST { get; set; }
 
         /// <summary>
         /// gets or sets company wallet balance
@@ -166,6 +174,28 @@
         /// gets or sets member fund request list
         /// </summary>
         public List<CompanyFund> GET_FUND_REQUEST { get; set; }
+
+        /// <summary>
+        /// gets or sets INSERT_PG_REQUEST_FOR_SERVICE
+        /// </summary>
+        public List<INSERT_PG_REQUEST_FOR_SERVICE> INSERT_PG_REQUEST_FOR_SERVICE { get; set; }
+
+        /// <summary>
+        /// gets or sets DISTRIBUTOR_LEDGER
+        /// </summary>
+        public List<DistributorLedger> DISTRIBUTOR_LEDGER { get; set; }
+
+        /// <summary>
+        /// Get list of member flights
+        /// </summary>
+        public List<BookingDetail> GET_FLIGHT_TRANSACTIONS_SUMMARY { get; set; }
+        
+
+        /// <summary>
+        /// Get selected flight status and details
+        /// </summary>
+        public EticketDetails FlightTicketDetails { get; set; }
+
 
     }
 }

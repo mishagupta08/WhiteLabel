@@ -140,8 +140,7 @@
         {
             if (!xmlDocument.HasElements)
             {
-                XElement xElement = new XElement(xmlDocument.Name.LocalName);
-                xElement.Value = xmlDocument.Value;
+                XElement xElement = new XElement(xmlDocument.Name.LocalName) {Value = xmlDocument.Value};
 
                 foreach (XAttribute attribute in xmlDocument.Attributes())
                     xElement.Add(attribute);
@@ -535,12 +534,12 @@
             var data = string.Empty;
             if (!string.IsNullOrEmpty(serviceId) && !string.IsNullOrEmpty(memberId) && !string.IsNullOrEmpty(companyId))
             {
-                data = "{\"action\":\"GET_COMMISSION_GROUPS\",\"service_id\":\"" + serviceId + "\",\"category\":\"" + service_type + "\",\"member_id\":\"" + memberId + "\",\"company_id\":\"" + companyId + "\",\"sub_category\":\"" + sub_category + "\"}";
+                data = "{\"action\":\"GET_MEMBER_SELF_AND_ALLOTED_GROUPS\",\"service_id\":\"" + serviceId + "\",\"category\":\"" + service_type + "\",\"member_id\":\"" + memberId + "\",\"sub_category\":\"" + sub_category + "\"}";
             }
             var response = await CallFunction(data);
-            if (response != null && response.GET_COMMISSION_GROUPS != null)
+            if (response != null && response.GET_MEMBER_SELF_AND_ALLOTED_GROUPS != null)
             {
-                return response.GET_COMMISSION_GROUPS;
+                return response.GET_MEMBER_SELF_AND_ALLOTED_GROUPS;
             }
             return null;
         }
@@ -932,9 +931,9 @@
         /// <summary>
         /// flight ticket booking
         /// </summary>
-        /// <param name="BookTicket"></param>
+        /// <param name="bookTicket"></param>
         /// <returns></returns>
-        public static async Task<Bookingresponse> BookTicket(Request BookTicket)
+        public static async Task<Bookingresponse> BookTicket(Request bookTicket)
         {
             var bookResponse = new Bookingresponse();
             using (var httpClient = new HttpClient())
@@ -944,7 +943,7 @@
                 var serializer = new XmlSerializer(typeof(Request));
                 httpClient.DefaultRequestHeaders.Add("authKey", FlightAuthKey);
                 var stringwriter = new System.IO.StringWriter();
-                serializer.Serialize(stringwriter, BookTicket);
+                serializer.Serialize(stringwriter, bookTicket);
 
                 var httpContent = new StringContent(stringwriter.ToString(), Encoding.UTF8, "application/xml");
                 var httpResponse = await httpClient.PostAsync("http://wlapi.bisplindia.in/api/Flight/BookTicket", httpContent);
@@ -987,7 +986,7 @@
                 serializer.Serialize(stringwriter, BookTicket);
 
                 var httpContent = new StringContent(stringwriter.ToString(), Encoding.UTF8, "application/xml");
-                var httpResponse = await httpClient.PostAsync("http://wlapi.bisplindia.in/api/Flight/CancelTicket", httpContent);
+                var httpResponse = await httpClient.PostAsync("http://wlapi.bisplindia.in/api/Flight/CancelRequest", httpContent);
 
                 // If the response contains content we want to read it!
 
@@ -1052,8 +1051,13 @@
             }
             return cancelResponse;
         }
-
-        public static async Task<EticketDetails> FlightTicketStatus(EticketRequest BookTicket)
+         
+        /// <summary>
+        /// Get flight ticket status
+        /// </summary>
+        /// <param name="bookTicket"></param>
+        /// <returns></returns>
+        public static async Task<EticketDetails> FlightTicketStatus(EticketRequest bookTicket)
         {
             var cancelResponse = new EticketDetails();
             using (var httpClient = new HttpClient())
@@ -1063,7 +1067,7 @@
                 var serializer = new XmlSerializer(typeof(EticketRequest));
                 httpClient.DefaultRequestHeaders.Add("authKey", FlightAuthKey);
                 var stringwriter = new System.IO.StringWriter();
-                serializer.Serialize(stringwriter, BookTicket);
+                serializer.Serialize(stringwriter, bookTicket);
 
                 var httpContent = new StringContent(stringwriter.ToString(), Encoding.UTF8, "application/xml");
                 var httpResponse = await httpClient.PostAsync("http://wlapi.bisplindia.in/api/Flight/BookingStatus", httpContent);
@@ -1094,8 +1098,8 @@
 
         /// <summary>
         /// method to save booking details to database
-        /// </summary>
-        /// <param name="serviceId"></param>
+        /// </summary>        
+        /// <param name="bookticket"></param>
         /// <returns></returns>
         public static async Task<List<INSERT_SERVICE_BOOKING_REQUEST>> InsertServiceBookingRequest(BookingDetail bookticket)
         {
@@ -1106,7 +1110,7 @@
             {
                 return response.INSERT_SERVICE_BOOKING_REQUEST;
             }
-            else if (response != null && response.INSERT_SERVICE_BOOKING_REQUEST != null)
+            else if (response?.INSERT_SERVICE_BOOKING_REQUEST != null)
             {
                 return response.INSERT_SERVICE_BOOKING_REQUEST;
             }
@@ -1114,13 +1118,14 @@
         }
 
         /// <summary>
-        /// method to get booking details to database
+        /// Get details of flight from database
         /// </summary>
-        /// <param name="serviceId"></param>
+        /// <param name="transactionId"></param>
+        /// <param name="memberId"></param>
         /// <returns></returns>
-        public static async Task<List<BookingDetail>> GetServiceBookingRequest(string TransactionId, string memberId)
+        public static async Task<List<BookingDetail>> GetServiceBookingRequest(string transactionId, string memberId)
         {
-            string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS\",\"member_id\":" + memberId + ",\"txn_id\":" + TransactionId + "}";
+            string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS\",\"member_id\":" + memberId + ",\"txn_id\":" + transactionId + "}";
             var response = await CallFunction(data);
             if (response != null && response.APISTATUS == SUCCESS && response.GET_FLIGHT_TRANSACTIONS != null)
             {
@@ -1136,7 +1141,7 @@
         /// <returns></returns>
         public static async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId,string api_txn_id, string status)
         {
-            string data = "{\"action\":\"UPDATE_TRANSACTION_STATUS\",\"update_member_id\":\"" + memberId + "\",\"txn_id\":\"" + TransactionId + "\",\"status\":\"" + status + "\",\"api_txn_id\":\"" + api_txn_id + "\"}";
+           string data = "{\"action\":\"UPDATE_TRANSACTION_STATUS\",\"update_member_id\":\"" + memberId + "\",\"txn_id\":" + TransactionId + ",\"status\":\"" + status + "\",\"api_txn_id\":\"" + api_txn_id + "\",\"deposit_mode\":\"\",\"bank_name\":\"\",\"remarks\":\"\"}";
             var response = await CallFunction(data);
             UPDATE_TRANSACTION_STATUS updatestatus = new UPDATE_TRANSACTION_STATUS();
         
@@ -1176,16 +1181,16 @@
         /// <summary>
         /// method to save rehargee details to database
         /// </summary>
-        /// <param name="serviceId"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        public static async Task<List<RechargeDBTxnResponse>> SaveRechargeRequest(RechargeDetails request)
+        public static async Task<List<InsertServiceRechargeResponse>> SaveRechargeRequest(InsertServiceRechargeRequest request)
         {
             string data = JsonConvert.SerializeObject(request);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY != null)
+            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_RECHARGE_REQUEST != null)
             {
-                return response.INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY;
+                return response.INSERT_SERVICE_RECHARGE_REQUEST;
             }
             else if (response != null)
             {
@@ -1263,11 +1268,24 @@
         /// <summary>
         /// get list of fund request from members
         /// </summary>
-        /// <param name="serviceId"></param>
+        /// <param name="memberId"></param>
+        /// <param name="txn_type"></param>
+        /// <param name="member"></param>
+        /// <param name="status"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<List<CompanyFund>> getFundRequestList(string memberId)
+        public static async Task<List<CompanyFund>> getFundRequestList(string member, string memberId,string txn_type,string status,string id)
         {
-            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\"7\",\"member_id\":"+ memberId + ",\"txn_type\":\"FUND_WALLET\"}";
+            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\""+ id + "\",\""+ member + "\":"+ memberId + ",\"txn_type\":\""+ txn_type + "\"";
+            if (!string.IsNullOrEmpty(status))
+            {
+                data += ",\"status\":\"" + status + "\"}";
+            }
+            else
+            {
+                data += "}";
+            }
+
             var response = await CallFunction(data);
             if (response != null)
             {
@@ -1304,6 +1322,94 @@
             }
 
             return "No Result Found.";
+        }
+
+        /// <summary>
+        /// method to save fund detail while payment from payment gateway
+        /// </summary>
+        /// <param name="fundDetail"></param>
+        /// <returns></returns>
+        public static async Task<string> SavePaymntGatewayTransactions(CompanyFund fundDetail)
+        {
+            string data = JsonConvert.SerializeObject(fundDetail);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS)
+            {
+                var transaction = response.INSERT_PG_REQUEST_FOR_SERVICE.FirstOrDefault();
+                if (transaction != null) return Convert.ToString(transaction.payment_txn_id);
+            }
+            else if (response != null)
+            {
+                return "Failed-" + response.MSG;
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// method to save fund detail while payment from payment gateway
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<List<DistributorLedger>> GetLedgerList(DistributorLedgerRequest request)
+        {
+            var ledgerList = new List<DistributorLedger>();
+            var data = JsonConvert.SerializeObject(request);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS && response.DISTRIBUTOR_LEDGER!=null)
+            {
+                return response.DISTRIBUTOR_LEDGER;                
+            }
+            else
+            {
+                return ledgerList;
+            }           
+        }
+
+        /// <summary>
+        /// Get member flight detail list
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        public static async Task<List<BookingDetail>> GetMemberFlightList(string memberId,string serviceId)
+        {
+            List<BookingDetail> flightSummary = new List<BookingDetail>();
+            try
+            {
+                string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS_SUMMARY\",\"service_id\":\"" + serviceId + "\",\"member_id\":\"" + memberId + "\"}";
+                var response = await CallFunction(data);
+                if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS &&
+                    response.GET_FLIGHT_TRANSACTIONS_SUMMARY != null)
+                {
+                    return response.GET_FLIGHT_TRANSACTIONS_SUMMARY;
+                }
+                else
+                {
+                    return flightSummary;
+                }
+            }
+            catch (Exception ex)
+            {
+                 Console.WriteLine(ex.InnerException);
+            }
+            return flightSummary;
+        }
+
+        /// <summary>
+        /// method to save fund detail while payment from payment gateway
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<string> AddUser(UserDetail userDetail)
+        {            
+            var data = JsonConvert.SerializeObject(userDetail);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS)
+                return response.APISTATUS;
+
+            return response.MSG;
         }
 
 

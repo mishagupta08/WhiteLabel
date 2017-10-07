@@ -19235,3 +19235,7 @@ table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
 table.dataTable thead th, table.dataTable tfoot th {
     font-weight: 500;
 }
+
+.nowrap {
+    white-space: nowrap;
+}

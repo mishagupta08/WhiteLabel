@@ -36,7 +36,7 @@ namespace ShineYatraAdmin.Entity
         [XmlElement(ElementName = "personName")]
         public personName PersonName { get; set; }
         [XmlElement(ElementName = "phoneNumber")]
-        public string PhoneNumber { get; set; }
+        public string phoneNumber { get; set; }
         [XmlElement(ElementName = "creditcardno")]
         public string Creditcardno { get; set; }
         [XmlElement(ElementName = "emailAddress")]
@@ -113,20 +113,20 @@ namespace ShineYatraAdmin.Entity
         [XmlElement(ElementName = "age")]
         public string age { get; set; }
 
-        [XmlElement(ElementName = "extra_field_1")]
-        public string extra_field_1 { get; set; }
+        //[XmlElement(ElementName = "extra_field_1")]
+        //public string extra_field_1 { get; set; }
 
-        [XmlElement(ElementName = "extra_field_2")]
-        public string extra_field_2 { get; set; }
+        //[XmlElement(ElementName = "extra_field_2")]
+        //public string extra_field_2 { get; set; }
 
-        [XmlElement(ElementName = "extra_field_3")]
-        public string extra_field_3 { get; set; }
+        //[XmlElement(ElementName = "extra_field_3")]
+        //public string extra_field_3 { get; set; }
 
-        [XmlElement(ElementName = "extra_field_4")]
-        public string extra_field_4 { get; set; }
+        //[XmlElement(ElementName = "extra_field_4")]
+        //public string extra_field_4 { get; set; }
 
-        [XmlElement(ElementName = "extra_field_5")]
-        public string extra_field_5 { get; set; }
+        //[XmlElement(ElementName = "extra_field_5")]
+        //public string extra_field_5 { get; set; }
 
     }
 
@@ -183,6 +183,8 @@ namespace ShineYatraAdmin.Entity
         public string Availability { get; set; }
         [XmlElement(ElementName = "AirLineName")]
         public string AirLineName { get; set; }
+        [XmlElement(ElementName = "SubServiceId")]
+        public string SubServiceId { get; set; }        
         [XmlElement(ElementName = "IsReturnFlight")]
         public string IsReturnFlight { get; set; }
         [XmlElement(ElementName = "BookingClassFare")]
@@ -295,62 +297,7 @@ namespace ShineYatraAdmin.Entity
         public string Xsi { get; set; }
         [XmlAttribute(AttributeName = "xsd", Namespace = "http://www.w3.org/2000/xmlns/")]
         public string Xsd { get; set; }
-    }
-
-    [XmlRoot(ElementName = "Eticket")]
-    public class Eticket
-    {
-        [XmlElement(ElementName = "givenName")]
-        public string GivenName { get; set; }
-        [XmlElement(ElementName = "surName")]
-        public string SurName { get; set; }
-        [XmlElement(ElementName = "nameReference")]
-        public string NameReference { get; set; }
-        [XmlElement(ElementName = "eticketno")]
-        public string Eticketno { get; set; }
-        [XmlElement(ElementName = "flightuid")]
-        public string Flightuid { get; set; }
-        [XmlElement(ElementName = "passuid")]
-        public string Passuid { get; set; }
-    }
-
-    [XmlRoot(ElementName = "eticketdto")]
-    public class Eticketdto
-    {
-        [XmlElement(ElementName = "Eticket")]
-        public Eticket Eticket { get; set; }
-    }
-
-    [XmlRoot(ElementName = "OriDestPNRRequest")]
-    public class OriDestPNRRequest
-    {
-        [XmlElement(ElementName = "flightno")]
-        public string Flightno { get; set; }
-        [XmlElement(ElementName = "eticketdto")]
-        public Eticketdto Eticketdto { get; set; }
-        [XmlElement(ElementName = "confirmationid")]
-        public string Confirmationid { get; set; }
-        [XmlElement(ElementName = "pnrnumber")]
-        public string Pnrnumber { get; set; }
-    }
-
-    [XmlRoot(ElementName = "origindestinationoptions")]
-    public class Origindestinationoptions
-    {
-        [XmlElement(ElementName = "OriDestPNRRequest")]
-        public OriDestPNRRequest OriDestPNRRequest { get; set; }
-    }
-
-    [XmlRoot(ElementName = "requestedPNR")]
-    public class RequestedPNR
-    {
-        [XmlElement(ElementName = "origindestinationoptions")]
-        public Origindestinationoptions Origindestinationoptions { get; set; }
-        [XmlElement(ElementName = "status")]
-        public string Status { get; set; }
-        [XmlElement(ElementName = "partnerRefId")]
-        public string PartnerRefId { get; set; }
-    }
+    }   
 
     [XmlRoot(ElementName = "ChargeableFares")]
     public class ChargeableFares
@@ -537,25 +484,7 @@ namespace ShineYatraAdmin.Entity
 
         [XmlElement(ElementName = "error__tag")]
         public string Error__tag { get; set; }
-    }
-
-    /******Booking Status*******/
-
-    [XmlRoot(ElementName = "EticketDetails")]
-    public class EticketDetails
-    {
-        [XmlElement(ElementName = "requestedPNR")]
-        public RequestedPNR RequestedPNR { get; set; }
-
-        [XmlElement(ElementName = "transid")]
-        public string Transid { get; set; }
-
-        [XmlElement(ElementName = "status")]
-        public string Status { get; set; }
-
-        [XmlElement(ElementName = "partnerRefId")]
-        public string PartnerRefId { get; set; }
-    }
+    }    
 
     /*****Cancelticket*****/
 
@@ -691,16 +620,17 @@ namespace ShineYatraAdmin.Entity
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string age { get; set; }
-        public string extra_field_1 { get; set; }
-        public string extra_field_2 { get; set; }
-        public string extra_field_3 { get; set; }
-        public string extra_field_4 { get; set; }
-        public string extra_field_5 { get; set; }
+        //public string extra_field_1 { get; set; }
+        //public string extra_field_2 { get; set; }
+        //public string extra_field_3 { get; set; }
+        //public string extra_field_4 { get; set; }
+        //public string extra_field_5 { get; set; }
     }
 
     public class BookingDetail
     {
         public string action { get; set; }
+        public string txn_id { get; set; }
         public string request_token { get; set; }
         public int service_id { get; set; }
         public string sub_service_id { get; set; }
@@ -734,6 +664,9 @@ namespace ShineYatraAdmin.Entity
         public string ref_code { get; set; }
         public string api_txn_id { get; set; }
         public string unique_ref_no { get; set; }
+        public string my_info { get; set; }
+        public string user_name { get; set; }
+        public string txn_date { get; set; }        
         public List<Passengers> passenger_details { get; set; }
     }
 
@@ -748,6 +681,12 @@ namespace ShineYatraAdmin.Entity
     {        
         public string MSG { get; set; }        
     }
+
+    public class INSERT_PG_REQUEST_FOR_SERVICE
+    {
+        public int payment_txn_id { get; set; }        
+    }
+
 
 
 }

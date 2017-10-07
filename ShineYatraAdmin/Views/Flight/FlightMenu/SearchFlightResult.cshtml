@@ -29,14 +29,8 @@
                     <label style="font-weight:100">Depart :- @Model.flightSearch.DepartDate</label> |
                     <label style="font-weight:100">@Model.flightSearch.FlightType</label> |
                     <label style="font-weight:100">@Model.flightSearch.AdultPax Adult, @Model.flightSearch.ChildPax Children, @Model.flightSearch.InfantPax InfantPaxs</label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Modify Search" onclick="modifyflightsearch('modifyflightsearch')" />
-                    <div class="col-md-12">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-10" id="modifyflightsearch" style="display:none;">
-                            @Html.Partial("~/Views/Flight/FlightMenu/SearchFlight.cshtml", Model.flightSearch)
-                        </div>
-                        <div class="col-md-1"></div>
-                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<a href="GetFlightMenu?menu=Flight Booking"><input type="button" value="Modify Search" /></a>
+                    
                 </div>
 
                 <hr />
@@ -109,7 +103,7 @@
                         }
                         else
                         {
-                            <table id="flightsearchResult" class="display table" cellspacing="0" width="100%">
+                            <table id="flightsearchResult" class="display table font-12"  width="100%">
                                 <thead>
                                     <tr>
                                         <th>

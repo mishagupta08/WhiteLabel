@@ -27,7 +27,12 @@
             }
             else {
                 $(".mfp-close").click();
-                swal("Status", result, "success")
+                var type = "error";
+                if (result.indexOf("SUCCESS")!=-1)
+                {
+                    type = "success";
+                }
+                swal("Status", result, type)
                 $(".confirm").click(function () {
                     ClearForm("add-company_funds");
                 })

@@ -32,7 +32,7 @@ namespace ShineYatraAdmin.Controllers
                 GuidString = GuidString.Replace("+", "");
                 companyFund.request_token = GuidString;
                 companyFund.txn_type = "FUND_WALLET";
-                companyFund.domain_name = "whitelabel.bisplindia.in";
+                companyFund.domain_name = ConfigurationManager.AppSettings["DomainName"];
                 companyFund.AssignDepositModeList();
             }
             catch (Exception ex)
@@ -173,9 +173,29 @@ namespace ShineYatraAdmin.Controllers
             List<CompanyFund> fundRequestList = new List<CompanyFund>();
             try {
                 string[] userData = User.Identity.Name.Split('|');
-                fundRequestList = await fundManger.getFundRequestList(userData[1]);
+                fundRequestList = await fundManger.getFundRequestList("ref_id",userData[1], "FUND_WALLET","","7");
             }
             catch (Exception Ex) {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View(fundRequestList);
+        }
+
+        /// <summary>
+        /// Get list of fund request from members
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> RequestedFund()
+        {
+
+            List<CompanyFund> fundRequestList = new List<CompanyFund>();
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                fundRequestList = await fundManger.getFundRequestList("member_id",userData[1],"FUND_WALLET", "","7");
+            }
+            catch (Exception Ex)
+            {
                 Console.WriteLine(Ex.InnerException);
             }
             return View(fundRequestList);
@@ -201,6 +221,78 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(Ex.InnerException);
             }
             return Json(response);
+        }
+
+        
+        /// <summary>
+        /// Get list of fund request from members
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> MemberFundRequestList(FormCollection frm)
+        {
+            List<CompanyFund> fundRequestList = new List<CompanyFund>();
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                string status = Convert.ToString(frm.GetValue("status").AttemptedValue);
+                fundRequestList = await fundManger.getFundRequestList("ref_id",userData[1], "FUND_WALLET", "","7");
+                if (!string.IsNullOrEmpty(status) && !status.ToLower().Equals("all"))
+                {
+                    var searchedlist = (from r in fundRequestList where r.status.ToLower() == status select r).ToList();
+                    fundRequestList = searchedlist;
+                }
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View("MemberFundRequest", fundRequestList);
+        }
+
+
+        /// <summary>
+        /// Get list of fund request from members
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> RequestedFundList(FormCollection frm)
+        {
+            List<CompanyFund> fundRequestList = new List<CompanyFund>();
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                string status = Convert.ToString(frm.GetValue("status").AttemptedValue);
+                fundRequestList = await fundManger.getFundRequestList("member_id", userData[1], "FUND_WALLET", "","7");
+                if (!string.IsNullOrEmpty(status) && !status.ToLower().Equals("all"))
+                {
+                    var searchedlist = (from r in fundRequestList where r.status.ToLower() == status select r).ToList();
+                    fundRequestList = searchedlist;
+                }
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View("RequestedFund", fundRequestList);
+        }
+
+        /// <summary>
+        /// Get list of fund request from members
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> pgpendingapprovals()
+        {
+
+            List<CompanyFund> fundRequestList = new List<CompanyFund>();
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                fundRequestList = await fundManger.getFundRequestList("ref_id", userData[1], "PG_REQUEST","Pending","8");
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View(fundRequestList);
         }
     }
 }

@@ -111,21 +111,4 @@
         /// </summary>
         public string margin { get; set; }
     }
-
-    public class RechargeDetails
-    {
-
-        public string action { get; set; }
-        public int  member_id { get; set; }
-        public string service_provider { get; set; }
-        public string request_token { get; set; }
-        public string account_no { get; set; }
-        public float amount { get; set; }
-
-    }
-
-    public class RechargeDBTxnResponse
-    {
-        public int txn_id { get; set; }
-    }
 }

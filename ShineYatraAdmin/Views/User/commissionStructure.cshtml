@@ -16,7 +16,7 @@
             <section>
                 <div class="sttabs tabs-style-bar">
                     <nav>
-                        <ul class="tablist">
+                        <ul class="tablist" id="servicetabs">
                             @{List<string> groups = (from r in Model.services select r.service_group).Distinct().ToList();}
                             @foreach (var service in groups)
                             {
@@ -40,11 +40,17 @@
                                 {
                                     action = "getCommissionGroupDetails('" + group_id + "','section-bar-prepaid','recharge','prepaid')";
                                 }
+                                else
+                                {
+                                    action = "getCommissionGroupDetails('0','section-bar-" + service.ToLower() + "','" + service.ToLower() + "','"+ service.ToLower() + "')";
+                                }
+
+
                                 <li id="tab-@service.ToLower()" onclick="@action"><a href="#section-bar-@service.ToLower()"><span>@service</span></a></li>
                             }
                         </ul>
                     </nav>
-                    <div class="content-wrap">
+                    <div class="content-wrap" id="categorysections">
 
                         @foreach (var g in groups)
                         {

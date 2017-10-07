@@ -49,7 +49,7 @@
             {
                 domain = ConfigurationManager.AppSettings["DomainName"];
                 List<CompanyTheme> ltheme = await theme.GetCompanyTheme(domain);
-                Session["CompanyTheme"] = (from r in ltheme select r.theme_name).FirstOrDefault();
+                if (ltheme != null) Session["CompanyTheme"] = (from r in ltheme select r.theme_name).FirstOrDefault();
                 if (string.IsNullOrEmpty(Convert.ToString(Session["CompanyTheme"])))
                 {
                     Session["CompanyTheme"] = "elite";
@@ -103,7 +103,7 @@
                     return Json(Resources.LoginError);
                 }
 
-                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name+"|"+result.ledger_id;
+                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name+"|"+result.mobileNo +"|"+ result.ledger_id +"|"+result.role_id +"|"+result.emailId;
                 FormsAuthentication.SetAuthCookie(userIdentity, false);
                 
             }

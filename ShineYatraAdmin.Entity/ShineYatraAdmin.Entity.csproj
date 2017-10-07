@@ -52,7 +52,9 @@
     <Compile Include="CompanySmsSetting.cs" />
     <Compile Include="CompanyViewModel.cs" />
     <Compile Include="DashboardModel.cs" />
+    <Compile Include="DbRecharge.cs" />
     <Compile Include="DTUserDetails.cs" />
+    <Compile Include="FlightEticket.cs" />
     <Compile Include="FlightSearch.cs" />
     <Compile Include="FlightViewModel.cs" />
     <Compile Include="FundRequestContainer.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="HotelResponseClasses.cs" />
     <Compile Include="HotelViewModel.cs" />
     <Compile Include="KeyValuePair.cs" />
+    <Compile Include="Ledger.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="PayuRequest.cs" />
     <Compile Include="PrimarySetting.cs" />

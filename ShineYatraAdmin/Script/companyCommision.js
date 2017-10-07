@@ -56,7 +56,7 @@ function EditCompanyPriceGroup() {
         }).done(function (result) {
             $(".preloader").hide();
             if (result == null || result == "") {
-                swal("Status", "There is some error please try again later.", "error")
+                swal("Status", "There is some error please try again later.", "error");
                 $(".confirm").click(function () {
                     $(".mfp-close").click();
                 })
@@ -70,7 +70,7 @@ function EditCompanyPriceGroup() {
                     $(".mfp-close").click();
                     var arr = currentTab.split("-");
                     $("#section-bar-" + arr[1]).addClass("content-current");
-                    getCommissionGroupDetails(price_group_id, "section-bar-" + arr[1], service_name, sub_category)
+                    getCommissionGroupDetails(price_group_id, "section-bar-" + arr[1], service_name, sub_category);
                 });
             }
             $(".mfp-close").click();
@@ -82,8 +82,10 @@ function EditCompanyPriceGroup() {
 
 function getCommissionGroupDetails(currentGroupId, divId, category, sub_category) {
     $(".preloader").show();
-    if (currentGroupId == "0") {
-        $("#" + divId).html("No allotted group available.");
+    if (currentGroupId === "0") {
+        $("#categorysections section").removeClass("content-current");
+        $("#" + divId).html("No allotted group available.");        
+        $("#section-bar-" + category).addClass("content-current");
         $(".preloader").hide();
     }
     else {
@@ -96,7 +98,10 @@ function getCommissionGroupDetails(currentGroupId, divId, category, sub_category
         }).done(function (result) {
 
             $("#" + divId).html(result);
-            if (category == "recharge") {
+            if (category === "recharge") {
+
+                $("#categorysections section").removeClass("content-current");
+
                 $("#section-bar-recharge").addClass("content-current");
 
                 $("#section-bar-prepaid").removeClass("content-current");
