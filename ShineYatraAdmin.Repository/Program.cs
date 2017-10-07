@@ -1181,16 +1181,16 @@
         /// <summary>
         /// method to save rehargee details to database
         /// </summary>
-        /// <param name="serviceId"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        public static async Task<List<RechargeDBTxnResponse>> SaveRechargeRequest(RechargeDetails request)
+        public static async Task<List<InsertServiceRechargeResponse>> SaveRechargeRequest(InsertServiceRechargeRequest request)
         {
             string data = JsonConvert.SerializeObject(request);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY != null)
+            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_RECHARGE_REQUEST != null)
             {
-                return response.INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY;
+                return response.INSERT_SERVICE_RECHARGE_REQUEST;
             }
             else if (response != null)
             {

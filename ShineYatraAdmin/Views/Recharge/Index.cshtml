@@ -1,76 +1,176 @@
-﻿@using ShineYatraAdmin.Properties;
+﻿@using System.Configuration
+@using ShineYatraAdmin.Properties;
 @model ShineYatraAdmin.Entity.RechargeViewModel
 
 @{
     ViewBag.Title = "Recharge";
     Layout = "~/Views/Shared/Layout.cshtml";
-    string RechargeType = Model.rechargeType;
+    string rechargeType = Model.rechargeType;
+    bool askOtp = Convert.ToBoolean(ConfigurationManager.AppSettings["askOTP"]);
+    bool isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
 }
 
-<h3>@RechargeType Recharge</h3>
 
-<form class="form-horizontal form-material" id="RechargeForm" action="Recharge/Transaction" method="post" onsubmit="return doRecharge()">
-    <div class="form-body">
-        <div class="form-group">
-            <label class="control-label col-md-3">Mobile Number</label>
-            <div class="col-md-3">
-                @Html.TextBox("account", "", new { @required = "", @id = "MobileNumber", @class = "form-control", @placeholder = "Mobile" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-3">Operator</label>
-            <div class="col-md-3">
-                <select id="operator" name="spkey" onchange="setvalue()" required>
-                    <option value="0">Please Select</option>
-                </select>
-                <input type="hidden" id="ProviderName" name="ProviderName" value="" />
-                <input type="hidden" id="rechargeType" name="rechargeType" value="@Model.rechargeType" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-3">Amount</label>
-            <div class="col-md-3">
-                @Html.TextBox("amount", "10", new { @readonly = "", @id = "Amount", @required = "", @class = "form-control", @placeholder = "Amount" })
-            </div>
-        </div>
-
-        <div class="row">
-            <label>NOTE :- Your current wallet balance is :- @Model.walletBalance</label><br/>
-            <input type="hidden" name="walletBalance" value="@Model.walletBalance">
-            <label class="control-label col-md-3">Choose Payment Mode:</label>
-            <div class="col-md-3">
-                <label>@Html.RadioButton("PaymentMode", "wallet", new { @required = "required" })Wallet</label>
-                <label>@Html.RadioButton("PaymentMode", "bank", new { @required = "required" })Bank</label>
-             </div>              
-        </div>
-
-        <br />
-
-        @if (!string.IsNullOrEmpty(Model.status))
-        {
-            <div class="row">
-                <h4 style="color:red;"> @Model.status</h4>
-                </div>
-         }
-
-                <div class="row">
-                    <div class="col-md-offset-3 col-md-9">
-                        <button type="submit" class="btn btn-success"> <i class="fa"></i> Proceed to recharge</button>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="white-box">
+            <h3 class="box-title">@rechargeType Recharge</h3>
+            <hr class="m-t-0 m-b-40">
+            <form class="form-horizontal" id="RechargeForm" action="Recharge/Transaction" method="post" onsubmit="return doRecharge()">
+                <div class="form-body">                                                            
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Mobile Number*</label>
+                                <div class="col-md-8">                                           
+                                    @Html.TextBox("account", "", new { @class = "form-control", required = "", id = "MobileNumber", placeholder = "Mobile" })
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            
+                        </div>
+                        <!--/span-->
                     </div>
-                </div>
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Operator*</label>
+                                <div class="col-md-8">
+                                    <select id="operator" name="spkey" onchange="setvalue()" required style="width: 100%">
+                                        <option value="0">Please Select</option>
+                                    </select>
+                                    <input type="hidden" id="ProviderName" name="ProviderName" value="" />
+                                    <input type="hidden" id="rechargeType" name="rechargeType" value="@Model.rechargeType" />
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
 
-            </div>
-</form>
+                        </div>
+                        <!--/span-->
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Amount*</label>
+                                <div class="col-md-8">
+                                    @Html.TextBox("amount", "10", new { @class = "form-control", @readonly = "", id = "Amount", required = "", placeholder = "Amount" })
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+
+                        </div>
+                        <!--/span-->
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-4"></label>
+                                <div class="col-md-8">
+                                    <label>NOTE :- Your current wallet balance is :- @Model.walletBalance</label>
+                                    <input type="hidden" name="walletBalance" value="@Model.walletBalance">
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+
+                        </div>
+                        <!--/span-->
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Choose Payment Mode*</label>
+                                <div class="col-md-8">
+                                    <label>@Html.RadioButton("PaymentMode", "wallet", new { @required = "required" })Wallet</label>
+                                    @if (isPaymentGatewayactive)
+                                    {
+                                        <label>@Html.RadioButton("PaymentMode", "bank", new {@required = "required"})Bank</label>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+
+                        </div>
+                        <!--/span-->
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3"></label>
+                                <div class="col-md-9">
+                                    @if (!string.IsNullOrEmpty(Model.status))
+                                    {
+                                        <div class="row">
+                                            <h4 style="color:red;"> @Model.status</h4>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+
+                        </div>
+                        <!--/span-->
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3"></label>
+                                <div class="col-md-9">
+                                    @if (askOtp)
+                                    {
+                                        <input type="button" class="btn btn-success" value="Proceed to Recharge" onclick="openotpform()">
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" class="btn btn-success" value="Proceed to Recharge">
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+
+                        </div>
+                        <!--/span-->
+                    </div>                                                                            
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<a class="popup-with-form btn btn-success" href="#VerifyOTP" id="showverifyOTPform" style="display:none;"></a>
+@Html.Partial("~/Views/Shared/OTPpopup.cshtml")
+
+
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/Script/recharge.js"></script>
+<script src="~/Script/otp.js"></script>
 
 <script>
-
     $(document).ready(function () {
         $(".preloader").show();
-        getServiceProviderList("@RechargeType");
+        getServiceProviderList("@rechargeType");
         if("@ViewBag.tansactionStatus"!="")
         {
             if ("@ViewBag.tansactionStatus" == "success") {
@@ -82,7 +182,6 @@
                     }
         }
     });
-
 </script>
 
 

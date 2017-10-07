@@ -63,6 +63,7 @@
             _flightManager = new FlightManager();
             ServiceManager serviceManager = new ServiceManager();
             SearchPageViewModel searchPageViewModel = new SearchPageViewModel();
+            var userData = User.Identity.Name.Split('|');
             try
             {
                 searchPageViewModel.flightSearch = flightDetail;
@@ -70,14 +71,14 @@
                 searchPageViewModel.flightSearch.AssignFlightClass();
                 searchPageViewModel.arrayOfSearchedFlights = await _flightManager.SearchFlight(flightDetail);
 
-                IList<CompanyCommissionGroup> allflightDiscountDetails = await serviceManager.GetSErviceAllottedGroupDetails("1", "", "", "", "");
+                IList<CompanyCommissionGroup> allflightDiscountDetails = await serviceManager.GetSErviceAllottedGroupDetails(userData[1], "", "", "", "");
 
                 ArrayOfOrigindestinationoption newarray = new ArrayOfOrigindestinationoption();
                 newarray.Origindestinationoption = new List<Origindestinationoption>();
 
                 foreach (var flight in searchPageViewModel.arrayOfSearchedFlights.Origindestinationoption)
                 {
-                    CompanyCommissionGroup flightdiscount = allflightDiscountDetails.Where(o => o.sub_service_code.Equals(flight.FlightsDetailList.FlightsDetail.First().OperatingAirlineCode)).FirstOrDefault();
+                    CompanyCommissionGroup flightdiscount = allflightDiscountDetails.Where(o => o.sub_service_id.Equals(flight.FlightsDetailList.FlightsDetail.First().SubServiceId)).FirstOrDefault();
                     double totalFare = flight.FareDetail.ChargeableFares.ActualBaseFare;
                     if (flightdiscount != null && Convert.ToDouble(flightdiscount.front_discount_per) != 0)
                     {
@@ -422,6 +423,7 @@
                 ticketDetail.request_token = GuidString;
                 ticketDetail.service_id = 1;
                 ticketDetail.sub_service_id = "11";
+                //ticketDetail.discount = "";
                 ticketDetail.mobile_no = bookingDetail.FlightBookingDetail.phoneNumber;
                 ticketDetail.email = bookingDetail.FlightBookingDetail.EmailAddress;
                 ticketDetail.infant = bookingDetail.FlightBookingDetail.InfantPax;

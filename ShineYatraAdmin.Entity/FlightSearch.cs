@@ -183,6 +183,8 @@ namespace ShineYatraAdmin.Entity
         public string Availability { get; set; }
         [XmlElement(ElementName = "AirLineName")]
         public string AirLineName { get; set; }
+        [XmlElement(ElementName = "SubServiceId")]
+        public string SubServiceId { get; set; }        
         [XmlElement(ElementName = "IsReturnFlight")]
         public string IsReturnFlight { get; set; }
         [XmlElement(ElementName = "BookingClassFare")]

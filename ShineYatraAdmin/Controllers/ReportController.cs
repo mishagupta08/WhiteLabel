@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace ShineYatraAdmin.Controllers
 {
+    [Authorize]
     public class ReportController : Controller
     {
         /// <summary>

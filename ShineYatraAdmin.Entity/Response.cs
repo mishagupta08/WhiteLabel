@@ -146,7 +146,7 @@
         /// <summary>
         /// gets or sets Recharge details to database
         /// </summary>
-        public List<RechargeDBTxnResponse> INSERT_SERVICE_RECHARGE_REQUEST_INSTANTPAY { get; set; }
+        public List<InsertServiceRechargeResponse> INSERT_SERVICE_RECHARGE_REQUEST { get; set; }
 
         /// <summary>
         /// gets or sets company wallet balance
