@@ -383,6 +383,10 @@
                 }
                 else
                 {
+                    if (!string.IsNullOrEmpty(txnId))
+                    {
+                        UPDATE_TRANSACTION_STATUS updatestatus = await _flightManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
+                    }
                     ViewBag.status = "Some Problem occured while booking, Please try again.";                    
                 }
 
