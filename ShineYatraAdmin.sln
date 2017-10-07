@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShineYatraAdmin.Entity", "S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{FBFF0638-F2AE-4E38-885D-163CAA7626CC}"
 	ProjectSection(SolutionItems) = preProject
+		Library\MCPG.ASP.net.ENC.dll = Library\MCPG.ASP.net.ENC.dll
+		Library\MCPG.CCA.Util.dll = Library\MCPG.CCA.Util.dll
 		Library\Newtonsoft.Json.dll = Library\Newtonsoft.Json.dll
 		Library\System.Net.Http.Formatting.dll = Library\System.Net.Http.Formatting.dll
 		Library\System.Web.Http.dll = Library\System.Web.Http.dll
