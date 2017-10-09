@@ -451,4 +451,7 @@ function SubmitCompanySetting(settingName) {
     return false;
 }
 
+function goBack() {
+    window.history.back();
+}
 /***Paging functions * End***/
