@@ -17,7 +17,7 @@ function getGrouplist(service_id, currentGroupId, serviceName, sub_category) {
                 optionlist = optionlist + "<option value = " + this.Value + ">" + this.Text + "</option>";
             }
         });
-        if (optionlist == "") {
+        if (optionlist === "") {
             optionlist = optionlist + "<option value=0>--Please Select--</option>";
         }
         $("#price_group_list").html(optionlist);
@@ -82,8 +82,9 @@ function EditCompanyPriceGroup() {
 
 function getCommissionGroupDetails(currentGroupId, divId, category, sub_category) {
     $(".preloader").show();
-    if (currentGroupId === "0") {
-        $("#categorysections section").removeClass("content-current");
+    $("#categorysections section").removeClass("content-current");
+    
+    if (currentGroupId === "0") {       
         $("#" + divId).html("No allotted group available.");        
         $("#section-bar-" + category).addClass("content-current");
         $(".preloader").hide();
@@ -96,19 +97,12 @@ function getCommissionGroupDetails(currentGroupId, divId, category, sub_category
             datatype: 'Json',
             data: { currentGroupId: currentGroupId, category: category, sub_category: sub_category }
         }).done(function (result) {
-
             $("#" + divId).html(result);
+            $("#categorysections section").removeClass("content-current");
+            $("#section-bar-" + category).addClass("content-current");
             if (category === "recharge") {
-
-                $("#categorysections section").removeClass("content-current");
-
-                $("#section-bar-recharge").addClass("content-current");
-
-                $("#section-bar-prepaid").removeClass("content-current");
-                $("#section-bar-postpaid").removeClass("content-current");
-                $("#section-bar-dth").removeClass("content-current");
-
-                $("#section-bar-" + sub_category).addClass("content-current");
+                
+                $("#"+divId).addClass("content-current");
             }
             $(".preloader").hide();
         }).fail(function (xhr) {

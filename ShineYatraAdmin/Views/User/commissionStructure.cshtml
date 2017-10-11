@@ -1,6 +1,4 @@
-﻿@using ShineYatraAdmin.Properties;
-@using ShineYatraAdmin.Entity;
-@model ShineYatraAdmin.Entity.UserViewModel
+﻿@model ShineYatraAdmin.Entity.UserViewModel
 @{
     Layout = "~/Views/Shared/Layout.cshtml";
 }
@@ -10,9 +8,9 @@
         <div class="white-box">
 
             <!-- Tabstyle start -->
-            <h3 class="box-title m-b-0">@*@Model.company_name*@</h3>
-            <code>Commission Structure</code><hr>
-            @*@Html.HiddenFor(m => m.cmp_setting_id, new { @id = "CompanySettingId" })*@
+            <h3 class="box-title m-b-0">Commission Structure for @Model.userDetail.first_name <span> @Model.userDetail.last_name </span></h3>
+            <hr>
+            
             <section>
                 <div class="sttabs tabs-style-bar">
                     <nav>
@@ -38,6 +36,7 @@
                                 }
                                 else if (service.ToLower().IndexOf("recharge") != -1)
                                 {
+                                    group_id = (from r in Model.membergroups where r.sub_category.ToLower() == "prepaid" select r.comp_group_id).FirstOrDefault();
                                     action = "getCommissionGroupDetails('" + group_id + "','section-bar-prepaid','recharge','prepaid')";
                                 }
                                 else
@@ -72,7 +71,7 @@
                                                     <li id="tab-dth" onclick="getCommissionGroupDetails('@group_id','section-bar-dth','recharge','dth')"><a href="#section-bar-dth"><span>DTH</span></a></li>
                                                 </ul>
                                             </nav>
-                                            <div class="content-wrap">
+                                            <div class="content-wrap" id="categorysections">
                                                 <section id="section-bar-prepaid"><br /><br /><br /><p>Loading please wait...</p></section>
                                                 <section id="section-bar-postpaid"><br /><br /><br /><p>Loading please wait...</p></section>
                                                 <section id="section-bar-dth"><br /><br /><br /><p>Loading please wait...</p></section>
@@ -146,6 +145,13 @@
 <script>
     $(document).ready(function () {
         $("#tab-flight").click();
+        $('#servicetabs').on('click',
+            '',
+            function(e) {
+                e.preventDefault();
+            });
+
+
         $(".preloader").show();
         //    var currentTab = sessionStorage.getItem('currentTab');
         //    if (currentTab != undefined && currentTab != "" && currentTab != null)
