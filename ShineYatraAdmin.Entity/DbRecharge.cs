@@ -16,6 +16,7 @@
         public string recharge_number { get; set; }
         public string circle_name { get; set; }
         public string remarks { get; set; }
+        public string my_info { get; set; }
     }
 
     public class InsertServiceRechargeResponse

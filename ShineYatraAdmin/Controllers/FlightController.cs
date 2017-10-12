@@ -18,9 +18,9 @@
     /// </summary>
     [Authorize]
     public class FlightController : Controller
-    {        
-        FlightManager _flightManager;
-        UserManager _userManager;
+    {
+        private FlightManager _flightManager;
+        private UserManager _userManager;
 
         // GET: Dashboard
         public ActionResult Index()
@@ -69,7 +69,18 @@
                 searchPageViewModel.flightSearch.AssignFlightClass();
                 searchPageViewModel.arrayOfSearchedFlights = await _flightManager.SearchFlight(flightDetail);
 
-                var allflightDiscountDetails = await serviceManager.GetSErviceAllottedGroupDetails(userData[1], "", "", "", "","0");
+                var serviceCgDetailsRequest = new AllotedServiceCGsDetailsRequest
+                {
+                    member_id = userData[1],
+                    action = "GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS",
+                    service_id =  "1",
+                    sub_service_id = "0",
+                    category = "FLIGHT",
+                    sub_category = "DOMESTIC",
+                    service_code = "0"
+                };
+
+                var allflightDiscountDetails = await serviceManager.GetServiceAllottedGroupDetails(serviceCgDetailsRequest);
 
                 var newarray =new ArrayOfOrigindestinationoption
                 {
@@ -216,20 +227,17 @@
                     if (!balanceTxnId.ToLower().Contains("failed"))
                     {
                         
-                        PayUController cntrl = new PayUController();
-                        PayuRequest payrequest = new PayuRequest
+                        var cntrl = new PayUController();
+                        var payrequest = new PayuRequest
                         {
                             FirstName = request.PersonName.CustomerInfo.FirstOrDefault()?.givenName,
-                            TransactionAmount = request.PaymentMode == "bank"
-                                ? request.AdultFare
-                                : request.AdultFare - bookingDetail.walletBalance,
+                            TransactionAmount = request.PaymentMode == "bank"? request.AdultFare: request.AdultFare - bookingDetail.walletBalance,
                             Email = request.EmailAddress,
                             Phone = request.phoneNumber,
                             udf1 = Convert.ToString(cookieId),
                             udf2 = Convert.ToString(balanceTxnId),
                             memberId = userData[1],
-                            ProductInfo = "Booking Flight " + request.FlightNumber + ": " + " For Name : " +
-                                          request.PersonName.CustomerInfo.FirstOrDefault()?.givenName,
+                            ProductInfo = "Booking Flight " + request.FlightNumber + ": " + " For Name : " +request.PersonName.CustomerInfo.FirstOrDefault()?.givenName,
                             surl = "http://" + Request.Url.Authority + "/Flight/Return",
                             furl = "http://" + Request.Url.Authority + "/Flight/Return"
                         };

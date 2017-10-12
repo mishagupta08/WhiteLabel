@@ -12,7 +12,7 @@ namespace ShineYatraAdmin.Entity
         public string txn_type { get; set; }
         public string company_id { get; set; }
         public string member_id { get; set; }
-        public float amount { get; set; }
+        public double amount { get; set; }
         public string deposit_mode { get; set; }
         public string remarks { get; set; }
         public string domain_name { get; set; }

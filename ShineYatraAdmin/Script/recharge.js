@@ -7,8 +7,8 @@
         data: { type: type }
     }).done(function (result) {
         for (var i = 0; i < result.length; i++) {
-            var option = new Option(result[i].service_provider, result[i].provider_key);
-            option.setAttribute("data-margin", result[i].margin);
+            var option = new Option(result[i].Text, result[i].Value);
+            //option.setAttribute("data-margin", result[i].margin);
             $('#operator').append(option);
         }
         $(".preloader").hide();

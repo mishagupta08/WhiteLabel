@@ -20,5 +20,17 @@ namespace ShineYatraAdmin.Entity
         /// </summary>
         public IList<CompanyCommissionGroup> service_group_list{ get; set; }        
     }
+
+   public class AllotedServiceCGsDetailsRequest
+    {
+        public string action { get; set; }
+        public string category { get; set; }        
+        public string sub_category { get; set; }
+        public string service_code { get; set; }
+        public string sub_service_id { get; set; }
+        public string member_id { get; set; }
+        public string service_id { get; set; }
+    }
+
 }
 

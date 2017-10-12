@@ -11,7 +11,6 @@
     using System.Text;
     using System.Threading.Tasks;
     using System;
-    using System.Xml;
     using System.Web;
     using System.Xml.Serialization;
     using System.IO;
@@ -32,43 +31,43 @@
         /// <summary>
         /// Constant for success status
         /// </summary>
-        private const string SUCCESS = "SUCCESS";
+        private const string Success = "SUCCESS";
 
         /// <summary>
         /// Base url of API
         /// </summary>
-        const string LoginApiUrl = "http://wlapi.bisplindia.in/api/Login/";
+        private const string LoginApiUrl = "http://wlapi.bisplindia.in/api/Login/";
 
         /// <summary>
         /// Base url of API
         /// </summary>
-        const string ApiBaseURL = "http://mukesh.bisplindia.in/apiRouter.aspx";
+        private const string ApiBaseUrl = "http://mukesh.bisplindia.in/apiRouter.aspx";
 
         /// <summary>
         /// Authentication key
         /// </summary>
-        const string AuthKey = "lPJpfNMUK6u2KAGyJXqxsw==";
+        private const string AuthKey = "lPJpfNMUK6u2KAGyJXqxsw==";
 
         /// <summary>
         /// Authentication key
         /// </summary>
-        const string FlightAuthKey = "e969da44-91f8-4d51-b138-0ace0980d519";
+        private const string FlightAuthKey = "e969da44-91f8-4d51-b138-0ace0980d519";
 
-        const string ValidateUserAction = "ValidateUser";
+        private const string ValidateUserAction = "ValidateUser";
 
-        const string ValidateLoginAction = "ValidateLogin";
+        private const string ValidateLoginAction = "ValidateLogin";
 
 
         /// <summary>
-        /// method to update primay setting margin for airline bus and hotel
+        /// Get white label theme
         /// </summary>
-        /// <param name="serviceId"></param>
+        /// <param name="domain"></param>
         /// <returns></returns>
         public static async Task<List<CompanyTheme>> GetWhitLabelTheme(string domain)
         {
             string data = "{\"action\":\"GET_DOMAININFO\",\"domain_name\":\"" + domain + "\"}";
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.GET_DOMAININFO != null)
+            if (response != null && response.APISTATUS == Success && response.GET_DOMAININFO != null)
             {
                 return response.GET_DOMAININFO;
             }
@@ -91,7 +90,7 @@
                     httpClient.DefaultRequestHeaders.Add("Key", AuthKey);
 
                     // Do the actual request and await the response
-                    var httpResponse = await httpClient.PostAsync(ApiBaseURL, httpContent);
+                    var httpResponse = await httpClient.PostAsync(ApiBaseUrl, httpContent);
 
                     // If the response contains content we want to read it!
 
@@ -132,7 +131,7 @@
         {
             XElement xmlDocumentWithoutNs = RemoveAllNamespaces(XElement.Parse(xmlDocument));
 
-            return xmlDocumentWithoutNs.Value.ToString();
+            return xmlDocumentWithoutNs.Value;
         }
 
         //Core recursion function
@@ -320,7 +319,7 @@
             string data = JsonConvert.SerializeObject(Row);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS)
+            if (response != null && response.APISTATUS == Success)
             {
                 return response.APISTATUS;
             }
@@ -378,7 +377,7 @@
             string data = JsonConvert.SerializeObject(addSetting);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS)
+            if (response != null && response.APISTATUS == Success)
             {
                 return response.APISTATUS;
             }
@@ -441,7 +440,7 @@
             string data = JsonConvert.SerializeObject(companyDetail);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS)
+            if (response != null && response.APISTATUS == Success)
             {
                 return response.APISTATUS;
             }
@@ -488,7 +487,7 @@
             {
                 data = data.Replace("null", "\"\"");
                 var response = await CallFunction(data);
-                if (response != null && response.APISTATUS == SUCCESS)
+                if (response != null && response.APISTATUS == Success)
                 {
                     return response.APISTATUS;
                 }
@@ -510,7 +509,7 @@
             string data = JsonConvert.SerializeObject(fundDetail);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS)
+            if (response != null && response.APISTATUS == Success)
             {
                 return response.APISTATUS;
             }
@@ -591,7 +590,7 @@
         {
             string data = "{\"action\":\"UPDATE_ALLOTMENT_COMMISSION_GROUP\",\"company_id\": " + company_id + ",\"price_group_id\":" + price_group_id + ",\"service_id\": " + service_id + ",\"member_id\": " + member_id + ",\"category\": \"" + category + "\",\"sub_category\": \"" + sub_category + "\"}";
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS)
+            if (response != null && response.APISTATUS == Success)
             {
                 return response.APISTATUS;
             }
@@ -649,7 +648,7 @@
             string data = JsonConvert.SerializeObject(newGroup);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS)
+            if (response != null && response.APISTATUS == Success)
             {
                 return response.APISTATUS;
             }
@@ -671,7 +670,7 @@
             string data = JsonConvert.SerializeObject(groupRow);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS)
+            if (response != null && response.APISTATUS == Success)
             {
                 return response.APISTATUS;
             }
@@ -767,9 +766,9 @@
         /// Get Flight, bus and hotel commission groups alloted to member
         /// </summary>
         /// <returns></returns>
-        public static async Task<IList<CompanyCommissionGroup>> GetServiceAllottedGroupDetails(string memberId, string service_code, string serviceid, string category, string sub_category,string sub_service_id)
+        public static async Task<IList<CompanyCommissionGroup>> GetServiceAllottedGroupDetails(AllotedServiceCGsDetailsRequest allotedServiceCGsDetailsRequest)
         {
-            var data = "{\"action\":\"GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS\",\"member_id\":"+memberId+ ",\"service_id\":1,\"category\":\"FLIGHT\",\"sub_category\":\"DOMESTIC\",\"service_code\":\"0\",\"sub_service_id\":\""+ sub_service_id + "\"}";
+            var data =  JsonConvert.SerializeObject(allotedServiceCGsDetailsRequest);
 
             var response = await CallFunction(data);
             if (response != null && response.GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS != null)
@@ -1106,7 +1105,7 @@
             string data = JsonConvert.SerializeObject(bookticket);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_BOOKING_REQUEST != null)
+            if (response != null && response.APISTATUS == Success && response.INSERT_SERVICE_BOOKING_REQUEST != null)
             {
                 return response.INSERT_SERVICE_BOOKING_REQUEST;
             }
@@ -1127,7 +1126,7 @@
         {
             string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS\",\"member_id\":" + memberId + ",\"txn_id\":" + transactionId + "}";
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.GET_FLIGHT_TRANSACTIONS != null)
+            if (response != null && response.APISTATUS == Success && response.GET_FLIGHT_TRANSACTIONS != null)
             {
                 return response.GET_FLIGHT_TRANSACTIONS;
             }
@@ -1145,7 +1144,7 @@
             var response = await CallFunction(data);
             UPDATE_TRANSACTION_STATUS updatestatus = new UPDATE_TRANSACTION_STATUS();
         
-            if (response != null && response.APISTATUS == SUCCESS && response.UPDATE_TRANSACTION_STATUS != null)
+            if (response != null && response.APISTATUS == Success && response.UPDATE_TRANSACTION_STATUS != null)
             {
                 return response.UPDATE_TRANSACTION_STATUS;
             }
@@ -1167,7 +1166,7 @@
             string data = JsonConvert.SerializeObject(request);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.GET_WALLET_BALANCE != null)
+            if (response != null && response.APISTATUS == Success && response.GET_WALLET_BALANCE != null)
             {
                 return response.GET_WALLET_BALANCE;
             }
@@ -1188,7 +1187,7 @@
             string data = JsonConvert.SerializeObject(request);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.INSERT_SERVICE_RECHARGE_REQUEST != null)
+            if (response != null && response.APISTATUS == Success && response.INSERT_SERVICE_RECHARGE_REQUEST != null)
             {
                 return response.INSERT_SERVICE_RECHARGE_REQUEST;
             }
@@ -1233,7 +1232,7 @@
             string data = JsonConvert.SerializeObject(fundDetail);
 
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.WALLET_CREDIT_3RD_PARTY_REQUEST != null && response.WALLET_CREDIT_3RD_PARTY_REQUEST.Count > 0)
+            if (response != null && response.APISTATUS == Success && response.WALLET_CREDIT_3RD_PARTY_REQUEST != null && response.WALLET_CREDIT_3RD_PARTY_REQUEST.Count > 0)
             {
                 var txnId = response.WALLET_CREDIT_3RD_PARTY_REQUEST.FirstOrDefault().txn_id;
                 return txnId;
@@ -1254,7 +1253,7 @@
             var response = await CallFunction(data);
             if (response != null)
             {
-                if (response.APISTATUS == SUCCESS)
+                if (response.APISTATUS == Success)
                 {
                     return "Fund Transfer successfully.";
                 }
@@ -1289,7 +1288,7 @@
             var response = await CallFunction(data);
             if (response != null)
             {
-                if (response.APISTATUS == SUCCESS && response.GET_FUND_REQUEST!=null)
+                if (response.APISTATUS == Success && response.GET_FUND_REQUEST!=null)
                 {
                     return response.GET_FUND_REQUEST;
                 }
@@ -1313,7 +1312,7 @@
             var response = await CallFunction(data);
             if (response != null)
             {
-                if (response.APISTATUS == SUCCESS)
+                if (response.APISTATUS == Success)
                 {
                     return "SUCCESS";
                 }
@@ -1334,7 +1333,7 @@
             string data = JsonConvert.SerializeObject(fundDetail);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS)
+            if (response != null && response.APISTATUS.ToUpper().Trim() == Success)
             {
                 var transaction = response.INSERT_PG_REQUEST_FOR_SERVICE.FirstOrDefault();
                 if (transaction != null) return Convert.ToString(transaction.payment_txn_id);
@@ -1357,7 +1356,7 @@
             var data = JsonConvert.SerializeObject(request);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS && response.DISTRIBUTOR_LEDGER!=null)
+            if (response != null && response.APISTATUS.ToUpper().Trim() == Success && response.DISTRIBUTOR_LEDGER!=null)
             {
                 return response.DISTRIBUTOR_LEDGER;                
             }
@@ -1380,7 +1379,7 @@
             {
                 string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS_SUMMARY\",\"service_id\":\"" + serviceId + "\",\"member_id\":\"" + memberId + "\"}";
                 var response = await CallFunction(data);
-                if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS &&
+                if (response != null && response.APISTATUS.ToUpper().Trim() == Success &&
                     response.GET_FLIGHT_TRANSACTIONS_SUMMARY != null)
                 {
                     return response.GET_FLIGHT_TRANSACTIONS_SUMMARY;
@@ -1406,7 +1405,7 @@
             var data = JsonConvert.SerializeObject(userDetail);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
-            if (response != null && response.APISTATUS.ToUpper().Trim() == SUCCESS)
+            if (response != null && response.APISTATUS.ToUpper().Trim() == Success)
                 return response.APISTATUS;
 
             return response.MSG;

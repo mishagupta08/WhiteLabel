@@ -40,7 +40,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-4">Operator*</label>
                                 <div class="col-md-8">
-                                    <select id="operator" name="spkey" onchange="setvalue()" required style="width: 100%">
+                                    <select id="operator" name="spkey" class="custom-select col-12" onchange="setvalue()" required style="width: 100%">
                                         <option value="0">Please Select</option>
                                     </select>
                                     <input type="hidden" id="ProviderName" name="ProviderName" value="" />
@@ -112,8 +112,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label col-md-3"></label>
-                                <div class="col-md-9">
+                                <label class="control-label col-md-4"></label>
+                                <div class="col-md-8">
                                     @if (!string.IsNullOrEmpty(Model.status))
                                     {
                                         <div class="row">

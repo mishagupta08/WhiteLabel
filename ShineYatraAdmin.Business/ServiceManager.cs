@@ -36,9 +36,9 @@
         /// </summary>
         /// <param name="companyId"></param>
         /// <returns> list of company services</returns>
-        public async Task<IList<CompanyCommissionGroup>> GetSErviceAllottedGroupDetails(string memberId, string service_code, string serviceid, string category, string sub_category,string sub_service_id)
+        public async Task<IList<CompanyCommissionGroup>> GetServiceAllottedGroupDetails(AllotedServiceCGsDetailsRequest allotedServiceCGsDetailsRequest)
         {
-            return await Program.GetServiceAllottedGroupDetails(memberId,"","","","",sub_service_id);
+            return await Program.GetServiceAllottedGroupDetails(allotedServiceCGsDetailsRequest);
         }
     }
 }
