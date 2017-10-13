@@ -2,7 +2,7 @@
 {
     public class PayuRequest
     {
-        public float TransactionAmount { get; set; }
+        public double TransactionAmount { get; set; }
         public string ProductInfo { get; set; }
         public string FirstName { get; set; }
         public string Email { get; set; }

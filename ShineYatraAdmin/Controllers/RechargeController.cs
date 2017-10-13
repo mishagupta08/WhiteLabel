@@ -108,20 +108,15 @@ namespace ShineYatraAdmin.Controllers
         /// <returns></returns>
         public async Task<ActionResult> ValidateTransaction(FormCollection frmCollection)
         {
-            string response = string.Empty;
-            ServicesRequest mobileDetails = new ServicesRequest();
+            var response = string.Empty;
+            var mobileDetails = new ServicesRequest();
             _rechargeManager = new RechargeManager();
             try
-            {
-                Guid g = Guid.NewGuid();
-                string guidString = Convert.ToBase64String(g.ToByteArray());
-                guidString = guidString.Replace("=", "");
-                guidString = guidString.Replace("+", "");
+            {               
                 mobileDetails.agentid = "123456";
                 mobileDetails.amount = 10;
                 mobileDetails.account = Convert.ToString(frmCollection["account"]);
                 mobileDetails.spkey = Convert.ToString(frmCollection["spkey"]);
-                var serviceProvider = Convert.ToString(frmCollection["ProviderName"]);
                 var validateTransaction = await _rechargeManager.ValidateTransaction(mobileDetails);
                 if (validateTransaction != null)
                 {
@@ -149,13 +144,13 @@ namespace ShineYatraAdmin.Controllers
         /// <returns></returns>
         public async Task<ActionResult> Transaction(FormCollection frmCollection)
         {
-            ServicesRequest mobileDetails = new ServicesRequest();
+            var mobileDetails = new ServicesRequest();
             var flightmanager = new FlightManager();
 
             _rechargeManager = new RechargeManager();
             _userManager = new UserManager();
-            string response = string.Empty;
-            string rechargeType = string.Empty;
+            var response = string.Empty;
+            var rechargeType = string.Empty;
             try
             {
                 mobileDetails.agentid = "123456";
@@ -207,8 +202,7 @@ namespace ShineYatraAdmin.Controllers
                         request_token = guidString,
                         txn_type = "PG_REQUEST",
                         deposit_mode = "PG",
-
-                        remarks = "Flight booking payment by payment gateway",
+                        remarks = "Recharge payment by payment gateway",
                         amount = paymentMode == "bank" ? mobileDetails.amount : mobileDetails.amount - walletBalance
                     };
 
@@ -380,7 +374,7 @@ namespace ShineYatraAdmin.Controllers
                     recharge_number = mobileDetails.account,
                     circle_name = "",
                     remarks = "Mobile Recharge",
-                    my_info = ""
+                    my_info = myInfo
                 };
                 var rechargeResponse = await _rechargeManager.SaveRechargeRequest(rechargedetails);
                 if (rechargeResponse != null && !string.IsNullOrEmpty(rechargeResponse.txn_id))
