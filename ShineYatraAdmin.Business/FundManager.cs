@@ -72,5 +72,18 @@ namespace ShineYatraAdmin.Business
         public async Task<string> UpdateFundRequest(int txnid, string memberid, string status, string remarks) {
             return await Program.UpdateFundRequest(txnid, memberid, status, remarks);
         }
+        
+        /// <summary>
+        /// update fund request
+        /// </summary>
+        /// <param name="txnid"></param>
+        /// <param name="memberid"></param>
+        /// <param name="status"></param>
+        /// <param name="remarks"></param>
+        /// <returns></returns>
+        public async Task<string> UpdatePgFundRequest(int txnid, string memberid, string status, string remarks)
+        {
+            return await Program.UpdatePgFundRequest(txnid, memberid, status, remarks);
+        }
     }
 }

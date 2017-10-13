@@ -98,11 +98,10 @@ function getCommissionGroupDetails(currentGroupId, divId, category, sub_category
             data: { currentGroupId: currentGroupId, category: category, sub_category: sub_category }
         }).done(function (result) {
             $("#" + divId).html(result);
-            $("#categorysections section").removeClass("content-current");
-            $("#section-bar-" + category).addClass("content-current");
-            if (category === "recharge") {
-                
-                $("#"+divId).addClass("content-current");
+            $("#categorysections section").removeClass("content-current");            
+            $("#" + divId).addClass("content-current");
+            if (category === "recharge") {                
+                $("#section-bar-recharge").addClass("content-current");
             }
             $(".preloader").hide();
         }).fail(function (xhr) {

@@ -531,7 +531,6 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Shared\Layout.cshtml" />
     <Content Include="Views\Shared\sidebar.cshtml" />
-    <Content Include="Views\Shared\leftmenu.cshtml" />
     <Content Include="Views\Shared\header.cshtml" />
     <Content Include="plugins\bower_components\footable\css\fonts\footable.eot" />
     <Content Include="plugins\bower_components\footable\css\fonts\footable.ttf" />
@@ -603,10 +602,8 @@
     <Content Include="Views\Error\page404.cshtml" />
     <Content Include="Views\Error\sessiontimeout.cshtml" />
     <Content Include="Views\Error\customError.cshtml" />
-    <Content Include="Views\Flight\Index.cshtml" />
     <Content Include="Views\Flight\FlightMenu\SearchFlight.cshtml" />
     <Content Include="Views\Flight\FlightMenu\SearchFlightResult.cshtml" />
-    <Content Include="Views\Flight\BookFlight.cshtml" />
     <Content Include="Views\PrimarySetting\master_bill_structure.cshtml" />
     <Content Include="Views\PrimarySetting\GetServiceSructure.cshtml" />
     <Content Include="Views\PrimarySetting\DefaultRechargeSetting.cshtml" />
@@ -618,8 +615,6 @@
     <Content Include="Views\Hotel\hotelDetailView.cshtml" />
     <Content Include="Views\Hotel\bookHotel.cshtml" />
     <Content Include="Views\Hotel\CancelHotelView.cshtml" />
-    <Content Include="Views\Flight\BookingResponse.cshtml" />
-    <Content Include="Views\Flight\CancelFlight.cshtml" />
     <Content Include="Views\PayU\Return.cshtml" />
     <Content Include="Views\Recharge\Index.cshtml" />
     <Content Include="Views\Login\elite_login.cshtml" />

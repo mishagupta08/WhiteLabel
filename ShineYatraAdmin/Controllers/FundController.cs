@@ -223,7 +223,29 @@ namespace ShineYatraAdmin.Controllers
             return Json(response);
         }
 
-        
+        /// <summary>
+        /// Update fund request from members
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> UpdateMemberPgFundRequest(FormCollection frm)
+        {
+            string response = string.Empty;
+            try
+            {
+                string[] userData = User.Identity.Name.Split('|');
+                int txnid = Convert.ToInt16(frm.GetValue("txnid").AttemptedValue);
+                string status = frm.GetValue("fundstatus").AttemptedValue;
+                string remark = frm.GetValue("fundremark").AttemptedValue;
+                response = await fundManger.UpdatePgFundRequest(txnid, userData[1], status, remark);
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return Json(response);
+        }
+
+
         /// <summary>
         /// Get list of fund request from members
         /// </summary>

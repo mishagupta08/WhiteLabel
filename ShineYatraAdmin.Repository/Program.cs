@@ -1324,6 +1324,32 @@
         }
 
         /// <summary>
+        ///  update fund request status
+        /// </summary>
+        /// <param name="txnid"></param>
+        /// <param name="memberid"></param>
+        /// <param name="status"></param>
+        /// <param name="remarks"></param>
+        /// <returns></returns>
+        public static async Task<string> UpdatePgFundRequest(int txnid, string memberid, string status, string remarks)
+        {
+            string data = "{\"action\":\"UPDATE_PG_REQUEST\",\"txn_id\":" + txnid + ",\"member_id\":" + memberid + ",\"status\":\"" + status + "\",\"remarks\":\"" + remarks + "\"}";
+
+            var response = await CallFunction(data);
+            if (response != null)
+            {
+                if (response.APISTATUS == Success)
+                {
+                    return "SUCCESS";
+                }
+
+                return response.MSG;
+            }
+
+            return "No Result Found.";
+        }
+
+        /// <summary>
         /// method to save fund detail while payment from payment gateway
         /// </summary>
         /// <param name="fundDetail"></param>
