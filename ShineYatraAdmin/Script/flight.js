@@ -1,8 +1,7 @@
 ﻿var oTable;
 var maxvalue;
 var minvalue;
-$(document).ready(function () {
-    
+$(document).ready(function () {    
     oTable = $('#flightsearchResult').DataTable({
         initComplete: function () {
             this.api().columns().every(function () {
@@ -129,9 +128,4 @@ $(document).ready(function () {
 
 });
 
-
-function modifyflightsearch(divId)
-{
-    $("#" + divId).toggle();
-}
 

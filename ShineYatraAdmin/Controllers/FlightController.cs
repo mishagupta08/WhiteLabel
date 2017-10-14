@@ -527,7 +527,12 @@
             return Json(null);
         }
 
-        public async Task<ActionResult> MyFlightBookings()
+        public ActionResult MyFlightBookings()
+        {           
+            return View("Report/MyFlightBookings");
+        }
+
+        public async Task<ActionResult> GetFlightList(FormCollection frm)
         {
             _flightManager = new FlightManager();
             List<BookingDetail> bookingDetails = null;
@@ -540,9 +545,9 @@
             {
                 Console.WriteLine(ex.InnerException);
             }
-            return View(bookingDetails);
+            return PartialView("Report/FilghtList", bookingDetails);
         }
-
+        
         /// <summary>
         /// Method to cancel flight booking detail
         /// </summary>

@@ -6,7 +6,7 @@
 <div>
     @if (Model != null || Model.HotelList != null || Model.HotelList.Count != 0)
     {
-        <table class="display table font-12"  width="100%">
+        <table class="display table"  width="100%">
             @foreach (var hotel in Model.HotelList)
             {
                 var imagePath = "http://" + hotel.Hoteldetail.Images.Image.Imagepath;

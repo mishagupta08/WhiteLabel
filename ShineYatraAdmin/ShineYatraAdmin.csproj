@@ -470,6 +470,7 @@
     <Content Include="Script\companyCommision.js" />
     <Content Include="Script\dashboard.js" />
     <Content Include="Script\flight.js" />
+    <Content Include="Script\FlightReport.js" />
     <Content Include="Script\Fund.js" />
     <Content Include="Script\group.js" />
     <Content Include="Script\hotel.js" />
@@ -487,6 +488,7 @@
     <Content Include="Views\Company\ManageCompany\companyList.cshtml" />
     <Content Include="Views\Company\ManageCompany\companySetting.cshtml" />
     <Content Include="Views\Company\ManageCompany\editCompany.cshtml" />
+    <Content Include="Views\Flight\Report\MyFlightBookings.cshtml" />
     <Content Include="Views\User\RechargeCommissionPercentage.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -627,7 +629,6 @@
     <Content Include="Views\Report\Ledger.cshtml" />
     <Content Include="Views\Fund\RequestedFund.cshtml" />
     <Content Include="Views\Fund\pgpendingapprovals.cshtml" />
-    <Content Include="Views\Flight\MyFlightBookings.cshtml" />
     <Content Include="Views\Shared\OTPpopup.cshtml" />
     <Content Include="Views\Report\LedgerList.cshtml" />
     <Content Include="Views\User\AddUser.cshtml" />
@@ -635,6 +636,7 @@
     <Content Include="Views\CCAvenue\ccAvenue.cshtml" />
     <Content Include="Views\CCAvenue\PaymentCancelled.cshtml" />
     <Content Include="Views\CCAvenue\PaymentSuccessful.cshtml" />
+    <Content Include="Views\Flight\Report\FilghtList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

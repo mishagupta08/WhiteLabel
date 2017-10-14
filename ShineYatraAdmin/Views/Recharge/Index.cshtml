@@ -18,21 +18,7 @@
             <hr class="m-t-0 m-b-40">
             <form class="form-horizontal" id="RechargeForm" action="Recharge/Transaction" method="post" onsubmit="return doRecharge()">
                 <div class="form-body">                                                            
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-4">Mobile Number*</label>
-                                <div class="col-md-8">                                           
-                                    @Html.TextBox("account", "", new { @class = "form-control", required = "", id = "MobileNumber", placeholder = "Mobile" })
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                        <div class="col-md-6">
-                            
-                        </div>
-                        <!--/span-->
-                    </div>
+                    
                     
                     
                     <div class="row">
@@ -45,6 +31,22 @@
                                     </select>
                                     <input type="hidden" id="ProviderName" name="ProviderName" value="" />
                                     <input type="hidden" id="rechargeType" name="rechargeType" value="@Model.rechargeType" />
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+
+                        </div>
+                        <!--/span-->
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Mobile Number*</label>
+                                <div class="col-md-8">
+                                    @Html.TextBox("account", "", new { @class = "form-control", required = "", id = "MobileNumber", placeholder = "Mobile" })
                                 </div>
                             </div>
                         </div>
@@ -72,22 +74,7 @@
                         <!--/span-->
                     </div>
                     
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-4"></label>
-                                <div class="col-md-8">
-                                    <label>NOTE :- Your current wallet balance is :- @Model.walletBalance</label>
-                                    <input type="hidden" name="walletBalance" value="@Model.walletBalance">
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                        <div class="col-md-6">
-
-                        </div>
-                        <!--/span-->
-                    </div>
+                    
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -141,7 +128,7 @@
                                     }
                                     else
                                     {
-                                        <input type="submit" class="btn btn-success" value="Proceed to Recharge">
+                                        <input type="submit" class="btn btn-success" value="Proceed to Recharge" >
                                     }
                                 </div>
                             </div>
@@ -182,6 +169,15 @@
                     }
         }
     });
+
+    function VerifyOTP() {
+        var isSuccess = CheckOTP();
+        if (isSuccess.indexOf("success") !== -1)
+            {
+            $("#RechargeForm").submit();
+            }
+            
+    }
 </script>
 
 
