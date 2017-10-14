@@ -479,6 +479,7 @@
     <Content Include="Script\PrimarySetting.js" />
     <Content Include="Script\rangeFiltering.js" />
     <Content Include="Script\recharge.js" />
+    <Content Include="Script\Report.js" />
     <Content Include="Script\shared.js" />
     <Content Include="Script\User.js" />
     <Content Include="Views\Company\Index.cshtml" />

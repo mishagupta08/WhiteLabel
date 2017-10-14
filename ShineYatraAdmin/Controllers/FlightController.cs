@@ -538,8 +538,19 @@
             List<BookingDetail> bookingDetails = null;
             try
             {
-                string[] userData = User.Identity.Name.Split('|');
-                bookingDetails = await _flightManager.GetMemberFlightList(userData[1], "1");
+                string[] userData = User.Identity.Name.Split('|');                
+                var request = new FlightBookingListRequest
+                {
+                    member_id = userData[1],
+                    service_id = "1",
+                    action = "GET_FLIGHT_TRANSACTIONS_SUMMARY",
+                    To_date = frm.GetValue("toDate").AttemptedValue,
+                    From_date = frm.GetValue("fromDate").AttemptedValue,
+                    Flight_type = frm.GetValue("flighttype")!=null? frm.GetValue("flighttype").AttemptedValue : "",
+                    Booking_Status = frm.GetValue("bookStatus") != null? frm.GetValue("bookStatus").AttemptedValue : ""
+                };
+
+                bookingDetails = await _flightManager.GetMemberFlightList(request);
             }
             catch (Exception ex)
             {

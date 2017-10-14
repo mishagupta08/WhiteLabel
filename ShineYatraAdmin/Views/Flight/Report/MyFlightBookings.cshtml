@@ -20,14 +20,14 @@
 
                 <h3 class="box-title">Filter Criteria</h3>
                 <hr class="m-t-0 m-b-20">
-                <form id="LegderFliter" onsubmit="return GetFlightList()">
+                <form id="FlightListFliter" onsubmit="return GetFlightList()">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label col-md-3">Result Type</label>
                                 <div class="col-md-9">
-                                    <label class="text-dark"><input type="radio" name="booktype" value="completed">Sucess</label> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <label class="text-dark"><input type="radio" name="booktype" value="notcompleted">Fail</label>
+                                    <label class="text-dark"><input type="radio" name="bookStatus" value="completed">Sucess</label> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text-dark"><input type="radio" name="bookStatus" value="notcompleted">Fail</label>
                                     <span class="help-block"> </span>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                                 <label class="control-label col-md-3">Flight Type</label>
                                 <div class="col-md-9">
                                     <label class="text-dark" ><input type="radio" name="flighttype" value="Both">Both</label> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <label class="text-dark"><input type="radio" name="flighttype" value="domestic">Domestic</labelclass="text-dark">&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text-dark"><input type="radio" name="flighttype" value="domestic">Domestic</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text-dark"><input type="radio" name="flighttype" value="international">International</label>
                                     <span class="help-block"> </span>
                                 </div>

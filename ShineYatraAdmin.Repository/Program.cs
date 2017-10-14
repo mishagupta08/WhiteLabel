@@ -1394,16 +1394,15 @@
 
         /// <summary>
         /// Get member flight detail list
-        /// </summary>
-        /// <param name="memberId"></param>
-        /// <param name="serviceId"></param>
+        /// </summary>        
+        /// <param name="request"></param>
         /// <returns></returns>
-        public static async Task<List<BookingDetail>> GetMemberFlightList(string memberId,string serviceId)
+        public static async Task<List<BookingDetail>> GetMemberFlightList(FlightBookingListRequest request)
         {
             List<BookingDetail> flightSummary = new List<BookingDetail>();
             try
             {
-                string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS_SUMMARY\",\"service_id\":\"" + serviceId + "\",\"member_id\":\"" + memberId + "\"}";
+                string data = JsonConvert.SerializeObject(request);
                 var response = await CallFunction(data);
                 if (response != null && response.APISTATUS.ToUpper().Trim() == Success &&
                     response.GET_FLIGHT_TRANSACTIONS_SUMMARY != null)

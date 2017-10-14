@@ -683,6 +683,16 @@ namespace ShineYatraAdmin.Entity
         public int payment_txn_id { get; set; }        
     }
 
+    public class FlightBookingListRequest
+    {
+        public string member_id { get; set; }
+        public string service_id { get; set; }
+        public string action { get; set; }
+        public string To_date { get; set; }
+        public string From_date { get; set; }
+        public string Flight_type { get; set; }
+        public string Booking_Status { get; set; }        
+    }
 
 
 }

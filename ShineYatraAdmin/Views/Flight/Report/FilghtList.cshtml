@@ -1,6 +1,16 @@
 ﻿@model IEnumerable<ShineYatraAdmin.Entity.BookingDetail>
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
 
-<table id="FlightList" class="display table font-12" width="100%">
+    .dataTables_filter, .dataTables_info {
+        display: none;
+    }
+</style>
+<table class="display table font-12" id="FlightList" width="100%">
     <thead>
     <tr>
         <th class="nowrap">ID</th>
@@ -21,28 +31,7 @@
         <th class="nowrap">Remark</th>
 
     </tr>
-    </thead>
-    @*<tfoot>
-            <tr>
-                <th scope="col">System ID</th>
-                <th scope="col">Distributor</th>
-                <th scope="col">User Name</th>
-                <th scope="col">Mobile No</th>
-                <th scope="col">Origin</th>
-                <th scope="col">Destination</th>
-                <th scope="col">Passenger Name</th>
-                <th scope="col">Flight Amount</th>
-                <th scope="col">DepartureDate</th>
-                <th scope="col">BookingDate</th>
-                <th scope="col">Print</th>
-                <th scope="col">Cancel Ticket</th>
-                <th scope="col">AgentInvoice</th>
-                <th scope="col">UserInvoice</th>
-                <th scope="col">Description</th>
-                <th scope="col">Remark</th>
-
-            </tr>
-        </tfoot>*@
+    </thead>   
     <tbody>
     @if (Model != null)
     {
@@ -102,23 +91,10 @@
     </tbody>
 </table>
     
-<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 
 <script>
-    var jq = $.noConflict();
-    jq(document).ready(function () {
-
-        //jq('#FlightList tfoot th').each(function () {
-        //    var title = $(this).text();
-        //    if (title.indexOf("Remark") === -1 && title.indexOf("Action") === -1) {
-        //        jq(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
-        //    }
-        //    else {
-        //        jq(this).html('              ');
-        //    }
-        //});
-
-        var flightList = jq('#FlightList').DataTable({
+    $(document).ready(function () {
+      $('#FlightList').DataTable({
             initComplete: function () {
                 this.api().columns().every(function () {
                     var column = this;
@@ -129,36 +105,14 @@
             },
             "destroy": true,
             "bLengthChange": false,
+            "ordering": false,
             "language": {
                 "paginate": {
                     "previous": "<<",
                     "next": ">>"
                 }
             },
-            "aoColumnDefs": [
-                { 'bSortable': false, 'aTargets': [7, 8] }
-            ],
-
             stateSave: true
         });
-
-
-        // Apply the search
-        flightList.columns().every(function () {
-            var that = this;
-
-            jq('input', this.footer()).on('keyup change', function () {
-                if (that.search() !== this.value) {
-                    that
-                        .search(this.value)
-                        .draw();
-                }
-            });
-        });
-        GetFlightList();
-
     });
-
-
-
 </script>

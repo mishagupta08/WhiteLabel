@@ -153,13 +153,12 @@ namespace ShineYatraAdmin.Business
 
         /// <summary>
         /// Get Member Flight List
-        /// </summary>
-        /// <param name="memberId"></param>
-        /// <param name="serviceId"></param>
+        /// </summary>        
+        /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<List<BookingDetail>> GetMemberFlightList(string memberId, string serviceId)
+        public async Task<List<BookingDetail>> GetMemberFlightList(FlightBookingListRequest request)
         {
-            return await Program.GetMemberFlightList(memberId, serviceId);
+            return await Program.GetMemberFlightList(request);
         }
     }
 }

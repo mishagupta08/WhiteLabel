@@ -1,5 +1,17 @@
 ﻿@model IEnumerable<ShineYatraAdmin.Entity.DistributorLedger>
-<table id="LedgerList" class="display table" cellspacing="0" width="100%">
+
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+
+    .dataTables_filter, .dataTables_info {
+        display: none;
+    }
+</style>
+<table class="display table" id="LedgerList" width="100%">
     <thead>
     <tr>
         <th>Date</th>
@@ -12,20 +24,7 @@
         <th>Remark</th>
         <th>Txn ref No. </th>
     </tr>
-    </thead>
-    @*<tfoot>
-            <tr>
-                <th>Date</th>
-                <th>Particulars</th>
-                <th>Service Type</th>
-                <th>Wallet Txn Id</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th>Balance</th>
-                <th>Remark</th>
-                <th>Txn ref No. </th>
-            </tr>
-        </tfoot>*@
+    </thead>   
     <tbody>
     @if (Model != null)
     {
@@ -70,21 +69,11 @@
     </tbody>
 </table>
     
-<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+
 
 <script>
     $(document).ready(function () {
-        //$('#LedgerList tfoot th').each(function () {
-        //    var title = $(this).text();
-        //    if (title.indexOf("Remark") == -1 && title.indexOf("Action") == -1) {
-        //        $(this).html('<input type="text" style="width:100%;" placeholder="' + title + '" />');
-        //    }
-        //    else {
-        //        $(this).html('              ');
-        //    }
-        //});
-
-        var LedgerList = $('#LedgerList').DataTable({
+        $('#LedgerList').DataTable({
             initComplete: function () {
                 this.api().columns().every(function () {
                     var column = this;
@@ -94,6 +83,7 @@
                 });
             },
             "destroy": true,
+            "ordering": false,
             "bLengthChange": false,
             "language": {
                 "paginate": {
@@ -101,26 +91,7 @@
                     "next": ">>"
                 }
             },
-          //  "aoColumnDefs": [
-          //{ 'bSortable': false, 'aTargets': [7, 8] }
-          //  ],
-
-            stateSave: true
+          stateSave: true
         });
-
-
-        // Apply the search
-        //LedgerList.columns().every(function () {
-        //    var that = this;
-
-        //    $('input', this.footer()).on('keyup change', function () {
-        //        if (that.search() !== this.value) {
-        //            that
-        //                .search(this.value)
-        //                .draw();
-        //        }
-        //    });
-        //});
-
     });
 </script>
