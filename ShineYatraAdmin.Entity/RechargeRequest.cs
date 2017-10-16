@@ -41,7 +41,11 @@
         public string account { get; set; }
 
         [XmlElement(ElementName = "amount")]
-        public float amount { get; set; }       
+        public float amount { get; set; }
+
+        public double discount { get; set; }
+        public double pg_amount { get; set; }
+
     }
 
     public class RechargeViewModel {   

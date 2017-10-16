@@ -17,6 +17,10 @@
         public string circle_name { get; set; }
         public string remarks { get; set; }
         public string my_info { get; set; }
+        public double pg_amount { get; set; }
+        public double other_amount { get; set; }
+        public double total_paid_amount { get; set; }
+        public double discount { get; set; }
     }
 
     public class InsertServiceRechargeResponse

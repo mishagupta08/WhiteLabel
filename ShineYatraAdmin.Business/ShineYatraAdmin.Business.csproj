@@ -47,6 +47,7 @@
     <Compile Include="GroupManager.cs" />
     <Compile Include="HotelManager.cs" />
     <Compile Include="LoginManager.cs" />
+    <Compile Include="PGManager.cs" />
     <Compile Include="PrimarySettingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RechargeManager.cs" />

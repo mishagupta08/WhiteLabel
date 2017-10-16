@@ -22,6 +22,8 @@
     public class FlightController : Controller
     {
         private FlightManager _flightManager;
+        private ServiceManager _serviceManager;
+        private PgManager _pgManager;
         private UserManager _userManager;
 
         /// <summary>
@@ -214,7 +216,7 @@
                         amount = request.PaymentMode == "bank" ? request.AdultFare : request.AdultFare - walletBalance
                     };
 
-                    var balanceTxnId = await _flightManager.SavePaymntGatewayTransactions(paymentDetail);
+                    var balanceTxnId = await _pgManager.SavePaymntGatewayTransactions(paymentDetail);
                     if (!balanceTxnId.ToLower().Contains("failed"))
                     {
 
@@ -363,7 +365,7 @@
         public async Task<ActionResult> BookingStatus(string txnId, string info)
         {
             BookingDetail eticket = null;
-            _flightManager = new FlightManager();
+            _serviceManager = new ServiceManager();
             try
             {
                 var bookResponse = (Bookingresponse)TempData["BookingResponse"];
@@ -373,18 +375,18 @@
                 if (bookResponse != null && bookResponse.Status.ToLower() == "success")
                 {
                     ViewBag.status = "Ticket Booked Successfully";
-                    UPDATE_TRANSACTION_STATUS updatestatus = await _flightManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "COMPLETED");
+                    UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "COMPLETED");
                 }
                 else if (!string.IsNullOrEmpty(bookResponse?.Error))
                 {
                     ViewBag.status = "Some Problem occured while booking, Please try again.";
-                    UPDATE_TRANSACTION_STATUS updatestatus = await _flightManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
+                    UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(txnId))
                     {
-                        UPDATE_TRANSACTION_STATUS updatestatus = await _flightManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
+                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
                     }
                     ViewBag.status = "Some Problem occured while booking, Please try again.";
                 }
@@ -582,7 +584,7 @@
                 if (cancelResponse != null)
                 {
                     result = "success";
-                    UPDATE_TRANSACTION_STATUS updatestatus = await _flightManager.UpdateServiceBookingRequest(txnId, userData[1], transId, "CANCELLED");
+                    UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], transId, "CANCELLED");
 
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ShineYatraAdmin.Entity.BookingDetail>
+﻿@using System.Globalization
+@model IEnumerable<ShineYatraAdmin.Entity.BookingDetail>
 <style>
     table.dataTable thead .sorting,
     table.dataTable thead .sorting_asc,
@@ -50,9 +51,13 @@
                 <td>@Html.DisplayFor(modelItem => item.txn_date)</td>
                 <td></td>
                 <td>
-                    @if (item.status.ToUpper().Trim() == "COMPLETED")
+                    @{
+                        var date = DateTime.ParseExact(item.travel_date, "dd-MMM-yyyy", CultureInfo.InvariantCulture);
+                        var canCancel = false || date > DateTime.Now.AddDays(-1);
+                    }
+                    @if (item.status.ToUpper().Trim() == "COMPLETED" && canCancel)
                     {
-                        <a href="#" data-toggle="tooltip" onclick="confirmCancel('@item.api_txn_id','@item.unique_ref_no','@item.txn_id')" data-original-title="Close" title="Close">
+                        <a href="#" data-toggle="tooltip" onclick="confirmCancel('@item.api_txn_id', '@item.unique_ref_no', '@item.txn_id')" data-original-title="Close" title="Close">
                             <span class="text-danger sa-disable">@item.api_txn_id</span>
                         </a>
                     }

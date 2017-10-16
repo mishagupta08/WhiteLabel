@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Configuration;
+using System.Linq;
 using System.Web;
 
 namespace ShineYatraAdmin.Controllers
@@ -14,9 +15,9 @@ namespace ShineYatraAdmin.Controllers
     public class RechargeController : Controller
     {
 
-        UserManager _userManager;
-        RechargeManager _rechargeManager;
-
+        private UserManager _userManager;
+        private RechargeManager _rechargeManager;
+        private ServiceManager _serviceManager;
 
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace ShineYatraAdmin.Controllers
         public async Task<ActionResult> Index(string type)
         {
             _userManager = new UserManager();
-            ServiceManager serviceManager = new ServiceManager();
+            _serviceManager = new ServiceManager();
             RechargeViewModel viewModel = new RechargeViewModel();
             try
             {
@@ -65,10 +66,9 @@ namespace ShineYatraAdmin.Controllers
         {
             List<SelectListItem> serviceDetail = new List<SelectListItem>();
             _rechargeManager = new RechargeManager();
+            _serviceManager = new ServiceManager();
             try
-            {
-                //ServicesRequest recharge = new ServicesRequest();
-                var serviceManager = new ServiceManager();
+            {               
                 var userData = User.Identity.Name.Split('|');
                 var serviceCgDetailsRequest = new AllotedServiceCGsDetailsRequest
                 {
@@ -81,8 +81,7 @@ namespace ShineYatraAdmin.Controllers
                     service_code = "0"
                 };
 
-                var allflightDiscountDetails =
-                    await serviceManager.GetServiceAllottedGroupDetails(serviceCgDetailsRequest);
+                var allflightDiscountDetails = await _serviceManager.GetServiceAllottedGroupDetails(serviceCgDetailsRequest);
                 foreach (var record in allflightDiscountDetails)
                 {
                     serviceDetail.Add(new SelectListItem
@@ -145,7 +144,8 @@ namespace ShineYatraAdmin.Controllers
         public async Task<ActionResult> Transaction(FormCollection frmCollection)
         {
             var mobileDetails = new ServicesRequest();
-            var flightmanager = new FlightManager();
+            var pgManager = new PgManager();
+            _serviceManager = new ServiceManager();
 
             _rechargeManager = new RechargeManager();
             _userManager = new UserManager();
@@ -160,25 +160,30 @@ namespace ShineYatraAdmin.Controllers
                 mobileDetails.account = Convert.ToString(frmCollection["account"]);
                 mobileDetails.spkey = Convert.ToString(frmCollection["spkey"]);
 
-                string serviceProvider = Convert.ToString(frmCollection["ProviderName"]);
-                string paymentMode = Convert.ToString(frmCollection["PaymentMode"]);
+                var serviceProvider = Convert.ToString(frmCollection["ProviderName"]);
+                var paymentMode = Convert.ToString(frmCollection["PaymentMode"]);
                 rechargeType = Convert.ToString(frmCollection["rechargeType"]);
-
-                WalletRequest balrequest = new WalletRequest();
                 double walletBalance = 0;
-                string[] userData = User.Identity.Name.Split('|');
-                balrequest.action = "GET_WALLET_BALANCE";
-                balrequest.domain_name = ConfigurationManager.AppSettings["DomainName"];
-                balrequest.member_id = userData[1];
-                balrequest.company_id = userData[2];
-                WalletResponse balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
+                var userData = User.Identity.Name.Split('|');
+
+                 
+
+                var balrequest = new WalletRequest
+                {
+                    action = "GET_WALLET_BALANCE",
+                    domain_name = ConfigurationManager.AppSettings["DomainName"],
+                    member_id = userData[1],
+                    company_id = userData[2]
+                };
+
+                var balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
                 if (balResponse != null)
                 {
                     walletBalance = balResponse.wallet_balance;
                 }
 
                 mobileDetails.type = rechargeType;
-                bool isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
+                var isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
                 if (isPaymentGatewayactive && (paymentMode == "bank" || (paymentMode == "wallet" && walletBalance < mobileDetails.amount)))
                 {
                     var g = Guid.NewGuid();
@@ -193,7 +198,6 @@ namespace ShineYatraAdmin.Controllers
                     };
                     HttpContext.Response.Cookies.Add(cookie);
 
-
                     var paymentDetail = new CompanyFund
                     {
                         action = "INSERT_PG_REQUEST_FOR_SERVICE",
@@ -205,8 +209,8 @@ namespace ShineYatraAdmin.Controllers
                         remarks = "Recharge payment by payment gateway",
                         amount = paymentMode == "bank" ? mobileDetails.amount : mobileDetails.amount - walletBalance
                     };
-
-                    var balanceTxnId = await flightmanager.SavePaymntGatewayTransactions(paymentDetail);
+                    mobileDetails.pg_amount = paymentDetail.amount;
+                    var balanceTxnId = await pgManager.SavePaymntGatewayTransactions(paymentDetail);
 
                     if (!balanceTxnId.ToLower().Contains("failed"))
                     {
@@ -238,19 +242,12 @@ namespace ShineYatraAdmin.Controllers
                             if (transactionResponse.status != null && transactionResponse.status.ToLower().Equals("success"))
                             {
                                 response = "success";
-                                UPDATE_TRANSACTION_STATUS updatestatus = await flightmanager.UpdateServiceBookingRequest(result, userData[1], transactionResponse.ipay_id, "COMPLETED");
+                                UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(result, userData[1], transactionResponse.ipay_id, "COMPLETED");
                             }
                             else
                             {
-                                if (!string.IsNullOrEmpty(transactionResponse.status))
-                                {
-                                    response = transactionResponse.status;
-                                }
-                                else
-                                {
-                                    response = transactionResponse.ipay_errordesc;
-                                }
-                                UPDATE_TRANSACTION_STATUS updatestatus = await flightmanager.UpdateServiceBookingRequest(result, userData[1], transactionResponse.ipay_id, "Failed");
+                                response = !string.IsNullOrEmpty(transactionResponse.status) ? transactionResponse.status : transactionResponse.ipay_errordesc;
+                                UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(result, userData[1], transactionResponse.ipay_id, "Failed");
                             }
                             TempData["status"] = response;
                         }
@@ -268,10 +265,6 @@ namespace ShineYatraAdmin.Controllers
             return RedirectToAction("Index", "Recharge", new { type = rechargeType });
         }
 
-
-
-
-
         /// <summary>
         /// Return method after payment transaction
         /// </summary>
@@ -282,7 +275,7 @@ namespace ShineYatraAdmin.Controllers
         {
             var status = string.Empty;
             _rechargeManager = new RechargeManager();
-            var flightManager = new FlightManager();
+            _serviceManager = new ServiceManager();
             var mobileDetail = new ServicesRequest();
 
             try
@@ -317,7 +310,7 @@ namespace ShineYatraAdmin.Controllers
                             {
                                 status = "success";
                                 var updatestatus =
-                                    await flightManager.UpdateServiceBookingRequest(saveBookingResonse, userData[1],
+                                    await _serviceManager.UpdateServiceBookingRequest(saveBookingResonse, userData[1],
                                         transactionResponse.ipay_id, "COMPLETED");
 
                             }
@@ -325,8 +318,8 @@ namespace ShineYatraAdmin.Controllers
                             {
                                 status = !string.IsNullOrEmpty(transactionResponse.status) ? transactionResponse.status : transactionResponse.ipay_errordesc;
                                 var updatestatus =
-                                    await flightManager.UpdateServiceBookingRequest(saveBookingResonse, userData[1],
-                                        transactionResponse.ipay_id, "Failed");
+                                    await _serviceManager.UpdateServiceBookingRequest(saveBookingResonse, userData[1],
+                                        "", "Failed");
                             }
                         }
                     }
@@ -358,6 +351,25 @@ namespace ShineYatraAdmin.Controllers
                 guidString = guidString.Replace("=", "");
                 guidString = guidString.Replace("+", "");
 
+                var serviceCgDetailsRequest = new AllotedServiceCGsDetailsRequest
+                {
+                    member_id = userData[1],
+                    action = "GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS",
+                    service_id = "4",
+                    sub_service_id = "0",
+                    category = "Recharge",
+                    sub_category = mobileDetails.type,
+                    service_code = "0"
+                };
+                int ssid = Convert.ToInt16(mobileDetails.spkey);
+
+                var allflightDiscountDetailsList = await _serviceManager.GetServiceAllottedGroupDetails(serviceCgDetailsRequest);
+                var flightDiscountDetails = allflightDiscountDetailsList.FirstOrDefault(o => o.sub_service_id== ssid);
+                if (flightDiscountDetails != null)
+                {
+                    mobileDetails.discount = (flightDiscountDetails.SELF_COMM_PER * mobileDetails.amount) / 100;
+                }
+
                 var rechargedetails = new InsertServiceRechargeRequest
                 {
                     action = "INSERT_SERVICE_RECHARGE_REQUEST",
@@ -374,7 +386,11 @@ namespace ShineYatraAdmin.Controllers
                     recharge_number = mobileDetails.account,
                     circle_name = "",
                     remarks = "Mobile Recharge",
-                    my_info = myInfo
+                    my_info = myInfo,
+                    other_amount = 0,
+                    total_paid_amount = 0,
+                    pg_amount = mobileDetails.pg_amount,
+                    discount = mobileDetails.discount
                 };
                 var rechargeResponse = await _rechargeManager.SaveRechargeRequest(rechargedetails);
                 if (rechargeResponse != null && !string.IsNullOrEmpty(rechargeResponse.txn_id))

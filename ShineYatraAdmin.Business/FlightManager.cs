@@ -117,30 +117,6 @@ namespace ShineYatraAdmin.Business
             return bookresponse;
         }
 
-        public async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId, string api_txn_id, string status)
-        {
-            UPDATE_TRANSACTION_STATUS updateresponse = null;
-            try
-            {
-                updateresponse = await Program.UpdateServiceBookingRequest(TransactionId,memberId,api_txn_id,status);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
-            return updateresponse;
-        }
-
-        /// <summary>
-        /// method to save fund detail while payment from payment gateway
-        /// </summary>
-        /// <param name="fundDetail"></param>
-        /// <returns></returns>
-        public async Task<string> SavePaymntGatewayTransactions(CompanyFund fundDetail)
-        {
-            return await Program.SavePaymntGatewayTransactions(fundDetail);
-        }
-         
         /// <summary>
         /// Get flight ticket status
         /// </summary>
