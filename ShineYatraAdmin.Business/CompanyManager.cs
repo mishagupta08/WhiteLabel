@@ -94,7 +94,18 @@
         {
             return await Program.GetCompanySetting(companyId);
         }
-
         
+
+        /// <summary>
+        /// method to 
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
+        public async Task<CompanySetting> GetCompanyExtraSetting(string companyId)
+        {
+            return await Program.GetCompanyExtraSetting(companyId);
+        }
+
+
     }
 }

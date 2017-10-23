@@ -1,4 +1,6 @@
-﻿namespace ShineYatraAdmin.Repository
+﻿using System.Data;
+
+namespace ShineYatraAdmin.Repository
 {
 
     #region namespace
@@ -1436,6 +1438,16 @@
             return response.MSG;
         }
 
+        public static async Task<CompanySetting> GetCompanyExtraSetting(string domain)
+        {
+            var data = "{\"action\":\"GET_COMPANY_EXTRA_SETTINGS\",\"domain_name\":\"" + domain + "\"}";            
+            var response = await CallFunction(data);
+            if (response != null && response.GET_COMPANY_EXTRA_SETTINGS != null && response.GET_COMPANY_EXTRA_SETTINGS.Count > 0)
+            {
+                return response.GET_COMPANY_EXTRA_SETTINGS.FirstOrDefault();
+            }
+            return null;
+        }
 
     }
 }

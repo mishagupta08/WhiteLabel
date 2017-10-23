@@ -59,6 +59,26 @@
                     ViewBag.returnUrl = returnUrl;
                 }
 
+
+                var companyManager = new CompanyManager();               
+                var setting = await companyManager.GetCompanyExtraSetting(domain);
+                CompanyApiSetting settings = null;
+                if (setting != null)
+                {
+                    settings = new CompanyApiSetting
+                    {
+                        company_id = setting.company_id,
+                        app_ewallet_api_enabled = setting.app_ewallet_api_enabled,
+                        app_login_api_enabled = setting.app_login_api_enabled,
+                        cmp_setting_id = setting.cmp_setting_id,
+                        app_pg_api_enabled = setting.app_pg_api_enabled,
+                        web_ewallet_api_enabled = setting.web_ewallet_api_enabled,
+                        web_login_api_enabled = setting.web_login_api_enabled,
+                        web_pg_api_enabled = setting.web_pg_api_enabled
+                    };
+                    Session["CompanyExtraSetting"] = settings;
+                }
+
                 if (Request.IsAuthenticated)
                 {
                     return RedirectToAction("Index", "Dashboard");

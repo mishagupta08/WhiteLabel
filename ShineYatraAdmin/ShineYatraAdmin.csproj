@@ -638,6 +638,7 @@
     <Content Include="Views\CCAvenue\PaymentCancelled.cshtml" />
     <Content Include="Views\CCAvenue\PaymentSuccessful.cshtml" />
     <Content Include="Views\Flight\Report\FilghtList.cshtml" />
+    <Content Include="Views\Recharge\RechargeStatus.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,74 @@
+﻿@model ShineYatraAdmin.Entity.TransactionStatus
+@{
+    ViewBag.Title = "Status";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">Recharge Status</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    @if (TempData["RechargeStatus"].ToString().ToLower() == "failed")
+                    {
+                        <h3>Some problem occured while doing your transaction.</h3>
+                        <h3>
+                            Please try again <a onclick="goBack()">Back</a>
+                        </h3>
+                    }
+                    else
+                    {
+
+                        <h3>Recharge Successfull</h3>
+                        <hr />
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            @if (Model != null)
+                            {
+                                <div class="col-md-12">
+                                    <h4>Transaction Receipt</h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <Label>
+                                            Transaction ID : @Model.ipay_id
+                                        </Label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <Label>
+                                            Date : @Model.datetime
+                                        </Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <Label>Recharge of Number : @Model.account_no</Label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <Label>Operator : @Model.sp_key</Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <Label>Amount Paid : @Model.trans_amt</Label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <Label>Charged amount : @Model.charged_amt</Label>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

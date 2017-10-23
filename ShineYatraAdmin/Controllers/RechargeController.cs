@@ -175,6 +175,20 @@ namespace ShineYatraAdmin.Controllers
                     member_id = userData[1],
                     company_id = userData[2]
                 };
+                                
+                mobileDetails.type = rechargeType;
+                var g = Guid.NewGuid();
+                var guidString = Convert.ToBase64String(g.ToByteArray());
+                guidString = guidString.Replace("=", "");
+                guidString = guidString.Replace("+", "");
+
+                var mobileDetailsJson = new JavaScriptSerializer().Serialize(mobileDetails);
+                var cookie = new HttpCookie("Cookie-" + guidString, mobileDetailsJson)
+                {
+                    Expires = DateTime.Now.AddYears(1)
+                };
+                HttpContext.Response.Cookies.Add(cookie);
+                var isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
 
                 var balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
                 if (balResponse != null)
@@ -182,22 +196,8 @@ namespace ShineYatraAdmin.Controllers
                     walletBalance = balResponse.wallet_balance;
                 }
 
-                mobileDetails.type = rechargeType;
-                var isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
                 if (isPaymentGatewayactive && (paymentMode == "bank" || (paymentMode == "wallet" && walletBalance < mobileDetails.amount)))
-                {
-                    var g = Guid.NewGuid();
-                    var guidString = Convert.ToBase64String(g.ToByteArray());
-                    guidString = guidString.Replace("=", "");
-                    guidString = guidString.Replace("+", "");
-
-                    string mobileDetailsJson = new JavaScriptSerializer().Serialize(mobileDetails);
-                    var cookie = new HttpCookie("Cookie-" + guidString, mobileDetailsJson)
-                    {
-                        Expires = DateTime.Now.AddYears(1)
-                    };
-                    HttpContext.Response.Cookies.Add(cookie);
-
+                {                    
                     var paymentDetail = new CompanyFund
                     {
                         action = "INSERT_PG_REQUEST_FOR_SERVICE",
@@ -214,11 +214,11 @@ namespace ShineYatraAdmin.Controllers
 
                     if (!balanceTxnId.ToLower().Contains("failed"))
                     {
-                        PayUController cntrl = new PayUController();
-                        PayuRequest payrequest = new PayuRequest
+                        var cntrl = new PayUController();
+                        var payrequest = new PayuRequest
                         {
                             FirstName = "Misha",
-                            TransactionAmount = 1,
+                            TransactionAmount = paymentDetail.amount,
                             Email = "guptamisha88@gmail.com",
                             Phone = "8107737208",
                             ProductInfo = "Recharge Payment",
@@ -233,36 +233,17 @@ namespace ShineYatraAdmin.Controllers
                 else
                 {
                     var result = await SaveRechargeDetailsToDb(mobileDetails, "");
-
                     if (result != "error")
                     {
-                        TransactionStatus transactionResponse = await _rechargeManager.Transaction(mobileDetails);
-                        if (transactionResponse != null)
-                        {
-                            if (transactionResponse.status != null && transactionResponse.status.ToLower().Equals("success"))
-                            {
-                                response = "success";
-                                UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(result, userData[1], transactionResponse.ipay_id, "COMPLETED");
-                            }
-                            else
-                            {
-                                response = !string.IsNullOrEmpty(transactionResponse.status) ? transactionResponse.status : transactionResponse.ipay_errordesc;
-                                UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(result, userData[1], transactionResponse.ipay_id, "Failed");
-                            }
-                            TempData["status"] = response;
-                        }
-                    }
-                    else
-                    {
-                        TempData["status"] = "Fail";
+                        return RedirectToAction("RechargeStatus", "Recharge", new { txnId = result, info = guidString });
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
-            }
-            return RedirectToAction("Index", "Recharge", new { type = rechargeType });
+            }                
+            return RedirectToAction("RechargeStatus", "Recharge", new {txnId = "", info = "" });
         }
 
         /// <summary>
@@ -280,7 +261,7 @@ namespace ShineYatraAdmin.Controllers
 
             try
             {
-                var userData = User.Identity.Name.Split('|');
+                
                 var cookieId = form["udf1"];
                 var balanceTxId = form["udf2"];
                 //getbooking                 
@@ -298,45 +279,71 @@ namespace ShineYatraAdmin.Controllers
                     var myInfo = "PG_REQUEST," + balanceTxId + "," + Convert.ToString(form["mode"]) + "," +
                                  Convert.ToString(form["txnid"]) + "," + Convert.ToString(form["bank_ref_num"]);
                     var saveBookingResonse = await SaveRechargeDetailsToDb(mobileDetail, myInfo);
-
                     if (saveBookingResonse != "error")
                     {
-                        var serializer = new JavaScriptSerializer();
-                        var transactionResponse = await _rechargeManager.Transaction(mobileDetail);
-                        if (transactionResponse != null)
-                        {
-                            if (transactionResponse.status != null &&
-                                transactionResponse.status.ToLower().Equals("success"))
-                            {
-                                status = "success";
-                                var updatestatus =
-                                    await _serviceManager.UpdateServiceBookingRequest(saveBookingResonse, userData[1],
-                                        transactionResponse.ipay_id, "COMPLETED");
-
-                            }
-                            else
-                            {
-                                status = !string.IsNullOrEmpty(transactionResponse.status) ? transactionResponse.status : transactionResponse.ipay_errordesc;
-                                var updatestatus =
-                                    await _serviceManager.UpdateServiceBookingRequest(saveBookingResonse, userData[1],
-                                        "", "Failed");
-                            }
-                        }
-                    }
-                    
+                        return RedirectToAction("RechargeStatus", "Recharge", new { txnId = saveBookingResonse, info = cookieId });
+                    }                    
                 }
-                else
-                {
-                    status = "Some problem occured while making your transaction, please try after some time";
-                }
-                TempData["status"] = status;
             }
             catch (Exception ex)
             {
-                Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+                Console.WriteLine(ex.InnerException);
             }
-            return RedirectToAction("Index", "Recharge", new { type = mobileDetail.type });
+            return RedirectToAction("RechargeStatus", "Recharge", new { txnId = "", info = "" });
         }
+
+        public async Task<ActionResult> RechargeStatus(string txnId, string info)
+        {
+            var status = "Failed";
+            var userData = User.Identity.Name.Split('|');
+            TransactionStatus transactionResponse = null;            
+            try
+            {
+                if (string.IsNullOrEmpty(txnId))
+                {
+                    TempData["RechargeStatus"] = "Failed";
+                    return View();
+                }
+                
+                var mobileDetail = new ServicesRequest();
+                var myCookie = Request.Cookies["Cookie-" + info];
+
+                // Read the cookie information and display it.
+                if (myCookie != null)
+                {
+                    var serializer = new JavaScriptSerializer();
+                    mobileDetail = serializer.Deserialize<ServicesRequest>(myCookie.Value);
+                }
+                _rechargeManager = new RechargeManager();
+                transactionResponse = await _rechargeManager.Transaction(mobileDetail);
+                if (transactionResponse != null)
+                {
+                    _serviceManager = new ServiceManager();
+                    if (transactionResponse.status != null &&
+                        transactionResponse.status.ToLower().Equals("success"))
+                    {
+                        status = "success";
+                        var updatestatus =
+                            await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1],transactionResponse.ipay_id, "COMPLETED");
+                        TempData["RechargeStatus"] = "Success";
+                    }
+                    else
+                    {
+                        status = !string.IsNullOrEmpty(transactionResponse.status) ? transactionResponse.status : transactionResponse.ipay_errordesc;
+                        var updatestatus =
+                            await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1],"", "Failed");
+                        TempData["RechargeStatus"] = "Failed";
+                    }
+                }            
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+             return View(transactionResponse);
+    }
+
+
 
         private async Task<string> SaveRechargeDetailsToDb(ServicesRequest mobileDetails, string myInfo)
         {

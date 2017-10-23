@@ -1,4 +1,6 @@
-﻿namespace ShineYatraAdmin.Entity
+﻿using System;
+
+namespace ShineYatraAdmin.Entity
 {
     #region namespace
 
@@ -82,7 +84,9 @@
         public string res_code { get; set; }
         public string res_msg { get; set; }
         public string ipay_errorcode { get; set; }
-        public string ipay_errordesc { get; set; }       
+        public string ipay_errordesc { get; set; }
+        public DateTime datetime { get; set; }
+
     }
 
     /// <summary>
