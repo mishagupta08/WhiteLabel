@@ -42,43 +42,18 @@
 
         // GET: Login
         public async Task<ActionResult> Index(string returnUrl)
-        {
-            ThemeManager theme = new ThemeManager();
-            string domain = Request.Url.Authority;
+        {            
             try
             {
-                domain = ConfigurationManager.AppSettings["DomainName"];
-                List<CompanyTheme> ltheme = await theme.GetCompanyTheme(domain);
-                if (ltheme != null) Session["CompanyTheme"] = (from r in ltheme select r.theme_name).FirstOrDefault();
-                if (string.IsNullOrEmpty(Convert.ToString(Session["CompanyTheme"])))
-                {
-                    Session["CompanyTheme"] = "elite";
-                }
+                CommonController commonController = new CommonController();
+                await commonController.GetCompanyTheme();
+                await commonController.GetCompanySettings();
+
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
                     ViewBag.returnUrl = returnUrl;
                 }
-
-
-                var companyManager = new CompanyManager();               
-                var setting = await companyManager.GetCompanyExtraSetting(domain);
-                CompanyApiSetting settings = null;
-                if (setting != null)
-                {
-                    settings = new CompanyApiSetting
-                    {
-                        company_id = setting.company_id,
-                        app_ewallet_api_enabled = setting.app_ewallet_api_enabled,
-                        app_login_api_enabled = setting.app_login_api_enabled,
-                        cmp_setting_id = setting.cmp_setting_id,
-                        app_pg_api_enabled = setting.app_pg_api_enabled,
-                        web_ewallet_api_enabled = setting.web_ewallet_api_enabled,
-                        web_login_api_enabled = setting.web_login_api_enabled,
-                        web_pg_api_enabled = setting.web_pg_api_enabled
-                    };
-                    Session["CompanyExtraSetting"] = settings;
-                }
-
+                 
                 if (Request.IsAuthenticated)
                 {
                     return RedirectToAction("Index", "Dashboard");

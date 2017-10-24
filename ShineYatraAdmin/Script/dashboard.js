@@ -85,14 +85,14 @@ function bindCompanyListLink() {
 function getuserbalance() {
     $(".preloader").show();    
     $.ajax({
-        url: '/Dashboard/GetUserBalance',
+        url: '/Common/GetUserBalance',
         type: 'Post',
         async:false,
     }).done(function (result) {
         $("#usercurrentbalance").html("Current Balance   :  " + result);
         $(".preloader").hide();
     }).fail(function (xhr) {
-        alert(xhr);
+        alert("getuserbalance " + xhr);
     });
 }
 

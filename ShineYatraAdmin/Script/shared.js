@@ -1,17 +1,6 @@
 ﻿var currentPage = 1;
-$(document).ready(function () {
-    //$(".preloader").hide();
-
-    //$("a[data-preloader=preloader]").bind("click", function () {
-        $(".preloader").show();
-    //});
-
-    var url = window.location.href;
-    if (url.indexOf("companyCommission") == -1)
-    {
-        sessionStorage.removeItem('currentTab');
-    }
-
+$(document).ready(function () {    
+    getCompanyThemeandSetting()
 });
 
 function RemoveErrorMessage(inputElement) {
@@ -93,4 +82,17 @@ function ClearForm(formName) {
 
 function closePopup() {
     $.magnificPopup.close();
+}
+
+function getCompanyThemeandSetting() {
+    $(".preloader").show();
+    $.ajax({
+        url: '/Common/GetCompanyThemeAndSetting',
+        type: 'Post',
+        async: false,
+    }).done(function (result) {        
+        $(".preloader").hide();
+    }).fail(function (xhr) {
+        alert("getCompanyThemeandSetting " + xhr);
+    });
 }

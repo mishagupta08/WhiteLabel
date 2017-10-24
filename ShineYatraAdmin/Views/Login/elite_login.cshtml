@@ -3,6 +3,8 @@
 @model ShineYatraAdmin.Entity.LoginModel
 @{
     Layout = null;
+
+    bool askOTP = Convert.ToString(Session["otp_login_enabled"]).ToUpper() == "Y";
 }
 
 
@@ -15,6 +17,8 @@
         <div class="white-box">
             <form class="form-horizontal form-material" id="loginform" onsubmit="return ValidateLoginUser();">
                 <input type="hidden" value="@ViewBag.returnUrl" id="returnUrl" name="returnUrl">
+                <input type="hidden" value="@askOTP" id="askOTP" name="askOTP">
+
                 <h3 class="box-title m-b-20">Sign In</h3>
                 <div class="form-group ">
                     <div class="col-xs-12">

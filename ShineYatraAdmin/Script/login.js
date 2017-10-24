@@ -45,15 +45,13 @@ function ValidateLoginUser() {
         datatype: 'Json',
         data: loginDetail
     }).done(function (result) {
-
         if (result == "") {
-        var returnUrl = $("#returnUrl").val();        
-        if (returnUrl != null && returnUrl != "" && returnUrl != undefined) {            
-            window.location.href = returnUrl;
-        }
-        else {
-            window.location.href = 'Dashboard/Index';
-        }                   
+            var askOTP = $("#askOTP").val();
+            if (askOTP) {
+                openotpform();
+            } else {
+                window.location.href = 'Dashboard/Index';
+            }
         }
         else {
             $("#loginError").html(result);
@@ -90,5 +88,11 @@ function ForgotPassword() {
         $("#loginError").html("Please enter username.");
         $("#ajax_loader").hide();
         $("#closeError").show();
+    }
+}
+
+function checkOTP(status) {   
+    if (status === "success") {
+      window.location.href = 'Dashboard/Index';       
     }
 }

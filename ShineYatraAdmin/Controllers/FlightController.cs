@@ -175,7 +175,7 @@
                 var userData = User.Identity.Name.Split('|');
                 var request = bookingDetail.FlightBookingDetail;
                 request.Creditcardno = "4111111111111111";
-                var isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
+                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper()=="Y";
                 info = saveBookingDetail(bookingDetail);
 
                 try

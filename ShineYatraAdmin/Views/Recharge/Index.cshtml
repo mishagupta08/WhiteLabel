@@ -6,8 +6,8 @@
     ViewBag.Title = "Recharge";
     Layout = "~/Views/Shared/Layout.cshtml";
     string rechargeType = Model.rechargeType;
-    bool askOtp = Convert.ToBoolean(ConfigurationManager.AppSettings["askOTP"]);
-    bool isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
+    bool askOtp = Convert.ToString(Session["otp_service_enabled"]) =="Y";
+    bool isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper()=="Y";
 }
 
 
@@ -146,7 +146,7 @@
 </div>
 
 
-<a class="popup-with-form btn btn-success" href="#VerifyOTP" id="showverifyOTPform" style="display:none;"></a>
+
 @Html.Partial("~/Views/Shared/OTPpopup.cshtml")
 
 
@@ -170,14 +170,11 @@
         }
     });
 
-    function VerifyOTP() {
-        var isSuccess = CheckOTP();
-        if (isSuccess.indexOf("success") !== -1)
-            {
+    function checkOTP(status) {
+        if (status === "success") {
             $("#RechargeForm").submit();
-            }
-            
-    }
+        }
+    }    
 </script>
 
 

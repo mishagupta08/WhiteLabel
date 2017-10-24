@@ -500,6 +500,7 @@
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\LinqHelper.cs" />
     <Compile Include="Controllers\CCAvenueController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />

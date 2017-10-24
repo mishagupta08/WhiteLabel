@@ -21,36 +21,17 @@
     <link href="~/css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="~/css/style.css" rel="stylesheet">
-    @*<link href="~/css/colors/megna.css" rel="stylesheet" />*@
-    <!-- color CSS -->
-    <link href="~/css/colors/default.css" id="theme" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    @*<script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '../../../www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-19175540-9', 'auto');
-        ga('send', 'pageview');
-
-    </script>*@
+    <!-- Popup CSS -->
+    <link href="~/plugins/bower_components/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet">
 </head>
 <body>
 
-    @if (Convert.ToString(Session["CompanyTheme"]).ToLower() == "elite")
+    @if (Convert.ToString(System.Web.HttpContext.Current.Session["CompanyTheme"]).ToLower() == "elite")
     {
         Html.RenderPartial("~/Views/Login/elite_login.cshtml", Model);
     }
 
-
+    @Html.Partial("~/Views/Shared/OTPpopup.cshtml")
     <!-- jQuery -->
     <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
@@ -66,8 +47,11 @@
     <script src="~/js/custom.min.js"></script>
     <!--Style Switcher -->
     <script src="~/plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script>
+    <!-- Magnific popup JavaScript -->
+    <script src="~/plugins/bower_components/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    <script src="~/plugins/bower_components/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     <script src="~/Script/shared.js"></script>
+    <script src="~/Script/otp.js"></script>
     <script src="~/Script/login.js"></script>
 </body>
-
 </html>

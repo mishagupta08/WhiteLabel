@@ -6,8 +6,8 @@
     ViewBag.Title = "BookingDetail";
     Layout = "~/Views/Shared/Layout.cshtml";
     int count = 0;
-    bool askOTP = Convert.ToBoolean(ConfigurationManager.AppSettings["askOTP"]);
-    bool IsPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
+    bool askOTP = Convert.ToString(Session["otp_service_enabled"]) == "Y";
+    bool IsPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y";
 }
 
 <style>
@@ -320,43 +320,7 @@
     </div>
 </div>
 
-<a class="popup-with-form btn btn-success" href="#VerifyOTP" id="showverifyOTPform" style="display:none;">test</a>
-<form id="VerifyOTP" class="form-horizontal mfp-hide white-popup-block" method="post" style="width: 90%;" onsubmit="return VerifyOTP();">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-info">
-                <div class="panel-heading"> Verify OTP</div> 
-                <div class="panel-wrapper collapse in" aria-expanded="true">
-                    <div class="panel-body">                        
-                        
-                        <div class="form-group">
-
-                            <label class="control-label col-md-3">
-                                Enter OTP:
-                            </label>
-
-                            <div class="col-md-9">
-                                <input type="text" id="otp" name="otp"/>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-
-                            <label class="control-label col-md-3">
-                                &nbsp;
-                            </label>
-
-                            <div class="col-md-9">
-                                <input class="btn btn-success" type="submit" value="submit" />
-                            </div>
-
-                        </div>                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+@Html.Partial("~/Views/Shared/OTPpopup.cshtml")
 
 
 
@@ -384,10 +348,9 @@
             dateFormat: "dd-M-yy"
         });
     });
-
-    function VerifyOTP() {
-        var isSuccess = CheckOTP();
-        if (isSuccess.indexOf("success") !== -1) {
+    
+    function checkOTP(status) {
+        if (status === "success") {
             $("#bookfightform").submit();
         }
     }

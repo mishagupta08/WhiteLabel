@@ -16,7 +16,7 @@
     return false;
 }
 
-function CheckOTP() {
+function VerifyOTP() {
     var userOtp = $("#VerifyOTP").serialize();
     var response = "error";
     $.ajax({
@@ -29,17 +29,14 @@ function CheckOTP() {
             ClearForm("VerifyOTP");
             $("#otperror").html("");
             $(".mfp-close").click();
-            response = "success";            
+            checkOTP("success");            
         } else {
             $("#otperror").html("Invalid OTP Entered");
         }
             return false;
         })
         .fail(function (xhr) {
-        alert(xhr);
-        $(".preloader").hide();
-        response = "error";
-        return response;
+            $("#otperror").html("Some problem occured please try again");
         });
-    return response;
+    return false;
 }
