@@ -9,19 +9,24 @@
         data: ledgerfilter
     }).done(function (result) {
         var jsonobject = jQuery.parseJSON(result);        
-        if (jsonobject != "") {
+        if (jsonobject !== "") {
             $('#LedgerList').DataTable({
                 "aaData": jsonobject,
                 "aoColumns": [
-                    {"mDataProp": "wallet_txn_date"},
-                    {"mDataProp": "op_ledger_name" },
-                    {"mDataProp": "service_name" },
-                    {"mDataProp": "wallet_txn_id"},
-                    {"mDataProp": "debit"},
-                    {"mDataProp": "credit"},
-                    {"mDataProp": "balance"},
-                    {"mDataProp": "remarks" },
-                    { "mDataProp": "ref_txn_id" }
+                    {"mData": "wallet_txn_date"},
+                    { "mData": "op_ledger_name" },
+                    { "mData": "service_name" },
+                    { "mData": "wallet_txn_id" },
+                    { "mData": "debit" },
+                    { "mData": "credit" },
+                    {
+                        "mData": "balance",                        
+                        "mRender": function (data, type, full) {
+                            return full.balance + " " + full.drcr;
+                        }
+                    },
+                    { "mData": "remarks" },
+                    { "mData": "ref_txn_id" }
                 ],
                 initComplete: function() {
                     this.api().columns().every(function() {

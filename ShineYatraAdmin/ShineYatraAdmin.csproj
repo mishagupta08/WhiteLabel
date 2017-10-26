@@ -632,7 +632,6 @@
     <Content Include="Views\Fund\RequestedFund.cshtml" />
     <Content Include="Views\Fund\pgpendingapprovals.cshtml" />
     <Content Include="Views\Shared\OTPpopup.cshtml" />
-    <Content Include="Views\Report\LedgerList.cshtml" />
     <Content Include="Views\User\AddUser.cshtml" />
     <Content Include="Views\CCAvenue\Payment.cshtml" />
     <Content Include="Views\CCAvenue\ccAvenue.cshtml" />
