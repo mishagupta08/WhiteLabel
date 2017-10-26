@@ -91,17 +91,27 @@
         public string email_password { get; set; }
 
         /// <summary>
+        /// gets or sets theme_name
+        /// </summary>
+        public string theme_name { get; set; }
+
+        /// <summary>
+        /// gets or sets active_status
+        /// </summary>
+        public string active_status { get; set; }
+
+        /// <summary>
         /// gets or sets master_postpaid_margin
         /// </summary>
         public int master_postpaid_margin { get; set; }
 
         /// <summary>
-        /// gets or sets email_password
+        /// gets or sets master_prepaid_margin
         /// </summary>
         public int master_prepaid_margin { get; set; }
 
         /// <summary>
-        /// gets or sets email_password
+        /// gets or sets master_dth_margin
         /// </summary>
         public int master_dth_margin { get; set; }
     }

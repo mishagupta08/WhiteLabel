@@ -46,7 +46,7 @@
             try
             {
                 CommonController commonController = new CommonController();
-                await commonController.GetCompanyTheme();
+                               
                 await commonController.GetCompanySettings();
 
                 if (!string.IsNullOrEmpty(returnUrl))

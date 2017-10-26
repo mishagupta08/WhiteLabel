@@ -25,7 +25,7 @@
         private ServiceManager _serviceManager;
         private PgManager _pgManager;
         private UserManager _userManager;
-
+        private int errorCode = 0;
         /// <summary>
         /// method to get flight search page
         /// </summary>        
@@ -166,6 +166,7 @@
         public async Task<ActionResult> BookResponse(SearchPageViewModel bookingDetail)
         {
             _flightManager = new FlightManager();
+            _userManager = new UserManager();
             var txnId = string.Empty;
             var info = string.Empty;
             var walletBalance = 0.0;
@@ -176,7 +177,7 @@
                 var request = bookingDetail.FlightBookingDetail;
                 request.Creditcardno = "4111111111111111";
                 var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper()=="Y";
-                info = saveBookingDetail(bookingDetail);
+                
 
                 try
                 {
@@ -198,6 +199,10 @@
                 {
                     Console.WriteLine(exx.InnerException);
                 }
+
+                bookingDetail.walletBalance = walletBalance;
+                info = saveBookingDetail(bookingDetail);
+
                 if (isPaymentGatewayactive && (request.PaymentMode == "bank" || walletBalance < request.AdultFare))
                 {
                     var g = Guid.NewGuid();
@@ -236,6 +241,10 @@
                         };
                         cntrl.Payment(payrequest);
                     }
+                    else
+                    {
+                        errorCode = 5001;
+                    }
                 }
                 else
                 {
@@ -255,7 +264,8 @@
                             }
                             else
                             {
-                                bookResponse.Status = "Failed";
+                                bookResponse.Status = "Failed";                                
+                                    errorCode = 5002;                                
                             }
                         }
                     }
@@ -341,6 +351,7 @@
                     else
                     {
                         bookResponse.Status = "Failed";
+                        errorCode = 5002;
                     }
                 }
                 else
@@ -375,6 +386,12 @@
                 if (bookResponse != null && bookResponse.Status.ToLower() == "success")
                 {
                     ViewBag.status = "Ticket Booked Successfully";
+                    ViewBag.statusCode = errorCode;
+                    var myCookie = Request.Cookies["Cookie-" + info];
+                    if (myCookie != null)
+                    {
+                        eticket = serializer.Deserialize<BookingDetail>(myCookie.Value);
+                    }
                     UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "COMPLETED");
                 }
                 else if (!string.IsNullOrEmpty(bookResponse?.Error))
@@ -391,11 +408,7 @@
                     ViewBag.status = "Some Problem occured while booking, Please try again.";
                 }
 
-                var myCookie = Request.Cookies["Cookie-" + info];
-                if (myCookie != null)
-                {
-                    eticket = serializer.Deserialize<BookingDetail>(myCookie.Value);
-                }
+               
             }
             catch (Exception ex)
             {
@@ -456,7 +469,8 @@
                 }
                 else
                 {
-                    if (bookingDetail.walletBalance < bookingDetail.FlightBookingDetail.AdultFare)
+                    var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y";
+                    if (isPaymentGatewayactive && bookingDetail.walletBalance < bookingDetail.FlightBookingDetail.AdultFare)
                     {
                         ticketDetail.pg_amount = bookingDetail.FlightBookingDetail.AdultFare - bookingDetail.walletBalance;
                     }

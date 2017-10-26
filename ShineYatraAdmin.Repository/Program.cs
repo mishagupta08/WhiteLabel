@@ -59,23 +59,6 @@ namespace ShineYatraAdmin.Repository
 
         private const string ValidateLoginAction = "ValidateLogin";
 
-
-        /// <summary>
-        /// Get white label theme
-        /// </summary>
-        /// <param name="domain"></param>
-        /// <returns></returns>
-        public static async Task<List<CompanyTheme>> GetWhitLabelTheme(string domain)
-        {
-            string data = "{\"action\":\"GET_DOMAININFO\",\"domain_name\":\"" + domain + "\"}";
-            var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == Success && response.GET_DOMAININFO != null)
-            {
-                return response.GET_DOMAININFO;
-            }
-            return null;
-        }
-
         /// <summary>
         /// Method to invoke api function
         /// </summary>

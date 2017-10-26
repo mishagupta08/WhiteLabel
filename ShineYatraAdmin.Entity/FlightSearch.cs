@@ -204,7 +204,7 @@ namespace ShineYatraAdmin.Entity
 
     public class SearchPageViewModel
     {
-        public float walletBalance { get; set; }
+        public double walletBalance { get; set; }
         public double discount { get; set;}
         public ArrayOfOrigindestinationoption arrayOfSearchedFlights { get; set; }
         public OriginDestinationOption flightfaredetails { get; set; }
@@ -645,10 +645,10 @@ namespace ShineYatraAdmin.Entity
         public int adult { get; set; }
         public int child { get; set; }
         public int infant { get; set; }
-        public float amount { get; set; }
-        public float pg_amount { get; set; }
-        public float other_amount { get; set; }
-        public float total_paid_amount { get; set; }
+        public double amount { get; set; }
+        public double pg_amount { get; set; }
+        public double other_amount { get; set; }
+        public double total_paid_amount { get; set; }
         public string status { get; set; }
         public string deposit_mode { get; set; }
         public string remarks { get; set; }

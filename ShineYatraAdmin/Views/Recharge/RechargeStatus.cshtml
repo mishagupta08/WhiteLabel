@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <Label>
-                                            Date : @Model.datetime
+                                            Date : @Model.datetime.ToShortDateString()
                                         </Label>
                                     </div>
                                 </div>
@@ -60,7 +60,7 @@
                                         <Label>Amount Paid : @Model.trans_amt</Label>
                                     </div>
                                     <div class="col-md-6">
-                                        <Label>Charged amount : @Model.charged_amt</Label>
+                                        
                                     </div>
                                 </div>
                             }
