@@ -183,7 +183,7 @@
         /// <summary>
         /// gets or sets DISTRIBUTOR_LEDGER
         /// </summary>
-        public List<DistributorLedger> DISTRIBUTOR_LEDGER { get; set; }
+        public string DISTRIBUTOR_LEDGER { get; set; }
 
         /// <summary>
         /// Get list of member flights

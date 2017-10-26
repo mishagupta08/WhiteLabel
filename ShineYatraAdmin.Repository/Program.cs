@@ -1354,28 +1354,7 @@ namespace ShineYatraAdmin.Repository
                 return "Failed-" + response.MSG;
             }
             return null;
-        }
-
-
-        /// <summary>
-        /// method to save fund detail while payment from payment gateway
-        /// </summary>
-        /// <returns></returns>
-        public static async Task<List<DistributorLedger>> GetLedgerList(DistributorLedgerRequest request)
-        {
-            var ledgerList = new List<DistributorLedger>();
-            var data = JsonConvert.SerializeObject(request);
-            data = data.Replace("null", "\"\"");
-            var response = await CallFunction(data);
-            if (response != null && response.APISTATUS.ToUpper().Trim() == Success && response.DISTRIBUTOR_LEDGER!=null)
-            {
-                return response.DISTRIBUTOR_LEDGER;                
-            }
-            else
-            {
-                return ledgerList;
-            }           
-        }
+        }        
 
         /// <summary>
         /// Get member flight detail list

@@ -1,6 +1,4 @@
-﻿@model IEnumerable<ShineYatraAdmin.Entity.DistributorLedger>
-
-<style>
+﻿<style>
     table.dataTable thead .sorting,
     table.dataTable thead .sorting_asc,
     table.dataTable thead .sorting_desc {
@@ -26,72 +24,7 @@
     </tr>
     </thead>   
     <tbody>
-    @if (Model != null)
-    {
-        foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @item.wallet_txn_date.ToString("dd-MMM-yyyy")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.op_ledger_name)
-
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.service_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.wallet_txn_id)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.debit)
-                </td>
-
-                <td>@Html.DisplayFor(modelItem => item.credit)</td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.balance)<span> &nbsp; @Html.DisplayFor(modelItem => item.drcr)</span>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.remarks)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ref_txn_id)
-                </td>
-            </tr>
-        }
-    }
-    else
-    {
-        <tr><td>No Fund Request Found</td></tr>
-    }
+   
     </tbody>
 </table>
-    
-
-
-<script>
-    $(document).ready(function () {
-        $('#LedgerList').DataTable({
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    column
-                        .search('', true, false)
-                        .draw();
-                });
-            },
-            "destroy": true,
-            "ordering": false,
-            "bLengthChange": false,
-            "language": {
-                "paginate": {
-                    "previous": "<<",
-                    "next": ">>"
-                }
-            },
-          stateSave: true
-        });
-    });
-</script>
+   

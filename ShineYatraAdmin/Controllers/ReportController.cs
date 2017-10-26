@@ -2,6 +2,7 @@
 using ShineYatraAdmin.Entity;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -10,10 +11,18 @@ namespace ShineYatraAdmin.Controllers
     [Authorize]
     public class ReportController : Controller
     {
+        private ReportManager _reportManager;
+
+        public ReportController()
+        {
+            _reportManager = new ReportManager();
+        }
+
         /// <summary>
         /// Get list of fund request from members
         /// </summary>
         /// <returns></returns>
+        /// 
         public ActionResult Ledger()
         {            
             try
@@ -27,28 +36,34 @@ namespace ShineYatraAdmin.Controllers
             return View();
         }
 
-        public async Task<ActionResult> GetLedgerList(FormCollection frm)
-        {
-            ReportManager reportManager = new ReportManager();
-            List<DistributorLedger> ledgerList = new List<DistributorLedger>();
+        [HttpPost]
+        public async Task<ActionResult> GetLedgerList(DistributorLedgerRequest request)
+        {            
+            string ledgerList = null;
+            MatchCollection matches = null;
+            var response = "";
             try
             {
-                string[] userData = User.Identity.Name.Split('|');
-                var request = new DistributorLedgerRequest
-                {
-                    Ledger_id = userData[5],
-                    action = "DISTRIBUTOR_LEDGER",
-                    To_date = frm.GetValue("toDate").AttemptedValue,
-                    From_date = frm.GetValue("fromDate").AttemptedValue
-                };
+                var userData = User.Identity.Name.Split('|');
+                request.Ledger_id = userData[5];
+                request.action = "DISTRIBUTOR_LEDGER";
 
-                ledgerList = await reportManager.GetLedgerList(request);
+                ledgerList = await _reportManager.GetLedgerList(request);
+                var pattern = @"\[(.*?)\]";
+                if (ledgerList.ToUpper().Contains("SUCCESS"))
+                {
+                    matches = Regex.Matches(ledgerList, pattern);
+                }
+                foreach (Match match in matches)
+                {
+                    response = match.Value;
+                }
             }
             catch (Exception Ex)
             {
                 Console.WriteLine(Ex.InnerException);
             }
-            return PartialView("LedgerList",ledgerList);
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
     }
 }

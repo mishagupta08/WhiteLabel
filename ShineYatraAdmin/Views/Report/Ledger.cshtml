@@ -10,6 +10,10 @@
     table.dataTable thead .sorting_desc {
         background: none;
     }
+
+    .dataTables_filter, .dataTables_info {
+        display: none;
+    }
 </style>
 
 <link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
@@ -29,7 +33,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">From Date</label>
                                 <div class="col-md-9">
-                                    @Html.TextBox("fromDate","", new { id = "fromdateinput", required = "required", @class = "form-control datepicker", placeholder = "dd-mmm-yyyy" })
+                                    @Html.TextBox("From_date", "", new { id = "fromdateinput", required = "required", @class = "form-control datepicker", placeholder = "dd-mmm-yyyy" })
                                     <span class="help-block"> </span>
                                 </div>
                             </div>
@@ -41,7 +45,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">To Date</label>
                                 <div class="col-md-9">
-                                    @Html.TextBox("toDate","", new { id = "todateinput", required = "required", @class = "form-control datepicker", placeholder = "dd-mmm-yyyy" })
+                                    @Html.TextBox("To_date", "", new { id = "todateinput", required = "required", @class = "form-control datepicker", placeholder = "dd-mmm-yyyy" })
                                     <span class="help-block"> </span>
                                 </div>
                             </div>
@@ -78,7 +82,24 @@
             
             <div class="table-responsive">                
                 <div id="Usercontainer" style="min-height:305px;">
-                   
+                    <table class="display table" id="LedgerList" width="100%">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Particulars</th>
+                            <th>Service Type</th>
+                            <th>Wallet Txn Id</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Balance</th>
+                            <th>Remark</th>
+                            <th>Txn ref No. </th>
+                        </tr>
+                        </thead>   
+                        <tbody>
+    
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -87,6 +108,7 @@
 
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+
 <script src="~/Script/Report.js"></script>
 
 <script>
@@ -109,8 +131,6 @@
             dateFormat: "dd-M-yy"
         }).datepicker("setDate", new Date());
         GetLedgerList();
-    });
-
-    
+    });    
 </script>
 
