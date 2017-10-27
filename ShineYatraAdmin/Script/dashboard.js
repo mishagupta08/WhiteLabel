@@ -6,8 +6,7 @@ var sortDownArrow = "<div class='up-arrow down-arrow'></div>";
 $(document).ready(function () {    
     $("#insertCompany").unbind();
     $("#insertCompany").bind("click", GetInsertCompanyView);
-    bindCompanyListLink();
-    getuserbalance();
+    bindCompanyListLink();   
 });
 
 function bindCompanyListLink() {
@@ -81,20 +80,6 @@ function bindCompanyListLink() {
 //        }        
 //    });
 //}
-
-function getuserbalance() {
-    $(".preloader").show();    
-    $.ajax({
-        url: '/Common/GetUserBalance',
-        type: 'Post',
-        async:false,
-    }).done(function (result) {
-        $("#usercurrentbalance").html("Current Balance   :  " + result);
-        $(".preloader").hide();
-    }).fail(function (xhr) {
-        alert("getuserbalance " + xhr);
-    });
-}
 
 function SearchCompanyList() {
     $(".preloader").show();

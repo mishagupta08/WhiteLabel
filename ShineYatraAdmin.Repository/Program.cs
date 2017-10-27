@@ -180,7 +180,27 @@ namespace ShineYatraAdmin.Repository
                         userDetail.kitid = dtUser.kitid;
                         userDetail.doj = dtUser.doj;
                     }
-                    //userDetail.user_name + "|" + result.member_id + "|" + result.company_id + "|" + result.first_name + " " + result.last_name;
+                    if (userDetail != null)
+                    {
+                        userDetail.doj = DateTime.Now.ToString("dd-MMM-yyyy");
+                        if (string.IsNullOrEmpty(userDetail.kitid))
+                        {
+                            userDetail.kitid = "0";
+                        }
+
+                        if (string.IsNullOrEmpty(userDetail.ref_id))
+                        {
+                            userDetail.ref_id = "0";
+                        }
+
+                        userDetail.user_type = "DISTB";
+                        var loginDetailJson = "{'action':'USER_LOGIN_UPDATE','domain_name':'" + ConfigurationManager.AppSettings["DomainName"] + "','user_type':'" + userDetail.user_type + "','ref_id':'" + userDetail.ref_id + "','user_name':'" + userDetail.user_name + "','password':'" + userDetail.pwd + "','first_name':'" + userDetail.first_name + "','last_name':'','mobileno':'" + userDetail.mobileNo + "','email':'" + userDetail.emailId + "','doj':'" + userDetail.doj + "','kitid':" + userDetail.kitid + "}";
+                        var updateresponse = await CallFunction(loginDetailJson);
+                        if (updateresponse == null)
+                        {
+                            return null;
+                        }
+                    }
                 }
                 else
                 {
@@ -199,35 +219,9 @@ namespace ShineYatraAdmin.Repository
                 var response = await CallFunction(data);
                 if (response != null && response.VALIDATELOGIN != null && response.VALIDATELOGIN.Count > 0)
                 {
-                    userDetail = new UserDetail();
-                    userDetail = response.VALIDATELOGIN.FirstOrDefault();
-                    userDetail.pwd = loginDetail.password;
+                    userDetail = response.VALIDATELOGIN.FirstOrDefault();                    
                 }
-            }
-
-            if (userDetail != null)
-            {
-                userDetail.doj = DateTime.Now.ToString("dd-MMM-yyyy");
-                if (string.IsNullOrEmpty(userDetail.kitid))
-                {
-                    userDetail.kitid = "0";
-                }
-
-                if (string.IsNullOrEmpty(userDetail.ref_id))
-                {
-                    userDetail.ref_id = "0";
-                }
-
-                userDetail.user_type = "DISTB";
-                var loginDetailJson = "{'action':'USER_LOGIN_UPDATE','domain_name':'" + ConfigurationManager.AppSettings["DomainName"] + "','user_type':'" + userDetail.user_type + "','ref_id':'" + userDetail.ref_id + "','user_name':'" + userDetail.user_name + "','password':'" + userDetail.pwd + "','first_name':'" + userDetail.first_name + "','last_name':'','mobileno':'" + userDetail.mobileNo + "','email':'" + userDetail.emailId + "','doj':'" + userDetail.doj + "','kitid':" + userDetail.kitid + "}";
-                //data = JsonConvert.SerializeObject(loginDetail);
-                var response = await CallFunction(loginDetailJson);
-                if (response == null)
-                {
-                    return null;
-                }
-            }
-
+            }           
             return userDetail;
         }
 
@@ -937,9 +931,9 @@ namespace ShineYatraAdmin.Repository
                 if (httpResponse.Content != null)
                 {
                     var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                    if (responseContent.Contains("FAILED") || responseContent.Contains("FAIL"))
+                    if (!responseContent.ToUpper().Contains("SUCCESS"))
                     {
-                        var response = JsonConvert.DeserializeObject<Response>(responseContent);
+                        bookResponse.Status = HttpUtility.HtmlDecode(responseContent);
                     }
                     else
                     {

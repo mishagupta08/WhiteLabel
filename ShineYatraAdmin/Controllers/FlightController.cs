@@ -1,4 +1,6 @@
-﻿namespace ShineYatraAdmin.Controllers
+﻿using System.Text.RegularExpressions;
+
+namespace ShineYatraAdmin.Controllers
 {
     #region namespace
 
@@ -24,8 +26,7 @@
         private FlightManager _flightManager;
         private ServiceManager _serviceManager;
         private PgManager _pgManager;
-        private UserManager _userManager;
-        private int errorCode = 0;
+        private UserManager _userManager;        
         /// <summary>
         /// method to get flight search page
         /// </summary>        
@@ -97,6 +98,7 @@
                         {
                             discount = flightdiscount.front_discount_amount;
                         }
+                        Session["FrontDiscount"] = discount;
                         flight.FareDetail.ChargeableFares.ActualBaseFare -= discount;
                         if (flightdiscount.back_discount_per > 0)
                         {
@@ -150,8 +152,8 @@
             searchPageViewModel.AssignNameReference();
             searchPageViewModel.AssignChildNameReference();
             searchPageViewModel.flightfaredetails = await _flightManager.FlightPricing(searchPageViewModel.flightSearch);
+            searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare -= Convert.ToDouble(Session["FrontDiscount"]);
             searchPageViewModel.flightfaredetails.FareDetail.backdiscount = searchPageViewModel.flightSearch.backdiscount;
-
             return View("FlightMenu//BookingDetail", searchPageViewModel);
         }
 
@@ -243,7 +245,7 @@
                     }
                     else
                     {
-                        errorCode = 5001;
+                        TempData["ErrorCode"] = 5001;
                     }
                 }
                 else
@@ -261,11 +263,15 @@
                             {
                                 txnId = Convert.ToString(insertServiceResonse.txn_id);
                                 bookResponse = await _flightManager.BookTicket(request);
+                                if (!bookResponse.Status.ToUpper().Equals("SUCCESS"))
+                                {
+                                    TempData["ErrorCode"] = 5005;
+                                }
                             }
                             else
                             {
-                                bookResponse.Status = "Failed";                                
-                                    errorCode = 5002;                                
+                                bookResponse.Status = "Failed";
+                                TempData["ErrorCode"] = 5002;                                
                             }
                         }
                     }
@@ -347,11 +353,15 @@
                             });
                         }
                         bookResponse = await flightManager.BookTicket(request);
+                        if (!bookResponse.Status.ToUpper().Equals("SUCCESS"))
+                        {
+                            TempData["ErrorCode"] = 5005;
+                        }
                     }
                     else
                     {
                         bookResponse.Status = "Failed";
-                        errorCode = 5002;
+                        TempData["ErrorCode"] = 5002;
                     }
                 }
                 else
@@ -377,38 +387,44 @@
         {
             BookingDetail eticket = null;
             _serviceManager = new ServiceManager();
+            
             try
             {
                 var bookResponse = (Bookingresponse)TempData["BookingResponse"];
 
                 var userData = User.Identity.Name.Split('|');
                 var serializer = new JavaScriptSerializer();
-                if (bookResponse != null && bookResponse.Status.ToLower() == "success")
+                if (!string.IsNullOrEmpty(txnId))
                 {
-                    ViewBag.status = "Ticket Booked Successfully";
-                    ViewBag.statusCode = errorCode;
-                    var myCookie = Request.Cookies["Cookie-" + info];
-                    if (myCookie != null)
+                    if (bookResponse.Status.ToLower() == "success")
                     {
-                        eticket = serializer.Deserialize<BookingDetail>(myCookie.Value);
+                        ViewBag.status = "Ticket Booked Successfully";
+                        
+                        var myCookie = Request.Cookies["Cookie-" + info];
+                        if (myCookie != null)
+                        {
+                            eticket = serializer.Deserialize<BookingDetail>(myCookie.Value);
+                        }
+                        UPDATE_TRANSACTION_STATUS updatestatus =
+                            await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid,
+                                "COMPLETED");
                     }
-                    UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "COMPLETED");
-                }
-                else if (!string.IsNullOrEmpty(bookResponse?.Error))
-                {
-                    ViewBag.status = "Some Problem occured while booking, Please try again.";
-                    UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(txnId))
+                        {
+                            UPDATE_TRANSACTION_STATUS updatestatus =
+                                await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
+                        }
+                        ViewBag.statusCode = TempData["ErrorCode"];
+                        ViewBag.status = bookResponse.Status;
+                    }
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(txnId))
-                    {
-                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
-                    }
-                    ViewBag.status = "Some Problem occured while booking, Please try again.";
+                    ViewBag.statusCode = TempData["ErrorCode"];
+                    ViewBag.status = "Some problem Occured while doing your transaction";
                 }
-
-               
             }
             catch (Exception ex)
             {

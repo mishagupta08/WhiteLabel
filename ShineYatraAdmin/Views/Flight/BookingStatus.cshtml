@@ -12,11 +12,11 @@
                 <div class="panel-body">
                 @if (Model != null)
                 {
-                    <h2 class="has-success">@ViewBag.status</h2>
+                    <h2 class="text-success">@ViewBag.status</h2>
                 }
                 else
                 {
-                    <h2 class="has-danger">Error Code:@ViewBag.statusCode  Some problem occured while booking you ticket. Please <a href="@Url.Action("SearchFlight", "Flight")">try again</a>.</h2>
+                    <h2 class="text-danger">Error Code:@ViewBag.statusCode &nbsp; @Html.Raw(ViewBag.status). Please <a href="@Url.Action("SearchFlight", "Flight")">try again</a>.</h2>
                 }
                     <div class="col-md-2"></div>
                     <div class="col-md-8">

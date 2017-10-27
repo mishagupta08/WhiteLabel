@@ -97,7 +97,8 @@
                 {
                     return Json(Resources.LoginError);
                 }
-
+                Session["WalletBalance"] = result.wallet_balance;
+                Session["CompanyWalletBalance"] = result.company_wallet_balance;
                 string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name+"|"+result.mobileNo +"|"+ result.ledger_id +"|"+result.role_id +"|"+result.emailId;
                 FormsAuthentication.SetAuthCookie(userIdentity, false);
                 

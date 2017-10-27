@@ -114,8 +114,13 @@
         /// <summary>
         /// gets or sets wallet_balance
         /// </summary>
-        public float wallet_balance { get; set; }
+        public double wallet_balance { get; set; }
 
+        /// <summary>
+        /// gets or sets company_wallet_balance
+        /// </summary>
+        public double company_wallet_balance { get; set; }
+       
         /// <summary>
         /// gets or sets credit
         /// </summary>

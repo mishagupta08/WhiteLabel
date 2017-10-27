@@ -12,15 +12,15 @@
                 <div class="panel-body">
                     @if (TempData["RechargeStatus"].ToString().ToLower() == "failed")
                     {
-                        <h3>Some problem occured while doing your transaction.</h3>
-                        <h3>
+                        <h2 class="text-danger">Some problem occured while doing your transaction.</h2>
+                        <h3 class="text-danger">
                             Please try again <a onclick="goBack()">Back</a>
                         </h3>
                     }
                     else
                     {
 
-                        <h3>Recharge Successfull</h3>
+                        <h2 class="text-success">Recharge Successfull</h2>
                         <hr />
                         <div class="col-md-2"></div>
                         <div class="col-md-8">
