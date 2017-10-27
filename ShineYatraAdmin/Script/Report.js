@@ -11,6 +11,18 @@
         var jsonobject = jQuery.parseJSON(result);        
         if (jsonobject !== "") {
             $('#LedgerList').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {                       
+                        extend: 'excelHtml5',
+                        text : 'Export to Excel',
+                        filename: function(){
+                            var d = new Date();
+                            var n = d.getTime();
+                            return 'LedgerReport_' + n;
+                        }
+                    }
+                ],
                 "aaData": jsonobject,
                 "aoColumns": [
                     {"mData": "wallet_txn_date"},
