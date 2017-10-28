@@ -169,6 +169,7 @@ namespace ShineYatraAdmin.Controllers
         {
             _flightManager = new FlightManager();
             _userManager = new UserManager();
+            _pgManager = new PgManager();
             var txnId = string.Empty;
             var info = string.Empty;
             var walletBalance = 0.0;
@@ -178,7 +179,7 @@ namespace ShineYatraAdmin.Controllers
                 var userData = User.Identity.Name.Split('|');
                 var request = bookingDetail.FlightBookingDetail;
                 request.Creditcardno = "4111111111111111";
-                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper()=="Y";
+                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper()=="Y" && userData[6] != "3"; 
                 
 
                 try
@@ -485,7 +486,7 @@ namespace ShineYatraAdmin.Controllers
                 }
                 else
                 {
-                    var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y";
+                    var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
                     if (isPaymentGatewayactive && bookingDetail.walletBalance < bookingDetail.FlightBookingDetail.AdultFare)
                     {
                         ticketDetail.pg_amount = bookingDetail.FlightBookingDetail.AdultFare - bookingDetail.walletBalance;
@@ -601,6 +602,7 @@ namespace ShineYatraAdmin.Controllers
         public async Task<ActionResult> CancelFlight(string transId, string partnerRefernceId, string txnId)
         {
             _flightManager = new FlightManager();
+            _serviceManager = new ServiceManager();
             try
             {
                 var userData = User.Identity.Name.Split('|');

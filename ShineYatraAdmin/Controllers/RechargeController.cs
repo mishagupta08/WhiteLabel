@@ -188,7 +188,7 @@ namespace ShineYatraAdmin.Controllers
                     Expires = DateTime.Now.AddYears(1)
                 };
                 HttpContext.Response.Cookies.Add(cookie);
-                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y";
+                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
 
                 var balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
                 if (balResponse != null)

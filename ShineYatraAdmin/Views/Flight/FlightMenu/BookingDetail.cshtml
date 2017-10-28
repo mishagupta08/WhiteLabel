@@ -6,8 +6,9 @@
     ViewBag.Title = "BookingDetail";
     Layout = "~/Views/Shared/Layout.cshtml";
     int count = 0;
+    string[] userData = User.Identity.Name.Split('|');
     bool askOTP = Convert.ToString(Session["otp_service_enabled"]) == "Y";
-    bool IsPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y";
+    bool IsPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
 }
 
 <style>
@@ -282,16 +283,11 @@
                         <div class="row">
                            
                             <label>Choose Payment Mode:</label>
-                            @{
-                                string[] userData = User.Identity.Name.Split('|');
-                            }                           
-                            @if (userData != null && userData[6] != "3")
+                                                       
+                            @if (IsPaymentGatewayactive)
                             {
                                 <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required" })Wallet</label>
-                                if (IsPaymentGatewayactive)
-                                {
-                                    <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required" })Bank</label>
-                                }
+                                 <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required" })Bank</label>                                
                             }
                             else
                             {

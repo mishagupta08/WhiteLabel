@@ -6,8 +6,9 @@
     ViewBag.Title = "Recharge";
     Layout = "~/Views/Shared/Layout.cshtml";
     string rechargeType = Model.rechargeType;
-    bool askOtp = Convert.ToString(Session["otp_service_enabled"]) =="Y";
-    bool isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper()=="Y";
+    string[] userData = User.Identity.Name.Split('|');
+    bool askOTP = Convert.ToString(Session["otp_service_enabled"]) == "Y";
+    bool IsPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
 }
 
 
@@ -80,11 +81,15 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label col-md-4">Choose Payment Mode*</label>
-                                <div class="col-md-8">
-                                    <label>@Html.RadioButton("PaymentMode", "wallet", new { @required = "required" })Wallet</label>
-                                    @if (isPaymentGatewayactive)
+                                <div class="col-md-8">                                    
+                                    @if (IsPaymentGatewayactive)
                                     {
-                                        <label>@Html.RadioButton("PaymentMode", "bank", new {@required = "required"})Bank</label>
+                                        <label>@Html.RadioButtonFor("PaymentMode", "wallet", new { @required = "required" })Wallet</label>
+                                        <label>@Html.RadioButtonFor("PaymentMode", "bank", new { @required = "required" })Bank</label>
+                                    }
+                                    else
+                                    {
+                                        <label>@Html.RadioButtonFor("PaymentMode", "wallet", new { @required = "required", @checked = "checked" })Wallet</label>
                                     }
                                 </div>
                             </div>
