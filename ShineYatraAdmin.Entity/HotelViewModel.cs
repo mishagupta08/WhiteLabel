@@ -9,9 +9,19 @@ namespace ShineYatraAdmin.Entity
     public class HotelViewModel
     {
         /// <summary>
+        /// gets or sets wallet balance
+        /// </summary>
+        public WalletResponse WalletResponseDetail { get; set; }
+        /// <summary>
         /// gets or sets selected menu
         /// </summary>
         public string SelectedMenu { get; set; }
+
+        public string hotelRequestCookieId { get; set; }
+
+        public HotelFilter HotelFilterDetail { get; set; }
+
+        public HotelResultDashboard HotelResultDashboardDetail { get; set; }
 
         /// <summary>
         /// gets or sets hotel request
@@ -34,6 +44,21 @@ namespace ShineYatraAdmin.Entity
         public IList<KeyValuePair> RoomsList { get; set; }
 
         /// <summary>
+        /// gets or sets child age list
+        /// </summary>
+        public IList<KeyValuePair> ChildAgeList { get; set; }
+
+        /// <summary>
+        /// gets or sets adult count list
+        /// </summary>
+        public IList<KeyValuePair> AdultCountList { get; set; }
+
+        /// <summary>
+        /// gets or sets child count list
+        /// </summary>
+        public IList<KeyValuePair> ChildCountList { get; set; }
+
+        /// <summary>
         /// gets or sets Title
         /// </summary>
         public IList<KeyValuePair> Title { get; set; }
@@ -42,6 +67,11 @@ namespace ShineYatraAdmin.Entity
         /// gets or sets hotel list
         /// </summary>
         public List<Hotel> HotelList { get; set; }
+
+        /// <summary>
+        /// gets or sets hotel error.
+        /// </summary>
+        public string Error { get; set; }
 
         /// <summary>
         /// gets or sets selected hotel detail
@@ -78,11 +108,60 @@ namespace ShineYatraAdmin.Entity
                 Value = "4 Room"
             });
 
-            this.RoomsList.Add(new KeyValuePair
+            this.AdultCountList = new List<KeyValuePair>();
+            this.AdultCountList.Add(new KeyValuePair
             {
-                Id = "5",
-                Value = "5 Room"
+                Id = "1",
+                Value = "1 Adults"
             });
+
+            this.AdultCountList.Add(new KeyValuePair
+            {
+                Id = "2",
+                Value = "2 Adults"
+            });
+
+            this.AdultCountList.Add(new KeyValuePair
+            {
+                Id = "3",
+                Value = "3 Adults"
+            });
+
+            this.AdultCountList.Add(new KeyValuePair
+            {
+                Id = "4",
+                Value = "4 Adults"
+            });
+
+            this.ChildCountList = new List<KeyValuePair>();
+            this.ChildCountList.Add(new KeyValuePair
+            {
+                Id = "0",
+                Value = "Children"
+            });
+
+            this.ChildCountList.Add(new KeyValuePair
+            {
+                Id = "1",
+                Value = "1 Child"
+            });
+
+            this.ChildCountList.Add(new KeyValuePair
+            {
+                Id = "2",
+                Value = "2 Children"
+            });
+
+            this.ChildAgeList = new List<KeyValuePair>();
+
+            for (var i = 1; i < 12; i++)
+            {
+                this.ChildAgeList.Add(new KeyValuePair
+                {
+                    Id = i.ToString(),
+                    Value = i.ToString()
+                });
+            }
         }
 
         /// <summary>

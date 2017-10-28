@@ -150,7 +150,11 @@
     <Content Include="css\spinners.css" />
     <Content Include="css\style.css" />
     <Content Include="Global.asax" />
+    <Content Include="images\adult.png" />
     <Content Include="images\arrow.png" />
+    <Content Include="images\child.png" />
+    <Content Include="images\empty.png" />
+    <Content Include="images\start.jpg" />
     <Content Include="images\wheel.gif" />
     <Content Include="js\cbpFWTabs.js" />
     <Content Include="js\chat.js" />
@@ -639,6 +643,8 @@
     <Content Include="Views\CCAvenue\PaymentSuccessful.cshtml" />
     <Content Include="Views\Flight\Report\FilghtList.cshtml" />
     <Content Include="Views\Recharge\RechargeStatus.cshtml" />
+    <Content Include="Views\Hotel\roomView.cshtml" />
+    <Content Include="Views\Hotel\hotelBookingStatus.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

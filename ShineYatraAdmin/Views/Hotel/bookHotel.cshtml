@@ -1,12 +1,21 @@
 ﻿@using ShineYatraAdmin.Properties;
 @model ShineYatraAdmin.Entity.HotelViewModel
-
-<script src="~/Script/hotel.js"></script>
+@using System.Configuration;
+@{
+    ViewBag.Title = "Hotel Book View";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+@{
+    int count = 0;
+    bool askOTP = Convert.ToBoolean(ConfigurationManager.AppSettings["askOTP"]);
+    bool IsPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
+}
 <!DOCTYPE html>
 
 <html>
 <body>
-    <form class="form-horizontal form-material" id="bookHotelForm" onsubmit="return SubmitBookingDetail();">
+    <form class="form-horizontal form-material white-box" id="bookHotelForm" onsubmit="return SubmitBookingDetail();">
+        @Html.HiddenFor(m => m.hotelRequestCookieId, new { @id = "hotelRequestCookieId" })
         <div class="form-body">
             <div class="form-group">
                 <label class="control-label col-md-3">Title</label>
@@ -61,10 +70,38 @@
                 </div>
             </div>
 
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-3">NOTE :- Your current wallet balance is</label>
+                <div class="col-md-9">
+                    @Model.WalletResponseDetail.wallet_balance
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-3">Choose Payment Mode</label>
+                <div class="col-md-9">
+                    @{
+                        string[] userData = User.Identity.Name.Split('|');
+                    }
+                    @if (userData != null && userData[6] != "3")
+                    {
+                        <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "wallet", new { @required = "required" })Wallet</label>
+                        if (IsPaymentGatewayactive)
+                        {
+                            <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "bank", new { @required = "required" })Bank</label>
+                        }
+                    }
+                    else
+                    {
+                        <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "wallet", new { @required = "required", @checked = "checked" })Wallet</label>
+                    }
+                </div>
+            </div>
             <span id="hoteSearchHotel"></span>
             <div class="row">
                 <div class="col-md-offset-3 col-md-9">
-                    <button type="submit" class="btn btn-success"> <i class="fa"></i> Book</button>
+                    <button type="submit" class="btn btn-success"> <i class="fa"></i>Book</button>
                 </div>
             </div>
 
@@ -72,3 +109,6 @@
     </form>
 </body>
 </html>
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/hotel.js"></script>

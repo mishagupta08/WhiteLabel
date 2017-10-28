@@ -93,6 +93,8 @@
         public Images Images { get; set; }
         [XmlElement(ElementName = "minrate")]
         public string MinRate { get; set; }
+        [XmlIgnore]
+        public string HeadOfficeImage { get; set; }
     }
 
     [XmlRoot(ElementName = "hotel")]
@@ -106,6 +108,9 @@
 
         [XmlElement(ElementName = "promotion")]
         public string Promotion { get; set; }
+
+        [XmlElement(ElementName = "Error")]
+        public string Error { get; set; }
     }
 
     [XmlRoot(ElementName = "searchresult")]
@@ -120,5 +125,7 @@
     {
         [XmlElement(ElementName = "searchresult")]
         public Searchresult Searchresult { get; set; }
+
+        public string Error { get; set; }
     }
 }

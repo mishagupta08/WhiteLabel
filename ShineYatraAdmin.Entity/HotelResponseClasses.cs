@@ -114,6 +114,8 @@
         public string Commission { get; set; }
         [XmlElement(ElementName = "originalRoomTotal")]
         public string OriginalRoomTotal { get; set; }
+        [XmlIgnore]
+        public string CommisionGroupAmount { get; set; }
     }
 
     [XmlRoot(ElementName = "rate")]
@@ -167,6 +169,9 @@
     {
         [XmlElement(ElementName = "searchresult")]
         public Searchresult Searchresult { get; set; }
+
+        [XmlElement(ElementName = "Error")]
+        public string Error { get; set; }
     }
 
     /*Hotel Detail response class*/

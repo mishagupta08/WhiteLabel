@@ -11,6 +11,7 @@
         public string surl { get; set; }
         public string furl { get; set; }
         public string udf1 { get; set; }
+        public string udf3 { get; set; }        
         public string udf2 { get; set; }
         public string memberId { get; set; }        
     }

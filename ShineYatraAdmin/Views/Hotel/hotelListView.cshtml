@@ -1,33 +1,319 @@
-﻿@using ShineYatraAdmin.Properties;
+﻿@using System.Globalization;
+@using ShineYatraAdmin.Properties;
 @model ShineYatraAdmin.Entity.HotelViewModel
+@{
+    ViewBag.Title = "Hotel List View";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
 
-<!DOCTYPE html>
-<script src="~/Script/hotel.js"></script>
-<div>
-    @if (Model != null || Model.HotelList != null || Model.HotelList.Count != 0)
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+
+    .display-none {
+        display: none;
+    }
+
+    .dataTables_filter, .dataTables_info {
+        display: none;
+    }
+
+    .searchContainer {
+        /*border: 1px solid;
+        border-color: lightgrey;
+        border-radius: 15px;
+        margin-bottom: 3px;
+        display: inline-block;*/
+        width: 99%;
+    }
+
+    #priceRange {
+        width: 96%;
+        margin-left: 5px;
+        margin-bottom: 4px;
+    }
+
+    .hotel-image {
+        margin-top: 50%;
+        height: 60px;
+        width: 60px;
+    }
+
+    .hotel-name {
+        font-size: x-large;
+        color: #00c292;
+        font-weight: 400;
+    }
+
+    img {
+        margin-top: -10px;
+    }
+
+    .flat {
+        height: 18px !important;
+        width: 18px !important;
+        margin-top: -14px !important;
+    }
+
+    .form-material .form-group {
+        margin: 0px !important;
+    }
+
+    .searchContainer > .white-box {
+        padding: 0px;
+        border: 1px solid;
+        width: 101%;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid lightgrey !important;
+    }
+
+    #leftPanel > table {
+        width: 100% !important;
+        border: 1px solid lightgrey !important;
+        margin-top: 3px;
+    }
+
+    .search-btn-container {
+        background: lightgrey;
+        text-align: right;
+        height: 37px;
+    }
+
+    td {
+        padding: 5px;
+    }
+
+    .rightPanel {
+        display: inline-block;
+        width: 69%;
+        margin-left: 10px;
+        vertical-align: top;
+    }
+
+    #contentHolder:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+</style>
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<div class="white-box" id="contentHolder">
+    @if (Model != null)
     {
-        <table class="display table"  width="100%">
-            @foreach (var hotel in Model.HotelList)
-            {
-                var imagePath = "http://" + hotel.Hoteldetail.Images.Image.Imagepath;
+        @Html.HiddenFor(m => m.hotelRequestCookieId, new { @id = "hotelRequestCookieId" })
+        <div id="leftPanel" style="display:inline-block; width:20%;">
+            <div>@string.Format(Resources.HotelFoundMessage, Model.HotelList.Count)</div>
+            <br />
+            <table>
+                <tr><td>City</td><td>@Model.HotelRequestDetail.HotelCityName</td></tr>
+                <tr><td>CheckIn</td><td>@Model.HotelRequestDetail.Start</td></tr>
+                <tr><td>CheckOut</td><td>@Model.HotelRequestDetail.End</td></tr>
+                <tr><td>No. Of Room</td><td>@Model.HotelRequestDetail.RoomCount</td></tr>
+                <tr><td>No. Of Adult</td><td>@Model.HotelRequestDetail.TotalAdultCount <img src="~/images/adult.png" height="15" /></td></tr>
                 <tr>
-                    <td><img src="@imagePath" height="50" width="50" /></td>
                     <td>
-                        <table>
-                            <tr><td>@hotel.Hoteldetail.Hotelname</td></tr>
-                            <tr><td>@hotel.Hoteldetail.Contactinfo.Address</td></tr>
-                            <tr><td>Room Left : @hotel.Hoteldetail.Noofrooms</td></tr>
-                        </table>
+                        No. Of Child
                     </td>
                     <td>
-                        <table>
-                            <tr><td>@hotel.Hoteldetail.MinRate</td></tr>
-                            <tr><td><button type="button" name="viewHotel" room-left="@hotel.Hoteldetail.Noofrooms" hotel-id="@hotel.Hoteldetail.Hotelid" hotel-webservice="@hotel.Hoteldetail.WebService" class="btn btn-success">View</button></td></tr>
-                        </table>
+                        @Model.HotelRequestDetail.TotalChildCount
+                        <img src="~/images/child.png" height="15" />
                     </td>
                 </tr>
-            }
-        </table>
-    }
-    <span id="hoteSearchHotel"></span>
+            </table>
+            <br />
+            @***Add slider here***@
+            <div>
+                <div class="col-lg-12" id="priceRange"></div>
+                <label id="minprice"></label>
+                <label id="maxprice" style="float:right;"></label>
+            </div>
+            @***Add slider here***@
+
+            Star Rating
+            <br />
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" checked name="rating" class="flat" value="5" />
+                            @*@Html.CheckBoxFor(m => m.HotelFilterDetail.FiveStar, new { @value = 5, @name = "rating", @class = "flat" })*@
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                        </label><br />
+                    </td>
+                    <td>(@Model.HotelResultDashboardDetail.FiveStartCount)</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" checked name="rating" class="flat" value="4" />
+                            @*@Html.CheckBoxFor(m => m.HotelFilterDetail.FourStar, new { name = "rating", @class = "flat" })*@
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                        </label><br />
+                    </td>
+                    <td>(@Model.HotelResultDashboardDetail.FourStartCount)</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" checked name="rating" class="flat" value="3" />
+                            @*@Html.CheckBoxFor(m => m.HotelFilterDetail.ThreeStar, new { name = "rating", @class = "flat" })*@
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                        </label><br />
+                    </td>
+                    <td>(@Model.HotelResultDashboardDetail.ThreeStartCount)</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            @*@Html.CheckBoxFor(m => m.HotelFilterDetail.TwoStar, new { name = "rating", @class = "flat" })*@
+                            <input type="checkbox" checked name="rating" class="flat" value="2" />
+                            <img src="~/images/start.jpg" height="15" />
+                            <img src="~/images/start.jpg" height="15" />
+                        </label><br />
+                    </td>
+                    <td>(@Model.HotelResultDashboardDetail.TwoStartCount)</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" checked name="rating" class="flat" value="1" />
+                            @*@Html.CheckBoxFor(m => m.HotelFilterDetail.OneStar, new { name = "rating", @class = "flat" })*@
+                            <img src="~/images/start.jpg" height="15" />
+                        </label><br />
+                    </td>
+                    <td>(@Model.HotelResultDashboardDetail.OneStartCount)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="rightPanel">
+            <div class="search-btn-container">
+                <input type="button" class="btn btn-success" id="ModifySearch" value="Modify Search" />
+            </div>
+            <div class="searchContainer" style="display:none;">
+                @Html.Partial("~/Views/Hotel/SearchHotel.cshtml", Model)
+            </div>
+            @if (Model.HotelList != null && Model.HotelList.Count != 0)
+                {
+                <table id="HotelListContainer" class="display table" style="height:100px;">
+                    <thead>
+                        <tr>
+                            <th>Rating</th>
+                            <th class="display-none">Image</th>
+                            <th class="display-none">Description</th>
+                            <th>Price</th>
+                            <th class="display-none"></th>
+                            <th class="display-none"></th>
+                            <th class="display-none"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var hotel in Model.HotelList)
+                        {
+                            var imagePath = "http://" + hotel.Hoteldetail.Images.Image.Imagepath;
+                            <tr>
+                                <td class="display-none">@hotel.Hoteldetail.Starrating</td>
+                                <td><img class="hotel-image" src="@imagePath" /></td>
+                                <td>
+                                    <table>
+                                        <tr><td class="hotel-name">@hotel.Hoteldetail.Hotelname</td></tr>
+                                        <tr>
+                                            <td>
+                                                @{
+                                                    var rate = hotel.Hoteldetail.Starrating == null ? 0 : Convert.ToInt16(hotel.Hoteldetail.Starrating);
+                                                    int j = 0;
+                                                    for (var i = 1; i <= 5; i++)
+                                                    {
+                                                        if (j < rate)
+                                                        {
+                                                            <img src="~/images/start.jpg" height='15' />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src='~/images/empty.png' height='15' />
+                                                        }
+
+                                                        j += 1;
+                                                    }
+                                                }
+                                                <input type="hidden" value=@hotel.Hoteldetail.Starrating />
+                                            </td>
+                                        </tr>
+                                        <tr><td>@hotel.Hoteldetail.Contactinfo.Address</td></tr>
+                                        <tr><td>Room Left : @hotel.Hoteldetail.Noofrooms</td></tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr><td>@hotel.Hoteldetail.MinRate<br /><span style="font-size:8px;">(All Incl. room per night)</span></td></tr>
+                                        <tr><td><button type="button" name="viewHotel" room-left="@hotel.Hoteldetail.Noofrooms" hotel-id="@hotel.Hoteldetail.Hotelid" hotel-webservice="@hotel.Hoteldetail.WebService" class="btn btn-success">View</button></td></tr>
+                                    </table>
+                                </td>
+                                <td class="display-none"></td>
+                                <td class="display-none"></td>
+                                <td class="display-none">@hotel.Hoteldetail.MinRate</td>
+                            </tr>
+                                                    }
+                    </tbody>
+                </table>
+                                                    }
+                                                    else if (!string.IsNullOrEmpty(Model.Error))
+                                                    {
+                                                        <span>@Model.Error</span>
+                                                    }
+        </div>
+        <span id="hoteSearchHotel"></span>
+                                                    }
 </div>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/hotel.js"></script>
+
+<script>
+    var jq = $.noConflict();
+
+    var minPrice = @Convert.ToInt32(Resources.MinPrice);
+    var maxPrice = @Convert.ToInt32(Resources.MaxPrice);
+
+    jq(document).ready(function () {
+        /**Show hide search**/
+        $("#ModifySearch").bind("click", function () {
+            $(".searchContainer").fadeToggle("slow");
+        });
+
+        /**Range Slider**/
+        jq("#priceRange").slider({
+            range: true,
+            step: 1,
+            values: [minPrice, maxPrice],
+            min: minPrice,
+            max: maxPrice
+        });
+
+        jq("#minprice").html(jq("#priceRange").slider("values", 0));
+        jq("#maxprice").html(jq("#priceRange").slider("values", 1));
+
+        jq("#priceRange").on("slide", function (event, ui) {
+            jq("#minprice").html(ui.values[0]);
+            jq("#maxprice").html(ui.values[1]);
+        });
+
+        jq("#priceRange").on("slidestop", function (event, ui) {
+            oTable.draw();
+        });
+    });
+</script>

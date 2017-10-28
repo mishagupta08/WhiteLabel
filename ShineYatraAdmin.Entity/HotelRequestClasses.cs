@@ -1,34 +1,45 @@
 ﻿namespace ShineYatraAdmin.Entity
 {
+    using System.Collections.Generic;
     #region namespace
 
     using System.Xml.Serialization;
 
     #endregion namespace
 
-
-    [XmlRoot(ElementName = "child")]
-    public class Child
+    public class HotelResultDashboard
     {
-        [XmlElement(ElementName = "age")]
-        public string Age { get; set; }
+        public int FiveStartCount { get; set; }
+        public int FourStartCount { get; set; }
+        public int ThreeStartCount { get; set; }
+        public int TwoStartCount { get; set; }
+        public int OneStartCount { get; set; }
     }
 
-    [XmlRoot(ElementName = "guestDetails")]
-    public class GuestDetails
+    public class HotelFilter
     {
-        [XmlElement(ElementName = "adults")]
-        public string Adults { get; set; }
-
-        [XmlElement(ElementName = "child")]
-        public Child Child { get; set; }
+        public bool FiveStar { get; set; }
+        public bool FourStar { get; set; }
+        public bool ThreeStar { get; set; }
+        public bool TwoStar { get; set; }
+        public bool OneStar { get; set; }
+        public int minPrice { get; set; }
+        public int maxPrice { get; set; }
     }
 
     [XmlRoot(ElementName = "HotelRequest")]
     public class HotelRequest
     {
-        [XmlElement(ElementName = "guestDetails")]
-        public GuestDetails GuestDetails { get; set; }
+        public int TotalAdultCount { get; set; }
+
+        public int TotalChildCount { get; set; }
+
+        public int RoomCount { get; set; }
+
+        public int NightCount { get; set; }
+
+        [XmlElement(ElementName = "roomStayCandidate")]
+        public RoomStayCandidate RoomStayCandidateDetail { get; set; }
 
         [XmlElement(ElementName = "start")]
         public string Start { get; set; }
@@ -65,6 +76,9 @@
 
         [XmlElement(ElementName = "roomCode")]
         public string roomCode { get; set; }
+
+        [XmlIgnore]
+        public string PaymentMode { get; set; }
 
     }
 
@@ -124,7 +138,7 @@
         [XmlElement(ElementName = "email")]
         public string Email { get; set; }
     }
-    
+
     [XmlRoot(ElementName = "hotelinfo")]
     public class Hotelinfo
     {
@@ -144,11 +158,33 @@
         public string RatePlanType { get; set; }
     }
 
+    [XmlRoot(ElementName = "child")]
+    public class Child
+    {
+        [XmlElement(ElementName = "age")]
+        public List<string> Age { get; set; }
+    }
+
+    [XmlRoot(ElementName = "guestDetails")]
+    public class GuestDetails
+    {
+        [XmlIgnore]
+        public int AdultCount { get; set; }
+
+        [XmlIgnore]
+        public int ChildCount { get; set; }
+
+        [XmlElement(ElementName = "adults")]
+        public string Adults { get; set; }
+        [XmlElement(ElementName = "child")]
+        public Child Child { get; set; }
+    }
+
     [XmlRoot(ElementName = "roomStayCandidate")]
     public class RoomStayCandidate
     {
         [XmlElement(ElementName = "guestDetails")]
-        public GuestDetails GuestDetails { get; set; }
+        public List<GuestDetails> GuestDetails { get; set; }
     }
 
     [XmlRoot(ElementName = "phoneNumber")]
@@ -213,6 +249,10 @@
         public GuestInformation GuestInformation { get; set; }
         [XmlElement(ElementName = "residentOfIndia")]
         public string ResidentOfIndia { get; set; }
+        [XmlIgnore]
+        public string Creditcardno { get; set; }
+        [XmlIgnore]
+        public float TotalFare { get; set; }
     }
 
 }

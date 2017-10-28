@@ -1,0 +1,40 @@
+﻿@model ShineYatraAdmin.Entity.HotelViewModel
+@{
+    Layout = null;
+}
+
+<div class="form-group">
+    @for (var i = 1; i <= 4; i++)
+    {
+        var roomString = " Room " + i;
+        var rowId = "guestRow" + i;
+        var childRow1 = "childRow-1" + i;
+        var childRow2 = "childRow-2" + i;
+
+        var styleValue = i == 1 ? "" : "display:none;";
+
+        <div class="row" name="guestRow" id="@rowId" style="@styleValue">
+            <label class="control-label col-md-1">@roomString </label>
+            <div class="col-md-2">
+                @Html.DropDownListFor(m => m.HotelRequestDetail.RoomStayCandidateDetail.GuestDetails[i - 1].AdultCount, new SelectList(Model.AdultCountList, "Id", "Value"), new { @required = "0", id = "adultCountDropDown", @class = "form-control" })
+            </div>
+            <label class="control-label col-md-1">Childers</label>
+            <div class="col-md-2">
+                @Html.DropDownListFor(m => m.HotelRequestDetail.RoomStayCandidateDetail.GuestDetails[i - 1].ChildCount, new SelectList(Model.ChildCountList, "Id", "Value"), new { @required = "0", id = "childCountDropDown-"+i, @class = "form-control" })
+            </div>
+            <div id="@childRow1" name="childRow" style="display:none;">
+                <label class="control-label col-md-1">Child 1 Age</label>
+                <div class="col-md-1">
+                    @Html.DropDownListFor(m => m.HotelRequestDetail.RoomStayCandidateDetail.GuestDetails[i - 1].Child.Age[0], new SelectList(Model.ChildAgeList, "Id", "Value"), new { @required = "0", id = "childAgeCountDropDown1" + i, @class = "form-control" })
+                </div>
+            </div>
+            <div id="@childRow2" name="childRow" style="display:none;">
+                <label class="control-label col-md-1">Child 2 Age</label>
+                <div class="col-md-1">
+                    @Html.DropDownListFor(m => m.HotelRequestDetail.RoomStayCandidateDetail.GuestDetails[i - 1].Child.Age[1], new SelectList(Model.ChildAgeList, "Id", "Value"), new { @required = "0", id = "childAgeCountDropDown2" + i, @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <br />
+    }
+</div>

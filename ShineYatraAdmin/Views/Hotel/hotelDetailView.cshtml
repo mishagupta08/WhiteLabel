@@ -1,44 +1,238 @@
 ﻿@using ShineYatraAdmin.Properties;
 @model ShineYatraAdmin.Entity.HotelViewModel
-
+@{
+    ViewBag.Title = "Hotel List View";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
 <!DOCTYPE html>
-<script src="~/Script/hotel.js"></script>
-<div>
-    @if (Model != null || Model.SelectedHotel != null || Model.SelectedHotel.Hoteldetail != null)
-    {
-        <div class="form-body">
-            @*/******Overview Section***Start***/*@
-            <h3>@Model.SelectedHotel.Hoteldetail.Hotelname</h3>
-            <h5>@Model.SelectedHotel.Hoteldetail.Contactinfo.Address</h5>
-            <br />
-
-            <h4>Overview</h4>
-            <marquee behavior="scroll" direction="left">
-                @if (Model.SelectedHotel.Hoteldetail.Images != null && Model.SelectedHotel.Hoteldetail.Images.Image != null)
-                {
-                    foreach (var image in Model.SelectedHotel.Hoteldetail.Images.Image)
-                    {
-                        <img src="@image" width="120" height="80" alt="Natural" />
-                    }
-                }
-            </marquee>
-
-            @*/******Overview Section***End***/*@
-
-            <h4>Select Room</h4>
-
-            @if (Model.SelectedHotel.Ratedetail != null)
-                {
-                    foreach (var rate in Model.SelectedHotel.Ratedetail.Rate)
-                    {
-                    <h3>@rate.Roomtype</h3>
-                    <h5>@rate.Roombasis</h5>
-                    <h5>@rate.Ratebands.OriginalRoomTotal</h5>
-                    <button type="button" data-roomcode="@rate.RoomTypeCode" name="bookHotel" class="btn btn-success">Book</button>
-                }
-            }
-
-        </div>
+<style>
+    #rateContainer tr:nth-child(even) {
+        background: aliceblue;
     }
-    <span id="hoteSearchHotel"></span>
-</div>
+
+    #leftPanel > table {
+        width: 100% !important;
+        border: 1px solid lightgrey !important;
+        margin-top: 3px;
+    }
+
+    #leftPanel {
+        vertical-align: top;
+    }
+
+    td, th {
+        padding: 5px;
+        vertical-align: top;
+    }
+
+    .rightPanel {
+        display: inline-block;
+        width: 69%;
+        margin-left: 10px;
+        display: inline-block;
+    }
+
+    #contentHolder:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+</style>
+@if (Model != null && string.IsNullOrEmpty(Model.Error))
+{
+    @Html.HiddenFor(m => m.hotelRequestCookieId, new { @id = "hotelRequestCookieId" })
+    <div class="white-box" id="contentHolder">
+
+        <div id="leftPanel" style="display:inline-block; width:20%;">
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <img src="@Model.SelectedHotel.Hoteldetail.HeadOfficeImage" style="width: 100%;height: 200px;">
+                    </td>
+                </tr>
+                <tr><td>City</td><td>@Model.HotelRequestDetail.HotelCityName</td></tr>
+                <tr><td>CheckIn</td><td>@Model.HotelRequestDetail.Start</td></tr>
+                <tr><td>CheckOut</td><td>@Model.HotelRequestDetail.End</td></tr>
+                <tr><td>No. Of Room</td><td>@Model.HotelRequestDetail.RoomCount</td></tr>
+                <tr><td>No. Of Adult</td><td>@Model.HotelRequestDetail.TotalAdultCount <img src="~/images/adult.png" height="15" /></td></tr>
+                <tr>
+                    <td>
+                        No. Of Child
+                    </td>
+                    <td>
+                        @Model.HotelRequestDetail.TotalChildCount
+                        <img src="~/images/child.png" height="15" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="rightPanel">
+            @if (Model.SelectedHotel != null || Model.SelectedHotel.Hoteldetail != null)
+            {
+                <div class="form-body">
+                    @*/******Overview Section***Start***/*@
+                    <h3>@Model.SelectedHotel.Hoteldetail.Hotelname</h3>
+                    <h5>@Model.SelectedHotel.Hoteldetail.Contactinfo.Address</h5>
+                    <br />
+                    <h4>Overview</h4>
+                    <p>
+                        @Model.SelectedHotel.Hoteldetail.Hoteldesc
+                    </p>
+
+                    @*/******Overview Section***End***/*@
+
+                    @*<h4>Select Room</h4>*@
+
+                    @if (Model.SelectedHotel.Ratedetail != null)
+                    {
+                        <table id="rateContainer">
+                            <thead>
+                                <tr style="background: gainsboro;">
+                                    <th width="25%">Room Type</th>
+                                    <th width="45%">Inclusion</th>
+                                    <th width="10%">Rate</th>
+                                    <th width="10%">Total Rate</th>
+                                    <th width="10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var count = 0;}
+                                @foreach (var rate in Model.SelectedHotel.Ratedetail.Rate)
+                                {
+                                    count++;
+                                    var fareBreakupTableId = "fareBreakupTable" + count;
+                                    <tr style="margin-top:5px;margin-bottom:5px;">
+                                        <td>
+                                            @rate.Roomtype
+                                        </td>
+                                        <td>@rate.Roombasis</td>
+                                        <td>@rate.Ratebands.RoomTotal <br /><span style="font-size : 8px;">(All Incl. room per night)</span></td>
+                                        <td>
+                                            @{
+                                                var roomTotal = Convert.ToInt32(rate.Ratebands.RoomTotal);
+                                                var rooms = Convert.ToInt32(Model.HotelRequestDetail.RoomCount);
+                                                var extraGuestAmount = 1;
+                                                //if (!string.IsNullOrEmpty(rate.Ratebands.ExtGuestTotal))
+                                                //{
+                                                //    extraGuestAmount = Convert.ToInt32(rate.Ratebands.ExtGuestTotal);
+                                                //    if (extraGuestAmount == 0)
+                                                //    {
+                                                //        extraGuestAmount = 1;
+                                                //    }
+                                                //}
+
+                                                var totalFare = rooms * roomTotal * Model.HotelRequestDetail.NightCount * extraGuestAmount;
+                                            }
+
+                                            @*@rate.Ratebands.OriginalRoomTotal*@
+                                            @totalFare
+
+                                        </td>
+                                        <td><button type="button" data-roomcode="@rate.RoomTypeCode" name="bookHotel" class="btn btn-success">Book</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div>
+                                                <div style="cursor:pointer; color:red;" name="fareBreakup" data-count="@count">Fare Breakup</div>
+
+                                                <table id="@fareBreakupTableId" style="display:none; width:40%;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Original Room Total</td>
+                                                            <td>@rate.Ratebands.OriginalRoomTotal</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Extra Guest Total</td>
+                                                            <td>@rate.Ratebands.ExtGuestTotal</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Service tax Total</td>
+                                                            <td>@rate.Ratebands.ServicetaxTotal</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Discount</td>
+                                                            <td>@rate.Ratebands.Discount</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Commission</td>
+                                                            <td>@rate.Ratebands.Commission</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>RoomTotal</td>
+                                                            <td>@rate.Ratebands.RoomTotal</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Commision Group Amount</td>
+                                                            <td>@rate.Ratebands.CommisionGroupAmount</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Total Fare(Rate*Nights*Rooms*Extra Guest)</td>
+                                                            <td>@totalFare</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                                }
+                            </tbody>
+                        </table>
+                                                }
+                    <br /><br />
+                    <div class="sttabs tabs-style-bar" style="background-color : beige;">
+                        <nav>
+                            <ul class="tablist">
+                                <li id="tab-1"><a class="sticon ti-wand" href="#section-bar-1"><span>@Resources.RoomServices</span></a></li>
+                                <li id="tab-2"><a class="sticon ti-signal" href="#section-bar-2"><span>@Resources.HotelServices</span></a></li>
+                                <li id="tab-3"><a class="sticon ti-ticket" href="#section-bar-3"><span>@Resources.ImageGallary</span></a></li>
+                            </ul>
+                        </nav>
+                        <div class="content-wrap">
+                            <section id="section-bar-1">
+                                @if (Model.SelectedHotel.Hoteldetail.Services != null)
+                                {
+                                    <span>
+                                        @Model.SelectedHotel.Hoteldetail.Services.Roomservices
+                                    </span>
+                                }
+                            </section>
+                            <section id="section-bar-2">
+                                @if (Model.SelectedHotel.Hoteldetail.Services != null)
+                                {
+                                    <span>
+                                        @Model.SelectedHotel.Hoteldetail.Services.Hotelservices
+                                    </span>
+                                }
+                            </section>
+                            <section id="section-bar-3">
+                                @if (Model.SelectedHotel.Hoteldetail.Images != null && Model.SelectedHotel.Hoteldetail.Images.Image != null)
+                                {
+                                    foreach (var image in Model.SelectedHotel.Hoteldetail.Images.Image)
+                                    {
+                                        <img src="@image.Imagepath" width="120" height="80" alt="Natural" />
+                                    }
+                                }
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                                                }
+                                                else
+                                                {
+                                                    if (string.IsNullOrEmpty(Model.SelectedHotel.Error))
+                                                    {
+                                                        <div>@Model.SelectedHotel.Error</div>
+                                                    }
+                                                }
+            <span id="hoteSearchHotel"></span>
+        </div>
+    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div>@Model.Error</div>
+                                                }
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/hotel.js"></script>
+
