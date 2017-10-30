@@ -315,19 +315,37 @@
   <data name="Origin" xml:space="preserve">
     <value>Origin</value>
   </data>
-  <data name="Recharge" xml:space="preserve">
-    <value>Recharge</value>
-  </data>
   <data name="HotelBooking" xml:space="preserve">
     <value>Hotel Booking</value>
+  </data>
+  <data name="CommissionStructure" xml:space="preserve">
+    <value>Commission Structure</value>
   </data>
   <data name="BillServices" xml:space="preserve">
     <value>Bill Services</value>
   </data>
   <data name="Cab" xml:space="preserve">
-    <value>Cab Services</value>
+    <value>Cab</value>
   </data>
-  <data name="CommissionStructure" xml:space="preserve">
-    <value>Commission Structure</value>
+  <data name="Recharge" xml:space="preserve">
+    <value>Recharge</value>
+  </data>
+  <data name="HotelFoundMessage" xml:space="preserve">
+    <value>Total {0} Hotel Found</value>
+  </data>
+  <data name="MaxPrice" xml:space="preserve">
+    <value>50000</value>
+  </data>
+  <data name="MinPrice" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="HotelServices" xml:space="preserve">
+    <value>Hotel Services</value>
+  </data>
+  <data name="ImageGallary" xml:space="preserve">
+    <value>Image Gallary</value>
+  </data>
+  <data name="RoomServices" xml:space="preserve">
+    <value>Room Services</value>
   </data>
 </root>

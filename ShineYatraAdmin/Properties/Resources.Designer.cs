@@ -178,7 +178,7 @@ namespace ShineYatraAdmin.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cab Services.
+        ///   Looks up a localized string similar to Cab.
         /// </summary>
         public static string Cab {
             get {
@@ -394,6 +394,15 @@ namespace ShineYatraAdmin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total {0} Hotel Found.
+        /// </summary>
+        public static string HotelFoundMessage {
+            get {
+                return ResourceManager.GetString("HotelFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hotel Groups.
         /// </summary>
         public static string HotelGroups {
@@ -403,11 +412,29 @@ namespace ShineYatraAdmin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hotel Services.
+        /// </summary>
+        public static string HotelServices {
+            get {
+                return ResourceManager.GetString("HotelServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hotel Structure.
         /// </summary>
         public static string HotelStructure {
             get {
                 return ResourceManager.GetString("HotelStructure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Gallary.
+        /// </summary>
+        public static string ImageGallary {
+            get {
+                return ResourceManager.GetString("ImageGallary", resourceCulture);
             }
         }
         
@@ -507,6 +534,24 @@ namespace ShineYatraAdmin.Properties {
         public static string ManageWhiteLabelUser {
             get {
                 return ResourceManager.GetString("ManageWhiteLabelUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 50000.
+        /// </summary>
+        public static string MaxPrice {
+            get {
+                return ResourceManager.GetString("MaxPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.
+        /// </summary>
+        public static string MinPrice {
+            get {
+                return ResourceManager.GetString("MinPrice", resourceCulture);
             }
         }
         
@@ -615,6 +660,15 @@ namespace ShineYatraAdmin.Properties {
         public static string RechargeStructure {
             get {
                 return ResourceManager.GetString("RechargeStructure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Room Services.
+        /// </summary>
+        public static string RoomServices {
+            get {
+                return ResourceManager.GetString("RoomServices", resourceCulture);
             }
         }
         
