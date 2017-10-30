@@ -48,6 +48,15 @@
                             .draw();
                     });
                 },
+
+                "footerCallback": function () {
+                    var api = this.api(),
+                    columns = [4, 5, 6];
+                    for (var i = 0; i < columns.length; i++) {
+                        $('tfoot th').eq(columns[i]).html('Total: ' + api.column(columns[i], { filter: 'applied' }).data().sum());                       
+                    }
+                },
+ 
                 "destroy": true,
                 "paging": false,
                 "ordering": false,
