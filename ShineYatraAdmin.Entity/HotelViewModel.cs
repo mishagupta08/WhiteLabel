@@ -39,6 +39,13 @@ namespace ShineYatraAdmin.Entity
         public ProvisionalBooking ProvisionalBookingDetail { get; set; }
 
         /// <summary>
+        /// gets or sets hotel booking response
+        /// </summary>
+        public ArzHotelBookingResp HotelBookingResponse { get; set; }
+
+        public string txnId { get; set; }
+
+        /// <summary>
         /// gets or sets flight city list
         /// </summary>
         public IList<KeyValuePair> RoomsList { get; set; }

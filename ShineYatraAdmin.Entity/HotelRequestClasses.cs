@@ -30,12 +30,16 @@
     [XmlRoot(ElementName = "HotelRequest")]
     public class HotelRequest
     {
+        [XmlIgnore]
         public int TotalAdultCount { get; set; }
 
+        [XmlIgnore]
         public int TotalChildCount { get; set; }
 
+        [XmlIgnore]
         public int RoomCount { get; set; }
 
+        [XmlIgnore]
         public int NightCount { get; set; }
 
         [XmlElement(ElementName = "roomStayCandidate")]

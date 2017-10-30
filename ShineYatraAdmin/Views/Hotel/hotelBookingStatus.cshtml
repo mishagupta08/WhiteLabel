@@ -9,61 +9,68 @@
             <div class="panel-heading">Hotel Booking Status</div>
             <div class="panel-wrapper collapse in" aria-expanded="true">
                 <div class="panel-body">
-                    <h3>@ViewBag.status</h3>
+                    @if (Model != null)
+                    {
+                        <h3>@Model.Error</h3>
 
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        @if (Model != null)
+                        <div class="col-md-2"></div>
+                        if (Model.HotelRequestDetail != null)
                         {
-                            <div class="col-md-12">
-                                <hr>
-                            </div>
-                            <div class="col-md-12">
-                                <h4>Hotel Details</h4>
-                            </div>
+                            <div class="col-md-8">
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
+                                <div class="col-md-12">
+                                    <h4>Hotel Details</h4>
+                                </div>
 
-                            <div class="col-md-6">
                                 <div class="col-md-6">
-                                    <Label>
-                                        @Model.HotelRequestDetail.Start - @Model.HotelRequestDetail.End
-                                    </Label>
+                                    <div class="col-md-6">
+                                        <Label>
+                                            @Model.HotelRequestDetail.Start - @Model.HotelRequestDetail.End
+                                        </Label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <Label>Hotel:&nbsp;</Label>@Model.HotelRequestDetail.HotelName
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <Label>Hotel:&nbsp;</Label>@Model.HotelRequestDetail.HotelName
+                                    <div class="col-md-6">
+                                        <Label>Room:&nbsp;</Label>
+                                        @{ var selectedRoom = Model.SelectedHotel.Ratedetail.Rate.FirstOrDefault(r => r.RoomTypeCode == Model.HotelRequestDetail.roomCode);}
+                                        @if (selectedRoom != null)
+                                        {
+                                            <span>@selectedRoom.Roomtype</span><br />
+                                            <span>@selectedRoom.Roombasis</span><br />
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <Label>Room:&nbsp;</Label>
-                                    @{ var selectedRoom = Model.SelectedHotel.Ratedetail.Rate.FirstOrDefault(r => r.RoomTypeCode == Model.HotelRequestDetail.roomCode)}
-                                    @selectedRoom.<span>-</span>@Model.flight_no
+                                <div class="col-md-12">
+                                    <hr>
                                 </div>
-                            </div>
-                            <div class="col-md-12">
-                                <hr>
-                            </div>
-                            <div class="col-md-12">
-                                <h4>Passenger Details</h4>
-                            </div>
-                            <table border="1" class="display table" width="100%">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Date of birth</th>
-                                    <th> Age</th>
-                                </tr>
-                                @{ int count = 0;}
-                                @foreach (var passenger in Model.passenger_details)
-                                {
-                                    <tr>
+                                <div class="col-md-12">
+                                    <h4>Passenger Details</h4>
+                                </div>
+                                @*<table border="1" class="display table" width="100%">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Date of birth</th>
+                                            <th> Age</th>
+                                        </tr>
+                                        @{ int count = 0;}
+                                        @foreach (var passenger in Model.passenger_details)
+                                        {
+                                            <tr>
 
-                                        <td>@passenger.title<span>&nbsp;</span> @passenger.first_name <span>&nbsp;</span>@passenger.last_name</td>
-                                        <td>@passenger.dob</td>
-                                        <td>@passenger.age </td>
-                                    </tr>
-                                }
-                            </table>
-                                    }
-                    </div>
+                                                <td>@passenger.title<span>&nbsp;</span> @passenger.first_name <span>&nbsp;</span>@passenger.last_name</td>
+                                                <td>@passenger.dob</td>
+                                                <td>@passenger.age </td>
+                                            </tr>
+                                        }
+                                    </table>*@
+                            </div>
+                                                }
+                                            }
                 </div>
             </div>
         </div>

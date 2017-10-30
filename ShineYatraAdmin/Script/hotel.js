@@ -95,7 +95,6 @@ function ChildRowInitialization() {
     }
 }
 
-
 function CancelHotelBooking() {
     $.ajax({
         url: 'GetHotelCancelView',

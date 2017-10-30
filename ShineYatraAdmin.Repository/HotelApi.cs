@@ -148,25 +148,25 @@
             }
 
             //**delete It* start*//
-            if (hotelList == null || hotelList.Searchresult == null)
-            {
-                hotelList = new ArzHotelAvailResp();
-                hotelList.Searchresult = new Searchresult();
-                hotelList.Searchresult.Hotel = new List<Hotel>();
-                hotelList.Searchresult.Hotel.Add(new Hotel
-                {
-                    Hoteldetail = new Hoteldetail
-                    {
-                        Hotelid = "00000898",
-                        Hotelname = "The Grand",
-                        WebService = "arzooB",
-                        Hoteldesc = "This luxury hotel is located in the commercial hub of Vasant Kunj area. There are 390 contemporary-styled guest rooms, which overlook the pool and lush green gardens. Business events can be held in any of its 15 spacious convention halls, a business centre and a mini-conference room, which can seat a maximum of five people. Some fine dining options include Brix, an Italian restaurant, Enoki, a Japanese restaurant and Grand Cafe, the 24 hour coffee shop.",
-                        MinRate = "7950",
-                        Contactinfo = new Contactinfo { Address = "Nelson Mandela Marg (close to airport), Vasant Kunj Phase II, Vasant Kunj, NEW DELHI, DELHI, India, Pin-110070" },
-                        Images = new Images { Image = new Image { Imagepath = "cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/HO.jpg" } }
-                    }
-                });
-            }
+            //if (hotelList == null || hotelList.Searchresult == null)
+            //{
+            //    hotelList = new ArzHotelAvailResp();
+            //    hotelList.Searchresult = new Searchresult();
+            //    hotelList.Searchresult.Hotel = new List<Hotel>();
+            //    hotelList.Searchresult.Hotel.Add(new Hotel
+            //    {
+            //        Hoteldetail = new Hoteldetail
+            //        {
+            //            Hotelid = "00000898",
+            //            Hotelname = "The Grand",
+            //            WebService = "arzooB",
+            //            Hoteldesc = "This luxury hotel is located in the commercial hub of Vasant Kunj area. There are 390 contemporary-styled guest rooms, which overlook the pool and lush green gardens. Business events can be held in any of its 15 spacious convention halls, a business centre and a mini-conference room, which can seat a maximum of five people. Some fine dining options include Brix, an Italian restaurant, Enoki, a Japanese restaurant and Grand Cafe, the 24 hour coffee shop.",
+            //            MinRate = "7950",
+            //            Contactinfo = new Contactinfo { Address = "Nelson Mandela Marg (close to airport), Vasant Kunj Phase II, Vasant Kunj, NEW DELHI, DELHI, India, Pin-110070" },
+            //            Images = new Images { Image = new Image { Imagepath = "cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/HO.jpg" } }
+            //        }
+            //    });
+            //}
 
             //**delete It* End*//
 
@@ -293,90 +293,90 @@
 
             /*****Delete Start*****/
 
-            if (hotelList == null || hotelList.Hoteldetail == null)
-            {
-                hotelList = new Entity.HotelDetail.Hotel();
-                hotelList.Hoteldetail = new Entity.HotelDetail.Hoteldetail();
-                hotelList.Hoteldetail.Hotelname = "The Grand";
-                hotelList.Hoteldetail.HotelId = "00000898";
-                hotelList.Hoteldetail.Hoteldesc = "This luxury hotel is located in the commercial hub of Vasant Kunj area. There are 390 contemporary-styled guest rooms, which overlook the pool and lush green gardens. Business events can be held in any of its 15 spacious convention halls, a business centre and a mini-conference room, which can seat a maximum of five people.";
-                hotelList.Hoteldetail.Starrating = "5";
-                hotelList.Hoteldetail.Noofrooms = "1";
-                hotelList.Hoteldetail.MinRate = "7500";
-                hotelList.Hoteldetail.Contactinfo = new Entity.HotelDetail.Contactinfo();
-                hotelList.Hoteldetail.Contactinfo.Address = "Nelson Mandela Marg (close to airport), Vasant Kunj Phase II, Vasant Kunj, NEW DELHI, DELHI, India, Pin-110070";
-                hotelList.Hoteldetail.Contactinfo.Citywiselocation = "Vasant Kunj";
+            //if (hotelList == null || hotelList.Hoteldetail == null)
+            //{
+            //    hotelList = new Entity.HotelDetail.Hotel();
+            //    hotelList.Hoteldetail = new Entity.HotelDetail.Hoteldetail();
+            //    hotelList.Hoteldetail.Hotelname = "The Grand";
+            //    hotelList.Hoteldetail.HotelId = "00000898";
+            //    hotelList.Hoteldetail.Hoteldesc = "This luxury hotel is located in the commercial hub of Vasant Kunj area. There are 390 contemporary-styled guest rooms, which overlook the pool and lush green gardens. Business events can be held in any of its 15 spacious convention halls, a business centre and a mini-conference room, which can seat a maximum of five people.";
+            //    hotelList.Hoteldetail.Starrating = "5";
+            //    hotelList.Hoteldetail.Noofrooms = "1";
+            //    hotelList.Hoteldetail.MinRate = "7500";
+            //    hotelList.Hoteldetail.Contactinfo = new Entity.HotelDetail.Contactinfo();
+            //    hotelList.Hoteldetail.Contactinfo.Address = "Nelson Mandela Marg (close to airport), Vasant Kunj Phase II, Vasant Kunj, NEW DELHI, DELHI, India, Pin-110070";
+            //    hotelList.Hoteldetail.Contactinfo.Citywiselocation = "Vasant Kunj";
 
-                hotelList.Hoteldetail.Images = new Entity.HotelDetail.Images();
-                hotelList.Hoteldetail.Images.Image = new List<Entity.HotelDetail.Image>();
-                hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/0000024122RD.jpg" });
-                hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/0000024905RD.jpg" });
-                hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/0000023333RD.jpg" });
-                hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/XT1.jpg" });
-                hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/XT2.jpg" });
-                hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/XT3.jpg" });
-                hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/XT4.jpg" });
+            //    hotelList.Hoteldetail.Images = new Entity.HotelDetail.Images();
+            //    hotelList.Hoteldetail.Images.Image = new List<Entity.HotelDetail.Image>();
+            //    hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/0000024122RD.jpg" });
+            //    hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/0000024905RD.jpg" });
+            //    hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/0000023333RD.jpg" });
+            //    hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/XT1.jpg" });
+            //    hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/XT2.jpg" });
+            //    hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/XT3.jpg" });
+            //    hotelList.Hoteldetail.Images.Image.Add(new Entity.HotelDetail.Image { Imagepath = "http://cdn.travelpartnerweb.com/DesiyaImages/Image/1/nxd/maw/wye/mbv/XT4.jpg" });
 
-                hotelList.Ratedetail = new Ratedetail();
-                hotelList.Ratedetail.Rate = new List<Rate>();
+            //    hotelList.Ratedetail = new Ratedetail();
+            //    hotelList.Ratedetail.Rate = new List<Rate>();
 
-                hotelList.Ratedetail.Rate.Add(new Rate
-                {
-                    Roomtype = "Grand Premium Room Only TG Special",
-                    Roombasis = "Complimentary Wi-Fi Internet, Taxes, ,10% Discount on Food and Beverages, Free room upgrade subject to availability",
-                    RoomTypeCode = "0000184150",
-                    RatePlanCode = "0000689459",
-                    Ratebands = new Ratebands
-                    {
-                        Validdays = "1111111",
-                        WsKey = "0uNZYHRVtT86eaST9cxEwBtzLdlIYUjBSYrQfbcoJRCld4hJqJ5J9mQ5oOVMvpmMisxuMwbRRW6LLccpNa9nxPbGM/bkO58ExDrDapJ4gq7B45RuCOzCgZa1JrJic2xK3xdveE9MzkF4s5fZZJnrk8Q6w2qSeIKuTCmFk8/vQHOnOnMaLOVKWsdPBf4axB3HSAQ8fAGeVbM9mGG2sw8eqaQkUVa5/1sIacktjDU7bFnb1KlhjkBUq6gxwf4UlPxISbC0fJxNC5KrMfmoT8DddxxsuMjFZPrR2HNjrW4zbuWzh1N9R0wT/JyOqGfxpfM2OrRdrunn1SpGytYyCpMf+7ni7GIfP7p8bEn4el2ypdbEOsNqkniCrpj/9TK3zkwEn4doaXhLJbPB45RuCOzCgZ+HaGl4SyWzweOUbgjswoFWp5nZ86iUG8Q6w2qSeIKu0Xg6kx6/VIvlRsv0brlhIgMdJk/xNq3JiX6Yfx2T7InULFBeohhejfflIYqwnPKwdzG+E+oGbFE+BrItg0qsrxwWtpoRqZ8/weOUbgjswoEeJcWhQsqZrg==",
-                        ExtGuestTotal = "0",
-                        RoomTotal = "7500",
-                        ServicetaxTotal = "2387",
-                        Discount = "345.0",
-                        Commission = "0",
-                        OriginalRoomTotal = "7950"
-                    }
-                });
+            //    hotelList.Ratedetail.Rate.Add(new Rate
+            //    {
+            //        Roomtype = "Grand Premium Room Only TG Special",
+            //        Roombasis = "Complimentary Wi-Fi Internet, Taxes, ,10% Discount on Food and Beverages, Free room upgrade subject to availability",
+            //        RoomTypeCode = "0000184150",
+            //        RatePlanCode = "0000689459",
+            //        Ratebands = new Ratebands
+            //        {
+            //            Validdays = "1111111",
+            //            WsKey = "0uNZYHRVtT86eaST9cxEwBtzLdlIYUjBSYrQfbcoJRCld4hJqJ5J9mQ5oOVMvpmMisxuMwbRRW6LLccpNa9nxPbGM/bkO58ExDrDapJ4gq7B45RuCOzCgZa1JrJic2xK3xdveE9MzkF4s5fZZJnrk8Q6w2qSeIKuTCmFk8/vQHOnOnMaLOVKWsdPBf4axB3HSAQ8fAGeVbM9mGG2sw8eqaQkUVa5/1sIacktjDU7bFnb1KlhjkBUq6gxwf4UlPxISbC0fJxNC5KrMfmoT8DddxxsuMjFZPrR2HNjrW4zbuWzh1N9R0wT/JyOqGfxpfM2OrRdrunn1SpGytYyCpMf+7ni7GIfP7p8bEn4el2ypdbEOsNqkniCrpj/9TK3zkwEn4doaXhLJbPB45RuCOzCgZ+HaGl4SyWzweOUbgjswoFWp5nZ86iUG8Q6w2qSeIKu0Xg6kx6/VIvlRsv0brlhIgMdJk/xNq3JiX6Yfx2T7InULFBeohhejfflIYqwnPKwdzG+E+oGbFE+BrItg0qsrxwWtpoRqZ8/weOUbgjswoEeJcWhQsqZrg==",
+            //            ExtGuestTotal = "0",
+            //            RoomTotal = "7500",
+            //            ServicetaxTotal = "2387",
+            //            Discount = "345.0",
+            //            Commission = "0",
+            //            OriginalRoomTotal = "7950"
+            //        }
+            //    });
 
-                hotelList.Ratedetail.Rate.Add(new Rate
-                {
-                    Roomtype = "Grand Premium Room with Breakfast TG Special",
-                    Roombasis = "Breakfast, Complimentary Wi-Fi Internet, Taxes,",
-                    RoomTypeCode = "0000184151",
-                    RatePlanCode = "0000689463",
-                    Ratebands = new Ratebands
-                    {
-                        Validdays = "1111111",
-                        WsKey = "xOpflrzr4ys6eaST9cxEwF5673/Pk2shweOUbgjswoGld4hJqJ5J9mQ5oOVMvpmMisxuMwbRRW4A8hCXqzdfkKw/Zffn7OMNxDrDapJ4gq7B45RuCOzCgZa1JrJic2xK3xdveE9MzkF4s5fZZJnrk8Q6w2qSeIKuTCmFk8/vQHOnOnMaLOVKWsdPBf4axB3HSAQ8fAGeVbNkf/7tWw7snL70mO3wUpfr7ANOsUaHXl4UGSHhnwqssBs1/1meUilv0CHNs6neM9a1nanBWALEewny+Iue3pdZ77m1Gq9TRy/TPACodTPy+u+5tRqvU0cv0zwAqHUz8vrzKoWaVPsO89db6E2oYWHjgrTTQ8Uz3Kgwf+IA4CTtS3purLcJG+UHw4dZqdlQMYB+neNrhA8rSPZvCoSerqeoo/LJSmYowiFZ1xBD2luqCfh+69pQRSEbyacZpMpYFYdIkvUy+xCoaBfc5EobFJGF",
-                        ExtGuestTotal = "0",
-                        RoomTotal = "8750",
-                        ServicetaxTotal = "2500",
-                        Discount = "402.0",
-                        Commission = "0",
-                        OriginalRoomTotal = "9276"
-                    }
-                });
+            //    hotelList.Ratedetail.Rate.Add(new Rate
+            //    {
+            //        Roomtype = "Grand Premium Room with Breakfast TG Special",
+            //        Roombasis = "Breakfast, Complimentary Wi-Fi Internet, Taxes,",
+            //        RoomTypeCode = "0000184151",
+            //        RatePlanCode = "0000689463",
+            //        Ratebands = new Ratebands
+            //        {
+            //            Validdays = "1111111",
+            //            WsKey = "xOpflrzr4ys6eaST9cxEwF5673/Pk2shweOUbgjswoGld4hJqJ5J9mQ5oOVMvpmMisxuMwbRRW4A8hCXqzdfkKw/Zffn7OMNxDrDapJ4gq7B45RuCOzCgZa1JrJic2xK3xdveE9MzkF4s5fZZJnrk8Q6w2qSeIKuTCmFk8/vQHOnOnMaLOVKWsdPBf4axB3HSAQ8fAGeVbNkf/7tWw7snL70mO3wUpfr7ANOsUaHXl4UGSHhnwqssBs1/1meUilv0CHNs6neM9a1nanBWALEewny+Iue3pdZ77m1Gq9TRy/TPACodTPy+u+5tRqvU0cv0zwAqHUz8vrzKoWaVPsO89db6E2oYWHjgrTTQ8Uz3Kgwf+IA4CTtS3purLcJG+UHw4dZqdlQMYB+neNrhA8rSPZvCoSerqeoo/LJSmYowiFZ1xBD2luqCfh+69pQRSEbyacZpMpYFYdIkvUy+xCoaBfc5EobFJGF",
+            //            ExtGuestTotal = "0",
+            //            RoomTotal = "8750",
+            //            ServicetaxTotal = "2500",
+            //            Discount = "402.0",
+            //            Commission = "0",
+            //            OriginalRoomTotal = "9276"
+            //        }
+            //    });
 
-                hotelList.Ratedetail.Rate.Add(new Rate
-                {
-                    Roomtype = "Grand Premium Room Only",
-                    Roombasis = "Complimentary Wi-Fi Internet, ,10% Discount on Food and Beverages, 15% discount on all other SPA therapies.",
-                    RoomTypeCode = "0000024903",
-                    RatePlanCode = "0000609988",
-                    Ratebands = new Ratebands
-                    {
-                        Validdays = "1111111",
-                        WsKey = "vEv28ofDPCY6eaST9cxEwDcz+kdacs1mFluz6IhIkl6ld4hJqJ5J9mQ5oOVMvpmMJg3iwYJnLRbMxoQOqXitOpTH0oV0EbXNxDrDapJ4gq7B45RuCOzCgZa1JrJic2xK3xdveE9MzkF4s5fZZJnrk8Q6w2qSeIKuTCmFk8/vQHOnOnMaLOVKWsdPBf4axB3HSAQ8fAGeVbM9mGG2sw8eqaQkUVa5/1sIacktjDU7bFnb1KlhjkBUq1zoMYzvQHxQbGwOiAVCvPojxu8IaDP0HNsMXUof3PxO6nyKY9j9b5HBlETKY7vedg6Lsdfc5dF9taSo1c0E+u+gnLQNydaucsRXGFNZV6c5xDrDapJ4gq6Y//Uyt85MBJ+HaGl4SyWzweOUbgjswoGfh2hpeEsls8HjlG4I7MKBVqeZ2fOolBvEOsNqkniCrtF4OpMev1SL5UbL9G65YSIDHSZP8TatyYl+mH8dk+yJ1CxQXqIYXo335SGKsJzysOe8ozEaHlntiPUp4z2XOsuYmbGlICASnMHjlG4I7MKBQifjBI72IvM=",
-                        ExtGuestTotal = "0",
-                        RoomTotal = "9500",
-                        ServicetaxTotal = "2463",
-                        Discount = "437.0",
-                        Commission = "0",
-                        OriginalRoomTotal = "10070"
-                    }
-                });
-            }
+            //    hotelList.Ratedetail.Rate.Add(new Rate
+            //    {
+            //        Roomtype = "Grand Premium Room Only",
+            //        Roombasis = "Complimentary Wi-Fi Internet, ,10% Discount on Food and Beverages, 15% discount on all other SPA therapies.",
+            //        RoomTypeCode = "0000024903",
+            //        RatePlanCode = "0000609988",
+            //        Ratebands = new Ratebands
+            //        {
+            //            Validdays = "1111111",
+            //            WsKey = "vEv28ofDPCY6eaST9cxEwDcz+kdacs1mFluz6IhIkl6ld4hJqJ5J9mQ5oOVMvpmMJg3iwYJnLRbMxoQOqXitOpTH0oV0EbXNxDrDapJ4gq7B45RuCOzCgZa1JrJic2xK3xdveE9MzkF4s5fZZJnrk8Q6w2qSeIKuTCmFk8/vQHOnOnMaLOVKWsdPBf4axB3HSAQ8fAGeVbM9mGG2sw8eqaQkUVa5/1sIacktjDU7bFnb1KlhjkBUq1zoMYzvQHxQbGwOiAVCvPojxu8IaDP0HNsMXUof3PxO6nyKY9j9b5HBlETKY7vedg6Lsdfc5dF9taSo1c0E+u+gnLQNydaucsRXGFNZV6c5xDrDapJ4gq6Y//Uyt85MBJ+HaGl4SyWzweOUbgjswoGfh2hpeEsls8HjlG4I7MKBVqeZ2fOolBvEOsNqkniCrtF4OpMev1SL5UbL9G65YSIDHSZP8TatyYl+mH8dk+yJ1CxQXqIYXo335SGKsJzysOe8ozEaHlntiPUp4z2XOsuYmbGlICASnMHjlG4I7MKBQifjBI72IvM=",
+            //            ExtGuestTotal = "0",
+            //            RoomTotal = "9500",
+            //            ServicetaxTotal = "2463",
+            //            Discount = "437.0",
+            //            Commission = "0",
+            //            OriginalRoomTotal = "10070"
+            //        }
+            //    });
+            //}
 
             /*****Delete End*****/
 

@@ -510,7 +510,7 @@
         private static HotelDescriptionRequest MakeConfirmHotelBookingRequest(HotelViewModel bookingModel, HotelRequest hotelRequestDetail, Rate rateRoom, ArzHotelProvResp response)
         {
             var bookingRequest = new HotelDescriptionRequest();
-            bookingRequest.hotelid = bookingModel.SelectedHotel.Hoteldetail.HotelId;
+            bookingRequest.hotelid = hotelRequestDetail.hotelid;
             bookingRequest.webService = hotelRequestDetail.webService;
             bookingRequest.RoomTypeCode = rateRoom.RoomTypeCode;
             bookingRequest.RatePlanType = rateRoom.RatePlanCode;
@@ -550,7 +550,7 @@
             bookingModel.ProvisionalBookingDetail.Hotelinfo.RoomTypeCode = rateRoom.RoomTypeCode;
             bookingModel.ProvisionalBookingDetail.Hotelinfo.Roomtype = rateRoom.Roomtype;
             bookingModel.ProvisionalBookingDetail.Hotelinfo.RatePlanType = rateRoom.RatePlanCode;
-            
+
             bookingModel.ProvisionalBookingDetail.RoomStayCandidate = new RoomStayCandidate();
 
             /****Set Room stay candidate Info***/
@@ -597,11 +597,22 @@
                 };
 
                 HttpContext.Response.Cookies.Add(cookie);
+                var cookie1 = new HttpCookie((GuidString + "RateDetail"), string.Empty)
+                {
+                    Expires = DateTime.Now.AddYears(1)
+                };
+
+                HttpContext.Response.Cookies.Add(cookie1);
+
             }
             else
             {
                 GuidString = cookieId;
                 HttpContext.Response.Cookies[cookieId].Value = requestDetailJson;
+                //if (string.IsNullOrEmpty(HttpContext.Response.Cookies[(cookieId + "RateDetail")].Value))
+                //{
+                //    HttpContext.Response.Cookies[(cookieId + "RateDetail")].Value = string.Empty;
+                //}
             }
 
             return GuidString;
@@ -611,15 +622,20 @@
         public void SaveRateDetail(Ratedetail rateDetail, string cookieId)
         {
             string requestDetailJson = new JavaScriptSerializer().Serialize(rateDetail);
-            if (!string.IsNullOrEmpty(cookieId))
-            {
-                var cookie = new HttpCookie(cookieId, requestDetailJson)
-                {
-                    Expires = DateTime.Now.AddYears(1)
-                };
+            Session[cookieId] = requestDetailJson;
+            //if (string.IsNullOrEmpty(HttpContext.Response.Cookies[(cookieId)].Value))
+            //{
+            //    var cookie = new HttpCookie(cookieId, requestDetailJson)
+            //    {
+            //        Expires = DateTime.Now.AddYears(1)
+            //    };
 
-                HttpContext.Response.Cookies.Add(cookie);
-            }
+            //    HttpContext.Response.Cookies.Add(cookie);
+            //}
+            //else
+            //{
+            //    HttpContext.Response.Cookies[cookieId].Value = requestDetailJson;
+            //}
         }
 
         /// <summary>
@@ -630,188 +646,216 @@
         [HttpPost]
         public async Task<ActionResult> BookResponse(HotelViewModel bookingModel)
         {
+            bookingModel.Error = string.Empty;
             var responseMessage = string.Empty;
             hotelManager = new HotelManager();
             var txnId = string.Empty;
             var info = string.Empty;
+            var error = string.Empty;
             var walletBalance = 0.0;
-            var bookResponse = new Bookingresponse();
+            var bookResponse = new ArzHotelBookingResp();
+            bookResponse.Bookingresponse = new HotelBookingresponse();
             try
             {
                 if (bookingModel == null || bookingModel.ProvisionalBookingDetail == null)
                 {
-                    return null;
+                    error = "In sufficient detail for Booking.";
+                    goto ExecuteError;
                 }
 
-                var userData = User.Identity.Name.Split('|');
-                var request = bookingModel.ProvisionalBookingDetail;
-                request.Creditcardno = "4111111111111111";
-                var isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
-
-                /****Set Hotel Info***/
-                bookingModel.ProvisionalBookingDetail.Hotelinfo = new Hotelinfo();
-
-                var hotelRequestCookie = Request.Cookies[bookingModel.hotelRequestCookieId];
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                var hotelRequestCookieModel = new HotelViewModel();
-                var rateDetail = new Ratedetail();
-                if (hotelRequestCookie != null)
+                if (string.IsNullOrEmpty(error))
                 {
-                    hotelRequestCookieModel = serializer.Deserialize<HotelViewModel>(hotelRequestCookie.Value);
-                }
+                    var userData = User.Identity.Name.Split('|');
+                    var request = bookingModel.ProvisionalBookingDetail;
+                    request.Creditcardno = "4111111111111111";
+                    var isPaymentGatewayactive = Convert.ToBoolean(ConfigurationManager.AppSettings["IsPaymentGatewayactive"]);
 
-                hotelRequestCookie = Request.Cookies[bookingModel.hotelRequestCookieId + "Ratedetail"];
-                if (hotelRequestCookie != null)
-                {
-                    rateDetail = serializer.Deserialize<Ratedetail>(hotelRequestCookie.Value);
-                }
+                    /****Set Hotel Info***/
+                    bookingModel.ProvisionalBookingDetail.Hotelinfo = new Hotelinfo();
 
-                if (hotelRequestCookieModel == null || rateDetail == null)
-                {
-                    return Json("Hotel request detail not found.");
-                }
-
-                bookingModel.SelectedHotel = hotelRequestCookieModel.SelectedHotel;
-                Rate rateRoom = MakeProvisionalBookingRequest(bookingModel, hotelRequestCookieModel.HotelRequestDetail, rateDetail);
-
-                /**nee bookhotel other work here ***/
-
-                /***comment* start*/
-                /**Need a call from bharat sir to save below request**/
-                info = SaveHotelBookingDetail(bookingModel.HotelDescRequest);
-
-                /***comment* end*/
-                try
-                {
-                    var balrequest = new WalletRequest
+                    var hotelRequestCookie = Request.Cookies[bookingModel.hotelRequestCookieId];
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    var hotelRequestCookieModel = new HotelViewModel();
+                    var rateDetail = new Ratedetail();
+                    if (hotelRequestCookie != null)
                     {
-                        action = "GET_WALLET_BALANCE",
-                        domain_name = ConfigurationManager.AppSettings["DomainName"],
-                        member_id = userData[1],
-                        company_id = userData[2]
-                    };
-
-                    _userManager = new UserManager();
-
-                    var balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
-                    if (balResponse != null)
-                    {
-                        walletBalance = balResponse.wallet_balance;
+                        hotelRequestCookieModel = serializer.Deserialize<HotelViewModel>(hotelRequestCookie.Value);
                     }
-                }
-                catch (Exception exx)
-                {
-                    return Json(exx.Message);
-                }
-                if (isPaymentGatewayactive && (bookingModel.HotelRequestDetail.PaymentMode == "bank" || walletBalance < request.TotalFare))
-                {
-                    var g = Guid.NewGuid();
-                    var guidString = Convert.ToBase64String(g.ToByteArray());
-                    guidString = guidString.Replace("=", "");
-                    guidString = guidString.Replace("+", "");
-                    var paymentDetail = new CompanyFund
-                    {
-                        action = "INSERT_PG_REQUEST_FOR_SERVICE",
-                        member_id = userData[1],
-                        domain_name = ConfigurationManager.AppSettings["DomainName"],
-                        request_token = guidString,
-                        txn_type = "PG_REQUEST",
-                        deposit_mode = "PG",
-                        remarks = "Hotel booking payment by payment gateway",
-                        amount = bookingModel.HotelRequestDetail.PaymentMode == "bank" ? request.TotalFare : request.TotalFare - walletBalance
-                    };
 
-                    _pgManager = new PgManager();
-                    var balanceTxnId = await _pgManager.SavePaymntGatewayTransactions(paymentDetail);
-                    if (!balanceTxnId.ToLower().Contains("failed"))
+                    //hotelRequestCookie = Request.Cookies[bookingModel.hotelRequestCookieId + "Ratedetail"];
+                    var rateDetailSession = Session[bookingModel.hotelRequestCookieId + "Ratedetail"];
+                    if (rateDetailSession != null)
                     {
-                        var cntrl = new PayUController();
-                        var payrequest = new PayuRequest
+                        rateDetail = serializer.Deserialize<Ratedetail>(rateDetailSession.ToString());
+                    }
+
+                    if (hotelRequestCookieModel == null || rateDetail == null)
+                    {
+                        error = "Hotel request detail not found.";
+                        goto ExecuteError;
+                    }
+
+                    bookingModel.SelectedHotel = hotelRequestCookieModel.SelectedHotel;
+                    Rate rateRoom = MakeProvisionalBookingRequest(bookingModel, hotelRequestCookieModel.HotelRequestDetail, rateDetail);
+
+                    /**need bookhotel other work here ***/
+
+                    /***comment* start*/
+                    /**Need a call from bharat sir to save below request**/
+                    //uncooment it info = SaveHotelBookingDetail(bookingModel.HotelDescRequest);
+                    info = bookingModel.hotelRequestCookieId;
+
+                    /***comment* end*/
+                    try
+                    {
+                        var balrequest = new WalletRequest
                         {
-                            FirstName = request.GuestInformation.FirstName,
-                            TransactionAmount = bookingModel.HotelRequestDetail.PaymentMode == "bank" ? request.TotalFare : request.TotalFare - walletBalance,
-                            Email = request.GuestInformation.Email,
-                            Phone = request.GuestInformation.PhoneNumber.Number,
-                            udf1 = info,
-                            udf2 = Convert.ToString(balanceTxnId),
-                            udf3 = bookingModel.hotelRequestCookieId,
-                            memberId = userData[1],
-                            ProductInfo = "Booking Hotel " + bookingModel.SelectedHotel.Hoteldetail.Hotelname + ": " + " For Name : " + request.GuestInformation.FirstName,
-                            surl = "http://" + Request.Url.Authority + "/Hotel/Return",
-                            furl = "http://" + Request.Url.Authority + "/Hotel/Return"
+                            action = "GET_WALLET_BALANCE",
+                            domain_name = ConfigurationManager.AppSettings["DomainName"],
+                            member_id = userData[1],
+                            company_id = userData[2]
                         };
-                        cntrl.Payment(payrequest);
-                    }
-                    else
-                    {
-                        return Json(balanceTxnId);
-                    }
-                }
-                else
-                {
-                    if (request.TotalFare <= walletBalance)
-                    {
-                        var myCookie = Request.Cookies[info];
-                        serializer = new JavaScriptSerializer();
-                        if (myCookie != null)
+
+                        _userManager = new UserManager();
+
+                        var balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
+                        if (balResponse != null)
                         {
-                            var ticketDetail = serializer.Deserialize<HotelDescriptionRequest>(myCookie.Value);
-                            /***comment* start*/
-                            /*need call from bharat sir to save hotel request*/
-                            var response = await _flightManager.InsertServiceBookingRequest(null);
-                            /**end**/
-                            var insertServiceResonse = response.FirstOrDefault();
-                            if (insertServiceResonse != null)
+                            walletBalance = balResponse.wallet_balance;
+                        }
+                    }
+                    catch (Exception exx)
+                    {
+                        error = exx.Message;
+                        goto ExecuteError;
+                    }
+                    if (isPaymentGatewayactive && (bookingModel.HotelRequestDetail.PaymentMode == "bank" || walletBalance < request.TotalFare))
+                    {
+                        var g = Guid.NewGuid();
+                        var guidString = Convert.ToBase64String(g.ToByteArray());
+                        guidString = guidString.Replace("=", "");
+                        guidString = guidString.Replace("+", "");
+                        var paymentDetail = new CompanyFund
+                        {
+                            action = "INSERT_PG_REQUEST_FOR_SERVICE",
+                            member_id = userData[1],
+                            domain_name = ConfigurationManager.AppSettings["DomainName"],
+                            request_token = guidString,
+                            txn_type = "PG_REQUEST",
+                            deposit_mode = "PG",
+                            remarks = "Hotel booking payment by payment gateway",
+                            amount = bookingModel.HotelRequestDetail.PaymentMode == "bank" ? request.TotalFare : request.TotalFare - walletBalance
+                        };
+
+                        _pgManager = new PgManager();
+                        var balanceTxnId = await _pgManager.SavePaymntGatewayTransactions(paymentDetail);
+                        if (!balanceTxnId.ToLower().Contains("failed"))
+                        {
+                            var cntrl = new PayUController();
+                            var payrequest = new PayuRequest
                             {
-                                txnId = Convert.ToString(insertServiceResonse.txn_id);
-
-                                this.hotelManager = new HotelManager();
-                                var response1 = await this.hotelManager.ProvisionBooking(bookingModel.ProvisionalBookingDetail);
-
-                                if (response1 == null)
-                                {
-                                    return Json(string.Empty);
-                                }
-                                else
-                                {
-                                    HotelDescriptionRequest bookingRequest = MakeConfirmHotelBookingRequest(bookingModel, hotelRequestCookieModel.HotelRequestDetail, rateRoom, response1);
-
-                                    var bookingResponse = await this.hotelManager.BookingConfirmation(bookingRequest);
-
-                                    if (bookingResponse == null || bookingResponse.Bookingresponse == null)
-                                    {
-                                        return Json(string.Empty);
-                                    }
-                                    else
-                                    {
-                                        if (bookingResponse.Bookingresponse.Bookingstatus == "E")
-                                        {
-                                            return Json(bookingResponse.Bookingresponse.Bookingremarks);
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                bookResponse.Status = "Failed";
-                            }
+                                FirstName = request.GuestInformation.FirstName,
+                                TransactionAmount = bookingModel.HotelRequestDetail.PaymentMode == "bank" ? request.TotalFare : request.TotalFare - walletBalance,
+                                Email = request.GuestInformation.Email,
+                                Phone = request.GuestInformation.PhoneNumber.Number,
+                                udf1 = info,
+                                udf2 = Convert.ToString(balanceTxnId),
+                                udf3 = bookingModel.hotelRequestCookieId,
+                                memberId = userData[1],
+                                ProductInfo = "Booking Hotel " + bookingModel.SelectedHotel.Hoteldetail.Hotelname + ": " + " For Name : " + request.GuestInformation.FirstName,
+                                surl = "http://" + Request.Url.Authority + "/Hotel/Return",
+                                furl = "http://" + Request.Url.Authority + "/Hotel/Return"
+                            };
+                            cntrl.Payment(payrequest);
+                        }
+                        else
+                        {
+                            error = (balanceTxnId);
+                            goto ExecuteError;
                         }
                     }
                     else
                     {
-                        bookResponse.Status = "Failed";
-                        return Json("Insufficient amount in wallet.");
-                    }
+                        if (request.TotalFare <= walletBalance)
+                        {
+                            var myCookie = Request.Cookies[info];
+                            serializer = new JavaScriptSerializer();
+                            // if (myCookie != null)
+                            {
+                                //  var ticketDetail = serializer.Deserialize<HotelDescriptionRequest>(myCookie.Value);
+                                /***comment* start*/
+                                /*need call from bharat sir to save hotel request*/
+                                ////uncomment this var response = await _flightManager.InsertServiceBookingRequest(null);
+                                /**end**/
+                                ////uncomment this var insertServiceResonse = response.FirstOrDefault();
+                                // uncomment this if (insertServiceResonse != null)
+                                if (true)
+                                {
+                                    //uncomment this txnId = Convert.ToString(insertServiceResonse.txn_id);
+                                    txnId = Guid.NewGuid().ToString().Substring(0, 5);
+                                    this.hotelManager = new HotelManager();
+                                    var response1 = await this.hotelManager.ProvisionBooking(bookingModel.ProvisionalBookingDetail);
 
-                    TempData["BookingResponse"] = bookResponse;
+                                    if (response1 == null)
+                                    {
+                                        error = ("Something went wrong while Provisional booking request.");
+                                    }
+                                    else
+                                    {
+                                        HotelDescriptionRequest bookingRequest = MakeConfirmHotelBookingRequest(bookingModel, hotelRequestCookieModel.HotelRequestDetail, rateRoom, response1);
+
+                                        var bookingResponse = await this.hotelManager.BookingConfirmation(bookingRequest);
+
+                                        if (bookingResponse == null || bookingResponse.Bookingresponse == null)
+                                        {
+                                            error = ("Something went wrong while booking confirmation request.");
+                                        }
+                                        else
+                                        {
+                                            if (bookingResponse.Bookingresponse.Bookingstatus == "E")
+                                            {
+                                                error = (bookingResponse.Bookingresponse.Bookingremarks);
+                                                goto ExecuteError;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    bookResponse.Bookingresponse.Bookingstatus = "Failed";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            bookResponse.Bookingresponse.Bookingstatus = "Failed";
+                            error = ("Insufficient amount in wallet.");
+                        }
+
+                        bookingModel.txnId = txnId;
+                        bookingModel.HotelBookingResponse = bookResponse;
+                        //TempData["BookingResponse"] = bookResponse;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.InnerException);
+                error = (ex.Message);
             }
 
-            return RedirectToAction("BookingStatus", "Hotel", new { txnId, info });
+            ExecuteError:
+            if (string.IsNullOrEmpty(error))
+            {
+                await BookingStatus(bookingModel);
+            }
+            else
+            {
+                hotelModel.Error = error;
+                return View("bookHotel", bookingModel);
+                //return RedirectToAction("BookingStatus", "Hotel", new { txnId, info });
+            }
+
+            return View("bookHotel", bookingModel);
         }
 
         [HttpPost]
@@ -917,47 +961,55 @@
         /// <param name="txnId"></param>
         /// <param name="info"></param>
         /// <returns></returns>
-        public async Task<ActionResult> BookingStatus(string txnId, string info)
+        public async Task<ActionResult> BookingStatus(HotelViewModel bookingModel)
         {
-            HotelDescriptionRequest eticket = null;
-            _serviceManager = new ServiceManager();
-            try
+            HotelViewModel eticket = new HotelViewModel();
+            if (bookingModel == null || bookingModel.HotelBookingResponse == null)
             {
-                var bookResponse = (Bookingresponse)TempData["BookingResponse"];
+                eticket.Error = "Complate detail not found. Please try again later.";
+            }
+            else
+            {
+                _serviceManager = new ServiceManager();
+                try
+                {
+                    //    var bookResponse = (ArzHotelBookingResp)TempData["BookingResponse"];
 
-                var userData = User.Identity.Name.Split('|');
-                var serializer = new JavaScriptSerializer();
-                if (bookResponse != null && bookResponse.Status.ToLower() == "success")
-                {
-                    ViewBag.status = "Hotel Booked Successfully";
-                    UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], bookResponse.Transid, "COMPLETED");
-                }
-                else if (!string.IsNullOrEmpty(bookResponse?.Error))
-                {
-                    ViewBag.status = "Some Problem occured while booking, Please try again.";
-                    UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(txnId))
+                    var userData = User.Identity.Name.Split('|');
+                    var serializer = new JavaScriptSerializer();
+                    if (bookingModel.HotelBookingResponse != null && bookingModel.HotelBookingResponse.Bookingresponse != null && bookingModel.HotelBookingResponse.Bookingresponse.Bookingstatus.ToLower() == "c")
                     {
-                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1], "", "Failed");
+                        eticket.Error = "Hotel Booked Successfully";
+                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(bookingModel.HotelBookingResponse.Bookingresponse.Bookingref, userData[1], bookingModel.HotelBookingResponse.Bookingresponse.BookingTrn, "COMPLETED");
                     }
-                    ViewBag.status = "Some Problem occured while booking, Please try again.";
-                }
+                    else if (!string.IsNullOrEmpty(bookingModel.HotelBookingResponse.Bookingresponse.Bookingstatus))
+                    {
+                        eticket.Error = "Some Problem occured while booking, Please try again.";
+                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(bookingModel.txnId, userData[1], "", "Failed");
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(bookingModel.txnId))
+                        {
+                            UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(bookingModel.txnId, userData[1], "", "Failed");
+                        }
+                        ViewBag.status = "Some Problem occured while booking, Please try again.";
+                    }
 
-                var myCookie = Request.Cookies[info];
-                if (myCookie != null)
+                    var myCookie = Request.Cookies[bookingModel.hotelRequestCookieId];
+                    if (myCookie != null)
+                    {
+                        eticket = serializer.Deserialize<HotelViewModel>(myCookie.Value);
+                    }
+                }
+                catch (Exception ex)
                 {
-                    eticket = serializer.Deserialize<HotelDescriptionRequest>(myCookie.Value);
+                    Console.WriteLine(ex.InnerException);
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }
 
-            return View(eticket);
+            //return View(this.hotelModel);
+            return View("hotelBookingStatus", eticket);
         }
 
         public string SaveHotelBookingDetail(HotelDescriptionRequest requestDetail)
@@ -984,8 +1036,8 @@
                     return 0;
                 }
 
-                DateTime d1 = DateTime.ParseExact(date1, "dd/mm/yyyy", System.Globalization.DateTimeFormatInfo.InvariantInfo);
-                DateTime d2 = DateTime.ParseExact(date2, "dd/mm/yyyy", System.Globalization.DateTimeFormatInfo.InvariantInfo);
+                DateTime d1 = DateTime.ParseExact(date1, "dd/MM/yyyy", System.Globalization.CultureInfo.CurrentCulture);
+                DateTime d2 = DateTime.ParseExact(date2, "dd/MM/yyyy", System.Globalization.CultureInfo.CurrentCulture);
                 return (d2 - d1).Days;
             }
             catch (Exception e)
