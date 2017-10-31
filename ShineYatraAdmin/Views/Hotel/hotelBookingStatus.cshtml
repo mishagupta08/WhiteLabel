@@ -24,53 +24,65 @@
                                     <h4>Hotel Details</h4>
                                 </div>
 
-                                <div class="col-md-6">
-                                    <div class="col-md-6">
-                                        <Label>
-                                            @Model.HotelRequestDetail.Start - @Model.HotelRequestDetail.End
-                                        </Label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <Label>Hotel:&nbsp;</Label>@Model.HotelRequestDetail.HotelName
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="col-md-6">
-                                        <Label>Room:&nbsp;</Label>
-                                        @{ var selectedRoom = Model.SelectedHotel.Ratedetail.Rate.FirstOrDefault(r => r.RoomTypeCode == Model.HotelRequestDetail.roomCode);}
-                                        @if (selectedRoom != null)
-                                        {
-                                            <span>@selectedRoom.Roomtype</span><br />
-                                            <span>@selectedRoom.Roombasis</span><br />
-                                        }
-                                    </div>
+                                <div class="col-md-12">
+                                    <Label>TxnID:&nbsp;</Label>@Model.txnId
                                 </div>
                                 <div class="col-md-12">
-                                    <hr>
+                                    <h2>Hotel:&nbsp;@Model.HotelRequestDetail.HotelName</h2>
                                 </div>
                                 <div class="col-md-12">
-                                    <h4>Passenger Details</h4>
+                                    Room:&nbsp;
+                                    @if (Model.ProvisionalBookingDetail != null && Model.ProvisionalBookingDetail.Hotelinfo != null)
+                                    {
+                                        @Model.ProvisionalBookingDetail.Hotelinfo.Roomtype<br />
+                                    }
                                 </div>
-                                @*<table border="1" class="display table" width="100%">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Date of birth</th>
-                                            <th> Age</th>
-                                        </tr>
-                                        @{ int count = 0;}
-                                        @foreach (var passenger in Model.passenger_details)
-                                        {
-                                            <tr>
-
-                                                <td>@passenger.title<span>&nbsp;</span> @passenger.first_name <span>&nbsp;</span>@passenger.last_name</td>
-                                                <td>@passenger.dob</td>
-                                                <td>@passenger.age </td>
-                                            </tr>
-                                        }
-                                    </table>*@
+                                <div class="col-md-12">
+                                    CheckIn: @Model.HotelRequestDetail.Start - CheckOut: @Model.HotelRequestDetail.End
+                                </div>
+                                <div class="col-md-12">
+                                    Nights: @Model.HotelRequestDetail.NightCount
+                                </div>
+                                <div class="col-md-6">
+                                    <Label>
+                                        <span>Adult: @Model.HotelRequestDetail.TotalAdultCount</span>
+                                    </Label>
+                                </div>
+                                <div class="col-md-6">
+                                    <Label>
+                                        <span>Child: @Model.HotelRequestDetail.TotalChildCount</span>
+                                    </Label>
+                                </div>
                             </div>
-                                                }
-                                            }
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                            <div class="col-md-6" style="margin-left:17%;">
+                                <h4>Booking Details</h4>
+                            </div>
+                            <table border="1" class="display table" style="margin-left:18%;width: 70%;">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Contact No.</th>
+                                    <th>Address</th>
+                                </tr>
+                                <tr>
+
+                                    <td>@Model.ProvisionalBookingDetail.GuestInformation.Title<span>&nbsp;</span> @Model.ProvisionalBookingDetail.GuestInformation.FirstName<span>&nbsp;</span>@Model.ProvisionalBookingDetail.GuestInformation.LastName</td>
+                                    <td>@Model.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Number</td>
+                                    <td>
+                                        @Model.ProvisionalBookingDetail.GuestInformation.Address.AddressLine
+                                        <br />
+                                        @Model.ProvisionalBookingDetail.GuestInformation.Address.City
+                                        <br />
+                                        @Model.ProvisionalBookingDetail.GuestInformation.Address.Country
+                                        <br />
+                                        @Model.ProvisionalBookingDetail.GuestInformation.Address.State
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                    }
                 </div>
             </div>
         </div>

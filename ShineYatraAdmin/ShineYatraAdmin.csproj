@@ -644,7 +644,7 @@
     <Content Include="Views\Flight\Report\FilghtList.cshtml" />
     <Content Include="Views\Recharge\RechargeStatus.cshtml" />
     <Content Include="Views\Hotel\roomView.cshtml" />
-    <Content Include="Views\Hotel\hotelBookingStatus.cshtml" />
+    <Content Include="Views\Hotel\HotelBookingStatus.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

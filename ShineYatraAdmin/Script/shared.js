@@ -1,7 +1,15 @@
 ﻿var currentPage = 1;
 $(document).ready(function () {    
-    getCompanyThemeandSetting()
+    getCompanyThemeandSetting();
+
+    $(".preloader").hide();
+
+    $("form").submit(function () {
+        $(".preloader").show();
+    });
 });
+
+
 
 function RemoveErrorMessage(inputElement) {
     if (inputElement.val() != "" && inputElement.val().length > 0) {
