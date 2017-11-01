@@ -144,6 +144,11 @@
         public List<INSERT_SERVICE_BOOKING_REQUEST> INSERT_SERVICE_BOOKING_REQUEST { get; set; }
 
         /// <summary>
+        /// gets or sets service booking request 
+        /// </summary>
+        public List<INSERT_SERVICE_HOTEL_REQUEST> INSERT_SERVICE_HOTEL_REQUEST { get; set; }
+
+        /// <summary>
         /// gets or sets Recharge details to database
         /// </summary>
         public List<InsertServiceRechargeResponse> INSERT_SERVICE_RECHARGE_REQUEST { get; set; }

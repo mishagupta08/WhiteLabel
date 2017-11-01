@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using ShineYatraAdmin.Entity.HotelDetail;
 
 namespace ShineYatraAdmin.Business
 {
@@ -136,6 +137,20 @@ namespace ShineYatraAdmin.Business
             }
 
             return arrayOfFlightsDetail;
+        }
+
+        public async Task<List<INSERT_SERVICE_HOTEL_REQUEST>> InsertServiceBookingRequest(HotelBoookingDetail bookticket)
+        {
+            List<INSERT_SERVICE_HOTEL_REQUEST> response = null;
+            try
+            {
+                response = await Program.InsertHotelServiceBookingRequest(bookticket);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
         }
     }
 }

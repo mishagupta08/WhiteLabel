@@ -45,6 +45,8 @@ namespace ShineYatraAdmin.Entity
 
         public string txnId { get; set; }
 
+        public string Info { get; set; }
+
         /// <summary>
         /// gets or sets flight city list
         /// </summary>

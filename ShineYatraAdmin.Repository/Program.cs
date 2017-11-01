@@ -18,6 +18,7 @@ namespace ShineYatraAdmin.Repository
     using System.IO;
     using System.Xml.Linq;
     using System.Configuration;
+    using Entity.HotelDetail;
 
     #endregion namespace
 
@@ -226,6 +227,27 @@ namespace ShineYatraAdmin.Repository
         }
 
         #endregion Login API
+
+        /// <summary>
+        /// method to save booking details to database
+        /// </summary>        
+        /// <param name="bookticket"></param>
+        /// <returns></returns>
+        public static async Task<List<INSERT_SERVICE_HOTEL_REQUEST>> InsertHotelServiceBookingRequest(HotelBoookingDetail bookticket)
+        {
+            string data = JsonConvert.SerializeObject(bookticket);
+            data = data.Replace("null", "\"\"");
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS == Success && response.INSERT_SERVICE_HOTEL_REQUEST != null)
+            {
+                return response.INSERT_SERVICE_HOTEL_REQUEST;
+            }
+            else if (response?.INSERT_SERVICE_HOTEL_REQUEST != null)
+            {
+                return response.INSERT_SERVICE_HOTEL_REQUEST;
+            }
+            return null;
+        }
 
         /// <summary>
         /// Method to invoke api function

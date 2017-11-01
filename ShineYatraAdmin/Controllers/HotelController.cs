@@ -14,6 +14,7 @@
     using System.Web;
     using System.Configuration;
     using Newtonsoft.Json;
+    using Entity.HotelDetail;
 
     #endregion namespace
 
@@ -227,7 +228,7 @@
                 }
                 else
                 {
-                    hotelDetailListViewModel.HotelList = new List<Hotel>();
+                    hotelDetailListViewModel.HotelList = new List<Entity.Hotel>();
                     hotelDetailListViewModel.Error = response.Error;
                 }
 
@@ -426,6 +427,7 @@
                 company_id = userData[2]
             };
 
+            _userManager = new UserManager();
             var balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
             if (balResponse != null)
             {
@@ -461,7 +463,8 @@
                     return Json("Hotel request detail not found.");
                 }
 
-                Rate rateRoom = MakeProvisionalBookingRequest(bookingModel, hotelRequestDetail, null);
+                bookingModel.HotelRequestDetail = hotelRequestDetail;
+                Rate rateRoom = MakeProvisionalBookingRequest(bookingModel, null);
 
                 /**nee bookhotel other work here ***/
 
@@ -546,22 +549,22 @@
             return bookingRequest;
         }
 
-        private static Rate MakeProvisionalBookingRequest(HotelViewModel bookingModel, HotelRequest hotelRequestDetail, Ratedetail rateDetail)
+        private static Rate MakeProvisionalBookingRequest(HotelViewModel bookingModel, Ratedetail rateDetail)
         {
-            bookingModel.ProvisionalBookingDetail.Hotelinfo.Hotelid = hotelRequestDetail.hotelid;
-            bookingModel.ProvisionalBookingDetail.Hotelinfo.WebService = hotelRequestDetail.webService;
-            bookingModel.ProvisionalBookingDetail.Hotelinfo.Fromdate = hotelRequestDetail.Start;
-            bookingModel.ProvisionalBookingDetail.Hotelinfo.Todate = hotelRequestDetail.End;
+            bookingModel.ProvisionalBookingDetail.Hotelinfo.Hotelid = bookingModel.HotelRequestDetail.hotelid;
+            bookingModel.ProvisionalBookingDetail.Hotelinfo.WebService = bookingModel.HotelRequestDetail.webService;
+            bookingModel.ProvisionalBookingDetail.Hotelinfo.Fromdate = bookingModel.HotelRequestDetail.Start;
+            bookingModel.ProvisionalBookingDetail.Hotelinfo.Todate = bookingModel.HotelRequestDetail.End;
 
             var rateRoom = new Rate();
             if (rateDetail != null)
             {
-                rateRoom = rateDetail.Rate.FirstOrDefault(r => r.RoomTypeCode == hotelRequestDetail.roomCode);
+                rateRoom = rateDetail.Rate.FirstOrDefault(r => r.RoomTypeCode == bookingModel.HotelRequestDetail.roomCode);
             }
 
-            bookingModel.HotelRequestDetail.NightCount = CalculateDays(hotelRequestDetail.Start, hotelRequestDetail.End);
+            bookingModel.HotelRequestDetail.NightCount = CalculateDays(bookingModel.HotelRequestDetail.Start, bookingModel.HotelRequestDetail.End);
 
-            bookingModel.ProvisionalBookingDetail.TotalFare = hotelRequestDetail.NightCount * hotelRequestDetail.RoomCount * Convert.ToInt32(rateRoom.Ratebands.RoomTotal);
+            bookingModel.ProvisionalBookingDetail.TotalFare = bookingModel.HotelRequestDetail.NightCount * bookingModel.HotelRequestDetail.RoomCount * Convert.ToInt32(rateRoom.Ratebands.RoomTotal);
             bookingModel.ProvisionalBookingDetail.Hotelinfo.RoomTypeCode = rateRoom.RoomTypeCode;
             bookingModel.ProvisionalBookingDetail.Hotelinfo.Roomtype = rateRoom.Roomtype;
             bookingModel.ProvisionalBookingDetail.Hotelinfo.RatePlanType = rateRoom.RatePlanCode;
@@ -570,7 +573,7 @@
 
             /****Set Room stay candidate Info***/
             bookingModel.ProvisionalBookingDetail.RoomStayCandidate.GuestDetails = new List<GuestDetails>();
-            bookingModel.ProvisionalBookingDetail.RoomStayCandidate.GuestDetails = (hotelRequestDetail.RoomStayCandidateDetail.GuestDetails);
+            bookingModel.ProvisionalBookingDetail.RoomStayCandidate.GuestDetails = (bookingModel.HotelRequestDetail.RoomStayCandidateDetail.GuestDetails);
 
             /****Set Rateband nfo***/
             bookingModel.ProvisionalBookingDetail.Ratebands = rateRoom.Ratebands;
@@ -710,15 +713,17 @@
                         goto ExecuteError;
                     }
 
+                    hotelRequestCookieModel.HotelRequestDetail.PaymentMode = bookingModel.HotelRequestDetail.PaymentMode;
                     bookingModel.SelectedHotel = hotelRequestCookieModel.SelectedHotel;
-                    Rate rateRoom = MakeProvisionalBookingRequest(bookingModel, hotelRequestCookieModel.HotelRequestDetail, rateDetail);
+                    bookingModel.HotelRequestDetail = hotelRequestCookieModel.HotelRequestDetail;
+                    Rate rateRoom = MakeProvisionalBookingRequest(bookingModel, rateDetail);
 
                     /**need bookhotel other work here ***/
 
                     /***comment* start*/
                     /**Need a call from bharat sir to save below request**/
-                    //uncooment it info = SaveHotelBookingDetail(bookingModel.HotelDescRequest);
-                    info = bookingModel.hotelRequestCookieId;
+                    //info = SaveHotelServiceBookingRequest(bookingModel);
+                    //info = bookingModel.hotelRequestCookieId;
 
                     /***comment* end*/
                     try
@@ -732,12 +737,14 @@
                         };
 
                         _userManager = new UserManager();
+                        bookingModel.WalletResponseDetail = new WalletResponse();
 
                         var balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
                         if (balResponse != null)
                         {
                             walletBalance = balResponse.wallet_balance;
                         }
+                        bookingModel.WalletResponseDetail.wallet_balance = (float)walletBalance;
                     }
                     catch (Exception exx)
                     {
@@ -798,21 +805,20 @@
                     {
                         if (request.TotalFare <= walletBalance)
                         {
-                            var myCookie = Request.Cookies[info];
-                            serializer = new JavaScriptSerializer();
+                            //var myCookie = Request.Cookies[info];
+                            //serializer = new JavaScriptSerializer();
                             // if (myCookie != null)
                             {
-                                //  var ticketDetail = serializer.Deserialize<HotelDescriptionRequest>(myCookie.Value);
+                                var ticketDetail = CreateServiceBookingRequest(bookingModel);
                                 /***comment* start*/
                                 /*need call from bharat sir to save hotel request*/
-                                ////uncomment this var response = await _flightManager.InsertServiceBookingRequest(null);
+                                var response = await hotelManager.InsertServiceBookingRequest(ticketDetail);
                                 /**end**/
-                                ////uncomment this var insertServiceResonse = response.FirstOrDefault();
-                                // uncomment this if (insertServiceResonse != null)
-                                if (true)
+                                var insertServiceResonse = response.FirstOrDefault();
+                                if (insertServiceResonse != null)
                                 {
-                                    //uncomment this txnId = Convert.ToString(insertServiceResonse.txn_id);
-                                    txnId = Guid.NewGuid().ToString().Substring(0, 5);
+                                    txnId = Convert.ToString(insertServiceResonse.txn_id);
+                                    //txnId = Guid.NewGuid().ToString().Substring(0, 5);
                                     this.hotelManager = new HotelManager();
                                     var response1 = await this.hotelManager.ProvisionBooking(bookingModel.ProvisionalBookingDetail);
 
@@ -885,7 +891,7 @@
                 //return RedirectToAction("BookingStatus", "Hotel", new { txnId, info });
             }
 
-            return View("bookHotel", bookingModel);
+            //return View("bookHotel", bookingModel);
         }
 
         [HttpPost]
@@ -896,14 +902,13 @@
             var error = string.Empty;
             var bookResponse = new Bookingresponse();
             var request = new Request();
-            var flightManager = new HotelManager();
+            var hotelManager = new HotelManager();
             var serializer = new JavaScriptSerializer();
             var hotelModelDetail = new HotelViewModel();
             try
             {
                 var id = form["udf3"];
-
-
+                var balanceTxId = form["udf2"];
                 if (string.IsNullOrEmpty(id) && Session[id] != null)
                 {
                     hotelModelDetail = serializer.Deserialize<HotelViewModel>(Session[id].ToString());
@@ -921,12 +926,17 @@
                 {
                     //ticketDetail.my_info = "PG_REQUEST," + balanceTxId + "," + Convert.ToString(form["mode"]) + "," + Convert.ToString(form["txnid"]) + "," + Convert.ToString(form["bank_ref_num"]);
                     /*need call from bharat sir to save hotel request*/
-                    var response = await _flightManager.InsertServiceBookingRequest(null);
+                    Rate rateRoom = MakeProvisionalBookingRequest(hotelModelDetail, rateDetail);
+
+                    var ticketDetail = CreateServiceBookingRequest(hotelModelDetail);
+                    ticketDetail.my_info = "PG_REQUEST," + balanceTxId + "," + Convert.ToString(form["mode"]) + "," + Convert.ToString(form["txnid"]) + "," + Convert.ToString(form["bank_ref_num"]);
+                    var response = await hotelManager.InsertServiceBookingRequest(ticketDetail);
                     var saveBookingResonse = response.FirstOrDefault();
-                    Rate rateRoom = MakeProvisionalBookingRequest(hotelModelDetail, hotelModelDetail.HotelRequestDetail, rateDetail);
+
                     if (saveBookingResonse != null)
                     {
                         txnId = Convert.ToString(saveBookingResonse.txn_id);
+                        hotelModelDetail.txnId = txnId;
                         this.hotelManager = new HotelManager();
                         var response1 = await this.hotelManager.ProvisionBooking(hotelModelDetail.ProvisionalBookingDetail);
 
@@ -1024,7 +1034,7 @@
                     if (bookingModel.HotelBookingResponse != null && bookingModel.HotelBookingResponse.Bookingresponse != null && bookingModel.HotelBookingResponse.Bookingresponse.Bookingstatus.ToLower() == "c")
                     {
                         eticket.Error = "Hotel Booked Successfully";
-                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(bookingModel.HotelBookingResponse.Bookingresponse.Bookingref, userData[1], bookingModel.HotelBookingResponse.Bookingresponse.BookingTrn, "COMPLETED");
+                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(bookingModel.txnId, userData[1], bookingModel.HotelBookingResponse.Bookingresponse.BookingTrn, "COMPLETED");
                     }
                     else if (!string.IsNullOrEmpty(bookingModel.HotelBookingResponse.Bookingresponse.Bookingstatus))
                     {
@@ -1092,6 +1102,69 @@
             {
                 return 0;
             }
+        }
+
+        public HotelBoookingDetail CreateServiceBookingRequest(HotelViewModel model)
+        {
+            var userData = User.Identity.Name.Split('|');
+            var ticketDetail = new HotelBoookingDetail();
+            string key = Guid.NewGuid().ToString().Substring(0, 5);
+            ticketDetail.action = "INSERT_SERVICE_HOTEL_REQUEST";
+            ticketDetail.domain_name = ConfigurationManager.AppSettings["DomainName"];
+            ticketDetail.request_token = key;
+            ticketDetail.txn_type = "HOTELS";
+            ticketDetail.category = "HOTEL";
+            ticketDetail.member_id = userData[1];
+            ticketDetail.amount = model.ProvisionalBookingDetail.TotalFare;
+            ticketDetail.service_id = 2;
+            ticketDetail.sub_service_id = 18;
+            ticketDetail.destination = model.HotelRequestDetail.HotelCityName;
+            ticketDetail.check_in = model.HotelRequestDetail.Start;
+            ticketDetail.check_out = model.HotelRequestDetail.End;
+            ticketDetail.adults = model.HotelRequestDetail.TotalAdultCount;
+            ticketDetail.childern = model.HotelRequestDetail.TotalChildCount;
+            ticketDetail.title = model.ProvisionalBookingDetail.GuestInformation.Title;
+            ticketDetail.first_name = model.ProvisionalBookingDetail.GuestInformation.FirstName;
+            ticketDetail.middle_name = model.ProvisionalBookingDetail.GuestInformation.MiddleName;
+            ticketDetail.last_name = model.ProvisionalBookingDetail.GuestInformation.LastName;
+            ticketDetail.mobile_number = model.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Number;
+            ticketDetail.email = model.ProvisionalBookingDetail.GuestInformation.Email;
+            ticketDetail.address_line1 = model.ProvisionalBookingDetail.GuestInformation.Address.AddressLine;
+            ticketDetail.city = model.ProvisionalBookingDetail.GuestInformation.Address.City;
+            ticketDetail.zipcode = model.ProvisionalBookingDetail.GuestInformation.Address.ZipCode;
+            ticketDetail.state = model.ProvisionalBookingDetail.GuestInformation.Address.State;
+            ticketDetail.country = model.ProvisionalBookingDetail.GuestInformation.Address.Country;
+            ticketDetail.my_info = string.Empty;
+            ticketDetail.remarks = "Hotel Booking";
+
+            if (model.HotelRequestDetail.PaymentMode.ToLower().Trim() == "bank")
+            {
+                ticketDetail.pg_amount = model.ProvisionalBookingDetail.TotalFare;
+            }
+            else
+            {
+                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
+                if (isPaymentGatewayactive && model.WalletResponseDetail.wallet_balance < model.ProvisionalBookingDetail.TotalFare)
+                {
+                    ticketDetail.pg_amount = model.ProvisionalBookingDetail.TotalFare - model.WalletResponseDetail.wallet_balance;
+                }
+                else
+                {
+                    ticketDetail.pg_amount = 0;
+                }
+            }
+            ticketDetail.other_amount = 0;
+            ticketDetail.total_paid_amount = 0;
+
+            //string ticketDetailJson = new JavaScriptSerializer().Serialize(ticketDetail);
+            //var cookie = new HttpCookie(key, ticketDetailJson)
+            //{
+            //    Expires = DateTime.Now.AddYears(1)
+            //};
+
+            //HttpContext.Response.Cookies.Add(cookie);
+
+            return ticketDetail;
         }
     }
 }
