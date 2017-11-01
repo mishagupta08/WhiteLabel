@@ -40,21 +40,26 @@
                     { "mData": "remarks" },
                     { "mData": "ref_txn_id" }
                 ],
-                initComplete: function() {
-                    this.api().columns().every(function() {
-                        var column = this;
-                        column
-                            .search('', true, false)
-                            .draw();
-                    });
-                },
-
+                //initComplete: function() {
+                //    this.api().columns().every(function() {
+                //        var column = this;
+                //        column
+                //            .search('', true, false)
+                //            .draw();
+                //    });
+                //},
+                "columnDefs": [
+                    { className: "text-right", "targets": [3,4,5,6,8] },      
+                ],
                 "footerCallback": function () {
                     var api = this.api(),
-                    columns = [4, 5, 6];
+                     columns = [4, 5];
                     for (var i = 0; i < columns.length; i++) {
-                        $('tfoot th').eq(columns[i]).html('Total: ' + api.column(columns[i], { filter: 'applied' }).data().sum());                       
+                        $('tfoot th').eq(columns[i]).html(api.column(columns[i], { filter: 'applied' }).data().sum());                       
                     }
+                    $('tfoot th').eq(3).html('Total:');
+                    var last_row = api.row(':last').data();
+                    $('tfoot th').eq(6).html(last_row.balance + " " + last_row.drcr);
                 },
  
                 "destroy": true,
