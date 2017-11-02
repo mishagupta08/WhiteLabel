@@ -43,6 +43,7 @@ namespace ShineYatraAdmin.Entity
         public string EmailAddress { get; set; }
         public string PartnerRefId { get; set; }
         public string PaymentMode { get; set; }
+        public bool PartialPaymentWithWallet { get; set; }
         public int SubServiceId { get; set; }
         public double backdiscount { get; set; }
         
@@ -341,7 +342,8 @@ namespace ShineYatraAdmin.Entity
         [XmlElement(ElementName = "NonchargeableFares")]
         public NonchargeableFares NonchargeableFares { get; set; }
         
-        public double backdiscount { get; set; }        
+        public double backdiscount { get; set; }
+        public double frontdiscount { get; set; }
     }
 
     [XmlRoot(ElementName = "BookingClass")]

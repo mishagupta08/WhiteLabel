@@ -56,7 +56,7 @@ namespace ShineYatraAdmin.Controllers
         public async Task<ActionResult> SearchFlight(Request flightDetail)
         {
             _flightManager = new FlightManager();
-            var serviceManager = new ServiceManager();
+            _serviceManager = new ServiceManager();
             var searchPageViewModel = new SearchPageViewModel();
             var userData = User.Identity.Name.Split('|');
             try
@@ -75,7 +75,7 @@ namespace ShineYatraAdmin.Controllers
                     service_code = "0"
                 };
 
-                var allflightDiscountDetails = await serviceManager.GetServiceAllottedGroupDetails(serviceCgDetailsRequest);
+                var allflightDiscountDetails = await _serviceManager.GetServiceAllottedGroupDetails(serviceCgDetailsRequest);
 
                 var newarray = new ArrayOfOrigindestinationoption
                 {
@@ -97,9 +97,9 @@ namespace ShineYatraAdmin.Controllers
                         else
                         {
                             discount = flightdiscount.front_discount_amount;
-                        }
-                        Session["FrontDiscount"] = discount;
+                        }                        
                         flight.FareDetail.ChargeableFares.ActualBaseFare -= discount;
+                        flight.FareDetail.frontdiscount = discount;
                         if (flightdiscount.back_discount_per > 0)
                         {
                             flight.FareDetail.backdiscount = ((totalFare / 100) * flightdiscount.back_discount_per);
@@ -131,29 +131,61 @@ namespace ShineYatraAdmin.Controllers
         {
             _flightManager = new FlightManager();
             _userManager = new UserManager();
-
-            var searchPageViewModel = new SearchPageViewModel
+            _serviceManager = new ServiceManager();
+            var searchPageViewModel = new SearchPageViewModel();
+            try
             {
-                flightSearch = passengerDetails,
-                FlightBookingDetail = passengerDetails
-            };
-            searchPageViewModel.FlightBookingDetail.PersonName = new personName
-            {
-                CustomerInfo = new List<CustomerInfo>()
-            };
+                var userData = User.Identity.Name.Split('|');
+                searchPageViewModel = new SearchPageViewModel
+                {
+                    flightSearch = passengerDetails,
+                    FlightBookingDetail = passengerDetails
+                };
+                searchPageViewModel.FlightBookingDetail.PersonName = new personName
+                {
+                    CustomerInfo = new List<CustomerInfo>()
+                };
 
-            var detail = passengerDetails.AdultPax + passengerDetails.ChildPax + passengerDetails.InfantPax;
+                var detail = passengerDetails.AdultPax + passengerDetails.ChildPax + passengerDetails.InfantPax;
 
-            for (var count = 0; count < detail; count++)
-            {
-                searchPageViewModel.FlightBookingDetail.PersonName.CustomerInfo.Add(new CustomerInfo());
+                for (var count = 0; count < detail; count++)
+                {
+                    searchPageViewModel.FlightBookingDetail.PersonName.CustomerInfo.Add(new CustomerInfo());
+                }
+
+                searchPageViewModel.AssignNameReference();
+                searchPageViewModel.AssignChildNameReference();
+                searchPageViewModel.flightfaredetails = await _flightManager.FlightPricing(searchPageViewModel.flightSearch);
+                var serviceCgDetailsRequest = new AllotedServiceCGsDetailsRequest
+                {
+                    member_id = userData[1],
+                    action = "GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS",
+                    service_id = "1",
+                    sub_service_id = Convert.ToString(passengerDetails.SubServiceId),
+                    category = "FLIGHT",
+                    sub_category = "DOMESTIC",
+                    service_code = "0"
+                };
+                var allflightDiscountDetails = await _serviceManager.GetServiceAllottedGroupDetails(serviceCgDetailsRequest);
+                var discountDetail = allflightDiscountDetails.FirstOrDefault();
+                double discount;
+                double totalFare = searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare;
+                if (discountDetail.front_discount_per > 0)
+                {
+                    discount = ((totalFare / 100) * discountDetail.front_discount_per);
+                }
+                else
+                {
+                    discount = discountDetail.front_discount_amount;
+                }
+
+                searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare -= discount;
+
+                searchPageViewModel.flightfaredetails.FareDetail.backdiscount = searchPageViewModel.flightSearch.backdiscount;
             }
-
-            searchPageViewModel.AssignNameReference();
-            searchPageViewModel.AssignChildNameReference();
-            searchPageViewModel.flightfaredetails = await _flightManager.FlightPricing(searchPageViewModel.flightSearch);
-            searchPageViewModel.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare -= Convert.ToDouble(Session["FrontDiscount"]);
-            searchPageViewModel.flightfaredetails.FareDetail.backdiscount = searchPageViewModel.flightSearch.backdiscount;
+            catch (Exception ex) {
+                throw ex;
+            }
             return View("FlightMenu//BookingDetail", searchPageViewModel);
         }
 
@@ -173,6 +205,7 @@ namespace ShineYatraAdmin.Controllers
             var txnId = string.Empty;
             var info = string.Empty;
             var walletBalance = 0.0;
+            var isWallet = true;
             var bookResponse = new Bookingresponse();
             try
             {
@@ -181,7 +214,6 @@ namespace ShineYatraAdmin.Controllers
                 request.Creditcardno = "4111111111111111";
                 var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper()=="Y" && userData[6] != "3"; 
                 
-
                 try
                 {
                     var balrequest = new WalletRequest
@@ -196,6 +228,7 @@ namespace ShineYatraAdmin.Controllers
                     if (balResponse != null)
                     {
                         walletBalance = balResponse.wallet_balance;
+                        Session["WalletBalance"] = walletBalance;
                     }
                 }
                 catch (Exception exx)
@@ -206,50 +239,77 @@ namespace ShineYatraAdmin.Controllers
                 bookingDetail.walletBalance = walletBalance;
                 info = saveBookingDetail(bookingDetail);
 
-                if (isPaymentGatewayactive && (request.PaymentMode == "bank" || walletBalance < request.AdultFare))
+                if (isPaymentGatewayactive && request.PaymentMode == "bank")
                 {
-                    var g = Guid.NewGuid();
-                    var guidString = Convert.ToBase64String(g.ToByteArray());
-                    guidString = guidString.Replace("=", "");
-                    guidString = guidString.Replace("+", "");
-                    var paymentDetail = new CompanyFund
-                    {
-                        action = "INSERT_PG_REQUEST_FOR_SERVICE",
-                        member_id = userData[1],
-                        domain_name = ConfigurationManager.AppSettings["DomainName"],
-                        request_token = guidString,
-                        txn_type = "PG_REQUEST",
-                        deposit_mode = "PG",
-                        remarks = "Flight booking payment by payment gateway",
-                        amount = request.PaymentMode == "bank" ? request.AdultFare : request.AdultFare - walletBalance
-                    };
+                    double pgamount = 0;
+                    bool pgflag = false;
 
-                    var balanceTxnId = await _pgManager.SavePaymntGatewayTransactions(paymentDetail);
-                    if (!balanceTxnId.ToLower().Contains("failed"))
+                    if (request.PartialPaymentWithWallet)
                     {
-
-                        var cntrl = new PayUController();
-                        var payrequest = new PayuRequest
+                        if (walletBalance < request.AdultFare)
                         {
-                            FirstName = request.PersonName.CustomerInfo.FirstOrDefault()?.givenName,
-                            TransactionAmount = request.PaymentMode == "bank" ? request.AdultFare : request.AdultFare - walletBalance,
-                            Email = request.EmailAddress,
-                            Phone = request.phoneNumber,
-                            udf1 = info,
-                            udf2 = Convert.ToString(balanceTxnId),
-                            memberId = userData[1],
-                            ProductInfo = "Booking Flight " + request.FlightNumber + ": " + " For Name : " + request.PersonName.CustomerInfo.FirstOrDefault()?.givenName,
-                            surl = "http://" + Request.Url.Authority + "/Flight/Return",
-                            furl = "http://" + Request.Url.Authority + "/Flight/Return"
-                        };
-                        cntrl.Payment(payrequest);
+                            pgamount = request.AdultFare - walletBalance;
+                            pgflag = true;
+                            isWallet = false;
+                        }
+                        else
+                        {
+                            pgamount = 0;
+                            pgflag = false;
+                        }
                     }
                     else
                     {
-                        TempData["ErrorCode"] = 5001;
+                        isWallet = false;
+                        pgamount = request.AdultFare;
+                        pgflag = true;
+                    }
+
+                    if (pgflag)
+                    {
+                        var g = Guid.NewGuid();
+                        var guidString = Convert.ToBase64String(g.ToByteArray());
+                        guidString = guidString.Replace("=", "");
+                        guidString = guidString.Replace("+", "");
+                        var paymentDetail = new CompanyFund
+                        {
+                            action = "INSERT_PG_REQUEST_FOR_SERVICE",
+                            member_id = userData[1],
+                            domain_name = ConfigurationManager.AppSettings["DomainName"],
+                            request_token = guidString,
+                            txn_type = "PG_REQUEST",
+                            deposit_mode = "PG",
+                            remarks = "Flight booking payment by payment gateway",
+                            amount = request.PartialPaymentWithWallet ? request.AdultFare - walletBalance : request.AdultFare
+                        };
+
+                        var balanceTxnId = await _pgManager.SavePaymntGatewayTransactions(paymentDetail);
+                        if (!balanceTxnId.ToLower().Contains("failed"))
+                        {
+                            var cntrl = new PayUController();
+                            var payrequest = new PayuRequest
+                            {
+                                FirstName = request.PersonName.CustomerInfo.FirstOrDefault()?.givenName,
+                                TransactionAmount = pgamount,
+                                Email = request.EmailAddress,
+                                Phone = request.phoneNumber,
+                                udf1 = info,
+                                udf2 = Convert.ToString(balanceTxnId),
+                                memberId = userData[1],
+                                ProductInfo = "Booking Flight " + request.FlightNumber + ": " + " For Name : " + request.PersonName.CustomerInfo.FirstOrDefault()?.givenName,
+                                surl = "http://" + Request.Url.Authority + "/Flight/Return",
+                                furl = "http://" + Request.Url.Authority + "/Flight/Return"
+                            };
+                            cntrl.Payment(payrequest);
+                        }
+                        else
+                        {
+                            TempData["ErrorCode"] = 5001;
+                        }
                     }
                 }
-                else
+              
+                if (isWallet)
                 {
                     if (request.AdultFare <= walletBalance)
                     {
@@ -480,23 +540,33 @@ namespace ShineYatraAdmin.Controllers
                 ticketDetail.trip_class = bookingDetail.FlightBookingDetail.Preferredclass;
                 ticketDetail.my_info = "";
                 ticketDetail.passenger_details = new List<Passengers>();
-                if (bookingDetail.FlightBookingDetail.PaymentMode.ToLower().Trim() == "bank")
+                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
+                double pgamount = 0;
+
+                if (isPaymentGatewayactive && bookingDetail.FlightBookingDetail.PaymentMode == "bank")
                 {
-                    ticketDetail.pg_amount = bookingDetail.FlightBookingDetail.AdultFare;
-                }
-                else
-                {
-                    var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
-                    if (isPaymentGatewayactive && bookingDetail.walletBalance < bookingDetail.FlightBookingDetail.AdultFare)
+                    if (bookingDetail.FlightBookingDetail.PartialPaymentWithWallet)
                     {
-                        ticketDetail.pg_amount = bookingDetail.FlightBookingDetail.AdultFare - bookingDetail.walletBalance;
+                        if (bookingDetail.walletBalance < bookingDetail.FlightBookingDetail.AdultFare)
+                        {
+                            pgamount = bookingDetail.FlightBookingDetail.AdultFare - bookingDetail.walletBalance;
+                        }
+                        else
+                        {
+                            pgamount = 0;
+                        }
                     }
                     else
                     {
-                        ticketDetail.pg_amount = 0;
+                        pgamount = bookingDetail.FlightBookingDetail.AdultFare;
                     }
                 }
+                else
+                {
+                    pgamount = 0;
+                }
 
+                ticketDetail.pg_amount = pgamount;
                 ticketDetail.other_amount = 0;
                 ticketDetail.total_paid_amount = 0;
                 foreach (var passenger in bookingDetail.FlightBookingDetail.PersonName.CustomerInfo)
@@ -509,13 +579,7 @@ namespace ShineYatraAdmin.Controllers
                         first_name = passenger.givenName,
                         last_name = passenger.surName,
                         title = passenger.nameReference,
-                        age = passenger.age,
-                        //extra_field_1 = "A",
-                        //extra_field_2 = "B",
-                        //extra_field_3 = "C",
-                        //extra_field_4 = "D",
-                        //extra_field_5 = "E",
-
+                        age = passenger.age                       
                     });
                 }
 
@@ -524,10 +588,7 @@ namespace ShineYatraAdmin.Controllers
                 {
                     Expires = DateTime.Now.AddYears(1)
                 };
-                HttpContext.Response.Cookies.Add(cookie);
-
-                //List<INSERT_SERVICE_BOOKING_REQUEST> response = await flightManager.InsertServiceBookingRequest(ticketDetail);
-                //return response.FirstOrDefault();
+                HttpContext.Response.Cookies.Add(cookie);                
                 return guidString;
             }
             catch (Exception ex)

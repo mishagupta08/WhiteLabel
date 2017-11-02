@@ -1,5 +1,4 @@
 ﻿@using ShineYatraAdmin.Properties;
-@using System.Configuration;;
 @model ShineYatraAdmin.Entity.SearchPageViewModel
 
 @{
@@ -286,14 +285,18 @@
                                                        
                             @if (IsPaymentGatewayactive)
                             {
-                                <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required" })Wallet</label>
-                                 <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required" })Bank</label>                                
+                                 <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required", @class = "PaymentModebutton" })Wallet</label>
+                                 <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required",@class="PaymentModebutton" })Bank</label>                                
                             }
                             else
                             {
                                 <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required",@checked="checked" })Wallet</label>                                
                             }
                             <br />
+                        </div>
+
+                        <div class="row" id="PartialPaymentWithWalletDiv" style="display:none;">
+                            <label>@Html.CheckBoxFor(x=>x.FlightBookingDetail.PartialPaymentWithWallet,new {@id="PartialPaymentWithWallet"} ) <span id="walletBalanceMessage">Your Wallet Contains some amount do you want to use that amount?</span></label>
                         </div>
                         <br />
 
@@ -343,11 +346,35 @@
             changeYear: true,
             dateFormat: "dd-M-yy"
         });
+        
+        $('.PaymentModebutton').change(function () {           
+            getwalletstatus(this.value);            
+        });
     });
     
     function checkOTP(status) {
         if (status === "success") {
             $("#bookfightform").submit();
+        }
+    }
+
+    function getwalletstatus(value) {
+        if (value === "bank") {
+            $(".preloader").show();
+            $.ajax({
+                url: '/Common/GetUserBalance',
+                type: 'Post',
+                async: false,
+            }).done(function (result) {
+                $("#walletBalanceMessage").html("Your wallet contains Rs " + result + ". Do you want to use your wallet balance to pay your fare?");
+                $("#PartialPaymentWithWalletDiv").show();
+                $(".preloader").hide();
+            }).fail(function (xhr) {
+                alert("getwalletstatus " + xhr);
+            });
+        }
+        else {
+            $("#PartialPaymentWithWalletDiv").hide();
         }
     }
 </script>
