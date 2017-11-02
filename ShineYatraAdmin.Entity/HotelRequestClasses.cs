@@ -84,6 +84,9 @@
         [XmlIgnore]
         public string PaymentMode { get; set; }
 
+        [XmlIgnore]
+        public bool PartialPaymentWithWallet { get; set; }
+
     }
 
     /// <summary>
