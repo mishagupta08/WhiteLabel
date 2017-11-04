@@ -163,11 +163,11 @@ namespace ShineYatraAdmin.Controllers
                 var serviceProvider = Convert.ToString(frmCollection["ProviderName"]);
                 var paymentMode = Convert.ToString(frmCollection["PaymentMode"]);
                 rechargeType = Convert.ToString(frmCollection["rechargeType"]);
+                var PartialPaymentWithWallet = Convert.ToBoolean(frmCollection["PartialPaymentWithWallet"].Split(',')[0]);
                 double walletBalance = 0;
                 var userData = User.Identity.Name.Split('|');
 
                  
-
                 var balrequest = new WalletRequest
                 {
                     action = "GET_WALLET_BALANCE",
@@ -183,10 +183,12 @@ namespace ShineYatraAdmin.Controllers
                 guidString = guidString.Replace("+", "");
 
                 var mobileDetailsJson = new JavaScriptSerializer().Serialize(mobileDetails);
+
                 var cookie = new HttpCookie("Cookie-" + guidString, mobileDetailsJson)
                 {
                     Expires = DateTime.Now.AddYears(1)
                 };
+
                 HttpContext.Response.Cookies.Add(cookie);
                 var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
 
@@ -195,42 +197,66 @@ namespace ShineYatraAdmin.Controllers
                 {
                     walletBalance = balResponse.wallet_balance;
                 }
+                bool pgflag = false;
+                if (isPaymentGatewayactive && paymentMode == "bank")
+                {
+                    double pgamount = 0;
 
-                if (isPaymentGatewayactive && (paymentMode == "bank" || (paymentMode == "wallet" && walletBalance < mobileDetails.amount)))
-                {                    
-                    var paymentDetail = new CompanyFund
+                    if (PartialPaymentWithWallet)
                     {
-                        action = "INSERT_PG_REQUEST_FOR_SERVICE",
-                        member_id = userData[1],
-                        domain_name = ConfigurationManager.AppSettings["DomainName"],
-                        request_token = guidString,
-                        txn_type = "PG_REQUEST",
-                        deposit_mode = "PG",
-                        remarks = "Recharge payment by payment gateway",
-                        amount = paymentMode == "bank" ? mobileDetails.amount : mobileDetails.amount - walletBalance
-                    };
-                    mobileDetails.pg_amount = paymentDetail.amount;
-                    var balanceTxnId = await pgManager.SavePaymntGatewayTransactions(paymentDetail);
-
-                    if (!balanceTxnId.ToLower().Contains("failed"))
-                    {
-                        var cntrl = new PayUController();
-                        var payrequest = new PayuRequest
+                        if (walletBalance < mobileDetails.amount)
                         {
-                            FirstName = "Misha",
-                            TransactionAmount = paymentDetail.amount,
-                            Email = "guptamisha88@gmail.com",
-                            Phone = "8107737208",
-                            ProductInfo = "Recharge Payment",
-                            udf1 = Convert.ToString(guidString),
-                            udf2 = Convert.ToString(balanceTxnId),
-                            surl = "http://" + Request.Url.Authority + "/Recharge/Return",
-                            furl = "http://" + Request.Url.Authority + "/Recharge/Return"
+                            pgamount = mobileDetails.amount - walletBalance;
+                            pgflag = true;
+                        }
+                        else
+                        {
+                            pgamount = 0;
+                            pgflag = false;
+                        }
+                    }
+                    else
+                    {
+                        pgamount = mobileDetails.amount;
+                        pgflag = true;
+                    }
+
+                    if (pgflag)
+                    {
+                        var paymentDetail = new CompanyFund
+                        {
+                            action = "INSERT_PG_REQUEST_FOR_SERVICE",
+                            member_id = userData[1],
+                            domain_name = ConfigurationManager.AppSettings["DomainName"],
+                            request_token = guidString,
+                            txn_type = "PG_REQUEST",
+                            deposit_mode = "PG",
+                            remarks = "Recharge payment by payment gateway",
+                            amount = pgamount
                         };
-                        cntrl.Payment(payrequest);
+                        mobileDetails.pg_amount = paymentDetail.amount;
+                        var balanceTxnId = await pgManager.SavePaymntGatewayTransactions(paymentDetail);
+
+                        if (!balanceTxnId.ToLower().Contains("failed"))
+                        {
+                            var cntrl = new PayUController();
+                            var payrequest = new PayuRequest
+                            {
+                                FirstName = "Misha",
+                                TransactionAmount = pgamount,
+                                Email = "guptamisha88@gmail.com",
+                                Phone = "8107737208",
+                                ProductInfo = "Recharge Payment",
+                                udf1 = Convert.ToString(guidString),
+                                udf2 = Convert.ToString(balanceTxnId),
+                                surl = "http://" + Request.Url.Authority + "/Recharge/Return",
+                                furl = "http://" + Request.Url.Authority + "/Recharge/Return"
+                            };
+                            cntrl.Payment(payrequest);
+                        }
                     }
                 }
-                else
+                if (!pgflag)
                 {
                     var result = await SaveRechargeDetailsToDb(mobileDetails, "");
                     if (result != "error")

@@ -204,8 +204,7 @@ namespace ShineYatraAdmin.Controllers
             _pgManager = new PgManager();
             var txnId = string.Empty;
             var info = string.Empty;
-            var walletBalance = 0.0;
-            var isWallet = true;
+            var walletBalance = 0.0;            
             var bookResponse = new Bookingresponse();
             try
             {
@@ -238,19 +237,17 @@ namespace ShineYatraAdmin.Controllers
 
                 bookingDetail.walletBalance = walletBalance;
                 info = saveBookingDetail(bookingDetail);
-
+                bool pgflag = false;
                 if (isPaymentGatewayactive && request.PaymentMode == "bank")
                 {
-                    double pgamount = 0;
-                    bool pgflag = false;
+                    double pgamount = 0;                    
 
                     if (request.PartialPaymentWithWallet)
                     {
                         if (walletBalance < request.AdultFare)
                         {
                             pgamount = request.AdultFare - walletBalance;
-                            pgflag = true;
-                            isWallet = false;
+                            pgflag = true;                            
                         }
                         else
                         {
@@ -259,8 +256,7 @@ namespace ShineYatraAdmin.Controllers
                         }
                     }
                     else
-                    {
-                        isWallet = false;
+                    {                        
                         pgamount = request.AdultFare;
                         pgflag = true;
                     }
@@ -309,7 +305,7 @@ namespace ShineYatraAdmin.Controllers
                     }
                 }
               
-                if (isWallet)
+                if (!pgflag)
                 {
                     if (request.AdultFare <= walletBalance)
                     {

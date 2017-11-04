@@ -74,9 +74,7 @@
                         </div>
                         <!--/span-->
                     </div>
-                    
-                    
-                    
+                                                            
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -84,14 +82,27 @@
                                 <div class="col-md-8">                                    
                                     @if (IsPaymentGatewayactive)
                                     {
-                                        <label>@Html.RadioButton("PaymentMode", "wallet", new { @required = "required" })Wallet</label>
-                                        <label>@Html.RadioButton("PaymentMode", "bank", new { @required = "required" })Bank</label>
+                                        <label>@Html.RadioButton("PaymentMode", "wallet", new { @required = "required", @class = "PaymentModebutton" })Wallet</label>
+                                        <label>@Html.RadioButton("PaymentMode", "bank", new { @required = "required", @class = "PaymentModebutton" })Bank</label>
                                     }
                                     else
                                     {
                                         <label>@Html.RadioButton("PaymentMode", "wallet", new { @required = "required", @checked = "checked" })Wallet</label>
                                     }
                                 </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+
+                        </div>
+                        <!--/span-->
+                    </div>
+
+                    <div class="row" id="PartialPaymentWithWalletDiv" style="display:none;">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@Html.CheckBox("PartialPaymentWithWallet", new { @id = "PartialPaymentWithWallet" }) <span id="walletBalanceMessage">Your Wallet Contains some amount do you want to use that amount?</span></label>
                             </div>
                         </div>
                         <!--/span-->
@@ -173,13 +184,37 @@
                         swal("Status", transaction_resut , "error");
                     }
         }
+
+        $('.PaymentModebutton').change(function () {
+            getwalletstatus(this.value);
+        });
     });
 
     function checkOTP(status) {
         if (status === "success") {
             $("#RechargeForm").submit();
         }
-    }    
+    }
+
+    function getwalletstatus(value) {
+        if (value === "bank") {
+            $(".preloader").show();
+            $.ajax({
+                url: '/Common/GetUserBalance',
+                type: 'Post',
+                async: false,
+            }).done(function (result) {
+                $("#walletBalanceMessage").html("Your wallet contains Rs " + result + ". Do you want to use your wallet balance to pay your fare?");
+                $("#PartialPaymentWithWalletDiv").show();
+                $(".preloader").hide();
+            }).fail(function (xhr) {
+                alert("getwalletstatus " + xhr);
+            });
+        }
+        else {
+            $("#PartialPaymentWithWalletDiv").hide();
+        }
+    }
 </script>
 
 
