@@ -46,6 +46,7 @@ namespace ShineYatraAdmin.Entity
         public float amount { get; set; }
 
         public double discount { get; set; }
+        public string providerName { get; set; }
         public double pg_amount { get; set; }
 
     }
@@ -85,6 +86,7 @@ namespace ShineYatraAdmin.Entity
         public string res_msg { get; set; }
         public string ipay_errorcode { get; set; }
         public string ipay_errordesc { get; set; }
+        public string providerName { get; set; }
         public DateTime datetime { get; set; }
 
     }

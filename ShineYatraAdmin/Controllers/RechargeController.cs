@@ -161,6 +161,7 @@ namespace ShineYatraAdmin.Controllers
                 mobileDetails.spkey = Convert.ToString(frmCollection["spkey"]);
 
                 var serviceProvider = Convert.ToString(frmCollection["ProviderName"]);
+                mobileDetails.providerName = serviceProvider;
                 var paymentMode = Convert.ToString(frmCollection["PaymentMode"]);
                 rechargeType = Convert.ToString(frmCollection["rechargeType"]);
                 var PartialPaymentWithWallet = Convert.ToBoolean(frmCollection["PartialPaymentWithWallet"].Split(',')[0]);
@@ -196,6 +197,7 @@ namespace ShineYatraAdmin.Controllers
                 if (balResponse != null)
                 {
                     walletBalance = balResponse.wallet_balance;
+                    Session["WalletBalance"] = balResponse.wallet_balance;
                 }
                 bool pgflag = false;
                 if (isPaymentGatewayactive && paymentMode == "bank")
@@ -348,6 +350,7 @@ namespace ShineYatraAdmin.Controllers
                     if (transactionResponse.status != null &&
                         transactionResponse.status.ToLower().Equals("success"))
                     {
+                        transactionResponse.providerName = mobileDetail.providerName;
                         status = "success";
                         var updatestatus =
                             await _serviceManager.UpdateServiceBookingRequest(txnId, userData[1],transactionResponse.ipay_id, "COMPLETED");
@@ -429,12 +432,12 @@ namespace ShineYatraAdmin.Controllers
                 if (rechargeResponse != null && !string.IsNullOrEmpty(rechargeResponse.txn_id))
                 {
                     result = rechargeResponse.txn_id;
+                    Session["WalletBalance"] = rechargeResponse.wallet_balance;
                 }
                 else
                 {
                     result = "error";
                 }
-
             }
             catch (Exception ex)
             {

@@ -673,6 +673,8 @@ namespace ShineYatraAdmin.Entity
         public int txn_id { get; set; }
         public string MSG { get; set; }
         public string unique_ref_no { get; set; }
+        public double wallet_balance { get; set; }
+        public double company_wallet_balance { get; set; }
     }
 
     public class UPDATE_TRANSACTION_STATUS
