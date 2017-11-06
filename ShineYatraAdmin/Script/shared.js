@@ -1,12 +1,6 @@
 ﻿var currentPage = 1;
 $(document).ready(function () {    
-    getCompanyThemeandSetting();
-
-    $(".preloader").hide();
-
-    $("form").submit(function () {
-        $(".preloader").show();
-    });
+    getCompanyThemeandSetting();   
 });
 
 
@@ -22,7 +16,7 @@ function RemoveErrorMessage(inputElement) {
     }
 }
 
-function CheckEmailError(userElement) {
+function CheckEmailError(userElement)  {
     var inputElement = $(this);
     if (userElement.selector != undefined) {
         inputElement = userElement;

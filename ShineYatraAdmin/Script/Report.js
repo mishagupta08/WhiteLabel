@@ -23,7 +23,7 @@
                             return 'LedgerReport_' + n;
                         },
                         exportOptions: {
-                            columns: [1,4,5,6,7,8,9,10,11]
+                            columns: [0,1,2,3,4,5,6,7,8,9,10,11]
                         }
                    }
                 ],
@@ -57,7 +57,7 @@
                 },
                 "columnDefs": [
                                    { className: "text-right", "targets": [6,7, 8, 9,11] },
-                                   { "targets": [0, 2, 3], "visible": false }
+                                   { "targets": [1, 2, 3], "visible": false }
                 ],
                 "destroy": true,
                 "paging": false,
@@ -72,9 +72,9 @@
                 stateSave: true
             });
         }
-        $(".preloader").hide();
+        $(".preloader").hide();        
     }).fail(function (xhr) {
         alert(xhr);
-    });
+  });
     return false;
 }
