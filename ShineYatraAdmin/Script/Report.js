@@ -71,8 +71,8 @@
                 },
                 stateSave: true
             });
-        }
-        $(".preloader").hide();        
+            $(".preloader").hide();
+        }             
     }).fail(function (xhr) {
         alert(xhr);
   });
