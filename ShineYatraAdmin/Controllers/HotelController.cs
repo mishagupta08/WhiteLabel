@@ -15,6 +15,7 @@
     using System.Configuration;
     using Newtonsoft.Json;
     using Entity.HotelDetail;
+    using System.Globalization;
 
     #endregion namespace
 
@@ -366,7 +367,7 @@
 
                         var cId = this.SaveHotelQuery(hotelRequestCookieModel, cookieId);
                         this.hotelModel.hotelRequestCookieId = cId;
-
+                        this.SaveSelectedHotelDetail(response, cookieId);
                         this.SaveRateDetail(response.Ratedetail, cookieId + "Ratedetail");
                     }
                 }
@@ -389,6 +390,10 @@
                     return null;
                 }
 
+                hotelModel.ProvisionalBookingDetail = new ProvisionalBooking();
+                hotelModel.ProvisionalBookingDetail.GuestInformation = new GuestInformation();
+                hotelModel.ProvisionalBookingDetail.GuestInformation.Address = new Address();
+
                 var hotelRequestCookie = Request.Cookies[hotelRequestCookieId];
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 var hotelRequestCookieModel = new HotelViewModel();
@@ -402,6 +407,24 @@
                     hotelRequestCookieModel.HotelRequestDetail.roomCode = roomCode;
                 }
 
+                /***Rate detail***/
+
+                var hotelRequestJson = Session[hotelRequestCookieId + "RateDetail"].ToString();
+                serializer = new JavaScriptSerializer();
+
+                if (hotelRequestCookie != null)
+                {
+                    var rateDetail = serializer.Deserialize<Ratedetail>(hotelRequestJson);
+                    if (rateDetail != null)
+                    {
+                        hotelModel.SelectedRate = rateDetail.Rate.FirstOrDefault(r => r.RoomTypeCode == roomCode);
+                        var fare = (hotelRequestCookieModel.HotelRequestDetail.NightCount * hotelRequestCookieModel.HotelRequestDetail.RoomCount * (Convert.ToInt32(hotelModel.SelectedRate.Ratebands.ExtGuestTotal) + Convert.ToInt32(hotelModel.SelectedRate.Ratebands.RoomTotal) + Convert.ToInt32(hotelModel.SelectedRate.Ratebands.ServicetaxTotal))) - Convert.ToDouble(hotelModel.SelectedRate.Ratebands.Discount);
+                        hotelModel.ProvisionalBookingDetail.TotalFare = Convert.ToInt32(fare);
+                        hotelModel.RoomTotalPerNight = (Convert.ToInt32(hotelModel.SelectedRate.Ratebands.ExtGuestTotal) + Convert.ToInt32(hotelModel.SelectedRate.Ratebands.RoomTotal) + Convert.ToInt32(hotelModel.SelectedRate.Ratebands.ServicetaxTotal)).ToString();
+                    }
+                }
+
+                hotelModel.SelectedHotel = serializer.Deserialize<Entity.HotelDetail.Hotel>(Session[hotelRequestCookieId + "Hotel"].ToString());
                 hotelModel.HotelRequestDetail = hotelRequestCookieModel.HotelRequestDetail;
                 var cookieId = SaveHotelQuery(hotelRequestCookieModel, hotelRequestCookieId);
                 hotelModel.hotelRequestCookieId = cookieId;
@@ -412,12 +435,7 @@
 
             }
 
-            hotelModel.ProvisionalBookingDetail = new ProvisionalBooking();
-            hotelModel.ProvisionalBookingDetail.GuestInformation = new GuestInformation();
-            hotelModel.ProvisionalBookingDetail.GuestInformation.Address = new Address();
-
             /***comment call get wallet balance here**/
-            hotelModel.WalletResponseDetail = new WalletResponse();
             var userData = User.Identity.Name.Split('|');
             var balrequest = new WalletRequest
             {
@@ -428,11 +446,17 @@
             };
 
             _userManager = new UserManager();
+            hotelModel.WalletResponseDetail = new WalletResponse();
+
             var balResponse = await _userManager.GET_WALLET_BALANCE(balrequest);
+            var walletBalance = 0f;
             if (balResponse != null)
             {
-                hotelModel.WalletResponseDetail.wallet_balance = balResponse.wallet_balance;
+                walletBalance = balResponse.wallet_balance;
+                Session["WalletBalance"] = walletBalance;
             }
+
+            hotelModel.WalletResponseDetail.wallet_balance = (float)walletBalance;
 
             hotelModel.AssignTitle();
             return View("bookHotel", hotelModel);
@@ -560,11 +584,13 @@
             if (rateDetail != null)
             {
                 rateRoom = rateDetail.Rate.FirstOrDefault(r => r.RoomTypeCode == bookingModel.HotelRequestDetail.roomCode);
+                bookingModel.SelectedRate = rateRoom;
             }
 
             bookingModel.HotelRequestDetail.NightCount = CalculateDays(bookingModel.HotelRequestDetail.Start, bookingModel.HotelRequestDetail.End);
 
-            bookingModel.ProvisionalBookingDetail.TotalFare = bookingModel.HotelRequestDetail.NightCount * bookingModel.HotelRequestDetail.RoomCount * Convert.ToInt32(rateRoom.Ratebands.RoomTotal);
+            var fare = (bookingModel.HotelRequestDetail.NightCount * bookingModel.HotelRequestDetail.RoomCount * (Convert.ToInt32(rateRoom.Ratebands.RoomTotal) + Convert.ToInt32(rateRoom.Ratebands.ExtGuestTotal) + Convert.ToInt32(rateRoom.Ratebands.ServicetaxTotal))) - Convert.ToDouble(rateRoom.Ratebands.Discount);
+            bookingModel.ProvisionalBookingDetail.TotalFare = Convert.ToInt32(fare);
             bookingModel.ProvisionalBookingDetail.Hotelinfo.RoomTypeCode = rateRoom.RoomTypeCode;
             bookingModel.ProvisionalBookingDetail.Hotelinfo.Roomtype = rateRoom.Roomtype;
             bookingModel.ProvisionalBookingDetail.Hotelinfo.RatePlanType = rateRoom.RatePlanCode;
@@ -574,6 +600,11 @@
             /****Set Room stay candidate Info***/
             bookingModel.ProvisionalBookingDetail.RoomStayCandidate.GuestDetails = new List<GuestDetails>();
             bookingModel.ProvisionalBookingDetail.RoomStayCandidate.GuestDetails = (bookingModel.HotelRequestDetail.RoomStayCandidateDetail.GuestDetails);
+
+            bookingModel.ProvisionalBookingDetail.GuestInformation.Address.Country = "India";
+            bookingModel.ProvisionalBookingDetail.GuestInformation.PhoneNumber.AreaCode = "1";
+            bookingModel.ProvisionalBookingDetail.GuestInformation.PhoneNumber.CountryCode = "1";
+            bookingModel.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Extension = "1";
 
             /****Set Rateband nfo***/
             bookingModel.ProvisionalBookingDetail.Ratebands = rateRoom.Ratebands;
@@ -641,19 +672,12 @@
         {
             string requestDetailJson = new JavaScriptSerializer().Serialize(rateDetail);
             Session[cookieId] = requestDetailJson;
-            //if (string.IsNullOrEmpty(HttpContext.Response.Cookies[(cookieId)].Value))
-            //{
-            //    var cookie = new HttpCookie(cookieId, requestDetailJson)
-            //    {
-            //        Expires = DateTime.Now.AddYears(1)
-            //    };
+        }
 
-            //    HttpContext.Response.Cookies.Add(cookie);
-            //}
-            //else
-            //{
-            //    HttpContext.Response.Cookies[cookieId].Value = requestDetailJson;
-            //}
+        public void SaveSelectedHotelDetail(Entity.HotelDetail.Hotel detail, string cookieId)
+        {
+            string requestDetailJson = new JavaScriptSerializer().Serialize(detail);
+            Session[cookieId + "Hotel"] = requestDetailJson;
         }
 
         /// <summary>
@@ -673,6 +697,7 @@
             var error = string.Empty;
             var walletBalance = 0.0;
             var bookResponse = new ArzHotelBookingResp();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
             bookResponse.Bookingresponse = new HotelBookingresponse();
             try
             {
@@ -721,7 +746,6 @@
                     bookingModel.ProvisionalBookingDetail.Hotelinfo = new Hotelinfo();
 
                     var hotelRequestCookie = Request.Cookies[bookingModel.hotelRequestCookieId];
-                    JavaScriptSerializer serializer = new JavaScriptSerializer();
                     var hotelRequestCookieModel = new HotelViewModel();
                     var rateDetail = new Ratedetail();
                     if (hotelRequestCookie != null)
@@ -746,6 +770,7 @@
                     hotelRequestCookieModel.HotelRequestDetail.PartialPaymentWithWallet = bookingModel.HotelRequestDetail.PartialPaymentWithWallet;
                     bookingModel.SelectedHotel = hotelRequestCookieModel.SelectedHotel;
                     bookingModel.HotelRequestDetail = hotelRequestCookieModel.HotelRequestDetail;
+
                     Rate rateRoom = MakeProvisionalBookingRequest(bookingModel, rateDetail);
 
                     /**need bookhotel other work here ***/
@@ -769,6 +794,7 @@
                                 pgamount = request.TotalFare - walletBalance;
                                 pgflag = true;
                                 isWallet = false;
+
                             }
                             else
                             {
@@ -925,6 +951,7 @@
                 bookingModel.Error = error;
                 bookingModel.WalletResponseDetail = new WalletResponse();
                 bookingModel.WalletResponseDetail.wallet_balance = (float)walletBalance;
+                bookingModel.SelectedHotel = serializer.Deserialize<Entity.HotelDetail.Hotel>(Session[bookingModel.hotelRequestCookieId + "Hotel"].ToString());
                 return View("bookHotel", bookingModel);
                 //return RedirectToAction("BookingStatus", "Hotel", new { txnId, info });
             }
@@ -943,9 +970,9 @@
             var hotelManager = new HotelManager();
             var serializer = new JavaScriptSerializer();
             var hotelModelDetail = new HotelViewModel();
+            var id = form["udf3"];
             try
             {
-                var id = form["udf3"];
                 var balanceTxId = form["udf2"];
                 if (string.IsNullOrEmpty(id) && Session[id] != null)
                 {
@@ -1039,7 +1066,7 @@
                 hotelModelDetail.AssignTitle();
                 hotelModelDetail.Error = error;
                 hotelModelDetail.WalletResponseDetail = new WalletResponse();
-                //bookingModel.WalletResponseDetail.wallet_balance = (float)walletBalance;
+                hotelModelDetail.SelectedHotel = serializer.Deserialize<Entity.HotelDetail.Hotel>(Session[id + "Hotel"].ToString());
                 return View("bookHotel", hotelModelDetail);
                 //return RedirectToAction("BookingStatus", "Hotel", new { txnId, info });
             }
@@ -1177,6 +1204,29 @@
             ticketDetail.my_info = string.Empty;
             ticketDetail.remarks = "Hotel Booking";
 
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            model.SelectedHotel = serializer.Deserialize<Entity.HotelDetail.Hotel>(Session[model.hotelRequestCookieId + "Hotel"].ToString());
+
+            //var hotelRequestJson = Session[hotelModel.hotelRequestCookieId + "RateDetail"].ToString();
+            //serializer = new JavaScriptSerializer();
+
+            //if (hotelRequestJson != null)
+            //{
+            //    var rateDetail = serializer.Deserialize<Ratedetail>(hotelRequestJson);
+            //    if (rateDetail != null)
+            //    {
+            //        hotelModel.SelectedRate = rateDetail.Rate.FirstOrDefault(r => r.RoomTypeCode == hotelModel.HotelRequestDetail.roomCode);
+            //    }
+            //}
+
+            ticketDetail.room_type = model.SelectedRate.Roomtype;
+            ticketDetail.hotel_name = model.SelectedHotel.Hoteldetail.Hotelname;
+            ticketDetail.hotel_city = model.SelectedHotel.Hoteldetail.City;
+            ticketDetail.hotel_address = model.SelectedHotel.Hoteldetail.Contactinfo.Address;
+            ticketDetail.hotel_amenities = model.SelectedRate.Roombasis;
+            ticketDetail.check_in_time = model.SelectedHotel.Hoteldetail.Bookinginfo.Checkintime;
+            ticketDetail.check_out_time = model.SelectedHotel.Hoteldetail.Bookinginfo.Checkintime;
+
             if (model.HotelRequestDetail.PaymentMode.ToLower().Trim() == "bank")
             {
                 ticketDetail.pg_amount = model.ProvisionalBookingDetail.TotalFare;
@@ -1206,5 +1256,88 @@
 
             return ticketDetail;
         }
+
+        public async Task<ActionResult> GetHotelTransactionList(HotelViewModel model)
+        {
+            if (model == null || model.FilterDetail == null)
+            {
+                model = new HotelViewModel();
+                model.FilterDetail = new Entity.Filter();
+            }
+
+            model.FilterDetail.AssignSelectTypeList();
+            hotelManager = new HotelManager();
+            var userData = User.Identity.Name.Split('|');
+            var bookingList = await hotelManager.GetHotelsTransactionSummaryList(userData[1]);
+            if (bookingList != null && model.FilterDetail != null)
+            {
+                if (!string.IsNullOrEmpty(model.FilterDetail.ResultType))
+                {
+                    if (model.FilterDetail.ResultType == "Success")
+                    {
+                        bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("COMPLETE") || book.status.ToUpper().Contains("SUCCESS"))).ToList();
+                    }
+                    else if (model.FilterDetail.ResultType == "Fail")
+                    {
+                        bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(model.FilterDetail.SelectType))
+                {
+                    var selectedTypeValueInt = 0;
+
+                    if (!string.IsNullOrEmpty(model.FilterDetail.SelectedTypeValue))
+                    {
+                        selectedTypeValueInt = Convert.ToInt32(model.FilterDetail.SelectedTypeValue);
+                    }
+                    if (model.FilterDetail.SelectType.Contains("Id"))
+                    {
+                        bookingList = bookingList.Where(book => book.txn_id == selectedTypeValueInt).ToList();
+                    }
+
+                    if (model.FilterDetail.SelectType.Contains("Member"))
+                    {
+                        bookingList = bookingList.Where(book => book.member_id == selectedTypeValueInt).ToList();
+                    }
+
+                    if (model.FilterDetail.SelectType.Contains("Mobile"))
+                    {
+                        bookingList = bookingList.Where(book => book.mobile != null && book.mobile == model.FilterDetail.SelectedTypeValue).ToList();
+                    }
+
+                    if (model.FilterDetail.SelectType.Contains("Email"))
+                    {
+                        bookingList = bookingList.Where(book => book.email != null && book.email == model.FilterDetail.SelectedTypeValue).ToList();
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(model.FilterDetail.FromDate))
+                {
+                    model.FilterDetail.FromDate = model.FilterDetail.FromDate.Trim();
+
+                    String format = "dd/MM/yyyy";
+                    DateTime d1 = DateTime.ParseExact(model.FilterDetail.FromDate, format, CultureInfo.CurrentCulture);
+
+                    //bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
+                    bookingList = bookingList.Where(p => p.check_in_date != null && DateTime.ParseExact(p.check_in_date.Trim(), format, CultureInfo.CurrentCulture) >= d1).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.FilterDetail.ToDate))
+                {
+                    model.FilterDetail.ToDate = model.FilterDetail.ToDate.Trim();
+
+                    String format = "dd/MM/yyyy";
+                    DateTime d1 = DateTime.ParseExact(model.FilterDetail.ToDate, format, CultureInfo.CurrentCulture);
+
+                    //bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
+                    bookingList = bookingList.Where(p => p.check_in_date != null && DateTime.ParseExact(p.check_out_date.Trim(), format, CultureInfo.CurrentCulture) <= d1).ToList();
+                }
+            }
+
+            model.BookingList = bookingList;
+            return View(model);
+        }
+
     }
 }

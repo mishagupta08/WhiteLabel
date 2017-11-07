@@ -4,12 +4,10 @@ $(document).ready(function () {
 
     $(".preloader").hide();
 
-    $("form").submit(function () {
-        $(".preloader").show();
-    });
+    //$("form").submit(function () {
+    //    $(".preloader").show();
+    //});
 });
-
-
 
 function RemoveErrorMessage(inputElement) {
     if (inputElement.val() != "" && inputElement.val().length > 0) {

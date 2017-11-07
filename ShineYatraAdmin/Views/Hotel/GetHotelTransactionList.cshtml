@@ -1,0 +1,149 @@
+﻿@using System.Globalization;
+@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.HotelViewModel
+@{
+    ViewBag.Title = "Hotel Transacton List View";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<style>
+    .ui-autocomplete {
+        z-index: 100;
+    }
+
+    .form-bordered .form-group {
+        border: none !important;
+    }
+
+    td, th {
+        text-align: center !important;
+    }
+</style>
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="~/Script/hotel.js"></script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SearchHotel</title>
+</head>
+<body>
+    @*<button type="button" id="cancelBooking" class="btn btn-success"> <i class="fa"></i> Cancel Hotel Booking</button>*@
+    <br /><br />
+    <div class="white-box" style="border-radius:15px;">
+        <h3 class="box-title">Hotel Booking Details</h3>
+        <form action="GetHotelTransactionList" method="post" class="form-horizontal form-bordered" id="hotelFilterForm">
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="control-label col-md-1">Result Type</label>
+                    <div class="col-md-9">
+                        <label>@Html.RadioButtonFor(x => Model.FilterDetail.ResultType, "Success", new { @class = "PaymentModebutton" }) Success</label>
+                        <label>@Html.RadioButtonFor(x => Model.FilterDetail.ResultType, "Fail", new { @class = "PaymentModebutton" }) Fail</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-1">Select type</label>
+                    <div class="col-md-2">
+                        @Html.DropDownListFor(m => m.FilterDetail.SelectType, new SelectList(Model.FilterDetail.SelectTypeList, "Id", "Value"), new { @required = "0", id = "roomCountDropDown", @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(m => m.FilterDetail.SelectedTypeValue, new { @id = "selectedTypeValue", @class = "form-control", @placeholder = "Selected Type Value" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-1">From date</label>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(m => m.FilterDetail.FromDate, new { @id = "start", @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" })
+                    </div>
+
+                    <label class="control-label col-md-1">To Date</label>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(m => m.FilterDetail.ToDate, new { @id = "end", @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" })
+                    </div>
+                </div>
+
+                <span id="hoteSearchHotel"></span>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" class="btn btn-success"> <i class="fa"></i> View</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+        <br />
+        @if (Model != null || Model.BookingList != null || Model.BookingList.Count != 0)
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">S.No.</th>
+                        <th width="10%">Mobile No</th>
+                        <th width="12%">Email Id</th>
+                        <th width="13%">Hotel Name</th>
+                        <th width="10%">Hotel City</th>
+                        <th width="10%">Checkin Date</th>
+                        <th width="10%">Checkout Date</th>
+                        <th width="10%">Book Date</th>
+                        <th width="5%">Book Amount</th>
+                        <th width="5%">Booking Id</th>
+                        <th width="10%">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var count = 0; }
+                    @foreach (var detail in Model.BookingList)
+                    {
+                        count++;
+                        <tr>
+                            <td>@count</td>
+                            <td>@detail.mobile</td>
+                            <td>@detail.email</td>
+                            <td>@detail.hotel_name</td>
+                            <td>@detail.hotel_city</td>
+                            <td>@detail.check_in_date</td>
+                            <td>@detail.check_out_date</td>
+                            <td>@detail.txn_date</td>
+                            <td>@detail.amount</td>
+                            <td>@detail.txn_id</td>
+                            <td>@detail.status</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+                        }
+    </div>
+</body>
+</html>
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+@*<script src="~/Script/flight.js"></script>*@
+
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+        jq(".preloader").hide();
+        jq("#hotelFilterForm").submit(function () {
+            jq(".preloader").show();
+        })
+
+        // Date Picker
+        jq('#start').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            dateFormat: "dd/mm/yy",
+            minDate: 0
+        }); 1
+
+        jq('#end').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            dateFormat: "dd/mm/yy",
+            minDate: 0
+        });
+    });
+</script>

@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filter.cs" />
+    <Compile Include="HotelBookingContainer.cs" />
     <Compile Include="CcAvenueViewModel.cs" />
     <Compile Include="Company.cs" />
     <Compile Include="CompanyApiSetting.cs" />

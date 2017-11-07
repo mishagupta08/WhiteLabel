@@ -9,122 +9,255 @@
     bool askOTP = Convert.ToString(Session["otp_service_enabled"]) == "Y";
     bool IsPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
 }
+<style>
+    #rateContainer tr:nth-child(even) {
+        background: aliceblue;
+    }
+
+    #leftPanel > table {
+        width: 100% !important;
+        border: 1px solid lightgrey !important;
+        margin-top: 3px;
+    }
+
+    #leftPanel {
+        vertical-align: top;
+    }
+
+    td, th {
+        padding: 5px;
+        vertical-align: top;
+    }
+
+    .rightPanel {
+        display: inline-block;
+        width: 69%;
+        margin-left: 10px;
+        display: inline-block;
+    }
+
+    #contentHolder:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+</style>
+
 <!DOCTYPE html>
 
 <html>
 <body>
-    <form class="form-horizontal form-material white-box" method="post" id="bookHotelForm" action="BookResponse">
-        @*<form class="form-horizontal form-material white-box" id="bookHotelForm" onsubmit="return SubmitBookingDetail();">*@
-        @Html.HiddenFor(m => m.hotelRequestCookieId, new { @id = "hotelRequestCookieId" })
-        <div class="form-body">
-            <div class="form-group">
-                <label class="control-label col-md-3">Title</label>
-                <div class="col-md-9">
-                    @Html.DropDownListFor(m => m.ProvisionalBookingDetail.GuestInformation.Title, new SelectList(Model.Title, "Id", "Value"), new { @required = "0", id = "titleDropDown", @class = "form-control" })
-                </div>
+    <div id="leftPanel" style="display:inline-block; width:27%; padding:10px; background:white;">
+        <label>Sale Summary</label>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Guest Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="60%">Adult Count</td>
+                    <td width="40%">@Model.HotelRequestDetail.TotalAdultCount</td>
+                </tr>
+                <tr>
+                    <td>Child Count</td>
+                    <td>@Model.HotelRequestDetail.TotalChildCount</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Room Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="60%">Room Rate</td>
+                    <td width="40%">@Model.SelectedRate.Ratebands.OriginalRoomTotal</td>
+                </tr>
+                <tr>
+                    <td>Extra Guest</td>
+                    <td>@Model.SelectedRate.Ratebands.ExtGuestTotal</td>
+                </tr>
+                <tr>
+                    <td>Service Tax</td>
+                    <td>@Model.SelectedRate.Ratebands.ServicetaxTotal</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Room Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="60%">No. Of Room</td>
+                    <td width="40%">@Model.HotelRequestDetail.RoomCount</td>
+                </tr>
+                <tr>
+                    <td>No. Of Nights</td>
+                    <td>@Model.HotelRequestDetail.NightCount</td>
+                </tr>
+                <tr>
+                    <td>Total (Per Night/ Per Room)</td>
+                    <td>@Model.RoomTotalPerNight</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th width="60%">Grand Total</th>
+                    <th>@Model.ProvisionalBookingDetail.TotalFare</th>
+                </tr>
+            </thead>
+            @*<tbody>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>*@
+            </tbody>
+        </table>
+    </div>
+    <div class="rightPanel">
+        <div class="form-group">
+            <label class="control-label col-md-3">Available Balance is : </label>
+            <div class="col-md-9">
+                @Model.WalletResponseDetail.wallet_balance
             </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3">Name</label>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.FirstName, new { @id = "firstName", @required = "", @class = "form-control", @placeholder = "FirstName" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.MiddleName, new { @id = "middleName", @class = "form-control", @placeholder = "SecondName" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.LastName, new { @id = "lastName", @required = "", @class = "form-control", @placeholder = "LastName" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3">Phone Number</label>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.PhoneNumber.CountryCode, new { @id = "countryCode", @required = "", @class = "form-control", @placeholder = "Country Code" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.PhoneNumber.AreaCode, new { @id = "countryCode", @required = "", @class = "form-control", @placeholder = "Area Code" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Number, new { @id = "number", @required = "", @class = "form-control", @placeholder = "Number" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Extension, new { @id = "extension", @required = "", @class = "form-control", @placeholder = "Extension" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3">Email</label>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Email, new { @type = "email", @id = "email", @required = "", @class = "form-control", @placeholder = "Email" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3">Address</label>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.AddressLine, new { @id = "addressLine", @required = "", @class = "form-control", @placeholder = "Address Line" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.City, new { @id = "City", @required = "", @class = "form-control", @placeholder = "City" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.ZipCode, new { @id = "ZipCode", @required = "", @class = "form-control", @placeholder = "Zipcode" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.State, new { @id = "State", @required = "", @class = "form-control", @placeholder = "State" })
-
-                    @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.Country, new { @id = "Country", @required = "", @class = "form-control", @placeholder = "Country" })
-                </div>
-            </div>
-
-            <br />
-            <div class="form-group">
-                <label class="control-label col-md-3">NOTE :- Your current wallet balance is</label>
-                <div class="col-md-9">
-                    @Model.WalletResponseDetail.wallet_balance
-                </div>
-            </div>
-            <br />
-            <div class="form-group">
-                <label class="control-label col-md-3">Choose Payment Mode</label>
-                <div class="col-md-9">
-
-                    @if (IsPaymentGatewayactive)
-                    {
-                        <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "wallet", new { @required = "required", @class = "PaymentModebutton" })Wallet</label>
-                        <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "bank", new { @required = "required", @class = "PaymentModebutton" })Bank</label>
-                    }
-                    else
-                    {
-                        <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "wallet", new { @required = "required", @checked = "checked", @class = "PaymentModebutton" })Wallet</label>
-                    }
-                </div>
-
-                <br />
-            </div>
-            <div class="form-group" id="PartialPaymentWithWalletDiv" style="display:none;">
-                <label class="control-label col-md-3"></label>
-                <div class="col-md-9">
-                    <label>@Html.CheckBoxFor(x => x.HotelRequestDetail.PartialPaymentWithWallet, new { @id = "PartialPaymentWithWallet" }) <span id="walletBalanceMessage">Your Wallet Contains some amount do you want to use that amount?</span></label>
-                </div>
-            </div>
-            <span id="hoteSearchHotel">@Model.Error</span>
-            <div class="row">
-                <div class="col-md-offset-3 col-md-9">
-                    @if (askOTP)
-                    {
-                        <input type="button" class="btn btn-success" value="Proceed To Booking" onclick="openotpform()">
-                    }
-                    else
-                    {
-                        <input type="submit" class="btn btn-success" value="Proceed To Booking">
-                    }
-                </div>
-            </div>
-
-            @*<div class="row">
-
-                        <button type="submit" class="btn btn-success"> <i class="fa"></i>Book</button>
-                    </div>
-                </div>*@
-
         </div>
-    </form>
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th width="20%">Hotel Name</th>
+                    <th width="35%">Address</th>
+                    <th width="10%">Check-in</th>
+                    <th width="10%">Check-out</th>
+                    <th width="25%">RoomType</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.SelectedHotel.Hoteldetail.Hotelname</td>
+                    <td>@Model.SelectedHotel.Hoteldetail.Contactinfo.Address</td>
+                    <td>@Model.HotelRequestDetail.Start</td>
+                    <td>@Model.HotelRequestDetail.End</td>
+                    <td>@Model.SelectedRate.Roomtype</td>
+                </tr>
+            </tbody>
+        </table>
+        <form class="form-horizontal form-material white-box" method="post" id="bookHotelForm" action="BookResponse">
+            @*<form class="form-horizontal form-material white-box" id="bookHotelForm" onsubmit="return SubmitBookingDetail();">*@
+            @Html.HiddenFor(m => m.hotelRequestCookieId, new { @id = "hotelRequestCookieId" })
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Title</label>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(m => m.ProvisionalBookingDetail.GuestInformation.Title, new SelectList(Model.Title, "Id", "Value"), new { @required = "0", id = "titleDropDown", @class = "form-control" })
+                    </div>
+                </div>
 
-    @Html.Partial("~/Views/Shared/OTPpopup.cshtml")
+                <div class="form-group">
+                    <label class="control-label col-md-3">Name</label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.FirstName, new { @id = "firstName", @required = "", @class = "form-control", @placeholder = "FirstName" })
+
+                        @*@Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.MiddleName, new { @id = "middleName", @class = "form-control", @placeholder = "SecondName" })*@
+
+                        @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.LastName, new { @id = "lastName", @required = "", @class = "form-control", @placeholder = "LastName" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3">Phone Number</label>
+                    <div class="col-md-3">
+                        @*@Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.PhoneNumber.CountryCode, new { @id = "countryCode", @required = "", @class = "form-control", @placeholder = "Country Code" })
+
+                            @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.PhoneNumber.AreaCode, new { @id = "countryCode", @required = "", @class = "form-control", @placeholder = "Area Code" })*@
+
+                        @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Number, new { @id = "number", @required = "", @class = "form-control", @placeholder = "Mobile/Phone No." })
+
+                        @*@Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.PhoneNumber.Extension, new { @id = "extension", @required = "", @class = "form-control", @placeholder = "Extension" })*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3">Email</label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Email, new { @type = "email", @id = "email", @required = "", @class = "form-control", @placeholder = "Email" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3">Address</label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.AddressLine, new { @id = "addressLine", @required = "", @class = "form-control", @placeholder = "Address Line" })
+
+                        @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.City, new { @id = "City", @required = "", @class = "form-control", @placeholder = "City" })
+
+                        @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.ZipCode, new { @id = "ZipCode", @required = "", @class = "form-control", @placeholder = "Zipcode" })
+
+                        @Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.State, new { @id = "State", @required = "", @class = "form-control", @placeholder = "State" })
+
+                        @*@Html.TextBoxFor(m => m.ProvisionalBookingDetail.GuestInformation.Address.Country, new { @id = "Country", @required = "", @class = "form-control", @placeholder = "Country" })*@
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <label class="control-label col-md-3">Choose Payment Mode</label>
+                    <div class="col-md-9">
+
+                        @if (IsPaymentGatewayactive)
+                        {
+                            <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "wallet", new { @required = "required", @class = "PaymentModebutton" })Wallet</label>
+                            <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "bank", new { @required = "required", @class = "PaymentModebutton" })Bank</label>
+                        }
+                        else
+                        {
+                            <label>@Html.RadioButtonFor(x => Model.HotelRequestDetail.PaymentMode, "wallet", new { @required = "required", @checked = "checked", @class = "PaymentModebutton" })Wallet</label>
+                        }
+                    </div>
+
+                    <br />
+                </div>
+                <div class="form-group" id="PartialPaymentWithWalletDiv" style="display:none;">
+                    <label class="control-label col-md-3"></label>
+                    <div class="col-md-9">
+                        <label>@Html.CheckBoxFor(x => x.HotelRequestDetail.PartialPaymentWithWallet, new { @id = "PartialPaymentWithWallet" }) <span id="walletBalanceMessage">Your Wallet Contains some amount do you want to use that amount?</span></label>
+                    </div>
+                </div>
+                <span id="hoteSearchHotel">@Model.Error</span>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        @if (askOTP)
+                        {
+                            <input type="button" class="btn btn-success" value="Proceed To Booking" onclick="openotpform()">
+                        }
+                        else
+                        {
+                            <input type="submit" class="btn btn-success" value="Proceed To Booking">
+                        }
+                    </div>
+                </div>
+
+                @*<div class="row">
+
+                            <button type="submit" class="btn btn-success"> <i class="fa"></i>Book</button>
+                        </div>
+                    </div>*@
+
+            </div>
+        </form>
+
+        @Html.Partial("~/Views/Shared/OTPpopup.cshtml")
+    </div>
 </body>
 </html>
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
@@ -134,9 +267,14 @@
     var jq = $.noConflict();
     jq(document).ready(function () {
         // Date Picker
+        jq(".preloader").hide();
         jq('.PaymentModebutton').change(function () {
             getwalletstatus(this.value);
         });
+
+        jq('#bookHotelForm').submit(function () {
+            jq(".preloader").show();
+        }); 
     });
 
     function checkOTP(status) {

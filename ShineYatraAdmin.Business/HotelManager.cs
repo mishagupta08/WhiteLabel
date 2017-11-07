@@ -152,5 +152,21 @@ namespace ShineYatraAdmin.Business
             }
             return response;
         }
+
+        public async Task<List<HotelBookingContainer>> GetHotelsTransactionSummaryList(string member_id)
+        {
+            List<HotelBookingContainer> response = null;
+            try
+            {
+                response = await HotelApi.GetHotelsTransactionSummaryList(member_id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+
     }
 }

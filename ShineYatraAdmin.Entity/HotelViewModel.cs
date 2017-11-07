@@ -12,10 +12,19 @@ namespace ShineYatraAdmin.Entity
         /// gets or sets wallet balance
         /// </summary>
         public WalletResponse WalletResponseDetail { get; set; }
+
+        /// <summary>
+        /// gets or sets filter detail
+        /// </summary>
+        public Filter FilterDetail { get; set; }
         /// <summary>
         /// gets or sets selected menu
         /// </summary>
         public string SelectedMenu { get; set; }
+
+        public Rate SelectedRate { get; set; }
+
+        public string RoomTotalPerNight { get; set; }
 
         public string hotelRequestCookieId { get; set; }
 
@@ -37,6 +46,11 @@ namespace ShineYatraAdmin.Entity
         /// gets or sets hotel request
         /// </summary>
         public ProvisionalBooking ProvisionalBookingDetail { get; set; }
+
+        /// <summary>
+        /// gets or sets booking list
+        /// </summary>
+        public  List<HotelBookingContainer> BookingList { get; set; }
 
         /// <summary>
         /// gets or sets hotel booking response
@@ -75,7 +89,7 @@ namespace ShineYatraAdmin.Entity
         /// <summary>
         /// gets or sets hotel list
         /// </summary>
-        public List<Hotel> HotelList { get; set; }
+        public IList<Hotel> HotelList { get; set; }
 
         /// <summary>
         /// gets or sets hotel error.
@@ -85,7 +99,7 @@ namespace ShineYatraAdmin.Entity
         /// <summary>
         /// gets or sets selected hotel detail
         /// </summary>
-        public ShineYatraAdmin.Entity.HotelDetail.Hotel SelectedHotel { get; set; }
+        public Entity.HotelDetail.Hotel SelectedHotel { get; set; }
 
         /// <summary>
         /// method to assign room

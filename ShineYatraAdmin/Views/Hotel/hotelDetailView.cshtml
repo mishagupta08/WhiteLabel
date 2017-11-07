@@ -111,17 +111,14 @@
                                             @{
                                                 var roomTotal = Convert.ToInt32(rate.Ratebands.RoomTotal);
                                                 var rooms = Convert.ToInt32(Model.HotelRequestDetail.RoomCount);
-                                                var extraGuestAmount = 1;
-                                                //if (!string.IsNullOrEmpty(rate.Ratebands.ExtGuestTotal))
-                                                //{
-                                                //    extraGuestAmount = Convert.ToInt32(rate.Ratebands.ExtGuestTotal);
-                                                //    if (extraGuestAmount == 0)
-                                                //    {
-                                                //        extraGuestAmount = 1;
-                                                //    }
-                                                //}
+                                                var extraGuestAmount = 0;
+                                                if (!string.IsNullOrEmpty(rate.Ratebands.ExtGuestTotal))
+                                                {
+                                                    extraGuestAmount = Convert.ToInt32(rate.Ratebands.ExtGuestTotal);
+                                                }
 
-                                                var totalFare = rooms * roomTotal * Model.HotelRequestDetail.NightCount * extraGuestAmount;
+                                                var totalFare = (rooms * Model.HotelRequestDetail.NightCount * (extraGuestAmount + roomTotal + Convert.ToInt32(rate.Ratebands.Commission))) - Convert.ToDouble(rate.Ratebands.Discount);
+
                                             }
 
                                             @*@rate.Ratebands.OriginalRoomTotal*@
@@ -166,7 +163,7 @@
                                                             <td>@rate.Ratebands.CommisionGroupAmount</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Total Fare(Rate*Nights*Rooms*Extra Guest)</td>
+                                                            <td>Total Fare(Nights*Rooms*(Extra Guest + Rate + Tax))-discount</td>
                                                             <td>@totalFare</td>
                                                         </tr>
                                                     </tbody>

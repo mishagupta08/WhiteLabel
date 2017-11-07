@@ -162,5 +162,12 @@
         public double other_amount { get; set; }
         public double total_paid_amount { get; set; }
         public double discount { get; set; }
+        public string room_type { get; set; }
+        public string check_in_time { get; set; }
+        public string check_out_time { get; set; }
+        public string hotel_name { get; set; }
+        public string hotel_city { get; set; }
+        public string hotel_address { get; set; }
+        public string hotel_amenities { get; set; }
     }
 }

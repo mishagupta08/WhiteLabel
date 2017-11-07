@@ -168,7 +168,7 @@
         /// <summary>
         /// gets or sets flight booking details
         /// </summary>
-        public List<BookingDetail> GET_FLIGHT_TRANSACTIONS { get; set; }
+        public List<HotelBookingContainer> GET_FLIGHT_TRANSACTIONS { get; set; }
 
         /// <summary>
         /// gets or sets update flight booking details
@@ -201,6 +201,9 @@
         /// </summary>
         public EticketDetails FlightTicketDetails { get; set; }
 
-
+        /// <summary>
+        /// gets or sets hotel transaction list
+        /// </summary>
+        public List<HotelBookingContainer> GET_HOTELS_TRANSACTIONS_SUMMARY { get; set; }
     }
 }

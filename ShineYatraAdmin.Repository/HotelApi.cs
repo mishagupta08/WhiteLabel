@@ -38,6 +38,16 @@
         /// </summary>
         const string HotelAuthKey = "e969da44-91f8-4d51-b138-0ace0980d519";
 
+        /// <summary>
+        /// Base url of API
+        /// </summary>
+        private const string ApiBaseUrl = "http://mukesh.bisplindia.in/apiRouter.aspx";
+
+        /// <summary>
+        /// Authentication key
+        /// </summary>
+        private const string AuthKey = "lPJpfNMUK6u2KAGyJXqxsw==";
+
         //Implemented based on interface, not part of algorithm
         public static string RemoveAllNamespaces(string xmlDocument)
         {
@@ -259,7 +269,7 @@
                     if (httpResponse.Content != null)
                     {
                         var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                       // responseContent = "<string xmlns='http://schemas.microsoft.com/2003/10/Serialization/'>&lt;?xml version='1.0' encoding='utf-16'?&gt;&lt;hotel xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'&gt;&lt;hoteldetail&gt;&lt;hotelid&gt;00013927&lt;/hotelid&gt;&lt;hotelname&gt;Hotel Payal&lt;/hotelname&gt;&lt;hoteldesc&gt;Hotel Payal is one of the good budget hotels located in the famous Paharganj area of New Delhi. Known for its convenient location to the main modes of transportation and the nearby tourist attractions the hotel is a huge draw. It also includes various highlights like a 24-hour reception room service, complimentary breakfast, travel desk, laundry facility and currency exchange service.&lt;/hoteldesc&gt;&lt;starrating&gt;0&lt;/starrating&gt;&lt;noofrooms&gt;1&lt;/noofrooms&gt;&lt;minRate&gt;750&lt;/minRate&gt;&lt;rph&gt;41&lt;/rph&gt;&lt;webService&gt;arzooB&lt;/webService&gt;&lt;contactinfo&gt;&lt;address&gt;1182 Mainj Bazar Paharganj, , Paharganj, NEW DELHI, DELHI, India, Pin-110055&lt;/address&gt;&lt;citywiselocation&gt;Paharganj&lt;/citywiselocation&gt;&lt;locationinfo&gt;NA&lt;/locationinfo&gt;&lt;phone&gt;NA&lt;/phone&gt;&lt;fax&gt;NA&lt;/fax&gt;&lt;email&gt;NA&lt;/email&gt;&lt;website&gt;NA&lt;/website&gt;&lt;/contactinfo&gt;&lt;bookinginfo&gt;&lt;checkintime&gt;12:00:00&lt;/checkintime&gt;&lt;checkouttime&gt;12:00:00&lt;/checkouttime&gt;&lt;/bookinginfo&gt;&lt;services&gt;&lt;creditcards&gt;All&lt;/creditcards&gt;&lt;hotelservices&gt;24-hour front desk#-Currency exchange#-Laundry facilities#-Airport transportation(surcharge)#-Travel counter#-Breakfast services&lt;/hotelservices&gt;&lt;roomservices&gt;Makeup mirror#-Smoking rooms#-Telephone-Room#-Wakeup-calls#-H/C running water&lt;/roomservices&gt;&lt;/services&gt;&lt;facilities&gt;NA&lt;/facilities&gt;&lt;images&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/HA.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/HO.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/0000048565RD.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/0000048567RD.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT1.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT2.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT3.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT4.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT5.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT6.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;/images&gt;&lt;geoCode&gt;,&lt;/geoCode&gt;&lt;/hoteldetail&gt;&lt;ratedetail&gt;&lt;rate&gt;&lt;ratetype&gt;Y&lt;/ratetype&gt;&lt;hotelPackage&gt;N&lt;/hotelPackage&gt;&lt;roomtype&gt;Standard Single Room With Fan&lt;/roomtype&gt;&lt;roombasis&gt;No Amenities&lt;/roombasis&gt;&lt;roomTypeCode&gt;0000276760&lt;/roomTypeCode&gt;&lt;ratePlanCode&gt;0000995884&lt;/ratePlanCode&gt;&lt;ratebands&gt;&lt;validdays&gt;1111111&lt;/validdays&gt;&lt;wsKey&gt;sqnOmFvYqobGHJZzEBm8Bjp5pJP1zETADml0U5ncn3cS8PIYJjNMOw5pdFOZ3J930GlY6nAFU8uaT2zVTPo9tp+CgAkL98z2xw1Qqnbhmf3GHJZzEBm8Bg7n6jvJWLZ8h/So6RwrCjn8LXfsCVqrts4HpwZO8Cvf2b0OSPoWl6BvJHPQXRt9CLipFgGa3hfeSAS/psz+s/vtFOZDhaz6EtGf96t/LsuWxw1Qqnbhmf1FSv+xKDhHyjZBEWtPCirBRUr/sSg4R8o2QRFrTwoqwaX4awkeoqG42nR9nXRKOhx4ExAjJltuZol+mH8dk+yJ2a6OMbvdrkwX7KdI32GXSOZd47f+VFQ4f05EVH7MtbX35SGKsJzysLyUBrDry8nOEry6w1cxiRzimGF/Ia0FXMQ6w2qSeIKusqnOmFvYqoYbAUyUDHRst6rdZ1JTSIubM9n0Dni017ohIiF9REMGIQ==&lt;/wsKey&gt;&lt;extGuestTotal&gt;0&lt;/extGuestTotal&gt;&lt;roomTotal&gt;795&lt;/roomTotal&gt;&lt;servicetaxTotal&gt;0&lt;/servicetaxTotal&gt;&lt;discount&gt;0.0&lt;/discount&gt;&lt;commission&gt;0&lt;/commission&gt;&lt;originalRoomTotal&gt;795&lt;/originalRoomTotal&gt;&lt;/ratebands&gt;&lt;/rate&gt;&lt;rate&gt;&lt;ratetype&gt;Y&lt;/ratetype&gt;&lt;hotelPackage&gt;N&lt;/hotelPackage&gt;&lt;roomtype&gt;Standard Non A/C&lt;/roomtype&gt;&lt;roombasis&gt;,Complimentary Wi-Fi Internet, &lt;/roombasis&gt;&lt;roomTypeCode&gt;0000048565&lt;/roomTypeCode&gt;&lt;ratePlanCode&gt;0000180249&lt;/ratePlanCode&gt;&lt;ratebands&gt;&lt;validdays&gt;1111111&lt;/validdays&gt;&lt;wsKey&gt;hggn4jZPFUzGHJZzEBm8Bjp5pJP1zETADml0U5ncn3cS8PIYJjNMOw5pdFOZ3J931JWjobnnvMKaT2zVTPo9tp+CgAkL98z2xw1Qqnbhmf3GHJZzEBm8Bg7n6jvJWLZ8h/So6RwrCjn8LXfsCVqrts4HpwZO8Cvf2b0OSPoWl6BvJHPQXRt9CLipFgGa3hfeRCwsaIZd6kIMUJDK/mi8dYUYg6zJXb9BI6k1+LgY3UGt0D3Y1QRlQQ+fTZgh1nupPIbMiKLjV+MSkO5olJdH/zyGzIii41fjEpDuaJSXR/+91xVkJdkXIWFYT9FlQjlyIdSiYkV0LG6jnah1b3263p/kcrxMhiqv4ZI0LBZ6y+BJitB9tyglEEk/9QHgwfujOYt42w8XTNKj8slKZijCIWUdJIzNmAFxKAw+1dxv3n65FmdKuPhldQelVcg/yWCrQLZKb+Tg4ADB45RuCOzCgXRFM0gx2HqTthncdiwkMY8=&lt;/wsKey&gt;&lt;extGuestTotal&gt;0&lt;/extGuestTotal&gt;&lt;roomTotal&gt;848&lt;/roomTotal&gt;&lt;servicetaxTotal&gt;0&lt;/servicetaxTotal&gt;&lt;discount&gt;0.0&lt;/discount&gt;&lt;commission&gt;0&lt;/commission&gt;&lt;originalRoomTotal&gt;848&lt;/originalRoomTotal&gt;&lt;/ratebands&gt;&lt;/rate&gt;&lt;/ratedetail&gt;&lt;promotion&gt;false&lt;/promotion&gt;&lt;/hotel&gt;</string>";
+                        // responseContent = "<string xmlns='http://schemas.microsoft.com/2003/10/Serialization/'>&lt;?xml version='1.0' encoding='utf-16'?&gt;&lt;hotel xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'&gt;&lt;hoteldetail&gt;&lt;hotelid&gt;00013927&lt;/hotelid&gt;&lt;hotelname&gt;Hotel Payal&lt;/hotelname&gt;&lt;hoteldesc&gt;Hotel Payal is one of the good budget hotels located in the famous Paharganj area of New Delhi. Known for its convenient location to the main modes of transportation and the nearby tourist attractions the hotel is a huge draw. It also includes various highlights like a 24-hour reception room service, complimentary breakfast, travel desk, laundry facility and currency exchange service.&lt;/hoteldesc&gt;&lt;starrating&gt;0&lt;/starrating&gt;&lt;noofrooms&gt;1&lt;/noofrooms&gt;&lt;minRate&gt;750&lt;/minRate&gt;&lt;rph&gt;41&lt;/rph&gt;&lt;webService&gt;arzooB&lt;/webService&gt;&lt;contactinfo&gt;&lt;address&gt;1182 Mainj Bazar Paharganj, , Paharganj, NEW DELHI, DELHI, India, Pin-110055&lt;/address&gt;&lt;citywiselocation&gt;Paharganj&lt;/citywiselocation&gt;&lt;locationinfo&gt;NA&lt;/locationinfo&gt;&lt;phone&gt;NA&lt;/phone&gt;&lt;fax&gt;NA&lt;/fax&gt;&lt;email&gt;NA&lt;/email&gt;&lt;website&gt;NA&lt;/website&gt;&lt;/contactinfo&gt;&lt;bookinginfo&gt;&lt;checkintime&gt;12:00:00&lt;/checkintime&gt;&lt;checkouttime&gt;12:00:00&lt;/checkouttime&gt;&lt;/bookinginfo&gt;&lt;services&gt;&lt;creditcards&gt;All&lt;/creditcards&gt;&lt;hotelservices&gt;24-hour front desk#-Currency exchange#-Laundry facilities#-Airport transportation(surcharge)#-Travel counter#-Breakfast services&lt;/hotelservices&gt;&lt;roomservices&gt;Makeup mirror#-Smoking rooms#-Telephone-Room#-Wakeup-calls#-H/C running water&lt;/roomservices&gt;&lt;/services&gt;&lt;facilities&gt;NA&lt;/facilities&gt;&lt;images&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/HA.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/HO.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/0000048565RD.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/0000048567RD.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT1.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT2.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT3.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT4.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT5.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;image&gt;&lt;imagepath&gt;http://cdn.travelpartnerweb.com/DesiyaImages/Image/2/nxd/mav/tyd/fbu/XT6.jpg&lt;/imagepath&gt;&lt;/image&gt;&lt;/images&gt;&lt;geoCode&gt;,&lt;/geoCode&gt;&lt;/hoteldetail&gt;&lt;ratedetail&gt;&lt;rate&gt;&lt;ratetype&gt;Y&lt;/ratetype&gt;&lt;hotelPackage&gt;N&lt;/hotelPackage&gt;&lt;roomtype&gt;Standard Single Room With Fan&lt;/roomtype&gt;&lt;roombasis&gt;No Amenities&lt;/roombasis&gt;&lt;roomTypeCode&gt;0000276760&lt;/roomTypeCode&gt;&lt;ratePlanCode&gt;0000995884&lt;/ratePlanCode&gt;&lt;ratebands&gt;&lt;validdays&gt;1111111&lt;/validdays&gt;&lt;wsKey&gt;sqnOmFvYqobGHJZzEBm8Bjp5pJP1zETADml0U5ncn3cS8PIYJjNMOw5pdFOZ3J930GlY6nAFU8uaT2zVTPo9tp+CgAkL98z2xw1Qqnbhmf3GHJZzEBm8Bg7n6jvJWLZ8h/So6RwrCjn8LXfsCVqrts4HpwZO8Cvf2b0OSPoWl6BvJHPQXRt9CLipFgGa3hfeSAS/psz+s/vtFOZDhaz6EtGf96t/LsuWxw1Qqnbhmf1FSv+xKDhHyjZBEWtPCirBRUr/sSg4R8o2QRFrTwoqwaX4awkeoqG42nR9nXRKOhx4ExAjJltuZol+mH8dk+yJ2a6OMbvdrkwX7KdI32GXSOZd47f+VFQ4f05EVH7MtbX35SGKsJzysLyUBrDry8nOEry6w1cxiRzimGF/Ia0FXMQ6w2qSeIKusqnOmFvYqoYbAUyUDHRst6rdZ1JTSIubM9n0Dni017ohIiF9REMGIQ==&lt;/wsKey&gt;&lt;extGuestTotal&gt;0&lt;/extGuestTotal&gt;&lt;roomTotal&gt;795&lt;/roomTotal&gt;&lt;servicetaxTotal&gt;0&lt;/servicetaxTotal&gt;&lt;discount&gt;0.0&lt;/discount&gt;&lt;commission&gt;0&lt;/commission&gt;&lt;originalRoomTotal&gt;795&lt;/originalRoomTotal&gt;&lt;/ratebands&gt;&lt;/rate&gt;&lt;rate&gt;&lt;ratetype&gt;Y&lt;/ratetype&gt;&lt;hotelPackage&gt;N&lt;/hotelPackage&gt;&lt;roomtype&gt;Standard Non A/C&lt;/roomtype&gt;&lt;roombasis&gt;,Complimentary Wi-Fi Internet, &lt;/roombasis&gt;&lt;roomTypeCode&gt;0000048565&lt;/roomTypeCode&gt;&lt;ratePlanCode&gt;0000180249&lt;/ratePlanCode&gt;&lt;ratebands&gt;&lt;validdays&gt;1111111&lt;/validdays&gt;&lt;wsKey&gt;hggn4jZPFUzGHJZzEBm8Bjp5pJP1zETADml0U5ncn3cS8PIYJjNMOw5pdFOZ3J931JWjobnnvMKaT2zVTPo9tp+CgAkL98z2xw1Qqnbhmf3GHJZzEBm8Bg7n6jvJWLZ8h/So6RwrCjn8LXfsCVqrts4HpwZO8Cvf2b0OSPoWl6BvJHPQXRt9CLipFgGa3hfeRCwsaIZd6kIMUJDK/mi8dYUYg6zJXb9BI6k1+LgY3UGt0D3Y1QRlQQ+fTZgh1nupPIbMiKLjV+MSkO5olJdH/zyGzIii41fjEpDuaJSXR/+91xVkJdkXIWFYT9FlQjlyIdSiYkV0LG6jnah1b3263p/kcrxMhiqv4ZI0LBZ6y+BJitB9tyglEEk/9QHgwfujOYt42w8XTNKj8slKZijCIWUdJIzNmAFxKAw+1dxv3n65FmdKuPhldQelVcg/yWCrQLZKb+Tg4ADB45RuCOzCgXRFM0gx2HqTthncdiwkMY8=&lt;/wsKey&gt;&lt;extGuestTotal&gt;0&lt;/extGuestTotal&gt;&lt;roomTotal&gt;848&lt;/roomTotal&gt;&lt;servicetaxTotal&gt;0&lt;/servicetaxTotal&gt;&lt;discount&gt;0.0&lt;/discount&gt;&lt;commission&gt;0&lt;/commission&gt;&lt;originalRoomTotal&gt;848&lt;/originalRoomTotal&gt;&lt;/ratebands&gt;&lt;/rate&gt;&lt;/ratedetail&gt;&lt;promotion&gt;false&lt;/promotion&gt;&lt;/hotel&gt;</string>";
                         Console.WriteLine(responseContent);
                         if (responseContent.Contains("Error") || responseContent.Contains("FAIL"))
                         {
@@ -557,6 +567,66 @@
             }
 
             return hotelList;
+        }
+
+        /// <summary>
+        /// method to save booking details to database
+        /// </summary>        
+        /// <param name="bookticket"></param>
+        /// <returns></returns>
+        public static async Task<List<HotelBookingContainer>> GetHotelsTransactionSummaryList(string member_id)
+        {
+            var data = "{\"action\":\"GET_HOTELS_TRANSACTIONS_SUMMARY\",\"member_id\":\"" + member_id + "\"}";
+            var response = await CallFunction(data);
+            if (response != null && response.APISTATUS == SUCCESS && response.GET_HOTELS_TRANSACTIONS_SUMMARY != null)
+            {
+                return response.GET_HOTELS_TRANSACTIONS_SUMMARY;
+            }
+            else if (response?.GET_HOTELS_TRANSACTIONS_SUMMARY != null)
+            {
+                return response.GET_HOTELS_TRANSACTIONS_SUMMARY;
+            }
+
+            return null;
+        }
+
+        private static async Task<Response> CallFunction(string data)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    // Wrap our JSON inside a StringContent which then can be used by the HttpClient class
+                    var httpContent = new StringContent(data, Encoding.UTF8, "application/json");
+                    httpClient.DefaultRequestHeaders.Add("Key", AuthKey);
+
+                    // Do the actual request and await the response
+                    var httpResponse = await httpClient.PostAsync(ApiBaseUrl, httpContent);
+
+                    // If the response contains content we want to read it!
+
+                    if (httpResponse.Content != null)
+                    {
+                        var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                        if (responseContent.Contains("FAILED") || responseContent.Contains("FAIL"))
+                        {
+                            Console.WriteLine(responseContent);
+                            return JsonConvert.DeserializeObject<Response>(responseContent);
+                        }
+                        else
+                        {
+                            var response = JsonConvert.DeserializeObject<Response>(responseContent);
+                            return response;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            return null;
         }
 
         #endregion  Hotel API

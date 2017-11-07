@@ -125,7 +125,7 @@ namespace ShineYatraAdmin.Repository
         {
             if (!xmlDocument.HasElements)
             {
-                XElement xElement = new XElement(xmlDocument.Name.LocalName) {Value = xmlDocument.Value};
+                XElement xElement = new XElement(xmlDocument.Name.LocalName) { Value = xmlDocument.Value };
 
                 foreach (XAttribute attribute in xmlDocument.Attributes())
                     xElement.Add(attribute);
@@ -220,9 +220,9 @@ namespace ShineYatraAdmin.Repository
                 var response = await CallFunction(data);
                 if (response != null && response.VALIDATELOGIN != null && response.VALIDATELOGIN.Count > 0)
                 {
-                    userDetail = response.VALIDATELOGIN.FirstOrDefault();                    
+                    userDetail = response.VALIDATELOGIN.FirstOrDefault();
                 }
-            }           
+            }
             return userDetail;
         }
 
@@ -769,7 +769,7 @@ namespace ShineYatraAdmin.Repository
         /// <returns></returns>
         public static async Task<IList<CompanyCommissionGroup>> GetServiceAllottedGroupDetails(AllotedServiceCGsDetailsRequest allotedServiceCGsDetailsRequest)
         {
-            var data =  JsonConvert.SerializeObject(allotedServiceCGsDetailsRequest);
+            var data = JsonConvert.SerializeObject(allotedServiceCGsDetailsRequest);
 
             var response = await CallFunction(data);
             if (response != null && response.GET_ALLOTED_SERVICE_COMMISSION_GROUPS_DETAILS != null)
@@ -823,7 +823,8 @@ namespace ShineYatraAdmin.Repository
                             {
                                 flightprice = (OriginDestinationOption)serializer1.Deserialize(reader);
                             }
-                            catch (Exception ex) {
+                            catch (Exception ex)
+                            {
                                 Console.WriteLine(ex.InnerException);
                             }
                         }
@@ -1051,7 +1052,7 @@ namespace ShineYatraAdmin.Repository
             }
             return cancelResponse;
         }
-         
+
         /// <summary>
         /// Get flight ticket status
         /// </summary>
@@ -1123,7 +1124,7 @@ namespace ShineYatraAdmin.Repository
         /// <param name="transactionId"></param>
         /// <param name="memberId"></param>
         /// <returns></returns>
-        public static async Task<List<BookingDetail>> GetServiceBookingRequest(string transactionId, string memberId)
+        public static async Task<List<HotelBookingContainer>> GetServiceBookingRequest(string transactionId, string memberId)
         {
             string data = "{\"action\":\"GET_FLIGHT_TRANSACTIONS\",\"member_id\":" + memberId + ",\"txn_id\":" + transactionId + "}";
             var response = await CallFunction(data);
@@ -1139,21 +1140,21 @@ namespace ShineYatraAdmin.Repository
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        public static async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId,string api_txn_id, string status)
+        public static async Task<UPDATE_TRANSACTION_STATUS> UpdateServiceBookingRequest(string TransactionId, string memberId, string api_txn_id, string status)
         {
-           string data = "{\"action\":\"UPDATE_TRANSACTION_STATUS\",\"update_member_id\":\"" + memberId + "\",\"txn_id\":" + TransactionId + ",\"status\":\"" + status + "\",\"api_txn_id\":\"" + api_txn_id + "\",\"deposit_mode\":\"\",\"bank_name\":\"\",\"remarks\":\"\"}";
+            string data = "{\"action\":\"UPDATE_TRANSACTION_STATUS\",\"update_member_id\":\"" + memberId + "\",\"txn_id\":" + TransactionId + ",\"status\":\"" + status + "\",\"api_txn_id\":\"" + api_txn_id + "\",\"deposit_mode\":\"\",\"bank_name\":\"\",\"remarks\":\"\"}";
             var response = await CallFunction(data);
             UPDATE_TRANSACTION_STATUS updatestatus = new UPDATE_TRANSACTION_STATUS();
-        
+
             if (response != null && response.APISTATUS == Success && response.UPDATE_TRANSACTION_STATUS != null)
             {
                 return response.UPDATE_TRANSACTION_STATUS;
             }
             else if (response != null && response.MSG != null)
             {
-                updatestatus.MSG =  response.MSG;
+                updatestatus.MSG = response.MSG;
                 return updatestatus;
-            }            
+            }
             return null;
         }
 
@@ -1274,9 +1275,9 @@ namespace ShineYatraAdmin.Repository
         /// <param name="status"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<List<CompanyFund>> getFundRequestList(string member, string memberId,string txn_type,string status,string id)
+        public static async Task<List<CompanyFund>> getFundRequestList(string member, string memberId, string txn_type, string status, string id)
         {
-            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\""+ id + "\",\""+ member + "\":"+ memberId + ",\"txn_type\":\""+ txn_type + "\"";
+            string data = "{ \"action\":\"GET_FUND_REQUEST\",\"service_id\":\"" + id + "\",\"" + member + "\":" + memberId + ",\"txn_type\":\"" + txn_type + "\"";
             if (!string.IsNullOrEmpty(status))
             {
                 data += ",\"status\":\"" + status + "\"}";
@@ -1289,7 +1290,7 @@ namespace ShineYatraAdmin.Repository
             var response = await CallFunction(data);
             if (response != null)
             {
-                if (response.APISTATUS == Success && response.GET_FUND_REQUEST!=null)
+                if (response.APISTATUS == Success && response.GET_FUND_REQUEST != null)
                 {
                     return response.GET_FUND_REQUEST;
                 }
@@ -1306,9 +1307,9 @@ namespace ShineYatraAdmin.Repository
         /// <param name="status"></param>
         /// <param name="remarks"></param>
         /// <returns></returns>
-        public static async Task<string> UpdateFundRequest(int txnid,string memberid,string status,string remarks)
+        public static async Task<string> UpdateFundRequest(int txnid, string memberid, string status, string remarks)
         {
-            string data = "{\"action\":\"UPDATE_FUND_REQUEST\",\"txn_id\":"+txnid+",\"member_id\":"+ memberid +",\"status\":\"" + status + "\",\"remarks\":\""+ remarks + "\"}";
+            string data = "{\"action\":\"UPDATE_FUND_REQUEST\",\"txn_id\":" + txnid + ",\"member_id\":" + memberid + ",\"status\":\"" + status + "\",\"remarks\":\"" + remarks + "\"}";
 
             var response = await CallFunction(data);
             if (response != null)
@@ -1370,7 +1371,7 @@ namespace ShineYatraAdmin.Repository
                 return "Failed-" + response.MSG;
             }
             return null;
-        }        
+        }
 
         /// <summary>
         /// Get member flight detail list
@@ -1396,7 +1397,7 @@ namespace ShineYatraAdmin.Repository
             }
             catch (Exception ex)
             {
-                 Console.WriteLine(ex.InnerException);
+                Console.WriteLine(ex.InnerException);
             }
             return flightSummary;
         }
@@ -1406,7 +1407,7 @@ namespace ShineYatraAdmin.Repository
         /// </summary>
         /// <returns></returns>
         public static async Task<string> AddUser(UserDetail userDetail)
-        {            
+        {
             var data = JsonConvert.SerializeObject(userDetail);
             data = data.Replace("null", "\"\"");
             var response = await CallFunction(data);
@@ -1418,7 +1419,7 @@ namespace ShineYatraAdmin.Repository
 
         public static async Task<CompanySetting> GetCompanyExtraSetting(string domain)
         {
-            var data = "{\"action\":\"GET_COMPANY_EXTRA_SETTINGS\",\"domain_name\":\"" + domain + "\"}";            
+            var data = "{\"action\":\"GET_COMPANY_EXTRA_SETTINGS\",\"domain_name\":\"" + domain + "\"}";
             var response = await CallFunction(data);
             if (response != null && response.GET_COMPANY_EXTRA_SETTINGS != null && response.GET_COMPANY_EXTRA_SETTINGS.Count > 0)
             {

@@ -72,10 +72,7 @@ $(document).ready(function () {
 });
 
 function ParentRowInitialization() {
-    var rowId = 0;
-    if ($("roomCountDropDown").length > 0) {
-        var rowId = document.getElementById("roomCountDropDown").selectedIndex;
-    }
+    var rowId = document.getElementById("roomCountDropDown").selectedIndex;
 
     $("div[name=guestRow").hide();
     //$('[id^=childCountDropDown]').prop('selectedIndex', 0);
