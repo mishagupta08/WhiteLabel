@@ -50,7 +50,7 @@ function ValidateLoginUser() {
             if (askOTP) {
                 openotpform();
             } else {
-                window.location.href = 'Dashboard/Index';
+                window.location.href = '/Dashboard/Index';
             }
         }
         else {
@@ -93,6 +93,6 @@ function ForgotPassword() {
 
 function checkOTP(status) {   
     if (status === "success") {
-      window.location.href = 'Dashboard/Index';       
+      window.location.href = '/Dashboard/Index';       
     }
 }

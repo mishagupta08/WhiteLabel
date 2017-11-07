@@ -41,7 +41,7 @@
         LoginManager loginManager = new LoginManager();
 
         // GET: Login
-        public async Task<ActionResult> Index(string returnUrl)
+        public async Task<ActionResult> Index(/*string returnUrl*/)
         {            
             try
             {
@@ -49,10 +49,10 @@
                                
                 await commonController.GetCompanySettings();
 
-                if (!string.IsNullOrEmpty(returnUrl))
-                {
-                    ViewBag.returnUrl = returnUrl;
-                }
+                //if (!string.IsNullOrEmpty(returnUrl))
+                //{
+                //    ViewBag.returnUrl = returnUrl;
+                //}
                  
                 if (Request.IsAuthenticated)
                 {
