@@ -25,6 +25,8 @@
 
     public class InsertServiceRechargeResponse
     {
-        public string txn_id { get; set; }        
+        public string txn_id { get; set; }  
+        public double wallet_balance { get; set; }
+        public double company_wallet_balance { get; set; }
     }
 }

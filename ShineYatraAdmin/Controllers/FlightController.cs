@@ -318,6 +318,7 @@ namespace ShineYatraAdmin.Controllers
                             var insertServiceResonse = response.FirstOrDefault();
                             if (insertServiceResonse != null)
                             {
+                                Session["WalletBalance"] = insertServiceResonse.wallet_balance;
                                 txnId = Convert.ToString(insertServiceResonse.txn_id);
                                 bookResponse = await _flightManager.BookTicket(request);
                                 if (!bookResponse.Status.ToUpper().Equals("SUCCESS"))
@@ -380,7 +381,7 @@ namespace ShineYatraAdmin.Controllers
                     if (saveBookingResonse != null)
                     {
                         txnId = Convert.ToString(saveBookingResonse.txn_id);
-
+                        Session["WalletBalance"] = saveBookingResonse.wallet_balance;
                         request.Origin = ticketDetail.travel_from;
                         request.Destination = ticketDetail.travel_to;
                         request.DepartDate = ticketDetail.travel_date;
