@@ -1,0 +1,210 @@
+﻿@using System.Globalization;
+@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.HotelViewModel
+@{
+    ViewBag.Title = "Hotel Transacton List View";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<style>
+    #roomDetailContainer th {
+        text-align: center;
+    }
+
+    #roomDetailContainer td {
+        text-align: center;
+    }
+
+    td {
+        text-align: right;
+        padding: 5px;
+        line-height: 21px !important;
+        padding: 5px;
+    }
+
+    th {
+        text-align: right;
+    }
+
+    .left {
+        width: 30%;
+    }
+
+    .heading {
+        text-align: center;
+        background: aliceblue;
+        font-weight: bold;
+    }
+
+    .tableContainer {
+        width: 97%;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="white-box">
+            <h3 class="box-title heading">Hotel Invoice</h3>
+            <table class="tableContainer" border="1">
+                <tbody>
+                    <tr>
+                        <td class="left">
+                            Booking No : @Model.InvoiceDetail.txn_id
+                        </td>
+                        <td>
+                            Booking Date : @Model.InvoiceDetail.txn_date
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Hotel Name
+                        </td>
+                        <td>
+                            @Model.InvoiceDetail.hotel_name
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Hotel Address
+                        </td>
+                        <td>
+                            @Model.InvoiceDetail.hotel_address
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Check In
+                        </td>
+                        <td>
+                            @Model.InvoiceDetail.check_in_date
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Check Out
+                        </td>
+                        <td>
+                            @Model.InvoiceDetail.check_out_date
+                        </td>
+                    </tr>
+                    <tr class="heading">
+                        <td colspan="2" class="heading">
+                            Booking Details
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Check In Time : @Model.InvoiceDetail.check_in_time
+                        </td>
+                        <td>
+                            Check Out Time : @Model.InvoiceDetail.check_out_time
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding: 0px !important;">
+                            <table style="width:100%;" border="1" id="roomDetailContainer">
+                                <thead>
+                                    <tr class="heading">
+                                        <th style="width:30% !important;">Room Type</th>
+                                        <th>
+                                            Rooms
+                                        </th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@Model.InvoiceDetail.room_type</td>
+                                        <td>roomCount</td>
+                                        <td>@Model.InvoiceDetail.amount</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="heading">
+                        <td colspan="2" class="heading">
+                            Number of Guests
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Adults
+                        </td>
+                        <td>
+                            adultcount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Childs
+                        </td>
+                        <td>
+                            childcount
+                        </td>
+                    </tr>
+                    <tr class="heading">
+                        <td colspan="2" class="heading">
+                            Hotel Amenities
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">
+                            @Model.InvoiceDetail.hotel_amenities
+                        </td>
+                    </tr>
+                    <tr class="heading">
+                        <td colspan="2" class="heading">
+                            Billing
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Total Amont : INR @Model.InvoiceDetail.amount /-
+                        </td>
+                        <td>
+                            Status : @Model.InvoiceDetail.status
+                        </td>
+                    </tr>
+                    <tr class="heading">
+                        <td colspan="2" class="heading">
+                            Customer Information
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Customer Name
+                        </td>
+                        <td>
+                            @Model.InvoiceDetail.title  @Model.InvoiceDetail.first_name
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Address
+                        </td>
+                        <td>
+                            @Model.InvoiceDetail.address_line1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Contact No.
+                        </td>
+                        <td>
+                            @Model.InvoiceDetail.mobile
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Email Id
+                        </td>
+                        <td>
+                            @Model.InvoiceDetail.email
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

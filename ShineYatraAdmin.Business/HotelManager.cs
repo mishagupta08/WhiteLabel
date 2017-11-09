@@ -153,12 +153,12 @@ namespace ShineYatraAdmin.Business
             return response;
         }
 
-        public async Task<List<HotelBookingContainer>> GetHotelsTransactionSummaryList(string member_id)
+        public async Task<string> GetHotelsTransactionSummaryList(HotelTransactionListRequest request)
         {
-            List<HotelBookingContainer> response = null;
+            string response = null;
             try
             {
-                response = await HotelApi.GetHotelsTransactionSummaryList(member_id);
+                response = await HotelApi.GetHotelsTransactionSummaryList(request);
             }
             catch (Exception ex)
             {

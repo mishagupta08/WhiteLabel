@@ -26,17 +26,17 @@ namespace ShineYatraAdmin.Entity
         public string title { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
-        public object address_line1 { get; set; }
-        public object city { get; set; }
-        public object state { get; set; }
-        public object pincode { get; set; }
-        public object check_in_time { get; set; }
-        public object check_out_time { get; set; }
-        public object hotel_name { get; set; }
-        public object hotel_city { get; set; }
-        public object hotel_address { get; set; }
-        public object room_type { get; set; }
-        public object hotel_amenities { get; set; }
+        public string address_line1 { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string pincode { get; set; }
+        public string check_in_time { get; set; }
+        public string check_out_time { get; set; }
+        public string hotel_name { get; set; }
+        public string hotel_city { get; set; }
+        public string hotel_address { get; set; }
+        public string room_type { get; set; }
+        public string hotel_amenities { get; set; }
         public string check_in_date { get; set; }
         public string check_out_date { get; set; }
     }

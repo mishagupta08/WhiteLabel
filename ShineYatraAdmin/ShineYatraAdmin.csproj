@@ -478,6 +478,7 @@
     <Content Include="Script\Fund.js" />
     <Content Include="Script\group.js" />
     <Content Include="Script\hotel.js" />
+    <Content Include="Script\hotelTransaction.js" />
     <Content Include="Script\login.js" />
     <Content Include="Script\otp.js" />
     <Content Include="Script\PrimarySetting.js" />
@@ -646,6 +647,7 @@
     <Content Include="Views\Hotel\roomView.cshtml" />
     <Content Include="Views\Hotel\HotelBookingStatus.cshtml" />
     <Content Include="Views\Hotel\GetHotelTransactionList.cshtml" />
+    <Content Include="Views\Hotel\InvoiceDetailView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -252,3 +252,5 @@ function SubmitHotelCancelRequest() {
 
     return false;
 }
+
+

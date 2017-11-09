@@ -16,6 +16,7 @@
     using Newtonsoft.Json;
     using Entity.HotelDetail;
     using System.Globalization;
+    using System.Text.RegularExpressions;
 
     #endregion namespace
 
@@ -1257,86 +1258,206 @@
             return ticketDetail;
         }
 
+        public ActionResult GetTransactionListView()
+        {
+            try
+            {
+                hotelModel = new HotelViewModel();
+                hotelModel.FilterDetail = new HotelTransactionListRequest();
+                hotelModel.AssignSelectTypeList();
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View("GetHotelTransactionList", hotelModel);
+        }
+
+        [HttpPost]
         public async Task<ActionResult> GetHotelTransactionList(HotelViewModel model)
         {
+            string ledgerList = null;
+            hotelManager = new HotelManager();
+            MatchCollection matches = null;
+            var response = "";
             if (model == null || model.FilterDetail == null)
             {
                 model = new HotelViewModel();
-                model.FilterDetail = new Entity.Filter();
+                model.FilterDetail = new HotelTransactionListRequest();
+
+                model.FilterDetail.check_in_date = DateTime.Today.ToString("dd-MMM-yyyy");
+                model.FilterDetail.check_out_date = DateTime.Today.ToString("dd-MMM-yyyy");
             }
 
-            model.FilterDetail.AssignSelectTypeList();
-            hotelManager = new HotelManager();
-            var userData = User.Identity.Name.Split('|');
-            var bookingList = await hotelManager.GetHotelsTransactionSummaryList(userData[1]);
-            if (bookingList != null && model.FilterDetail != null)
+            try
             {
-                if (!string.IsNullOrEmpty(model.FilterDetail.ResultType))
-                {
-                    if (model.FilterDetail.ResultType == "Success")
-                    {
-                        bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("COMPLETE") || book.status.ToUpper().Contains("SUCCESS"))).ToList();
-                    }
-                    else if (model.FilterDetail.ResultType == "Fail")
-                    {
-                        bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(model.FilterDetail.SelectType))
+                var userData = User.Identity.Name.Split('|');
+                model.FilterDetail.member_id = userData[1];
+                
+                if (!string.IsNullOrEmpty(model.SelectType))
                 {
                     var selectedTypeValueInt = 0;
 
-                    if (!string.IsNullOrEmpty(model.FilterDetail.SelectedTypeValue))
+                    if (!string.IsNullOrEmpty(model.SelectedTypeValue))
                     {
-                        selectedTypeValueInt = Convert.ToInt32(model.FilterDetail.SelectedTypeValue);
+                        selectedTypeValueInt = Convert.ToInt32(model.SelectedTypeValue);
                     }
-                    if (model.FilterDetail.SelectType.Contains("Id"))
+                    if (model.SelectType.Contains("Id"))
                     {
-                        bookingList = bookingList.Where(book => book.txn_id == selectedTypeValueInt).ToList();
-                    }
-
-                    if (model.FilterDetail.SelectType.Contains("Member"))
-                    {
-                        bookingList = bookingList.Where(book => book.member_id == selectedTypeValueInt).ToList();
+                        model.FilterDetail.txn_id = model.SelectedTypeValue;
                     }
 
-                    if (model.FilterDetail.SelectType.Contains("Mobile"))
+                    if (model.SelectType.Contains("Member"))
                     {
-                        bookingList = bookingList.Where(book => book.mobile != null && book.mobile == model.FilterDetail.SelectedTypeValue).ToList();
+                        model.FilterDetail.member_id = model.SelectedTypeValue; ;
                     }
 
-                    if (model.FilterDetail.SelectType.Contains("Email"))
+                    if (model.SelectType.Contains("Mobile"))
                     {
-                        bookingList = bookingList.Where(book => book.email != null && book.email == model.FilterDetail.SelectedTypeValue).ToList();
+                        model.FilterDetail.mobile = model.SelectedTypeValue;
+                    }
+
+                    if (model.SelectType.Contains("Email"))
+                    {
+                        model.FilterDetail.email = model.SelectedTypeValue;
                     }
                 }
 
-                if (!string.IsNullOrEmpty(model.FilterDetail.FromDate))
+                ledgerList = await hotelManager.GetHotelsTransactionSummaryList(model.FilterDetail);
+                var pattern = @"\[(.*?)\]";
+                if (ledgerList.ToUpper().Contains("SUCCESS"))
                 {
-                    model.FilterDetail.FromDate = model.FilterDetail.FromDate.Trim();
-
-                    String format = "dd/MM/yyyy";
-                    DateTime d1 = DateTime.ParseExact(model.FilterDetail.FromDate, format, CultureInfo.CurrentCulture);
-
-                    //bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
-                    bookingList = bookingList.Where(p => p.check_in_date != null && DateTime.ParseExact(p.check_in_date.Trim(), format, CultureInfo.CurrentCulture) >= d1).ToList();
+                    matches = Regex.Matches(ledgerList, pattern);
                 }
-
-                if (!string.IsNullOrEmpty(model.FilterDetail.ToDate))
+                foreach (Match match in matches)
                 {
-                    model.FilterDetail.ToDate = model.FilterDetail.ToDate.Trim();
-
-                    String format = "dd/MM/yyyy";
-                    DateTime d1 = DateTime.ParseExact(model.FilterDetail.ToDate, format, CultureInfo.CurrentCulture);
-
-                    //bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
-                    bookingList = bookingList.Where(p => p.check_in_date != null && DateTime.ParseExact(p.check_out_date.Trim(), format, CultureInfo.CurrentCulture) <= d1).ToList();
+                    response = match.Value;
                 }
             }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
 
-            model.BookingList = bookingList;
-            return View(model);
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        //public async Task<ActionResult> GetHotelTransactionList(HotelViewModel model)
+        //{
+        //    if (model == null || model.FilterDetail == null)
+        //    {
+        //        model = new HotelViewModel();
+        //        model.FilterDetail = new Entity.Filter();
+        //    }
+
+        //    model.FilterDetail.AssignSelectTypeList();
+        //    hotelManager = new HotelManager();
+        //    var userData = User.Identity.Name.Split('|');
+        //    var bookingList = await hotelManager.GetHotelsTransactionSummaryList(userData[1]);
+        //    if (bookingList != null && model.FilterDetail != null)
+        //    {
+        //        if (!string.IsNullOrEmpty(model.FilterDetail.ResultType))
+        //        {
+        //            if (model.FilterDetail.ResultType == "Success")
+        //            {
+        //                bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("COMPLETE") || book.status.ToUpper().Contains("SUCCESS"))).ToList();
+        //            }
+        //            else if (model.FilterDetail.ResultType == "Fail")
+        //            {
+        //                bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
+        //            }
+        //        }
+
+        //        if (!string.IsNullOrEmpty(model.FilterDetail.SelectType))
+        //        {
+        //            var selectedTypeValueInt = 0;
+
+        //            if (!string.IsNullOrEmpty(model.FilterDetail.SelectedTypeValue))
+        //            {
+        //                selectedTypeValueInt = Convert.ToInt32(model.FilterDetail.SelectedTypeValue);
+        //            }
+        //            if (model.FilterDetail.SelectType.Contains("Id"))
+        //            {
+        //                bookingList = bookingList.Where(book => book.txn_id == selectedTypeValueInt).ToList();
+        //            }
+
+        //            if (model.FilterDetail.SelectType.Contains("Member"))
+        //            {
+        //                bookingList = bookingList.Where(book => book.member_id == selectedTypeValueInt).ToList();
+        //            }
+
+        //            if (model.FilterDetail.SelectType.Contains("Mobile"))
+        //            {
+        //                bookingList = bookingList.Where(book => book.mobile != null && book.mobile == model.FilterDetail.SelectedTypeValue).ToList();
+        //            }
+
+        //            if (model.FilterDetail.SelectType.Contains("Email"))
+        //            {
+        //                bookingList = bookingList.Where(book => book.email != null && book.email == model.FilterDetail.SelectedTypeValue).ToList();
+        //            }
+        //        }
+
+        //        if (!string.IsNullOrEmpty(model.FilterDetail.FromDate))
+        //        {
+        //            model.FilterDetail.FromDate = model.FilterDetail.FromDate.Trim();
+
+        //            String format = "dd/MM/yyyy";
+        //            DateTime d1 = DateTime.ParseExact(model.FilterDetail.FromDate, format, CultureInfo.CurrentCulture);
+
+        //            //bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
+        //            bookingList = bookingList.Where(p => p.check_in_date != null && DateTime.ParseExact(p.check_in_date.Trim(), format, CultureInfo.CurrentCulture) >= d1).ToList();
+        //        }
+
+        //        if (!string.IsNullOrEmpty(model.FilterDetail.ToDate))
+        //        {
+        //            model.FilterDetail.ToDate = model.FilterDetail.ToDate.Trim();
+
+        //            String format = "dd/MM/yyyy";
+        //            DateTime d1 = DateTime.ParseExact(model.FilterDetail.ToDate, format, CultureInfo.CurrentCulture);
+
+        //            //bookingList = bookingList.Where(book => book.status != null && (book.status.ToUpper().Contains("FAIL") || book.status.ToUpper().Contains("PENDING"))).ToList();
+        //            bookingList = bookingList.Where(p => p.check_in_date != null && DateTime.ParseExact(p.check_out_date.Trim(), format, CultureInfo.CurrentCulture) <= d1).ToList();
+        //        }
+        //    }
+
+        //    model.BookingList = bookingList;
+        //    return View(model);
+        //}
+
+        public async Task<ActionResult> GetInvoice(string txnId)
+        {
+            try
+            {
+                hotelModel = new HotelViewModel();
+                hotelManager = new HotelManager();
+                hotelModel.FilterDetail = new HotelTransactionListRequest();
+                var userData = User.Identity.Name.Split('|');
+                hotelModel.FilterDetail.member_id = (userData[1]);
+                hotelModel.FilterDetail.txn_id = txnId;
+                var ledgerList = await hotelManager.GetHotelsTransactionSummaryList(hotelModel.FilterDetail);
+                var pattern = @"\[(.*?)\]";
+                MatchCollection matches = null;
+                var response = "";
+                if (ledgerList.ToUpper().Contains("SUCCESS"))
+                {
+                    matches = Regex.Matches(ledgerList, pattern);
+                }
+                foreach (Match match in matches)
+                {
+                    response = match.Value;
+                }
+
+                var invoice = JsonConvert.DeserializeObject<List<HotelBookingContainer>>(response);
+                if (invoice != null)
+                {
+                    hotelModel.InvoiceDetail = invoice.FirstOrDefault();
+                }
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine(Ex.InnerException);
+            }
+            return View("InvoiceDetailView", hotelModel);
         }
 
     }

@@ -20,7 +20,7 @@ function RemoveErrorMessage(inputElement) {
     }
 }
 
-function CheckEmailError(userElement) {
+function CheckEmailError(userElement)  {
     var inputElement = $(this);
     if (userElement.selector != undefined) {
         inputElement = userElement;

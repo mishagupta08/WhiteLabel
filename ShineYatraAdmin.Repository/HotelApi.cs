@@ -574,23 +574,55 @@
         /// </summary>        
         /// <param name="bookticket"></param>
         /// <returns></returns>
-        public static async Task<List<HotelBookingContainer>> GetHotelsTransactionSummaryList(string member_id)
+        public static async Task<string> GetHotelsTransactionSummaryList(HotelTransactionListRequest request)
         {
-            var data = "{\"action\":\"GET_HOTELS_TRANSACTIONS_SUMMARY\",\"member_id\":\"" + member_id + "\"}";
-            var response = await CallFunction(data);
-            if (response != null && response.APISTATUS == SUCCESS && response.GET_HOTELS_TRANSACTIONS_SUMMARY != null)
+            request.action = "GET_HOTELS_TRANSACTIONS_SUMMARY";
+            var data = "\"action\":\"" + request.action + "\"";
+            if (!string.IsNullOrEmpty(request.member_id))
             {
-                return response.GET_HOTELS_TRANSACTIONS_SUMMARY;
+                data += ",\"member_id\":\"" + request.member_id + "\"";
             }
-            else if (response?.GET_HOTELS_TRANSACTIONS_SUMMARY != null)
+            if (!string.IsNullOrEmpty(request.status))
             {
-                return response.GET_HOTELS_TRANSACTIONS_SUMMARY;
+                data += ",\"status\":\"" + request.status + "\"";
+            }
+            if (!string.IsNullOrEmpty(request.check_in_date))
+            {
+                data += ",\"check_in_date\":\"" + request.check_in_date + "\"";
+            }
+            if (!string.IsNullOrEmpty(request.check_out_date))
+            {
+                data += ",\"check_out_date\":\"" + request.check_out_date + "\"";
+            }
+            if (!string.IsNullOrEmpty(request.mobile))
+            {
+                data += ",\"mobile\":\"" + request.mobile + "\"";
+            }
+            if (!string.IsNullOrEmpty(request.email))
+            {
+                data += ",\"email\":\"" + request.email + "\"";
+            }
+            if (!string.IsNullOrEmpty(request.txn_id))
+            {
+                data += ",\"txn_id\":\"" + request.txn_id + "\"";
             }
 
-            return null;
+            data = "{" + data + "}";
+            return await CallFunction(data);
+
+            //if (response != null && response.APISTATUS == SUCCESS && response.GET_HOTELS_TRANSACTIONS_SUMMARY != null)
+            //{
+            //    return response.GET_HOTELS_TRANSACTIONS_SUMMARY;
+            //}
+            //else if (response?.GET_HOTELS_TRANSACTIONS_SUMMARY != null)
+            //{
+            //    return response.GET_HOTELS_TRANSACTIONS_SUMMARY;
+            //}
+
+            //return null;
         }
 
-        private static async Task<Response> CallFunction(string data)
+        private static async Task<string> CallFunction(string data)
         {
             using (var httpClient = new HttpClient())
             {
@@ -608,16 +640,18 @@
                     if (httpResponse.Content != null)
                     {
                         var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                        if (responseContent.Contains("FAILED") || responseContent.Contains("FAIL"))
-                        {
-                            Console.WriteLine(responseContent);
-                            return JsonConvert.DeserializeObject<Response>(responseContent);
-                        }
-                        else
-                        {
-                            var response = JsonConvert.DeserializeObject<Response>(responseContent);
-                            return response;
-                        }
+                        //if (responseContent.Contains("FAILED") || responseContent.Contains("FAIL"))
+                        //{
+                        //    Console.WriteLine(responseContent);
+                        //    return JsonConvert.DeserializeObject<Response>(responseContent);
+                        //}
+                        //else
+                        //{
+                        //    var response = JsonConvert.DeserializeObject<Response>(responseContent);
+                        //    return response;
+                        //}
+
+                        return responseContent;
                     }
                 }
                 catch (Exception e)

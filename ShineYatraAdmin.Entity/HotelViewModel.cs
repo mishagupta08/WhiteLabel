@@ -14,9 +14,16 @@ namespace ShineYatraAdmin.Entity
         public WalletResponse WalletResponseDetail { get; set; }
 
         /// <summary>
+        /// gets or sets select type
+        /// </summary>
+        public string SelectType { get; set; }
+
+        public string SelectedTypeValue { get; set; }        
+
+        /// <summary>
         /// gets or sets filter detail
         /// </summary>
-        public Filter FilterDetail { get; set; }
+        public HotelTransactionListRequest FilterDetail { get; set; }
         /// <summary>
         /// gets or sets selected menu
         /// </summary>
@@ -41,6 +48,11 @@ namespace ShineYatraAdmin.Entity
         /// gets or sets requet
         /// </summary>
         public HotelDescriptionRequest HotelDescRequest { get; set; }
+
+        /// <summary>
+        /// gets or sets invoice detail
+        /// </summary>
+        public HotelBookingContainer InvoiceDetail { get; set; }
 
         /// <summary>
         /// gets or sets hotel request
@@ -100,6 +112,8 @@ namespace ShineYatraAdmin.Entity
         /// gets or sets selected hotel detail
         /// </summary>
         public Entity.HotelDetail.Hotel SelectedHotel { get; set; }
+
+        public IList<KeyValuePair> SelectTypeList { get; set; }
 
         /// <summary>
         /// method to assign room
@@ -210,6 +224,16 @@ namespace ShineYatraAdmin.Entity
                 Id = "Miss.",
                 Value = "Miss."
             });
+        }
+
+        public void AssignSelectTypeList()
+        {
+            this.SelectTypeList = new List<KeyValuePair>();
+            this.SelectTypeList.Add(new KeyValuePair { Id = "All", Value = "All" });
+            this.SelectTypeList.Add(new KeyValuePair { Id = "Id Wise", Value = "Id Wise" });
+            this.SelectTypeList.Add(new KeyValuePair { Id = "Member Wise", Value = "Member Wise" });
+            this.SelectTypeList.Add(new KeyValuePair { Id = "Mobile No Wise", Value = "Mobile No Wise" });
+            this.SelectTypeList.Add(new KeyValuePair { Id = "Email Id Wise", Value = "Email Id Wise" });
         }
     }
 }

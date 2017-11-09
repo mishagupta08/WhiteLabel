@@ -64,6 +64,7 @@
     <Compile Include="HotelDetail.cs" />
     <Compile Include="HotelRequestClasses.cs" />
     <Compile Include="HotelResponseClasses.cs" />
+    <Compile Include="HotelTransactionListRequest.cs" />
     <Compile Include="HotelViewModel.cs" />
     <Compile Include="INSERT_SERVICE_HOTEL_REQUEST.cs" />
     <Compile Include="KeyValuePair.cs" />
