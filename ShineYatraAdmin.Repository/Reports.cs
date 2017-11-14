@@ -9,25 +9,11 @@ namespace ShineYatraAdmin.Repository
 {
 
     public class Reports
-    {       
-
-        /// <summary>
-        /// Base url of API
-        /// </summary>
+    {               
         private const string ApiBaseUrl = "http://mukesh.bisplindia.in/apiRouter.aspx";
 
-        /// <summary>
-        /// Authentication key
-        /// </summary>
         private const string AuthKey = "lPJpfNMUK6u2KAGyJXqxsw==";
-
         
-
-        /// <summary>
-        /// Method to invoke api function
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
         private static async Task<string> CallFunction(string data)
         {
             using (var httpClient = new HttpClient())

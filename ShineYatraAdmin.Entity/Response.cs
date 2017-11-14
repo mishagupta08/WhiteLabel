@@ -202,8 +202,23 @@
         public EticketDetails FlightTicketDetails { get; set; }
 
         /// <summary>
+        /// gets or sets GET_BILL_SERVICES_FIELDS_LIST
+        /// </summary>
+        public List<BillServicesFields> GET_BILL_SERVICES_FIELDS_LIST { get; set; }
+
+        /// <summary>
         /// gets or sets hotel transaction list
         /// </summary>
         public List<HotelBookingContainer> GET_HOTELS_TRANSACTIONS_SUMMARY { get; set; }
+
+        /// <summary>
+        /// gets or sets GET_ZONE_LIST
+        /// </summary>
+        public List<ZoneList> GET_ZONE_LIST { get; set; }
+
+        /// <summary>
+        /// gets or sets GET_SUB_ZONE_LIST
+        /// </summary>
+        public List<SubZoneList> GET_SUB_ZONE_LIST { get; set; }
     }
 }

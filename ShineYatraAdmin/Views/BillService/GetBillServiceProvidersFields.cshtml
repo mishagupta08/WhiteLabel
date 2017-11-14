@@ -1,0 +1,56 @@
+﻿@model ShineYatraAdmin.Entity.BillServiceFieldViewModel
+
+@foreach (var field in Model.fieldList)
+{
+    if (field.visible.ToLower() == "y")
+    {
+        if (field.field_name.ToLower() == "district")
+        {
+            <div class="col-md-12">
+                <div class="form-group col-md-12">
+                    <label>@field.field_name </label>
+                    <select class="form-control" id="districtList">
+                        <option value="">--Please Select--</option>
+                        @if (Model.ZoneList != null)
+                        {
+                            foreach (var zone in Model.ZoneList)
+                            {
+                                <option value="@zone.zone_id">@zone.zone_name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        }
+        else if (field.field_name.ToLower() == "ero")
+        {            
+                <div class="col-md-12">
+                    <div class="form-group col-md-12">
+                        <label>@field.field_name </label>
+                        <select class="form-control" id="eroList">
+                            <option value="">--Please Select--</option>
+                        </select>
+                    </div>
+                </div>            
+        }
+        else
+        {
+            <div class="col-md-12">
+                <div class="form-group col-md-12">
+                    <label>@field.field_name </label>
+                    <input class="form-control" type="text" name="@field.field_name">
+                </div>
+            </div>
+        }
+    }
+}
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#districtList').change(function () {
+            getSubZoneList(this.value);
+        });
+    });
+</script>

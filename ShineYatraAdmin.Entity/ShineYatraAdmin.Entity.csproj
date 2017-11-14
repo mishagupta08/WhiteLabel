@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillService.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="HotelBookingContainer.cs" />
     <Compile Include="CcAvenueViewModel.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="DashboardModel.cs" />
     <Compile Include="DbRecharge.cs" />
     <Compile Include="DTUserDetails.cs" />
+    <Compile Include="ExceptionLogging.cs" />
     <Compile Include="FlightEticket.cs" />
     <Compile Include="FlightSearch.cs" />
     <Compile Include="FlightViewModel.cs" />

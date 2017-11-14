@@ -41,8 +41,7 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.InnerException);
-
+                ExceptionLogging.SendErrorTomail(e,User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View("FlightMenu//SearchFlight", flightSearchModel);
         }
@@ -115,7 +114,7 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
 
             return View("FlightMenu//SearchFlightResult", searchPageViewModel);

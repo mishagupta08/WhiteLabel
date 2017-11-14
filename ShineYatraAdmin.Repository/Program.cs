@@ -292,14 +292,15 @@ namespace ShineYatraAdmin.Repository
         /// </summary>
         /// <param name="serviceId"></param>
         /// <returns></returns>
-        public static async Task<IList<CompanyCommissionGroup>> GetPrimarySetting(string serviceId, string sub_service)
+        public static async Task<IList<CompanyCommissionGroup>> GetPrimarySetting(string serviceId, string sub_service,string userDetail)
         {
             var data = string.Empty;
+            var arrUserData = userDetail.Split('|');
             //Code for get services           
-            data = "{\"action\":\"GET_SERVICE_DETAILS\",\"SERVICE_ID\":\"" + serviceId + "\"}";
+            data = "{\"action\":\"GET_SERVICE_DETAILS\",\"SERVICE_ID\":\"" + serviceId + "\",\"member_id\":\"" + arrUserData[1] + "\",\"company_id\":\"" + arrUserData[2] + "\"}";
             if (!string.IsNullOrEmpty(sub_service))
             {
-                data = "{\"action\":\"GET_SERVICE_DETAILS\",\"SERVICE_ID\":\"" + serviceId + "\",\"sub_category\":\"" + sub_service + "\"}";
+                data = "{\"action\":\"GET_SERVICE_DETAILS\",\"SERVICE_ID\":\"" + serviceId + "\",\"sub_category\":\"" + sub_service + "\",\"member_id\":\"" + arrUserData[1] + "\",\"company_id\":\"" + arrUserData[2] + "\"}";
             }
             var response = await CallFunction(data);
             if (response != null && response.GET_SERVICE_DETAILS != null)
@@ -1427,6 +1428,8 @@ namespace ShineYatraAdmin.Repository
             }
             return null;
         }
+
+        
 
     }
 }

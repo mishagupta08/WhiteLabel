@@ -99,12 +99,12 @@
             <li>
                 <a href="tables.html" class="waves-effect"><i data-icon="O" class="linea-icon linea-software fa-fw"></i> <span class="hide-menu">Bill Payments<span class="fa arrow"></span></span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li> <a href="contact.html">Water</a></li>
-                    <li> <a href="contact2.html">Electricity</a></li>
-                    <li> <a href="contact-detail.html">LandLine</a></li>
-                    <li> <a href="contact-detail.html">Insurance Premium</a></li>
-                    <li> <a href="contact-detail.html">Credit Card</a></li>
-                    <li> <a href="contact-detail.html">GAS</a></li>
+                    <li> <a href="@Url.Action("Index", "BillService",new {type="Electricity"})">Electricity</a></li>
+                    <li> <a href="@Url.Action("Index", "BillService",new {type="LandLine"})">LandLine</a></li>
+                    <li> <a href="@Url.Action("Index", "BillService",new {type="Insurance Premium"})">Insurance Premium</a></li>
+                    <li> <a href="@Url.Action("Index", "BillService",new {type="Credit Card"})">Credit Card</a></li>
+                    <li> <a href="@Url.Action("Index", "BillService",new {type="GAS"})">GAS</a></li>
+                    <li> <a href="@Url.Action("Index", "BillService",new {type="Internet ISP"})">Internet ISP</a></li>
                     <li>
                         <a href="javascript:void(0)" class="waves-effect">Reports<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse">
