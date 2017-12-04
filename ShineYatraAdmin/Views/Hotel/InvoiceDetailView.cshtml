@@ -6,21 +6,21 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
-
-@*<script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")"></script>
-
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>*@
-
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-
-@*<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />*@
-
+<link href="~/plugins/bower_components/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
+<link href="~/plugins/bower_components/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet">
 <script src="~/Script/hotelTransaction.js"></script>
 
 <style>
+    .popup-style {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .mfp-content {
+        width: 33% !important;
+    }
+
     #roomDetailContainer th {
         text-align: center;
     }
@@ -221,12 +221,18 @@
             </table>
         </div>
     </div>
-    <button type="button" id="cancelBooking" class="btn btn-success"> <i class="fa"></i> Cancel Hotel Booking</button>
+    @*<button type="button" id="cancelBooking" class="btn btn-success"> <i class="fa"></i> Cancel Hotel Booking</button>*@
+    <a class="popup-with-form btn btn-success" href="#test-form" id="cancelBooking"><i class="fa"></i> Cancel Hotel Booking</a>
 </div>
 
-<div id="dialog" title="Delete" style="display:none;">
-    <p>Are You Sure!!</p>
+<form id="test-form" class="mfp-hide panel panel-info popup-style">
+    @*<div id="test" style="height:550px; overflow-y:auto; overflow-x:hidden;"></div>*@
+    <p>Are You Sure, You want to cancel booking!!</p>
     <button type="button" Id="deleteButton">Yes</button>
     <button type="button" Id="errorNoButton">No</button>
-</div>
+</form>
+
+@*<div id="dialog" title="Delete" style="display:none;">
+
+    </div>*@
 

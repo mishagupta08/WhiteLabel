@@ -1,30 +1,55 @@
 ﻿$(document).ready(function () {
-    $("#cancelBooking").unbind();
-    $("#cancelBooking").bind("click", CancelHotelBooking);
+    //$("#cancelBooking").unbind();
+    //$("#cancelBooking").bind("click", CancelHotelBooking);
     //$("#deleteButton").unbind();
     //$("#deleteButton").bind("click", DeleteHotelBooking);
+    //$("#deleteButton").click(function () {
+    //    //   $(".ui-dialog-titlebar-close").click();
+    //    var txnId = $("#txnId").html();
+    //    window.location.href = '/Hotel/SubmitHotelCancelrequest?txnId=' + txnId;
+    //});
+
+    //$("#errorNoButton").click(function () {
+    //    $(".mfp-close").click();
+    //});
+    CancelHotelBooking();
 });
 
 function CancelHotelBooking() {
-    //$.ajax({
-    //    url: '/Hotel/',
-    //    type: 'Get',
-    //}).done(function (result) {
-    //    $("#hotelContent").html("");
-    //    $("#hotelContent").html(result);
-    //});
-    $("#dialog").dialog({
-        dialogClass: "noclose"
-    });
-
+   
     $("#deleteButton").click(function () {
         //   $(".ui-dialog-titlebar-close").click();
         var txnId = $("#txnId").html();
-        window.location.href = '/Hotel/SubmitHotelCancelrequest?txnId=' + txnId;
+       // window.location.href = '/Hotel/SubmitHotelCancelrequest?txnId=' + txnId;
+        $(".mfp-close").click();
+        $(".preloader").show();
+        var ledgerfilter = $("#hotelFilterForm").serialize();
+        $.ajax({
+            url: '/Hotel/SubmitHotelCancelrequest?txnId=' + txnId,
+            type: 'Post',
+            datatype: 'Json',
+            //async: false,
+            //data: ledgerfilter
+        }).done(function (result) {
+            $(".preloader").hide();
+            swal("Status", result, "success")
+            $(".confirm").click(function () {
+                //$(".mfp-close").click();
+            })
+
+        }).fail(function (xhr) {
+            $(".preloader").hide();
+            swal("Status", xhr, "error")
+            $(".confirm").click(function () {
+                //$(".mfp-close").click();
+
+            })
+        });
+        return false;
     });
 
     $("#errorNoButton").click(function () {
-        $(".ui-dialog-titlebar-close").click();
+        $(".mfp-close").click();
     });
 }
 

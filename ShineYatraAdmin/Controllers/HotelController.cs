@@ -286,13 +286,14 @@
                 var response = await this.hotelManager.BookingCancellation(cancelModel.HotelDescRequest);
                 if (response == null || response.Cancellationinfo == null)
                 {
-                    return Json(string.Empty);
+                    return Json("Cancellation info is empty.");
                 }
                 else
                 {
                     if (string.IsNullOrEmpty(response.Cancellationinfo.Error))
                     {
-                        return Json(response.Cancellationinfo.Success);
+                        //return Json(response.Cancellationinfo.Success);
+                        return Json("Booking has been cancelled successfully.");
                     }
 
                     return Json(response.Cancellationinfo.Error);
