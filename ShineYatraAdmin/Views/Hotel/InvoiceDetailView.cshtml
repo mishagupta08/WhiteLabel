@@ -6,6 +6,20 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
+
+@*<script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")"></script>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>*@
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+@*<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />*@
+
+<script src="~/Script/hotelTransaction.js"></script>
+
 <style>
     #roomDetailContainer th {
         text-align: center;
@@ -49,7 +63,7 @@
                 <tbody>
                     <tr>
                         <td class="left">
-                            Booking No : @Model.InvoiceDetail.txn_id
+                            Booking No : <span id="txnId">@Model.InvoiceDetail.txn_id</span>
                         </td>
                         <td>
                             Booking Date : @Model.InvoiceDetail.txn_date
@@ -115,7 +129,7 @@
                                 <tbody>
                                     <tr>
                                         <td>@Model.InvoiceDetail.room_type</td>
-                                        <td>roomCount</td>
+                                        <td>@Model.InvoiceDetail.room_count</td>
                                         <td>@Model.InvoiceDetail.amount</td>
                                     </tr>
                                 </tbody>
@@ -131,16 +145,16 @@
                         <td>
                             Adults
                         </td>
-                        <td>
-                            adultcount
+                        <td style="text-align:left;padding-left:16% !important;">
+                            @Model.InvoiceDetail.adult
                         </td>
                     </tr>
                     <tr>
                         <td>
                             Childs
                         </td>
-                        <td>
-                            childcount
+                        <td style="text-align:left; padding-left:16% !important;">
+                            @Model.InvoiceDetail.child
                         </td>
                     </tr>
                     <tr class="heading">
@@ -207,4 +221,12 @@
             </table>
         </div>
     </div>
+    <button type="button" id="cancelBooking" class="btn btn-success"> <i class="fa"></i> Cancel Hotel Booking</button>
 </div>
+
+<div id="dialog" title="Delete" style="display:none;">
+    <p>Are You Sure!!</p>
+    <button type="button" Id="deleteButton">Yes</button>
+    <button type="button" Id="errorNoButton">No</button>
+</div>
+

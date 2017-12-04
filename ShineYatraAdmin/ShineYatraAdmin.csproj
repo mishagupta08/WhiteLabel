@@ -480,6 +480,7 @@
     <Content Include="Script\group.js" />
     <Content Include="Script\hotel.js" />
     <Content Include="Script\hotelTransaction.js" />
+    <Content Include="Script\jquery-1.10.2.min.js" />
     <Content Include="Script\login.js" />
     <Content Include="Script\otp.js" />
     <Content Include="Script\PrimarySetting.js" />

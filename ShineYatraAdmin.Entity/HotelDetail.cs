@@ -169,5 +169,11 @@
         public string hotel_city { get; set; }
         public string hotel_address { get; set; }
         public string hotel_amenities { get; set; }
+
+        public string adult_count { get; set; }
+        public string child_count { get; set; }
+        public string room_count { get; set; }
+        public string webservice { get; set; }
+        public string booking_ref_no { get; set; }
     }
 }

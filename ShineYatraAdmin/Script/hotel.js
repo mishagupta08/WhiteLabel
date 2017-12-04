@@ -13,8 +13,6 @@ $(document).ready(function () {
     $("button[name=viewHotel]").bind("click", ViewHotelDetail);
     $("button[name=bookHotel]").unbind();
     $("button[name=bookHotel]").bind("click", BookHotelView);
-    $("#cancelBooking").unbind();
-    $("#cancelBooking").bind("click", CancelHotelBooking);
 
     /*Hotel list filter*/
 
@@ -94,16 +92,6 @@ function ChildRowInitialization() {
             $(childRowId).show();
         }
     }
-}
-
-function CancelHotelBooking() {
-    $.ajax({
-        url: 'GetHotelCancelView',
-        type: 'Get',
-    }).done(function (result) {
-        $("#hotelContent").html("");
-        $("#hotelContent").html(result);
-    });
 }
 
 function SubmitBookingDetail() {

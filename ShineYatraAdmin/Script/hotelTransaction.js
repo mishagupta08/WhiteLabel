@@ -1,4 +1,34 @@
-﻿function GetTransactionListDetail() {
+﻿$(document).ready(function () {
+    $("#cancelBooking").unbind();
+    $("#cancelBooking").bind("click", CancelHotelBooking);
+    //$("#deleteButton").unbind();
+    //$("#deleteButton").bind("click", DeleteHotelBooking);
+});
+
+function CancelHotelBooking() {
+    //$.ajax({
+    //    url: '/Hotel/',
+    //    type: 'Get',
+    //}).done(function (result) {
+    //    $("#hotelContent").html("");
+    //    $("#hotelContent").html(result);
+    //});
+    $("#dialog").dialog({
+        dialogClass: "noclose"
+    });
+
+    $("#deleteButton").click(function () {
+        //   $(".ui-dialog-titlebar-close").click();
+        var txnId = $("#txnId").html();
+        window.location.href = '/Hotel/SubmitHotelCancelrequest?txnId=' + txnId;
+    });
+
+    $("#errorNoButton").click(function () {
+        $(".ui-dialog-titlebar-close").click();
+    });
+}
+
+function GetTransactionListDetail() {
     $(".preloader").show();
     var ledgerfilter = $("#hotelFilterForm").serialize();
     $.ajax({
@@ -56,10 +86,10 @@
                 //    var last_row = api.row(':last').data();
                 //    $(api.column(9).footer()).html(last_row.balance + " " + last_row.drcr);
                 //},
-                "columnDefs": [
-                                   { className: "text-right", "targets": [6, 7, 8, 9] },
-                                   { "targets": [1, 2, 3], "visible": false }
-                ],
+                //"columnDefs": [
+                //                   { className: "text-right", "targets": [6, 7, 8, 9] },
+                //                   { "targets": [1, 2, 3], "visible": false }
+                //],
                 "destroy": true,
                 "paging": false,
                 "ordering": false,

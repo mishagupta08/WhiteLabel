@@ -258,21 +258,45 @@
 
         }
 
-        public async Task<ActionResult> SubmitHotelCancelrequest(HotelViewModel cancelModel)
+        public async Task<ActionResult> SubmitHotelCancelrequest(string txnId)
         {
-            this.hotelManager = new HotelManager();
-            var response = await this.hotelManager.BookingCancellation(cancelModel.HotelDescRequest);
-            if (response == null || response.Cancellationinfo == null)
+            HotelViewModel cancelModel = new HotelViewModel();
+            /**Get cancellation detail start**/
+            string res = await GetInvoiveDetail(txnId);
+
+            var invoice = JsonConvert.DeserializeObject<List<HotelBookingContainer>>(res);
+            if (invoice != null)
             {
-                return Json(string.Empty);
+                hotelModel.InvoiceDetail = invoice.FirstOrDefault();
+            }
+            if (hotelModel.InvoiceDetail == null)
+            {
+                return Json("Hotel booking detail not found");
             }
             else
             {
-                if (string.IsNullOrEmpty(response.Cancellationinfo.Error))
+                cancelModel.HotelDescRequest = new HotelDescriptionRequest();
+                cancelModel.HotelDescRequest.webService = hotelModel.InvoiceDetail.web_service;
+                cancelModel.HotelDescRequest.LastName = hotelModel.InvoiceDetail.last_name;
+                cancelModel.HotelDescRequest.Bookingref = hotelModel.InvoiceDetail.api_txn_id;
+                cancelModel.HotelDescRequest.Email = hotelModel.InvoiceDetail.email;
+
+                /**Get cancellation detail end**/
+                this.hotelManager = new HotelManager();
+                var response = await this.hotelManager.BookingCancellation(cancelModel.HotelDescRequest);
+                if (response == null || response.Cancellationinfo == null)
                 {
-                    return Json(response.Cancellationinfo.Success);
+                    return Json(string.Empty);
                 }
-                return Json(response.Cancellationinfo.Error);
+                else
+                {
+                    if (string.IsNullOrEmpty(response.Cancellationinfo.Error))
+                    {
+                        return Json(response.Cancellationinfo.Success);
+                    }
+
+                    return Json(response.Cancellationinfo.Error);
+                }
             }
         }
 
@@ -337,7 +361,7 @@
                         };
                         var allDiscountDetails = await serviceManager.GetServiceAllottedGroupDetails(serviceCgDetailsRequest);
 
-                        CompanyCommissionGroup hotelDiscount = allDiscountDetails.FirstOrDefault();
+                        CompanyCommissionGroup hotelDiscount = allDiscountDetails == null ? null : allDiscountDetails.FirstOrDefault();
 
                         var amount = string.Empty;
                         if (hotelDiscount != null && Convert.ToDouble(hotelDiscount.back_discount_per) != 0)
@@ -1100,7 +1124,7 @@
                     if (bookingModel.HotelBookingResponse != null && bookingModel.HotelBookingResponse.Bookingresponse != null && bookingModel.HotelBookingResponse.Bookingresponse.Bookingstatus.ToLower() == "c")
                     {
                         eticket.Error = "Hotel Booked Successfully";
-                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(bookingModel.txnId, userData[1], bookingModel.HotelBookingResponse.Bookingresponse.BookingTrn, "COMPLETED");
+                        UPDATE_TRANSACTION_STATUS updatestatus = await _serviceManager.UpdateServiceBookingRequest(bookingModel.txnId, userData[1], bookingModel.HotelBookingResponse.Bookingresponse.Bookingref, "COMPLETED");
                     }
                     else if (!string.IsNullOrEmpty(bookingModel.HotelBookingResponse.Bookingresponse.Bookingstatus))
                     {
@@ -1228,6 +1252,11 @@
             ticketDetail.check_in_time = model.SelectedHotel.Hoteldetail.Bookinginfo.Checkintime;
             ticketDetail.check_out_time = model.SelectedHotel.Hoteldetail.Bookinginfo.Checkintime;
 
+            ticketDetail.adult_count = Convert.ToString(model.HotelRequestDetail.TotalAdultCount);
+            ticketDetail.child_count = Convert.ToString(model.HotelRequestDetail.TotalChildCount);
+            ticketDetail.room_count = Convert.ToString(model.HotelRequestDetail.RoomCount);
+            ticketDetail.webservice = model.HotelRequestDetail.webService;
+            ticketDetail.booking_ref_no = Convert.ToString(model.HotelRequestDetail.TotalAdultCount);
             if (model.HotelRequestDetail.PaymentMode.ToLower().Trim() == "bank")
             {
                 ticketDetail.pg_amount = model.ProvisionalBookingDetail.TotalFare;
@@ -1293,7 +1322,7 @@
             {
                 var userData = User.Identity.Name.Split('|');
                 model.FilterDetail.member_id = userData[1];
-                
+
                 if (!string.IsNullOrEmpty(model.SelectType))
                 {
                     var selectedTypeValueInt = 0;
@@ -1429,23 +1458,7 @@
             try
             {
                 hotelModel = new HotelViewModel();
-                hotelManager = new HotelManager();
-                hotelModel.FilterDetail = new HotelTransactionListRequest();
-                var userData = User.Identity.Name.Split('|');
-                hotelModel.FilterDetail.member_id = (userData[1]);
-                hotelModel.FilterDetail.txn_id = txnId;
-                var ledgerList = await hotelManager.GetHotelsTransactionSummaryList(hotelModel.FilterDetail);
-                var pattern = @"\[(.*?)\]";
-                MatchCollection matches = null;
-                var response = "";
-                if (ledgerList.ToUpper().Contains("SUCCESS"))
-                {
-                    matches = Regex.Matches(ledgerList, pattern);
-                }
-                foreach (Match match in matches)
-                {
-                    response = match.Value;
-                }
+                string response = await GetInvoiveDetail(txnId);
 
                 var invoice = JsonConvert.DeserializeObject<List<HotelBookingContainer>>(response);
                 if (invoice != null)
@@ -1460,5 +1473,27 @@
             return View("InvoiceDetailView", hotelModel);
         }
 
+        private async Task<string> GetInvoiveDetail(string txnId)
+        {
+            hotelManager = new HotelManager();
+            hotelModel.FilterDetail = new HotelTransactionListRequest();
+            var userData = User.Identity.Name.Split('|');
+            hotelModel.FilterDetail.member_id = (userData[1]);
+            hotelModel.FilterDetail.txn_id = txnId;
+            var ledgerList = await hotelManager.GetHotelsTransactionSummaryList(hotelModel.FilterDetail);
+            var pattern = @"\[(.*?)\]";
+            MatchCollection matches = null;
+            var response = "";
+            if (ledgerList.ToUpper().Contains("SUCCESS"))
+            {
+                matches = Regex.Matches(ledgerList, pattern);
+            }
+            foreach (Match match in matches)
+            {
+                response = match.Value;
+            }
+
+            return response;
+        }
     }
 }

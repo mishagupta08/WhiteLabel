@@ -39,5 +39,11 @@ namespace ShineYatraAdmin.Entity
         public string hotel_amenities { get; set; }
         public string check_in_date { get; set; }
         public string check_out_date { get; set; }
+
+        public string adult { get; set; }
+        public string child { get; set; }
+        public string room_count { get; set; }
+        public string web_service { get; set; }
+        public string booking_ref_no { get; set; }
     }
 }
