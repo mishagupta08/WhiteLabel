@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BillService.cs" />
-    <Compile Include="Filter.cs" />
     <Compile Include="HotelBookingContainer.cs" />
     <Compile Include="CcAvenueViewModel.cs" />
     <Compile Include="Company.cs" />
@@ -54,7 +53,6 @@
     <Compile Include="CompanySetting.cs" />
     <Compile Include="CompanySmsSetting.cs" />
     <Compile Include="CompanyViewModel.cs" />
-    <Compile Include="DashboardModel.cs" />
     <Compile Include="DbRecharge.cs" />
     <Compile Include="DTUserDetails.cs" />
     <Compile Include="ExceptionLogging.cs" />
@@ -80,7 +78,6 @@
     <Compile Include="Response.cs" />
     <Compile Include="SearchParameter.cs" />
     <Compile Include="Service.cs" />
-    <Compile Include="Theme.cs" />
     <Compile Include="TransactionDetail.cs" />
     <Compile Include="UserDetail.cs" />
     <Compile Include="UserViewModel.cs" />

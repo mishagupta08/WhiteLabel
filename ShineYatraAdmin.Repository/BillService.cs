@@ -29,13 +29,13 @@ namespace ShineYatraAdmin.Repository
                     var httpResponse = await httpClient.PostAsync(ApiBaseUrl, httpContent);
 
                     // If the response contains content we want to read it!
-
                     if (httpResponse.Content != null)
                     {
                         var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                        if (responseContent.Contains("FAILED") || responseContent.Contains("FAIL"))
+                        if (responseContent.ToUpper().Contains("FAILED") || responseContent.ToUpper().Contains("FAIL"))
                         {
                             Console.WriteLine(responseContent);
+                            ExceptionLogging.SendAPIErrorTomail(data, responseContent);
                             return JsonConvert.DeserializeObject<Response>(responseContent);
                         }
                         else

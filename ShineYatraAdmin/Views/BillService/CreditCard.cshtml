@@ -1,0 +1,58 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.BillServiceViewModel
+@{
+    ViewBag.Title = "master_bill_structure";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="white-box">
+            <h3 class="box-title m-b-0">Credit Card Bill Payment</h3>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form class="col-md-4" id="billService" onsubmit="return false">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-12">
+                                <label>Service Provider </label>
+                                <input type="hidden" id="bill_service" value="@Model.service">
+                                <select class="form-control" id="bill_service_providers" onchange="changeBillServiceProviders()">
+                                    <option value="">--Please Select--</option>
+                                    @foreach (var service in Model.serviceProviders)
+                                    {
+                                        <option value="@service.sub_service_id">@service.sub_service_name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="billServiceStructure">
+
+                        </div>
+                        <input type="submit" value="Submit" class="btn btn-success">
+                    </form>
+                    <div class="col-md-8">
+                        <div style="padding: 10px; border: 1px solid #ddd;">
+                            <ul>
+                                <li>Enter the exact bill amount as per the latest copy of bill.</li>
+                                <li>
+                                    Do not forget to include the Late Payment Charges if you are paying the bill after
+                                    due date.
+                                </li>
+                                <li>You will get an instant payment confirmation for a successful transaction.</li>
+
+                                <li>
+                                    The time taken to credit your account depends on respective Electricity Board's
+                                    payment processing system.
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Script/BillService.js"></script>

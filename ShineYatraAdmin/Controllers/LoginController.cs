@@ -19,59 +19,32 @@
     /// Hold Login Functionality
     /// </summary>
     public class LoginController : Controller
-    {
-        /// <summary>
-        /// Hold company id
-        /// </summary>
-        private string CompanyId = ConfigurationManager.AppSettings.Get("CompanyId");
+    {                            
+        LoginManager loginManager = null; 
+        CommonController commonController = null;
 
-        /// <summary>
-        /// gets or sets login action
-        /// </summary>
-        private const string LoginAction = "VALIDATELOGIN";
-
-        /// <summary>
-        /// Gets or sets Login Model
-        /// </summary>
-        LoginModel loginModel = new LoginModel();
-
-        /// <summary>
-        /// gets or sets login manager
-        /// </summary>
-        LoginManager loginManager = new LoginManager();
-
-        // GET: Login
-        public async Task<ActionResult> Index(/*string returnUrl*/)
-        {            
+        //function to Call login page
+        public async Task<ActionResult> Index()
+        {
+            LoginModel loginModel = new LoginModel();
+            commonController = new CommonController();           
             try
-            {
-                CommonController commonController = new CommonController();
-                               
-                await commonController.GetCompanySettings();
-
-                //if (!string.IsNullOrEmpty(returnUrl))
-                //{
-                //    ViewBag.returnUrl = returnUrl;
-                //}
-                 
+            {                                
+                await commonController.GetCompanySettings();                
                 if (Request.IsAuthenticated)
                 {
                     return RedirectToAction("Index", "Dashboard");
                 }
             }
             catch (Exception ex)
-            {
+            {                
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, "", ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(loginModel);
         }
-
-        /// <summary>
-        /// validate user detail
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <returns>validation result</returns>
+        
+        /// validate user login detail        
         public async Task<ActionResult> ValidateUser(LoginModel loginDetail)
         {
             try
@@ -88,7 +61,7 @@
 
                 loginManager = new LoginManager();
 
-                loginDetail.action = LoginAction;
+                loginDetail.action = "VALIDATELOGIN";
                 loginDetail.domain_name = ConfigurationManager.AppSettings["DomainName"];
 
                 var result = await loginManager.ValidateUser(loginDetail);
@@ -100,12 +73,12 @@
                 Session["WalletBalance"] = result.wallet_balance;
                 Session["CompanyWalletBalance"] = result.company_wallet_balance;
                 string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name+"|"+result.mobileNo +"|"+ result.ledger_id +"|"+result.role_id +"|"+result.emailId;
-                FormsAuthentication.SetAuthCookie(userIdentity, false);
-                
+                FormsAuthentication.SetAuthCookie(userIdentity, false);                
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, "", ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(string.Empty);
         }

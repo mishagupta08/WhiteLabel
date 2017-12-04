@@ -9,6 +9,7 @@
     using System.Linq;
     using Business;
     using System;
+    using System.Configuration;
 
     #endregion namespace
     [Authorize]
@@ -56,6 +57,7 @@
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View("Index", _companyViewModel);
         }
@@ -88,6 +90,7 @@
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             if (string.IsNullOrEmpty(companyId) || companyId.Equals("0"))
             {
@@ -139,6 +142,7 @@
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(string.Empty);
         }
@@ -210,6 +214,7 @@
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return PartialView("ManageCompany\\companySetting", _companyViewModel);
         }
@@ -235,6 +240,7 @@
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(string.Empty);
         }
@@ -259,6 +265,7 @@
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return null;
         }

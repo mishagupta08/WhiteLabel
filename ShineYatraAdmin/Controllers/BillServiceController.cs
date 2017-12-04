@@ -14,17 +14,94 @@ namespace ShineYatraAdmin.Controllers
         // GET: BillService
         PrimarySettingManager primarySettingManager;
 
-        public async Task<ActionResult> Index(string type)
+        public async Task<ActionResult> Electricity()
         {
             var viewModel = new BillServiceViewModel();
             primarySettingManager = new PrimarySettingManager();
-            try {
-                if (string.IsNullOrEmpty(type))
-                {
-                    type = "electricity";
-                }
-                viewModel.service = type;
-                viewModel.serviceProviders = await primarySettingManager.GetPrimarySetting("6",type, User.Identity.Name);               
+            try
+            {
+                viewModel.service = "electricity";
+                viewModel.serviceProviders = await primarySettingManager.GetPrimarySetting("6", "electricity", User.Identity.Name);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
+            }
+            return View(viewModel);
+        }
+
+        public async Task<ActionResult> Insurance()
+        {
+            var viewModel = new BillServiceViewModel();
+            primarySettingManager = new PrimarySettingManager();
+            try
+            {
+                viewModel.service = "Insurance Premium";
+                viewModel.serviceProviders = await primarySettingManager.GetPrimarySetting("6", "Insurance Premium", User.Identity.Name);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
+            }
+            return View(viewModel);
+        }
+
+        public async Task<ActionResult> CreditCard()
+        {
+            var viewModel = new BillServiceViewModel();
+            primarySettingManager = new PrimarySettingManager();
+            try
+            {
+                viewModel.service = "Credit Card";
+                viewModel.serviceProviders = await primarySettingManager.GetPrimarySetting("6", "Credit Card", User.Identity.Name);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
+            }
+            return View(viewModel);
+        }
+
+        public async Task<ActionResult> Gas()
+        {
+            var viewModel = new BillServiceViewModel();
+            primarySettingManager = new PrimarySettingManager();
+            try
+            {
+                viewModel.service = "Gas";
+                viewModel.serviceProviders = await primarySettingManager.GetPrimarySetting("6", "Gas", User.Identity.Name);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
+            }
+            return View(viewModel);
+        }
+
+        public async Task<ActionResult> LandLine()
+        {
+            var viewModel = new BillServiceViewModel();
+            primarySettingManager = new PrimarySettingManager();
+            try
+            {
+                viewModel.service = "landline";
+                viewModel.serviceProviders = await primarySettingManager.GetPrimarySetting("6", "landline", User.Identity.Name);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
+            }
+            return View(viewModel);
+        }
+
+        public async Task<ActionResult> Internet()
+        {
+            var viewModel = new BillServiceViewModel();
+            primarySettingManager = new PrimarySettingManager();
+            try
+            {
+                viewModel.service = "Internet ISP";
+                viewModel.serviceProviders = await primarySettingManager.GetPrimarySetting("6", "Internet ISP", User.Identity.Name);
             }
             catch (Exception ex)
             {
@@ -37,7 +114,7 @@ namespace ShineYatraAdmin.Controllers
         // GET: Bill PrimarySetting page details
         /// </summary>       
         /// <returns></returns>
-        public async Task<ActionResult> GetBillServiceProvidersFields(string selectedBillService,string selectedBillServiceprovider)
+        public async Task<ActionResult> GetBillServiceProvidersFields(string selectedBillService, string selectedBillServiceprovider)
         {
             primarySettingManager = new PrimarySettingManager();
             var fieldListModel = new BillServiceFieldViewModel();
@@ -63,7 +140,7 @@ namespace ShineYatraAdmin.Controllers
             primarySettingManager = new PrimarySettingManager();
             try
             {
-                 zoneList = await this.primarySettingManager.GetZoneList(User.Identity.Name);                
+                zoneList = await this.primarySettingManager.GetZoneList(User.Identity.Name);
             }
             catch (Exception ex)
             {
@@ -78,7 +155,7 @@ namespace ShineYatraAdmin.Controllers
             primarySettingManager = new PrimarySettingManager();
             try
             {
-                zoneList = await this.primarySettingManager.GetSubZoneList(zoneid,User.Identity.Name);
+                zoneList = await this.primarySettingManager.GetSubZoneList(zoneid, User.Identity.Name);
             }
             catch (Exception ex)
             {
@@ -87,7 +164,7 @@ namespace ShineYatraAdmin.Controllers
             return Json(zoneList, JsonRequestBehavior.AllowGet);
         }
 
-        
+
 
     }
 }

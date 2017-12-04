@@ -38,6 +38,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(companyFund);
         }
@@ -54,6 +55,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(string.Empty);
         }
@@ -158,7 +160,8 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException);
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
 
             return Json(string.Empty);
@@ -175,8 +178,9 @@ namespace ShineYatraAdmin.Controllers
                 string[] userData = User.Identity.Name.Split('|');
                 fundRequestList = await fundManger.getFundRequestList("ref_id",userData[1], "FUND_WALLET","","7");
             }
-            catch (Exception Ex) {
-                Console.WriteLine(Ex.InnerException);
+            catch (Exception ex) {
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(fundRequestList);
         }
@@ -194,9 +198,10 @@ namespace ShineYatraAdmin.Controllers
                 string[] userData = User.Identity.Name.Split('|');
                 fundRequestList = await fundManger.getFundRequestList("member_id",userData[1],"FUND_WALLET", "","7");
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(Ex.InnerException);
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(fundRequestList);
         }
@@ -216,9 +221,10 @@ namespace ShineYatraAdmin.Controllers
                 string remark = frm.GetValue("fundremark").AttemptedValue;
                 response = await fundManger.UpdateFundRequest(txnid, userData[1], status, remark);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(Ex.InnerException);
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(response);
         }
@@ -238,9 +244,10 @@ namespace ShineYatraAdmin.Controllers
                 string remark = frm.GetValue("fundremark").AttemptedValue;
                 response = await fundManger.UpdatePgFundRequest(txnid, userData[1], status, remark);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(Ex.InnerException);
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(response);
         }
@@ -264,9 +271,10 @@ namespace ShineYatraAdmin.Controllers
                     fundRequestList = searchedlist;
                 }
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(Ex.InnerException);
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View("MemberFundRequest", fundRequestList);
         }
@@ -290,9 +298,10 @@ namespace ShineYatraAdmin.Controllers
                     fundRequestList = searchedlist;
                 }
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(Ex.InnerException);
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View("RequestedFund", fundRequestList);
         }
@@ -310,9 +319,10 @@ namespace ShineYatraAdmin.Controllers
                 string[] userData = User.Identity.Name.Split('|');
                 fundRequestList = await fundManger.getFundRequestList("ref_id", userData[1], "PG_REQUEST","Pending","8");
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(Ex.InnerException);
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(fundRequestList);
         }

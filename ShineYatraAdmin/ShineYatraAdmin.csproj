@@ -652,7 +652,12 @@
     <Content Include="Views\Hotel\GetHotelTransactionList.cshtml" />
     <Content Include="Views\Hotel\InvoiceDetailView.cshtml" />
     <Content Include="Views\BillService\GetBillServiceProvidersFields.cshtml" />
-    <Content Include="Views\BillService\Index.cshtml" />
+    <Content Include="Views\BillService\Electricity.cshtml" />
+    <Content Include="Views\BillService\Insurance.cshtml" />
+    <Content Include="Views\BillService\Gas.cshtml" />
+    <Content Include="Views\BillService\Internet.cshtml" />
+    <Content Include="Views\BillService\CreditCard.cshtml" />
+    <Content Include="Views\BillService\Landline.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -2,6 +2,7 @@
 using ShineYatraAdmin.Entity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -59,9 +60,10 @@ namespace ShineYatraAdmin.Controllers
                     response = match.Value;
                 }
             }
-            catch (Exception Ex)
-            {
-                Console.WriteLine(Ex.InnerException);
+            catch (Exception ex)
+            {                
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }

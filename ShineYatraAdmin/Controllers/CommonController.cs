@@ -31,6 +31,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(balance);
         }
@@ -51,6 +52,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, "" , ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(true);
         }        
@@ -61,10 +63,9 @@ namespace ShineYatraAdmin.Controllers
             {
                 var companyManager = new CompanyManager();
                 var domain = ConfigurationManager.AppSettings["DomainName"];
-               
-                    var setting = await companyManager.GetCompanyExtraSetting(domain);
-                    if (setting != null)
-                    {
+                var setting = await companyManager.GetCompanyExtraSetting(domain);
+                if (setting != null)
+                {
                         System.Web.HttpContext.Current.Session["CompanyTheme"] = setting.theme_name;
                         if (String.IsNullOrEmpty(
                             Convert.ToString(System.Web.HttpContext.Current.Session["CompanyTheme"])))
@@ -74,11 +75,12 @@ namespace ShineYatraAdmin.Controllers
                         System.Web.HttpContext.Current.Session["web_pg_api_enabled"] = setting.web_pg_api_enabled;
                         System.Web.HttpContext.Current.Session["otp_login_enabled"] = setting.otp_login_enabled;
                         System.Web.HttpContext.Current.Session["otp_service_enabled"] = setting.otp_login_service;
-                    }                
+                }                
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, "", ConfigurationManager.AppSettings["DomainName"]);
             }
             return true;
         }

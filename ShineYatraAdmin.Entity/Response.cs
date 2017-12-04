@@ -156,12 +156,7 @@
         /// <summary>
         /// gets or sets company wallet balance
         /// </summary>
-        public List<WalletResponse> GET_WALLET_BALANCE { get; set; }
-
-        /// <summary>
-        /// gets or sets white label theme for domain
-        /// </summary>
-        public List<CompanyTheme> GET_DOMAININFO { get; set; }
+        public List<WalletResponse> GET_WALLET_BALANCE { get; set; }     
 
         public List<CompanyCommissionGroup> GET_COMMISSION_GROUPS_ALLOTEMENT_CHOICES { get; set; }
 

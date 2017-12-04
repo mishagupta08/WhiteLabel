@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using ShineYatraAdmin.Properties;
+using System.Configuration;
 
 namespace ShineYatraAdmin.Controllers
 {
@@ -34,6 +35,7 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(userViewModel);
         }
@@ -54,6 +56,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(userViewModel);
         }
@@ -70,6 +73,7 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(false);
         }
@@ -93,7 +97,8 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(userViewModel);
         }
@@ -142,6 +147,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return PartialView("_structure", userViewModel);
         }
@@ -199,7 +205,8 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(groupList);
         }
@@ -245,6 +252,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(string.Empty);
         }
@@ -263,6 +271,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }            
             return PartialView("AddUser", userDetail);            
         }
@@ -300,6 +309,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(string.Empty);
         }

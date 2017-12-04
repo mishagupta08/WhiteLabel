@@ -53,6 +53,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(viewModel);
         }
@@ -96,6 +97,8 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
+
             }
             return Json(serviceDetail);
         }
@@ -132,6 +135,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(response);
         }
@@ -270,6 +274,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }                
             return RedirectToAction("RechargeStatus", "Recharge", new {txnId = "", info = "" });
         }
@@ -316,6 +321,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return RedirectToAction("RechargeStatus", "Recharge", new { txnId = "", info = "" });
         }
@@ -367,7 +373,8 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
              return View(transactionResponse);
     }
@@ -441,12 +448,10 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return (result);
-
         }
-
     }
-
 }

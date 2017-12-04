@@ -26,7 +26,9 @@ namespace ShineYatraAdmin.Controllers
         private FlightManager _flightManager;
         private ServiceManager _serviceManager;
         private PgManager _pgManager;
-        private UserManager _userManager;        
+        private UserManager _userManager;
+        
+                
         /// <summary>
         /// method to get flight search page
         /// </summary>        
@@ -39,9 +41,9 @@ namespace ShineYatraAdmin.Controllers
                 flightSearchModel.AssignTripMode();
                 flightSearchModel.AssignFlightClass();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ExceptionLogging.SendErrorTomail(e,User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View("FlightMenu//SearchFlight", flightSearchModel);
         }
@@ -80,6 +82,7 @@ namespace ShineYatraAdmin.Controllers
                 {
                     Origindestinationoption = new List<Origindestinationoption>()
                 };
+
 
                 foreach (var flight in searchPageViewModel.arrayOfSearchedFlights.Origindestinationoption)
                 {
@@ -183,11 +186,11 @@ namespace ShineYatraAdmin.Controllers
                 searchPageViewModel.flightfaredetails.FareDetail.backdiscount = searchPageViewModel.flightSearch.backdiscount;
             }
             catch (Exception ex) {
-                throw ex;
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View("FlightMenu//BookingDetail", searchPageViewModel);
         }
-
 
 
         /// <summary>
@@ -229,9 +232,10 @@ namespace ShineYatraAdmin.Controllers
                         Session["WalletBalance"] = walletBalance;
                     }
                 }
-                catch (Exception exx)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(exx.InnerException);
+                    Console.WriteLine(ex.InnerException);
+                    ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
                 }
 
                 bookingDetail.walletBalance = walletBalance;
@@ -300,6 +304,8 @@ namespace ShineYatraAdmin.Controllers
                         else
                         {
                             TempData["ErrorCode"] = 5001;
+                            bookResponse.Status = balanceTxnId;                            
+                            TempData["BookingResponse"] = bookResponse;
                         }
                     }
                 }
@@ -342,6 +348,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return RedirectToAction("BookingStatus", "Flight", new { txnId, info });
         }
@@ -429,7 +436,8 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex)
             {
-                Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+                Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return RedirectToAction("BookingStatus", "Flight", new { txnId, info });
         }
@@ -480,12 +488,20 @@ namespace ShineYatraAdmin.Controllers
                 else
                 {
                     ViewBag.statusCode = TempData["ErrorCode"];
-                    ViewBag.status = "Some problem Occured while doing your transaction";
+                    if (bookResponse != null && !String.IsNullOrEmpty(bookResponse.Status))
+                    {
+                        ViewBag.status = bookResponse.Status;
+                    }
+                    else
+                    {
+                        ViewBag.status = "Some problem Occured while doing your transaction";
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return View(eticket);
         }
@@ -590,6 +606,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return null;
         }
@@ -613,6 +630,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(null);
         }
@@ -645,6 +663,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return PartialView("Report/FilghtList", bookingDetails);
         }
@@ -681,6 +700,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(null);
         }

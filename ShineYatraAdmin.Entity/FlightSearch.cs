@@ -561,26 +561,7 @@ namespace ShineYatraAdmin.Entity
 
         [XmlElement(ElementName = "error")]
         public string Error { get; set; }
-    }
-
-    /***Pricing Rsponse***/
-
-    [XmlRoot(ElementName = "pricingresponse")]
-    public class Pricingresponse
-    {
-        [XmlElement(ElementName = "onwardFlights")]
-        public OnwardFlights OnwardFlights { get; set; }
-
-        [XmlElement(ElementName = "error")]
-        public string Error { get; set; }
-    }
-
-    [XmlRoot(ElementName = "onwardFlights")]
-    public class OnwardFlights
-    {
-        [XmlElement(ElementName = "OriginDestinationOption")]
-        public OriginDestinationOption OriginDestinationOption { get; set; }
-    }
+    }    
 
     [XmlRoot(ElementName = "FlightsDetailList")]
     public class FlightsDetailList

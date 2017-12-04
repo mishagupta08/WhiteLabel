@@ -83,9 +83,10 @@ namespace ShineYatraAdmin.Repository
                     if (httpResponse.Content != null)
                     {
                         var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                        if (responseContent.Contains("FAILED") || responseContent.Contains("FAIL"))
+                        if (responseContent.ToUpper().Contains("FAILED") || responseContent.ToUpper().Contains("FAIL"))
                         {
                             Console.WriteLine(responseContent);
+                            ExceptionLogging.SendAPIErrorTomail(data, responseContent);
                             return JsonConvert.DeserializeObject<Response>(responseContent);
                         }
                         else
@@ -100,7 +101,6 @@ namespace ShineYatraAdmin.Repository
                     Console.WriteLine(e.Message);
                 }
             }
-
             return null;
         }
 
@@ -1427,9 +1427,6 @@ namespace ShineYatraAdmin.Repository
                 return response.GET_COMPANY_EXTRA_SETTINGS.FirstOrDefault();
             }
             return null;
-        }
-
-        
-
+        }        
     }
 }

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using ShineYatraAdmin.Entity;
 using ShineYatraAdmin.Business;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace ShineYatraAdmin.Controllers
 
@@ -49,52 +50,11 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }            
             return View(group);
         }
-
-
-        public async Task<ActionResult> AllottedGroup(string category)
-        {
-            AllottedGroupViewModel viewModel = new AllottedGroupViewModel();
-            group = new GroupModel();
-            Member_Allotted_group Servicegroup = new Member_Allotted_group();
-            try
-            {
-                group.service_name = category;
-                group.service_id = Common.Common.getIdbyServiceName(category);
-
-                
-
-                    if (group.service_id == "1")
-                    {
-                        group.sub_service_name = "DOMESTIC";
-                    }
-                    else if (group.service_id == "2")
-                    {
-                        group.sub_service_name = "Hotels";
-                    }
-                    else if (group.service_id == "4")
-                    {
-                        group.sub_service_name = "Prepaid";
-                    }
-                    else
-                    {
-                        group.sub_service_name = group.service_name;
-                    }
-               
-                string[] userData = User.Identity.Name.Split('|');
-                var groups = await this.userManager.GetUserAllottedGroups(userData[1], userData[2], group.service_id, category, group.sub_service_name);
-                viewModel.service_id = group.service_id;
-                viewModel.allottedGoup = groups.FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.InnerException);
-            }           
-            return View(viewModel);
-        }
-
+        
         public async Task<ActionResult> GetAllottedGroup(string category,string sub_category)
         {
             group = new GroupModel();
@@ -135,6 +95,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(Servicegroup, JsonRequestBehavior.AllowGet);
         }
@@ -151,6 +112,7 @@ namespace ShineYatraAdmin.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(group.service_group_list, JsonRequestBehavior.AllowGet);
         }
@@ -172,6 +134,7 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return null;
         }
@@ -193,6 +156,7 @@ namespace ShineYatraAdmin.Controllers
             catch(Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             if (type.ToLower() == "custom")
             {
@@ -221,6 +185,7 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return Json(null);
         }

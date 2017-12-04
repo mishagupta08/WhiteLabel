@@ -18,7 +18,7 @@
             <div class="col-md-2">
                 @Html.DropDownListFor(m => m.HotelRequestDetail.RoomStayCandidateDetail.GuestDetails[i - 1].AdultCount, new SelectList(Model.AdultCountList, "Id", "Value"), new { @required = "0", id = "adultCountDropDown", @class = "form-control" })
             </div>
-            <label class="control-label col-md-1">Childers</label>
+            <label class="control-label col-md-1">Childern</label>
             <div class="col-md-2">
                 @Html.DropDownListFor(m => m.HotelRequestDetail.RoomStayCandidateDetail.GuestDetails[i - 1].ChildCount, new SelectList(Model.ChildCountList, "Id", "Value"), new { @required = "0", id = "childCountDropDown-"+i, @class = "form-control" })
             </div>

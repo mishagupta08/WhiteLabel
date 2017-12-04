@@ -48,6 +48,7 @@ namespace ShineYatraAdmin.Controllers
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.InnerException);
+                ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
             return RedirectToAction("Index", "Login");
         }
