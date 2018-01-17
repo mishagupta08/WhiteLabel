@@ -26,10 +26,10 @@
 </head>
 <body>
 
-    @if (Convert.ToString(System.Web.HttpContext.Current.Session["CompanyTheme"]).ToLower() == "elite")
+    @*@if (Convert.ToString(System.Web.HttpContext.Current.Session["CompanyTheme"]).ToLower() == "elite")
     {
         Html.RenderPartial("~/Views/Login/elite_login.cshtml", Model);
-    }
+    }*@
 
     @Html.Partial("~/Views/Shared/OTPpopup.cshtml")
     <!-- jQuery -->

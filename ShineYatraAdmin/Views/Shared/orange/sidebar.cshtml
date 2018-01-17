@@ -1,0 +1,140 @@
+﻿@using ShineYatraAdmin.Properties;
+<div class="container">
+    <div class="nav">
+        <ul class="slimmenu" id="slimmenu">
+            @*<li class="sidebar-search hidden-sm hidden-md hidden-lg">
+                    <!-- input-group -->
+                    <div class="input-group custom-search-form">
+                        <input class="form-control" placeholder="@Resources.Search" type="text"> <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
+                        </span>
+                    </div>
+                    <!-- /input-group -->
+                </li>*@
+            <li>
+                <a href="inbox.html"> @Resources.CommissionStructure</a>
+                <ul class="nav nav-second-level collapse">
+                    @*<li>
+                            <a href="javascript:void(0)" class="waves-effect">Allotted Commission Group&nbsp;<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level collapse">
+                                <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Flight">@Resources.FlightGroups</a> </li>
+                                <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Hotel">@Resources.HotelGroups</a> </li>
+                                <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Bus">@Resources.BUSGroups</a> </li>
+                                <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Recharge">@Resources.Recharge</a></li>
+                                <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Bill">@Resources.BillServices</a></li>
+                                <li> <a data-preloader="preloader" href="~/Group/AllottedGroup?category=Cab">@Resources.Cab</a></li>
+                            </ul>
+                        </li>*@
+
+                    <li>
+                        <a href="javascript:void(0)">Commission Groups&nbsp;</a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Flight">@Resources.FlightGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Hotel">@Resources.HotelGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Bus">@Resources.BUSGroups</a> </li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Recharge">@Resources.Recharge</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Bill">@Resources.BillServices</a></li>
+                            <li> <a data-preloader="preloader" href="~/Group/Index?category=Cab">@Resources.Cab</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="inbox.html">@Resources.Administration</a>
+                <ul class="nav nav-second-level collapse">
+                    @*<li><a data-preloader="preloader" href="@Url.Action("GetSelectedMenu", "Company", new { menu = Resources.ManageCompanies, isRefresh = false, isBack = false, sortColum = string.Empty, sortOrder = string.Empty })">@Resources.ManageCompany</a></li>*@
+                    <li><a data-preloader="preloader" href="@Url.Action("MemberUsers", "User")">Manage User</a></li>
+                    <li><a data-preloader="preloader" href="@Url.Action("FundRequest", "Fund")">Add Fund Request</a></li>
+                    @{
+                        string[] userData = User.Identity.Name.Split('|');
+                    }
+
+                    <li><a data-preloader="preloader" href="@Url.Action("MemberFundRequest", "Fund")">Pending Approvals</a></li>
+
+                    <li><a data-preloader="preloader" href="@Url.Action("RequestedFund", "Fund")">Fund Request</a></li>
+                    @if (userData != null && userData[6] == "3")
+                    {
+                        <li><a data-preloader="preloader" href="@Url.Action("pgpendingapprovals", "Fund")">PG Pending Approvals</a></li>
+                    }
+                </ul>
+            </li>
+
+            <li>
+                <a href="#">Travel</a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a data-preloader="preloader" href="@Url.Action("SearchFlight", "Flight")">@Resources.FlightBooking</a>
+                    </li>
+                    <li><a data-preloader="preloader" href="@Url.Action("GetHotelMenu", "Hotel", new { menu = Resources.HotelBooking })">Hotels Search</a></li>
+                    <li> <a href="contact-detail.html">Bus Booking</a></li>
+                    <li>
+                        <a href="javascript:void(0)">Reports</a>
+                        <ul class="nav nav-third-level collapse">
+                            <li>
+                                <a data-preloader="preloader" href="@Url.Action("MyFlightBookings", "Flight")">My Flight Bookings</a>
+                            </li>
+                            <li> <a data-preloader="preloader" href="@Url.Action("GetTransactionListView", "Hotel")">Hotel Booking</a> </li>
+                            <li> <a href="javascript:void(0)">Bus Booking</a> </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="forms.html">Recharge</a>
+                <ul class="nav nav-second-level collapse">
+                    <li> <a href="@Url.Action("Index", "Recharge",new {type="Prepaid"})">Prepaid</a></li>
+                    <li> <a href="@Url.Action("Index", "Recharge",new {type="Postpaid"})">PostPaid</a></li>
+                    <li> <a href="@Url.Action("Index", "Recharge",new {type="DTH"})">DTH</a></li>
+                    <li>
+                        <a href="javascript:void(0)">Reports</a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a href="javascript:void(0)">Recharge Details</a> </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="tables.html">Bill Payments</a>
+                <ul class="nav nav-second-level collapse">
+                    <li> <a href="@Url.Action("Electricity", "BillService")">Electricity</a></li>
+                    <li> <a href="@Url.Action("Landline", "BillService")">LandLine</a></li>
+                    <li> <a href="@Url.Action("Insurance", "BillService")">Insurance Premium</a></li>
+                    <li> <a href="@Url.Action("CreditCard", "BillService")">Credit Card</a></li>
+                    <li> <a href="@Url.Action("Gas", "BillService")">GAS</a></li>
+                    <li> <a href="@Url.Action("Internet", "BillService")">Internet ISP</a></li>
+                    <li>
+                        <a href="javascript:void(0)">Reports</a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a href="javascript:void(0)">Bill Payment Details</a> </li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+            </li>
+            <li>
+                <a href="#">Reports</a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="@Url.Action("Ledger", "Report")">Ledger Report</a></li>
+                    <li><a href="blank.html">Report-2</a></li>
+                    <li>
+                        <a href="javascript:void(0)">Report Section-1</a>
+                        <ul class="nav nav-third-level collapse">
+                            <li> <a href="" class="active">Report-1</a></li>
+                            <li> <a href="" class="active">Report-2</a></li>
+                            <li> <a href="" class="active">Report-3</a></li>
+                            <li> <a href="" class="active">Report-4</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h5 style="margin-top: 20px;margin-left: 14px;">
+                    <i data-icon="" class="linea-icon linea-basic fa-fw"></i>
+                    <span id="usercurrentbalance" style="color:RED">Current Balance   :@Convert.ToString(Session["WalletBalance"])</span>
+                </h5>
+            </li>
+        </ul>
+    </div>
+</div>

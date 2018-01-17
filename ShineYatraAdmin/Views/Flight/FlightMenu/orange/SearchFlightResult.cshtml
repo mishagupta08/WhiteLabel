@@ -1,0 +1,582 @@
+﻿@using System.Globalization
+@model ShineYatraAdmin.Entity.SearchPageViewModel
+@using ShineYatraAdmin.Properties
+
+@{
+    ViewBag.Title = "SearchFlightResult";
+    Layout = "~/Views/Shared/orange/Layout.cshtml";
+    int i = 0, count = 0;
+    var query = string.Empty;
+}
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+
+    .dataTables_filter, .dataTables_info {
+        display: none;
+    }
+
+    .ui-datepicker .ui-datepicker-header {
+        background-color: white;
+        border: 0px;
+    }
+
+    .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+        background-color: #ed8323 !important;
+        color: white !important;
+    }
+
+    .ui-autocomplete {
+        z-index: 100;
+    }
+
+    .tab {
+        display: inline-block;
+        padding: 8px;
+        background-color: rgba(0,0,0,0.06);
+        color: #ed8323;
+    }
+
+    .active-tab {
+        background-color: #ed8323;
+        color: white;
+    }
+
+    .form-group.form-group-lg {
+        margin-bottom: 8px;
+    }
+
+    .ui-menu {
+        background-color: #ed8323;
+        width: 335.2px !important;
+        color: white;
+    }
+
+    .mt50 {
+        margin-top: 10px !important;
+    }
+</style>
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+
+<div class="container">
+   
+    @{
+        var recordCount = Model.arrayOfSearchedFlights.Origindestinationoption == null ? "0" : Model.arrayOfSearchedFlights.Origindestinationoption.Count().ToString();
+        var child = string.Empty;
+        if (Model.flightSearch.ChildPax > 0)
+        {
+            child += " ," + @Model.flightSearch.AdultPax + " Child ";
+        }
+        if (Model.flightSearch.InfantPax > 0)
+        {
+            child += " ,and " + @Model.flightSearch.InfantPax + " Infant";
+        }
+
+        query = recordCount + " Flights from " + @Model.flightSearch.Origin + " to " + @Model.flightSearch.Destination + " on " + @Model.flightSearch.DepartDate + " for " + @Model.flightSearch.AdultPax + " adult " + child;
+    }
+    <h3 class="booking-title">@query <small><a class="popup-text" href="#search-dialog" data-effect="mfp-zoom-out">Change search</a></small></h3>
+    <div class="row">
+        <div class="col-md-3">
+            <form class="booking-item-dates-change mb30" action="SearchFlight" method="post" id="search-dialog" @*onsubmit="return SubmitFlightSearch();"*@>
+                <div class="form-group form-group-icon-left">
+                    <div class="tab active-tab" data-value="ONE" name="tripmode">One Way</div><div class="tab" name="tripmode" data-value="ROUND">Round Trip</div>
+                    @Html.HiddenFor(m => m.flightSearch.Mode, new { @id = "Mode" })
+                </div>
+                <div class="form-group form-group-icon-left">
+                    <label class="control-label">Flight Category</label>
+                    <div class="radio-list">
+                        <label style="display:inline-block;">
+                            @Html.RadioButtonFor(model => model.flightSearch.FlightType, (Resources.Domestic), new { @style = "display:inline-block;", @checked = "checked" })
+                            @Html.Label(Resources.Domestic, new { @style = "display:inline-block;" })
+                        </label>
+                        <label style="display:inline-block;margin-left: 10%;margin-top: 9px;">
+                            @Html.RadioButtonFor(model => model.flightSearch.FlightType, Resources.International, new { @style = "display:inline-block;" })
+                            @Html.Label(Resources.International, new { @style = "display:inline-block;" })
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group form-group-icon-left">
+                    <i class="fa fa-map-marker input-icon"></i>
+                    <label>Class</label>
+                    @Html.DropDownListFor(m => m.flightSearch.Preferredclass, new SelectList(Model.flightSearch.FlightClass, "Id", "Value"), new { @required = "0", id = "flightClass", @class = "form-control" })
+                </div>
+                <div class="form-group form-group-icon-left">
+                    <i class="fa fa-map-marker input-icon input-icon-hightlight"></i>
+                    <label>From</label>
+                    @Html.TextBoxFor(m => m.flightSearch.Origin, new { @required = "", @id = "flightOrigin", @class = "form-control", @placeholder = Resources.Origin })
+                </div>
+                <div class="form-group form-group-icon-left">
+                    <i class="fa fa-map-marker input-icon input-icon-hightlight"></i>
+                    <label>To</label>
+                    @Html.TextBoxFor(m => m.flightSearch.Destination, new { @required = "", @id = "flightDestination", @class = "form-control", @placeholder = Resources.Destination })
+                </div>
+                <div class="form-group form-group-icon-left">
+                    <i class="fa fa-calendar input-icon input-icon-hightlight"></i>
+                    <label>Departing</label>
+                    @Html.TextBoxFor(m => m.flightSearch.DepartDate, new { @id = "dateinput", @required = "", @class = "datepicker form-control", @placeholder = "dd-mmm-yyyy" })
+                </div>
+                <div class="form-group form-group-icon-left"  id="ReturnDateField" style="display:none;">
+                    <i class="fa fa-calendar input-icon input-icon-hightlight"></i>
+                    <label>Returning</label>
+                    @Html.TextBoxFor(m => m.flightSearch.ReturnDate, new { @id = "returnDate", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
+                </div>
+                <div class="form-group form-group-select-plus">
+                    <label>Adult 12+ yrs</label>
+                    @Html.TextBoxFor(m => m.flightSearch.AdultPax, new { @type = "number", @id = "adult", @required = "", @class = "form-control", @min = "1", @Value = "1" })
+
+                    <label>Child 2-11 yrs</label>
+                    @Html.TextBoxFor(m => m.flightSearch.ChildPax, new { @type = "number", @id = "ChildPax", @class = "form-control", @min = "0" })
+
+                    <label>Infant 0-2 yrs</label>
+                    @Html.TextBoxFor(m => m.flightSearch.InfantPax, new { @type = "number", @id = "infant", @class = "form-control", @min = "0" })
+                </div>
+                <input class="btn btn-primary" type="submit" value="Upadte Search" />
+            </form>
+            <aside class="booking-filters text-white">
+                <h3>Filter By:</h3>
+                <ul class="list booking-filters-list">
+                    <li>
+                        <h5 class="booking-filters-title">Stops <small>Price from</small></h5>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Non-stop<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 215</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />1 Stop<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 154</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />2+ Stops<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 197</span>
+                            </label>
+                        </div>
+                    </li>
+                    <li>
+                        <h5 class="booking-filters-title">Price </h5>
+                        <input type="text" id="price-slider">
+                    </li>
+                    <li>
+                        <h5 class="booking-filters-title">Flight Class <small>Price from</small></h5>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Economy<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 154</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Business<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 316</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />First<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 450</span>
+                            </label>
+                        </div>
+                    </li>
+                    <li>
+                        <h5 class="booking-filters-title">Airlines <small>Price from</small></h5>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Lufthansa<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 215</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />American Airlines<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 350</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Airfrance<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 154</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Croatia Airlines<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 197</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Delta<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 264</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Air Canada<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 445</span>
+                            </label>
+                        </div>
+                    </li>
+                    <li>
+                        <h5 class="booking-filters-title">Departure Time</h5>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Morning (5:00a - 11:59a)
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Afternoon (12:00p - 5:59p)
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="i-check" type="checkbox" />Evening (6:00p - 11:59p)
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="col-md-9">
+            <div class="nav-drop booking-sort">
+                <h5 class="booking-sort-title"><a href="#">Sort: Sort: Price (low to high)<i class="fa fa-angle-down"></i><i class="fa fa-angle-up"></i></a></h5>
+                <ul class="nav-drop-menu">
+                    <li>
+                        <a href="#">Price (high to low)</a>
+                    </li>
+                    <li>
+                        <a href="#">Duration</a>
+                    </li>
+                    <li>
+                        <a href="#">Stops</a>
+                    </li>
+                    <li>
+                        <a href="#">Arrival</a>
+                    </li>
+                    <li>
+                        <a href="#">Departure</a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="booking-list">
+
+
+                <!----------------------------------- -->
+
+                <li>
+                    <div class="booking-item-container">
+                        <div class="booking-item">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="booking-item-airline-logo">
+                                        <img src="img/croatia.jpg" alt="Image Alternative text" title="Image Title" />
+                                        <p>Croatia Airlines</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="booking-item-flight-details">
+                                        <div class="booking-item-departure">
+                                            <i class="fa fa-plane"></i>
+                                            <h5>10:25 PM</h5>
+                                            <p class="booking-item-date">Sun, Mar 22</p>
+                                            <p class="booking-item-destination">Jaipur, Rajasthan, India (INR)</p>
+                                        </div>
+                                        <div class="booking-item-arrival">
+                                            <i class="fa fa-plane fa-flip-vertical"></i>
+                                            <h5>12:25 PM</h5>
+                                            <p class="booking-item-date">Sat, Mar 23</p>
+                                            <p class="booking-item-destination">Delhi, Rajasthan, India (INR)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>22h 50m</h5>
+                                    <p>1 stop</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="booking-item-price"> <i class="fa fa-inr" aria-hidden="true"></i> 571</span><span>/person</span>
+                                    <p class="booking-item-flight-class">Class: First</p><a class="btn btn-primary" href="flight-payment.asp">Select</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="booking-item-details">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p>Flight Details</p>
+                                    <h5 class="list-title">Jaipur, Rajasthan, India (INR)</h5>
+                                    <ul class="list">
+                                        <li>US Airways 731</li>
+                                        <li>Economy / Coach Class ( M), AIRBUS INDUSTRIE A330-300</li>
+                                        <li>Depart 09:55 Arrive 15:10</li>
+                                        <li>Duration: 9h 15m</li>
+                                    </ul>
+                                    <h5>Stopover: Charlotte (CLT) 7h 1m</h5>
+                                    <h5 class="list-title">Delhi, Rajasthan, India (INR)</h5>
+                                    <ul class="list">
+                                        <li>US Airways 1873</li>
+                                        <li>Economy / Coach Class ( M), Airbus A321</li>
+                                        <li>Depart 22:11 Arrive 23:53</li>
+                                        <li>Duration: 1h 42m</li>
+                                    </ul>
+                                    <p>Total trip time: 17h 58m</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <!----------------------------------- -->
+                <!----------------------------------- -->
+
+                <li>
+                    <div class="booking-item-container">
+                        <div class="booking-item">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="booking-item-airline-logo">
+                                        <img src="img/croatia.jpg" alt="Image Alternative text" title="Image Title" />
+                                        <p>Croatia Airlines</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="booking-item-flight-details">
+                                        <div class="booking-item-departure">
+                                            <i class="fa fa-plane"></i>
+                                            <h5>10:25 PM</h5>
+                                            <p class="booking-item-date">Sun, Mar 22</p>
+                                            <p class="booking-item-destination">Jaipur, Rajasthan, India (INR)</p>
+                                        </div>
+                                        <div class="booking-item-arrival">
+                                            <i class="fa fa-plane fa-flip-vertical"></i>
+                                            <h5>12:25 PM</h5>
+                                            <p class="booking-item-date">Sat, Mar 23</p>
+                                            <p class="booking-item-destination">Delhi, Rajasthan, India (INR)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>22h 50m</h5>
+                                    <p>1 stop</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="booking-item-price"> <i class="fa fa-inr" aria-hidden="true"></i> 571</span><span>/person</span>
+                                    <p class="booking-item-flight-class">Class: First</p><a class="btn btn-primary" href="flight-payment.asp">Select</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="booking-item-details">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p>Flight Details</p>
+                                    <h5 class="list-title">Jaipur, Rajasthan, India (INR)</h5>
+                                    <ul class="list">
+                                        <li>US Airways 731</li>
+                                        <li>Economy / Coach Class ( M), AIRBUS INDUSTRIE A330-300</li>
+                                        <li>Depart 09:55 Arrive 15:10</li>
+                                        <li>Duration: 9h 15m</li>
+                                    </ul>
+                                    <h5>Stopover: Charlotte (CLT) 7h 1m</h5>
+                                    <h5 class="list-title">Delhi, Rajasthan, India (INR)</h5>
+                                    <ul class="list">
+                                        <li>US Airways 1873</li>
+                                        <li>Economy / Coach Class ( M), Airbus A321</li>
+                                        <li>Depart 22:11 Arrive 23:53</li>
+                                        <li>Duration: 1h 42m</li>
+                                    </ul>
+                                    <p>Total trip time: 17h 58m</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <!----------------------------------- -->
+                <!----------------------------------- -->
+
+                <li>
+                    <div class="booking-item-container">
+                        <div class="booking-item">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="booking-item-airline-logo">
+                                        <img src="img/croatia.jpg" alt="Image Alternative text" title="Image Title" />
+                                        <p>Croatia Airlines</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="booking-item-flight-details">
+                                        <div class="booking-item-departure">
+                                            <i class="fa fa-plane"></i>
+                                            <h5>10:25 PM</h5>
+                                            <p class="booking-item-date">Sun, Mar 22</p>
+                                            <p class="booking-item-destination">Jaipur, Rajasthan, India (INR)</p>
+                                        </div>
+                                        <div class="booking-item-arrival">
+                                            <i class="fa fa-plane fa-flip-vertical"></i>
+                                            <h5>12:25 PM</h5>
+                                            <p class="booking-item-date">Sat, Mar 23</p>
+                                            <p class="booking-item-destination">Delhi, Rajasthan, India (INR)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>22h 50m</h5>
+                                    <p>1 stop</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="booking-item-price"> <i class="fa fa-inr" aria-hidden="true"></i> 571</span><span>/person</span>
+                                    <p class="booking-item-flight-class">Class: First</p><a class="btn btn-primary" href="flight-payment.asp">Select</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="booking-item-details">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p>Flight Details</p>
+                                    <h5 class="list-title">Jaipur, Rajasthan, India (INR)</h5>
+                                    <ul class="list">
+                                        <li>US Airways 731</li>
+                                        <li>Economy / Coach Class ( M), AIRBUS INDUSTRIE A330-300</li>
+                                        <li>Depart 09:55 Arrive 15:10</li>
+                                        <li>Duration: 9h 15m</li>
+                                    </ul>
+                                    <h5>Stopover: Charlotte (CLT) 7h 1m</h5>
+                                    <h5 class="list-title">Delhi, Rajasthan, India (INR)</h5>
+                                    <ul class="list">
+                                        <li>US Airways 1873</li>
+                                        <li>Economy / Coach Class ( M), Airbus A321</li>
+                                        <li>Depart 22:11 Arrive 23:53</li>
+                                        <li>Duration: 1h 42m</li>
+                                    </ul>
+                                    <p>Total trip time: 17h 58m</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <!----------------------------------- -->
+
+            </ul>
+            <p class="text-right">
+                Not what you're looking for? <a class="popup-text" href="#search-dialog" data-effect="mfp-zoom-out">Try your search again</a>
+            </p>
+        </div>
+    </div>
+    <div class="gap"></div>
+</div>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/flight.js"></script>
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+        jq("#priceRange").slider({
+            range: true,
+            step: 1,
+            values: [minvalue, maxvalue],
+            min: minvalue,
+            max: maxvalue
+        });
+
+        jq("#minprice").html(jq("#priceRange").slider("values", 0));
+        jq("#maxprice").html(jq("#priceRange").slider("values", 1));
+
+        jq("#priceRange").on("slide", function (event, ui) {
+            jq("#minprice").html(ui.values[0]);
+            jq("#maxprice").html(ui.values[1]);
+        });
+
+        jq("#priceRange").on("slidestop", function (event, ui) {
+            oTable.draw();
+        });
+
+        jq("#Mode").val("ONE");
+        jq("div[name=tripmode]").bind("click", function () {
+            jq("div[name=tripmode]").removeClass("active-tab");
+            jq("div[name=tripmode]").addClass("tab");
+            jq(this).addClass("active-tab");
+            var selectedMode = jq(this).attr("data-value");
+            jq("#Mode").val(selectedMode);
+            displayReturn(selectedMode);
+        });
+        jq("#dateinput").focusout(function () {
+            jq("#DepartDate").val(this.value);
+        });
+
+        jq("#returnDate").focusout(function () {
+            jq("#ReturnDate").val(this.value);
+        });
+        // Date Picker
+        jq('#dateinput').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy",
+            minDate: 0
+        });
+
+        jq('#returnDate').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy",
+            minDate: 0
+        });
+
+        var taskIdValue = $("#boardTaskId").val();
+
+        jq('#flightOrigin').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "AssessorNameSearch",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.Id + " (" + item.Value + ")",
+                                value: item.Id
+                            }
+                        }));
+                    },
+                    fail: function (error) {
+                        alert(erorr);
+                    }
+                });
+            }
+        });
+
+        jq('#flightDestination').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "AssessorNameSearch",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.Id + " (" + item.Value + ")",
+                                value: item.Id
+                            }
+                        }));
+                    },
+                    fail: function (error) {
+                        alert(erorr);
+                    }
+                });
+            }
+        });
+    });
+
+    function displayReturn(type) {
+        if (type == "ONE") {
+            $("#ReturnDateField").hide();
+            $("#returnDate").prop('required', false);
+        }
+        else {
+            $("#ReturnDateField").show();
+            $("#returnDate").prop('required', true);
+        }
+    }
+</script>

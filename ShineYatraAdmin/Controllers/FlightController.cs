@@ -27,8 +27,8 @@ namespace ShineYatraAdmin.Controllers
         private ServiceManager _serviceManager;
         private PgManager _pgManager;
         private UserManager _userManager;
-        
-                
+
+
         /// <summary>
         /// method to get flight search page
         /// </summary>        
@@ -45,7 +45,11 @@ namespace ShineYatraAdmin.Controllers
             {
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
-            return View("FlightMenu//SearchFlight", flightSearchModel);
+
+            var viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlight";
+            return View(viewFolder, flightSearchModel);
+
+            //return View("FlightMenu//SearchFlight", flightSearchModel);
         }
 
         /// <summary>
@@ -62,7 +66,7 @@ namespace ShineYatraAdmin.Controllers
             var userData = User.Identity.Name.Split('|');
             try
             {
-                searchPageViewModel.flightSearch = flightDetail;                
+                searchPageViewModel.flightSearch = flightDetail;
                 searchPageViewModel.arrayOfSearchedFlights = await _flightManager.SearchFlight(flightDetail);
 
                 var serviceCgDetailsRequest = new AllotedServiceCGsDetailsRequest
@@ -82,8 +86,7 @@ namespace ShineYatraAdmin.Controllers
                 {
                     Origindestinationoption = new List<Origindestinationoption>()
                 };
-
-
+                
                 foreach (var flight in searchPageViewModel.arrayOfSearchedFlights.Origindestinationoption)
                 {
                     var subServiceId = flight.FlightsDetailList.FlightsDetail.First().SubServiceId;
@@ -99,7 +102,7 @@ namespace ShineYatraAdmin.Controllers
                         else
                         {
                             discount = flightdiscount.front_discount_amount;
-                        }                        
+                        }
                         flight.FareDetail.ChargeableFares.ActualBaseFare -= discount;
                         flight.FareDetail.frontdiscount = discount;
                         if (flightdiscount.back_discount_per > 0)
@@ -120,7 +123,10 @@ namespace ShineYatraAdmin.Controllers
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
 
-            return View("FlightMenu//SearchFlightResult", searchPageViewModel);
+            searchPageViewModel.flightSearch.AssignFlightClass();
+            searchPageViewModel.flightSearch.AssignTripMode();
+            var viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlightResult";
+            return View(viewFolder, searchPageViewModel);
         }
 
         /// <summary>
@@ -185,7 +191,8 @@ namespace ShineYatraAdmin.Controllers
 
                 searchPageViewModel.flightfaredetails.FareDetail.backdiscount = searchPageViewModel.flightSearch.backdiscount;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.InnerException);
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
@@ -206,15 +213,15 @@ namespace ShineYatraAdmin.Controllers
             _pgManager = new PgManager();
             var txnId = string.Empty;
             var info = string.Empty;
-            var walletBalance = 0.0;            
+            var walletBalance = 0.0;
             var bookResponse = new Bookingresponse();
             try
             {
                 var userData = User.Identity.Name.Split('|');
                 var request = bookingDetail.FlightBookingDetail;
                 request.Creditcardno = "4111111111111111";
-                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper()=="Y" && userData[6] != "3"; 
-                
+                var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
+
                 try
                 {
                     var balrequest = new WalletRequest
@@ -243,14 +250,14 @@ namespace ShineYatraAdmin.Controllers
                 bool pgflag = false;
                 if (isPaymentGatewayactive && request.PaymentMode == "bank")
                 {
-                    double pgamount = 0;                    
+                    double pgamount = 0;
 
                     if (request.PartialPaymentWithWallet)
                     {
                         if (walletBalance < request.AdultFare)
                         {
                             pgamount = request.AdultFare - walletBalance;
-                            pgflag = true;                            
+                            pgflag = true;
                         }
                         else
                         {
@@ -259,7 +266,7 @@ namespace ShineYatraAdmin.Controllers
                         }
                     }
                     else
-                    {                        
+                    {
                         pgamount = request.AdultFare;
                         pgflag = true;
                     }
@@ -304,12 +311,12 @@ namespace ShineYatraAdmin.Controllers
                         else
                         {
                             TempData["ErrorCode"] = 5001;
-                            bookResponse.Status = balanceTxnId;                            
+                            bookResponse.Status = balanceTxnId;
                             TempData["BookingResponse"] = bookResponse;
                         }
                     }
                 }
-              
+
                 if (!pgflag)
                 {
                     if (request.AdultFare <= walletBalance)
@@ -334,7 +341,7 @@ namespace ShineYatraAdmin.Controllers
                             else
                             {
                                 bookResponse.Status = "Failed";
-                                TempData["ErrorCode"] = 5002;                                
+                                TempData["ErrorCode"] = 5002;
                             }
                         }
                     }
@@ -452,7 +459,7 @@ namespace ShineYatraAdmin.Controllers
         {
             BookingDetail eticket = null;
             _serviceManager = new ServiceManager();
-            
+
             try
             {
                 var bookResponse = (Bookingresponse)TempData["BookingResponse"];
@@ -464,7 +471,7 @@ namespace ShineYatraAdmin.Controllers
                     if (bookResponse.Status.ToLower() == "success")
                     {
                         ViewBag.status = "Ticket Booked Successfully";
-                        
+
                         var myCookie = Request.Cookies["Cookie-" + info];
                         if (myCookie != null)
                         {
@@ -591,7 +598,7 @@ namespace ShineYatraAdmin.Controllers
                         first_name = passenger.givenName,
                         last_name = passenger.surName,
                         title = passenger.nameReference,
-                        age = passenger.age                       
+                        age = passenger.age
                     });
                 }
 
@@ -600,7 +607,7 @@ namespace ShineYatraAdmin.Controllers
                 {
                     Expires = DateTime.Now.AddYears(1)
                 };
-                HttpContext.Response.Cookies.Add(cookie);                
+                HttpContext.Response.Cookies.Add(cookie);
                 return guidString;
             }
             catch (Exception ex)
@@ -636,7 +643,7 @@ namespace ShineYatraAdmin.Controllers
         }
 
         public ActionResult MyFlightBookings()
-        {           
+        {
             return View("Report/MyFlightBookings");
         }
 
@@ -646,7 +653,7 @@ namespace ShineYatraAdmin.Controllers
             List<BookingDetail> bookingDetails = null;
             try
             {
-                string[] userData = User.Identity.Name.Split('|');                
+                string[] userData = User.Identity.Name.Split('|');
                 var request = new FlightBookingListRequest
                 {
                     member_id = userData[1],
@@ -654,8 +661,8 @@ namespace ShineYatraAdmin.Controllers
                     action = "GET_FLIGHT_TRANSACTIONS_SUMMARY",
                     To_date = frm.GetValue("toDate").AttemptedValue,
                     From_date = frm.GetValue("fromDate").AttemptedValue,
-                    Flight_type = frm.GetValue("flighttype")!=null? frm.GetValue("flighttype").AttemptedValue : "",
-                    Booking_Status = frm.GetValue("bookStatus") != null? frm.GetValue("bookStatus").AttemptedValue : ""
+                    Flight_type = frm.GetValue("flighttype") != null ? frm.GetValue("flighttype").AttemptedValue : "",
+                    Booking_Status = frm.GetValue("bookStatus") != null ? frm.GetValue("bookStatus").AttemptedValue : ""
                 };
 
                 bookingDetails = await _flightManager.GetMemberFlightList(request);
@@ -667,7 +674,7 @@ namespace ShineYatraAdmin.Controllers
             }
             return PartialView("Report/FilghtList", bookingDetails);
         }
-        
+
         /// <summary>
         /// Method to cancel flight booking detail
         /// </summary>

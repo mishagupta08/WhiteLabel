@@ -34,7 +34,10 @@ namespace ShineYatraAdmin.Controllers
             {
                 Console.WriteLine(ex.InnerException);
             }
-            return View();
+
+            var viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//Index";
+            return View(viewFolder);
+            //return View();
         }
         
         /// <summary>

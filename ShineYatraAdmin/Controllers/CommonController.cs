@@ -70,8 +70,9 @@ namespace ShineYatraAdmin.Controllers
                         if (String.IsNullOrEmpty(
                             Convert.ToString(System.Web.HttpContext.Current.Session["CompanyTheme"])))
                         {
-                            System.Web.HttpContext.Current.Session["CompanyTheme"] = "elite";
-                        }
+                        //System.Web.HttpContext.Current.Session["CompanyTheme"] = "elite";
+                        System.Web.HttpContext.Current.Session["CompanyTheme"] = "orange";
+                    }
                         System.Web.HttpContext.Current.Session["web_pg_api_enabled"] = setting.web_pg_api_enabled;
                         System.Web.HttpContext.Current.Session["otp_login_enabled"] = setting.otp_login_enabled;
                         System.Web.HttpContext.Current.Session["otp_service_enabled"] = setting.otp_login_service;

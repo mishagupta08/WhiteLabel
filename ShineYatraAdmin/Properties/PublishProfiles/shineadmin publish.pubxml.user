@@ -88,16 +88,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/28/2017 10:56:54</publishTime>
     </File>
     <File Include="bin/ShineYatraAdmin.Business.dll">
-      <publishTime>11/09/2017 23:33:09</publishTime>
+      <publishTime>01/16/2018 18:51:13</publishTime>
     </File>
     <File Include="bin/ShineYatraAdmin.dll">
-      <publishTime>11/10/2017 12:57:26</publishTime>
+      <publishTime>01/16/2018 22:46:53</publishTime>
     </File>
     <File Include="bin/ShineYatraAdmin.Entity.dll">
-      <publishTime>11/09/2017 23:33:09</publishTime>
+      <publishTime>01/16/2018 18:51:12</publishTime>
     </File>
     <File Include="bin/ShineYatraAdmin.Repository.exe">
-      <publishTime>11/09/2017 23:33:09</publishTime>
+      <publishTime>01/16/2018 18:51:12</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>10/28/2017 10:56:49</publishTime>
@@ -156,8 +156,14 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bootstrap/dist/js/tether.min.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
+    <File Include="css/AjaxLoader.html">
+      <publishTime>12/01/2017 13:10:34</publishTime>
+    </File>
     <File Include="css/animate.css">
       <publishTime>10/28/2017 10:56:49</publishTime>
+    </File>
+    <File Include="css/bootstrap.css">
+      <publishTime>03/02/2014 22:57:26</publishTime>
     </File>
     <File Include="css/colors/blue.css">
       <publishTime>10/28/2017 10:56:49</publishTime>
@@ -168,14 +174,104 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="css/colors/megna.css">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
+    <File Include="css/font-awesome.css">
+      <publishTime>07/23/2014 00:23:14</publishTime>
+    </File>
+    <File Include="css/icomoon.css">
+      <publishTime>05/04/2014 22:57:28</publishTime>
+    </File>
+    <File Include="css/mystyles.css">
+      <publishTime>07/23/2014 00:26:38</publishTime>
+    </File>
     <File Include="css/my_custom.css">
       <publishTime>10/28/2017 10:56:49</publishTime>
+    </File>
+    <File Include="css/schemes/brick-red.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/bright-turquoise.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/cerise.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/de-york.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/denim.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/green-smoke.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/hippie-blue.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/horizon.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/leather.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/mandy.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/salem.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/scarlet.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/shamrock.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/studio.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
+    </File>
+    <File Include="css/schemes/turkish-rose.css">
+      <publishTime>08/12/2014 07:42:20</publishTime>
     </File>
     <File Include="css/spinners.css">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
     <File Include="css/style.css">
-      <publishTime>10/28/2017 10:56:49</publishTime>
+      <publishTime>01/11/2018 20:25:55</publishTime>
+    </File>
+    <File Include="css/styles.css">
+      <publishTime>01/16/2018 14:52:45</publishTime>
+    </File>
+    <File Include="css/switcher.css">
+      <publishTime>08/05/2014 06:04:14</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfontba72.eot">
+      <publishTime>07/23/2014 00:21:14</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfontba72.svg">
+      <publishTime>07/23/2014 00:21:14</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfontba72.ttf">
+      <publishTime>07/23/2014 00:21:14</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfontba72.woff">
+      <publishTime>07/23/2014 00:21:14</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfontd41d.eot">
+      <publishTime>07/23/2014 00:21:14</publishTime>
+    </File>
+    <File Include="fonts/icomoonba72.eot">
+      <publishTime>05/04/2014 22:57:40</publishTime>
+    </File>
+    <File Include="fonts/icomoonba72.svg">
+      <publishTime>05/04/2014 22:57:40</publishTime>
+    </File>
+    <File Include="fonts/icomoonba72.ttf">
+      <publishTime>05/04/2014 22:57:40</publishTime>
+    </File>
+    <File Include="fonts/icomoonba72.woff">
+      <publishTime>05/04/2014 22:57:40</publishTime>
+    </File>
+    <File Include="fonts/icomoond41d.eot">
+      <publishTime>05/04/2014 22:57:40</publishTime>
     </File>
     <File Include="Global.asax">
       <publishTime>10/28/2017 10:56:49</publishTime>
@@ -198,11 +294,701 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="images/wheel.gif">
       <publishTime>09/08/2017 11:09:31</publishTime>
     </File>
+    <File Include="img/196_365_1200x500.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/196_365_2048x1365.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/196_365_800x600.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/4_strokes_of_fun_100x100.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/4_strokes_of_fun_300x300.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/4_strokes_of_fun_50x50.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/4_strokes_of_fun_70x70.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/4_strokes_of_fun_800x600.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/afro_300x300.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/afro_50x50.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/afro_70x70.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/aircanada.jpg">
+      <publishTime>03/28/2014 01:12:26</publishTime>
+    </File>
+    <File Include="img/airfrance.jpg">
+      <publishTime>03/28/2014 01:07:58</publishTime>
+    </File>
+    <File Include="img/amaze_300x300.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/amaze_40x40.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/amaze_70x70.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/amaze_800x600.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/american-airlines.jpg">
+      <publishTime>03/28/2014 01:05:42</publishTime>
+    </File>
+    <File Include="img/ana_29_50x50.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/andrea_300x300.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/Audi-S8.png">
+      <publishTime>08/05/2014 06:50:50</publishTime>
+    </File>
+    <File Include="img/a_dreamy_jump_100x100.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/a_dreamy_jump_300x300.jpg">
+      <publishTime>08/05/2014 06:45:54</publishTime>
+    </File>
+    <File Include="img/a_dreamy_jump_800x600.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/a_turn_300x300.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/backgrounds/beach.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/bike.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/bridge.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/cameras.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/flowers.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/keyboard.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/nature.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/phone.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/road.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/street.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/taxi.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/backgrounds/wood.jpg">
+      <publishTime>07/05/2014 09:35:32</publishTime>
+    </File>
+    <File Include="img/bekohlicious_300x300.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/bekohlicious_flower_300x300.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/BMW-X6-facelift.png">
+      <publishTime>07/17/2014 08:00:40</publishTime>
+    </File>
+    <File Include="img/branding__ipad_interactive_design_800x600.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/bridge_1280x848.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/bridge_300x300.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/bridge_800x600.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/bubbles_300x300.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/bubbles_70x70.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/bubbles_800x600.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/b_and_w_camera_100x100.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/b_and_w_camera_300x300.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/cascada_300x300.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/Chevrolet-Camaro.png">
+      <publishTime>08/05/2014 06:50:36</publishTime>
+    </File>
+    <File Include="img/chiara_300x300.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/chiara_50x50.jpg">
+      <publishTime>08/05/2014 06:45:56</publishTime>
+    </File>
+    <File Include="img/chiara_70x70.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/croatia.jpg">
+      <publishTime>03/28/2014 01:09:08</publishTime>
+    </File>
+    <File Include="img/cup_on_red_300x300.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/cup_on_red_70x70.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/delta.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/department_of_theatre_arts_800x600.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/drifting_days_300x300.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/el_inevitable_paso_del_tiempo_2048x2048.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/el_inevitable_paso_del_tiempo_300x300.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/el_inevitable_paso_del_tiempo_800x600.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/end_of_the_day_300x300.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/flags/32/de.png">
+      <publishTime>03/10/2014 01:23:34</publishTime>
+    </File>
+    <File Include="img/flags/32/fr.png">
+      <publishTime>03/10/2014 01:23:34</publishTime>
+    </File>
+    <File Include="img/flags/32/gr.png">
+      <publishTime>03/10/2014 01:23:34</publishTime>
+    </File>
+    <File Include="img/flags/32/hu.png">
+      <publishTime>03/10/2014 01:23:34</publishTime>
+    </File>
+    <File Include="img/flags/32/it.png">
+      <publishTime>12/01/2017 18:53:14</publishTime>
+    </File>
+    <File Include="img/flags/32/jp.png">
+      <publishTime>03/10/2014 01:23:34</publishTime>
+    </File>
+    <File Include="img/flags/32/kr.png">
+      <publishTime>03/10/2014 01:23:34</publishTime>
+    </File>
+    <File Include="img/flags/32/ru.png">
+      <publishTime>03/10/2014 01:23:36</publishTime>
+    </File>
+    <File Include="img/flags/32/uk.png">
+      <publishTime>03/10/2014 01:23:36</publishTime>
+    </File>
+    <File Include="img/flags/32/us.png">
+      <publishTime>03/10/2014 01:23:36</publishTime>
+    </File>
+    <File Include="img/flare_lens_flare_300x300.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/flare_lens_flare_50x50.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/fly_away_800x600.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/food_is_pride_800x600.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/foots_and_grass_300x300.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/gamer_chick_300x300.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/gamer_chick_50x50.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/gamer_chick_70x70.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/gaviota_en_el_top_300x300.jpg">
+      <publishTime>08/05/2014 06:45:58</publishTime>
+    </File>
+    <File Include="img/gaviota_en_el_top_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/going_out_tonight_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/good_job_100x100.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/good_job_50x50.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/good_job_70x70.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/grabbing.png">
+      <publishTime>05/10/2014 21:26:46</publishTime>
+    </File>
+    <File Include="img/happy_bokeh_day_100x100.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/Honda-Civic.png">
+      <publishTime>08/05/2014 06:50:38</publishTime>
+    </File>
+    <File Include="img/hotel_1_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_2_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_eden_mar_suite_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_liberdade_2048x1293.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_liberdade_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_rio_internacional_de_luxe_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_rio_internacional_rooftop_pool_300x300.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_rio_internacional_rooftop_pool_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_serra_golf_library_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_serra_golf_living_room_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_serra_golf_suite2_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_porto_bay_serra_golf_suite_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/hotel_the_cliff_bay_spa_suite_2048x1310.jpg">
+      <publishTime>08/09/2014 04:26:14</publishTime>
+    </File>
+    <File Include="img/hotel_the_cliff_bay_spa_suite_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/in_the_bokeh_forest_300x300.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/lack_of_blue_depresses_me_300x300.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/lack_of_blue_depresses_me_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/Lamborghini-Mansory-Aventador.png">
+      <publishTime>08/05/2014 06:50:38</publishTime>
+    </File>
+    <File Include="img/Land-Rover-Range-Rover-Evoque.png">
+      <publishTime>08/05/2014 06:50:40</publishTime>
+    </File>
+    <File Include="img/lhotel_porto_bay_sao_paulo_lobby_1024x672.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/lhotel_porto_bay_sao_paulo_lobby_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/lhotel_porto_bay_sao_paulo_luxury_suite_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/lhotel_porto_bay_sao_paulo_suite_lhotel_living_room_800x600.jpg">
+      <publishTime>08/05/2014 06:46:00</publishTime>
+    </File>
+    <File Include="img/logo-biztadka.png">
+      <publishTime>12/01/2017 17:45:56</publishTime>
+    </File>
+    <File Include="img/logo-invert.png">
+      <publishTime>03/22/2014 05:21:30</publishTime>
+    </File>
+    <File Include="img/logo-white.png">
+      <publishTime>07/21/2014 01:19:14</publishTime>
+    </File>
+    <File Include="img/luca_50x50.jpg">
+      <publishTime>07/18/2014 08:39:32</publishTime>
+    </File>
+    <File Include="img/lufthansa.jpg">
+      <publishTime>03/27/2014 06:24:22</publishTime>
+    </File>
+    <File Include="img/Maserati-GranTurismo-Sport-facelift.png">
+      <publishTime>08/05/2014 06:50:40</publishTime>
+    </File>
+    <File Include="img/Mercedes-Benz-Clasa-G-facelift.png">
+      <publishTime>07/17/2014 08:02:16</publishTime>
+    </File>
+    <File Include="img/me_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/me_with_the_uke_100x100.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/me_with_the_uke_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/me_with_the_uke_70x70.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/me_with_the_uke_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/Mitsubishi-Outlander_2013.png">
+      <publishTime>08/05/2014 06:50:42</publishTime>
+    </File>
+    <File Include="img/new_year_greetings_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/new_york_at_an_angle_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/new_york_at_an_angle_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/Nissan-GT-R.png">
+      <publishTime>08/05/2014 06:50:42</publishTime>
+    </File>
+    <File Include="img/old_no7_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/old_no7_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/our_coffee_miss_u_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/patterns/binding_dark.png">
+      <publishTime>09/14/2013 17:28:36</publishTime>
+    </File>
+    <File Include="img/patterns/binding_light.png">
+      <publishTime>09/14/2013 17:28:16</publishTime>
+    </File>
+    <File Include="img/patterns/dark_fish_skin.png">
+      <publishTime>09/14/2013 17:30:48</publishTime>
+    </File>
+    <File Include="img/patterns/dimension.png">
+      <publishTime>09/14/2013 17:25:08</publishTime>
+    </File>
+    <File Include="img/patterns/escheresque_ste.png">
+      <publishTime>09/14/2013 17:31:00</publishTime>
+    </File>
+    <File Include="img/patterns/food.png">
+      <publishTime>06/19/2014 12:31:18</publishTime>
+    </File>
+    <File Include="img/patterns/giftly.png">
+      <publishTime>06/19/2014 11:12:24</publishTime>
+    </File>
+    <File Include="img/patterns/grey_wash_wall.png">
+      <publishTime>09/14/2013 17:29:10</publishTime>
+    </File>
+    <File Include="img/patterns/ps_neutral.png">
+      <publishTime>09/14/2013 17:28:56</publishTime>
+    </File>
+    <File Include="img/patterns/pw_maze_black.png">
+      <publishTime>09/14/2013 17:30:32</publishTime>
+    </File>
+    <File Include="img/patterns/pw_pattern.png">
+      <publishTime>09/14/2013 17:27:28</publishTime>
+    </File>
+    <File Include="img/patterns/simple_dashed.png">
+      <publishTime>09/14/2013 17:29:36</publishTime>
+    </File>
+    <File Include="img/payment/american-express-curved-32px.png">
+      <publishTime>04/25/2014 10:44:36</publishTime>
+    </File>
+    <File Include="img/payment/discover-curved-32px.png">
+      <publishTime>04/25/2014 10:44:36</publishTime>
+    </File>
+    <File Include="img/payment/maestro-curved-32px.png">
+      <publishTime>04/25/2014 10:44:38</publishTime>
+    </File>
+    <File Include="img/payment/maestro-curved-64px.png">
+      <publishTime>04/25/2014 10:44:38</publishTime>
+    </File>
+    <File Include="img/payment/mastercard-curved-32px.png">
+      <publishTime>04/25/2014 10:44:38</publishTime>
+    </File>
+    <File Include="img/payment/visa-curved-32px.png">
+      <publishTime>04/25/2014 10:44:38</publishTime>
+    </File>
+    <File Include="img/payment/visa-curved-64px.png">
+      <publishTime>04/25/2014 10:44:38</publishTime>
+    </File>
+    <File Include="img/paypal.png">
+      <publishTime>07/21/2014 04:25:32</publishTime>
+    </File>
+    <File Include="img/people_on_the_beach_1280x852.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/people_on_the_beach_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/people_on_the_beach_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/pictures_at_the_museum_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/pictures_at_the_museum_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/pink_flowers_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/pizza_hut_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/playstation_controller_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/playstation_controller_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/play_ball_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/plunklock_live_in_cologne_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/Porsche-Cayenne-Turbo-S.png">
+      <publishTime>08/05/2014 06:50:42</publishTime>
+    </File>
+    <File Include="img/rail_road_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/rajasthan.jpg">
+      <publishTime>12/01/2017 20:01:22</publishTime>
+    </File>
+    <File Include="img/sevenly_shirts_-_june_2012__2_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/sevenly_shirts_-_june_2012__2_50x50.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/slider-1.jpg">
+      <publishTime>12/01/2017 18:30:52</publishTime>
+    </File>
+    <File Include="img/slider-2.jpg">
+      <publishTime>12/01/2017 18:32:20</publishTime>
+    </File>
+    <File Include="img/sorry_to_bust_your_bubble_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/spidy_100x100.jpg">
+      <publishTime>07/18/2014 07:20:46</publishTime>
+    </File>
+    <File Include="img/spidy_300x300.jpg">
+      <publishTime>07/20/2014 13:44:18</publishTime>
+    </File>
+    <File Include="img/spidy_50x50.jpg">
+      <publishTime>07/18/2014 08:38:38</publishTime>
+    </File>
+    <File Include="img/spidy_800x600.jpg">
+      <publishTime>04/05/2014 16:11:26</publishTime>
+    </File>
+    <File Include="img/street_1280x853.jpg">
+      <publishTime>03/09/2014 22:59:20</publishTime>
+    </File>
+    <File Include="img/street_300x300.jpg">
+      <publishTime>07/24/2014 13:43:48</publishTime>
+    </File>
+    <File Include="img/street_800x600.jpg">
+      <publishTime>07/13/2014 10:02:14</publishTime>
+    </File>
+    <File Include="img/street_yoga_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/street_yoga_800x600.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/sunny_wood_100x100.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/sunny_wood_300x300.jpg">
+      <publishTime>08/05/2014 06:46:02</publishTime>
+    </File>
+    <File Include="img/sweet_escape_300x300.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/switcher/beach.jpg">
+      <publishTime>07/04/2014 10:08:08</publishTime>
+    </File>
+    <File Include="img/switcher/bike.jpg">
+      <publishTime>07/04/2014 10:09:18</publishTime>
+    </File>
+    <File Include="img/switcher/bridge.jpg">
+      <publishTime>07/04/2014 10:09:34</publishTime>
+    </File>
+    <File Include="img/switcher/cameras.jpg">
+      <publishTime>07/04/2014 10:09:54</publishTime>
+    </File>
+    <File Include="img/switcher/flowers.jpg">
+      <publishTime>07/04/2014 10:10:04</publishTime>
+    </File>
+    <File Include="img/switcher/keyboard.jpg">
+      <publishTime>07/04/2014 10:10:16</publishTime>
+    </File>
+    <File Include="img/switcher/nature.jpg">
+      <publishTime>07/04/2014 10:10:26</publishTime>
+    </File>
+    <File Include="img/switcher/phone.jpg">
+      <publishTime>07/04/2014 10:10:36</publishTime>
+    </File>
+    <File Include="img/switcher/road.jpg">
+      <publishTime>07/04/2014 10:10:46</publishTime>
+    </File>
+    <File Include="img/switcher/street.jpg">
+      <publishTime>07/04/2014 10:10:58</publishTime>
+    </File>
+    <File Include="img/switcher/taxi.jpg">
+      <publishTime>07/04/2014 10:11:08</publishTime>
+    </File>
+    <File Include="img/switcher/wood.jpg">
+      <publishTime>07/04/2014 10:11:16</publishTime>
+    </File>
+    <File Include="img/sydney_harbour_300x300.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/sydney_harbour_800x600.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/the_best_mode_of_transport_here_in_maldives_300x300.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/the_best_mode_of_transport_here_in_maldives_800x600.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/the_big_showoff-take_2_100x100.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/the_big_showoff-take_2_300x300.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/the_big_showoff-take_2_800x600.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/the_hidden_power_of_the_heart_300x300.jpg">
+      <publishTime>07/24/2014 13:36:44</publishTime>
+    </File>
+    <File Include="img/the_hidden_power_of_the_heart_800x600.jpg">
+      <publishTime>07/22/2014 13:12:04</publishTime>
+    </File>
+    <File Include="img/the_journey_home_400x300.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/the_pool_800x600.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/thyme_300x300.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/Toyota-Prius-Plus.png">
+      <publishTime>08/05/2014 06:50:44</publishTime>
+    </File>
+    <File Include="img/trebbiano_ristorante_-_japenese_breakfast_800x600.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/upper_lake_in_new_york_central_park_1024x487.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/upper_lake_in_new_york_central_park_800x600.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/video-bg.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/viva_las_vegas_2048x1365.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/viva_las_vegas_300x300.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/viva_las_vegas_70x70.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/viva_las_vegas_800x600.jpg">
+      <publishTime>08/05/2014 06:46:04</publishTime>
+    </File>
+    <File Include="img/Volkswagen-Polo-BlueGT.png">
+      <publishTime>08/05/2014 06:50:44</publishTime>
+    </File>
+    <File Include="img/Volkswagen-Touareg-Edition-X.png">
+      <publishTime>08/05/2014 06:50:46</publishTime>
+    </File>
+    <File Include="img/Volvo-V40.png">
+      <publishTime>08/05/2014 06:50:48</publishTime>
+    </File>
+    <File Include="img/waipio_valley_300x300.jpg">
+      <publishTime>08/05/2014 06:46:06</publishTime>
+    </File>
+    <File Include="img/waipio_valley_800x600.jpg">
+      <publishTime>08/05/2014 06:46:06</publishTime>
+    </File>
+    <File Include="img/working_in_the_nature_300x300.jpg">
+      <publishTime>08/05/2014 06:46:06</publishTime>
+    </File>
+    <File Include="js/bootstrap-datepicker.js">
+      <publishTime>05/05/2014 18:44:00</publishTime>
+    </File>
+    <File Include="js/bootstrap-timepicker.js">
+      <publishTime>04/23/2014 12:25:00</publishTime>
+    </File>
+    <File Include="js/bootstrap.js">
+      <publishTime>03/02/2014 22:57:26</publishTime>
+    </File>
+    <File Include="js/card-payment.js">
+      <publishTime>04/25/2014 08:04:54</publishTime>
+    </File>
     <File Include="js/cbpFWTabs.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
     <File Include="js/chat.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
+    </File>
+    <File Include="js/countdown.js">
+      <publishTime>07/22/2014 11:13:16</publishTime>
+    </File>
+    <File Include="js/custom.js">
+      <publishTime>10/21/2014 09:01:00</publishTime>
     </File>
     <File Include="js/custom.min.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
@@ -219,11 +1005,29 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="js/dashboard4.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
+    <File Include="js/dropit.js">
+      <publishTime>03/22/2014 03:29:04</publishTime>
+    </File>
+    <File Include="js/fitvids.js">
+      <publishTime>07/18/2014 02:55:38</publishTime>
+    </File>
     <File Include="js/flot-data.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
     <File Include="js/footable-init.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
+    </File>
+    <File Include="js/fotorama.js">
+      <publishTime>04/06/2014 03:18:24</publishTime>
+    </File>
+    <File Include="js/gridrotator.js">
+      <publishTime>08/03/2014 10:57:04</publishTime>
+    </File>
+    <File Include="js/icheck.js">
+      <publishTime>03/25/2014 09:37:42</publishTime>
+    </File>
+    <File Include="js/ionrangeslider.js">
+      <publishTime>03/23/2014 05:25:48</publishTime>
     </File>
     <File Include="js/jasny-bootstrap.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
@@ -234,23 +1038,50 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="js/jquery-ui.js">
       <publishTime>10/28/2017 10:56:50</publishTime>
     </File>
+    <File Include="js/jquery.js">
+      <publishTime>02/23/2014 02:17:36</publishTime>
+    </File>
     <File Include="js/jquery.slimscroll.js">
       <publishTime>10/28/2017 10:56:50</publishTime>
     </File>
     <File Include="js/jsgrid-init.js">
       <publishTime>10/28/2017 10:56:50</publishTime>
     </File>
+    <File Include="js/magnific.js">
+      <publishTime>05/05/2014 18:50:54</publishTime>
+    </File>
     <File Include="js/mask.js">
       <publishTime>10/28/2017 10:56:50</publishTime>
+    </File>
+    <File Include="js/modernizr.js">
+      <publishTime>07/24/2014 13:12:06</publishTime>
     </File>
     <File Include="js/morris-data.js">
       <publishTime>10/28/2017 10:56:50</publishTime>
     </File>
+    <File Include="js/nicescroll.js">
+      <publishTime>03/25/2014 22:11:26</publishTime>
+    </File>
+    <File Include="js/owl-carousel.js">
+      <publishTime>07/31/2014 04:11:42</publishTime>
+    </File>
     <File Include="js/real-estate.js">
       <publishTime>10/28/2017 10:56:50</publishTime>
     </File>
+    <File Include="js/slimmenu.js">
+      <publishTime>03/03/2014 03:41:16</publishTime>
+    </File>
+    <File Include="js/switcher.js">
+      <publishTime>09/01/2014 16:56:56</publishTime>
+    </File>
     <File Include="js/toastr.js">
       <publishTime>10/28/2017 10:56:50</publishTime>
+    </File>
+    <File Include="js/tweet.js">
+      <publishTime>07/18/2014 07:52:14</publishTime>
+    </File>
+    <File Include="js/typeahead.js">
+      <publishTime>04/21/2014 05:13:00</publishTime>
     </File>
     <File Include="js/validator.js">
       <publishTime>10/28/2017 10:56:50</publishTime>
@@ -1299,6 +2130,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="plugins/images/users/varun.jpg">
       <publishTime>10/28/2017 10:56:53</publishTime>
     </File>
+    <File Include="Script/BillService.js">
+      <publishTime>12/01/2017 12:20:29</publishTime>
+    </File>
     <File Include="Script/companyCommision.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
@@ -1321,7 +2155,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/10/2017 11:44:55</publishTime>
     </File>
     <File Include="Script/hotelTransaction.js">
-      <publishTime>11/10/2017 12:10:07</publishTime>
+      <publishTime>12/05/2017 13:20:11</publishTime>
+    </File>
+    <File Include="Script/jquery-1.10.2.min.js">
+      <publishTime>07/05/2017 10:39:47</publishTime>
     </File>
     <File Include="Script/login.js">
       <publishTime>11/07/2017 23:23:44</publishTime>
@@ -1346,6 +2183,27 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Script/User.js">
       <publishTime>10/28/2017 10:56:49</publishTime>
+    </File>
+    <File Include="Views/BillService/CreditCard.cshtml">
+      <publishTime>12/04/2017 19:38:51</publishTime>
+    </File>
+    <File Include="Views/BillService/Electricity.cshtml">
+      <publishTime>12/04/2017 19:38:51</publishTime>
+    </File>
+    <File Include="Views/BillService/Gas.cshtml">
+      <publishTime>12/04/2017 19:38:51</publishTime>
+    </File>
+    <File Include="Views/BillService/GetBillServiceProvidersFields.cshtml">
+      <publishTime>12/04/2017 19:38:51</publishTime>
+    </File>
+    <File Include="Views/BillService/Insurance.cshtml">
+      <publishTime>12/04/2017 19:38:51</publishTime>
+    </File>
+    <File Include="Views/BillService/Internet.cshtml">
+      <publishTime>12/04/2017 19:38:51</publishTime>
+    </File>
+    <File Include="Views/BillService/Landline.cshtml">
+      <publishTime>12/04/2017 19:38:51</publishTime>
     </File>
     <File Include="Views/CCAvenue/ccAvenue.cshtml">
       <publishTime>10/28/2017 10:56:49</publishTime>
@@ -1383,6 +2241,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Dashboard/Index.cshtml">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
+    <File Include="Views/Dashboard/orange/Index.cshtml">
+      <publishTime>01/11/2018 17:32:26</publishTime>
+    </File>
     <File Include="Views/Error/customError.cshtml">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
@@ -1398,11 +2259,17 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Flight/FlightMenu/BookingDetail.cshtml">
       <publishTime>11/02/2017 11:55:19</publishTime>
     </File>
+    <File Include="Views/Flight/FlightMenu/orange/SearchFlight.cshtml">
+      <publishTime>01/16/2018 22:37:56</publishTime>
+    </File>
+    <File Include="Views/Flight/FlightMenu/orange/SearchFlightResult.cshtml">
+      <publishTime>01/16/2018 22:28:53</publishTime>
+    </File>
     <File Include="Views/Flight/FlightMenu/SearchFlight.cshtml">
-      <publishTime>10/28/2017 10:56:49</publishTime>
+      <publishTime>01/16/2018 20:12:55</publishTime>
     </File>
     <File Include="Views/Flight/FlightMenu/SearchFlightResult.cshtml">
-      <publishTime>10/28/2017 10:56:49</publishTime>
+      <publishTime>01/16/2018 22:15:26</publishTime>
     </File>
     <File Include="Views/Flight/Report/FilghtList.cshtml">
       <publishTime>10/28/2017 10:56:49</publishTime>
@@ -1456,19 +2323,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/14/2017 00:26:22</publishTime>
     </File>
     <File Include="Views/Hotel/InvoiceDetailView.cshtml">
-      <publishTime>11/10/2017 12:06:15</publishTime>
+      <publishTime>12/04/2017 18:37:48</publishTime>
     </File>
     <File Include="Views/Hotel/roomView.cshtml">
-      <publishTime>10/23/2017 16:55:47</publishTime>
+      <publishTime>12/04/2017 19:38:51</publishTime>
     </File>
     <File Include="Views/Hotel/SearchHotel.cshtml">
       <publishTime>11/10/2017 11:41:00</publishTime>
+    </File>
+    <File Include="Views/Login/elite/Index.cshtml">
+      <publishTime>01/10/2018 19:49:22</publishTime>
     </File>
     <File Include="Views/Login/elite_login.cshtml">
       <publishTime>11/07/2017 23:23:44</publishTime>
     </File>
     <File Include="Views/Login/Index.cshtml">
-      <publishTime>10/28/2017 10:56:49</publishTime>
+      <publishTime>01/10/2018 19:27:15</publishTime>
+    </File>
+    <File Include="Views/Login/orange/Index.cshtml">
+      <publishTime>01/15/2018 16:50:09</publishTime>
     </File>
     <File Include="Views/PayU/Return.cshtml">
       <publishTime>10/28/2017 10:56:49</publishTime>
@@ -1489,7 +2362,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
     <File Include="Views/Recharge/Index.cshtml">
-      <publishTime>11/04/2017 15:55:12</publishTime>
+      <publishTime>12/01/2017 12:20:29</publishTime>
     </File>
     <File Include="Views/Recharge/RechargeStatus.cshtml">
       <publishTime>11/07/2017 23:23:44</publishTime>
@@ -1498,16 +2371,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/08/2017 21:41:53</publishTime>
     </File>
     <File Include="Views/Shared/header.cshtml">
-      <publishTime>10/28/2017 10:56:49</publishTime>
+      <publishTime>01/11/2018 19:19:55</publishTime>
     </File>
     <File Include="Views/Shared/Layout.cshtml">
-      <publishTime>10/28/2017 10:56:49</publishTime>
+      <publishTime>01/11/2018 17:13:25</publishTime>
+    </File>
+    <File Include="Views/Shared/orange/header.cshtml">
+      <publishTime>01/11/2018 22:29:42</publishTime>
+    </File>
+    <File Include="Views/Shared/orange/Layout.cshtml">
+      <publishTime>01/16/2018 13:42:19</publishTime>
+    </File>
+    <File Include="Views/Shared/orange/sidebar.cshtml">
+      <publishTime>01/12/2018 13:09:57</publishTime>
     </File>
     <File Include="Views/Shared/OTPpopup.cshtml">
       <publishTime>10/28/2017 10:56:49</publishTime>
     </File>
     <File Include="Views/Shared/sidebar.cshtml">
-      <publishTime>11/08/2017 21:14:15</publishTime>
+      <publishTime>01/11/2018 17:18:01</publishTime>
     </File>
     <File Include="Views/User/AddUser.cshtml">
       <publishTime>10/28/2017 10:56:49</publishTime>

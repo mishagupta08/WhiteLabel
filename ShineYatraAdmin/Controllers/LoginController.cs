@@ -19,31 +19,35 @@
     /// Hold Login Functionality
     /// </summary>
     public class LoginController : Controller
-    {                            
-        LoginManager loginManager = null; 
+    {
+        LoginManager loginManager = null;
         CommonController commonController = null;
 
         //function to Call login page
         public async Task<ActionResult> Index()
         {
             LoginModel loginModel = new LoginModel();
-            commonController = new CommonController();           
+            commonController = new CommonController();
             try
-            {                                
-                await commonController.GetCompanySettings();                
+            {
+                await commonController.GetCompanySettings();
                 if (Request.IsAuthenticated)
                 {
                     return RedirectToAction("Index", "Dashboard");
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 Console.WriteLine(ex.InnerException);
                 ExceptionLogging.SendErrorTomail(ex, "", ConfigurationManager.AppSettings["DomainName"]);
             }
-            return View(loginModel);
+
+            var viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//Index";
+            return View(viewFolder, loginModel);
+
+            //return View(loginModel);
         }
-        
+
         /// validate user login detail        
         public async Task<ActionResult> ValidateUser(LoginModel loginDetail)
         {
@@ -72,8 +76,8 @@
                 }
                 Session["WalletBalance"] = result.wallet_balance;
                 Session["CompanyWalletBalance"] = result.company_wallet_balance;
-                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id+"|"+ result.first_name+" "+ result.last_name+"|"+result.mobileNo +"|"+ result.ledger_id +"|"+result.role_id +"|"+result.emailId;
-                FormsAuthentication.SetAuthCookie(userIdentity, false);                
+                string userIdentity = result.user_name + "|" + result.member_id + "|" + result.company_id + "|" + result.first_name + " " + result.last_name + "|" + result.mobileNo + "|" + result.ledger_id + "|" + result.role_id + "|" + result.emailId;
+                FormsAuthentication.SetAuthCookie(userIdentity, false);
             }
             catch (Exception ex)
             {
