@@ -53,126 +53,37 @@
 <link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 
 <!-- TOP AREA -->
-
 <div class="bg-front bg-front-mob-rel">
-    <div class="container">
-        <div class="search-tabs search-tabs-bg search-tabs-abs mt50">
-            <h1>Find Your Perfect Trip</h1>
-            <div class="tabbable">
-                <ul class="nav nav-tabs" id="myTab">
-                    <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-plane"></i> <span>Flights</span></a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade in active" id="tab-1">
-                        <h2>Search for Cheap Flights</h2>
-                        <form action="SearchFlight" method="post" id="searchFlightForm" @*onsubmit="return SubmitFlightSearch();"*@>
-                            <div class="tabbable">
-                                <div class="tab-content">
-                                    <div class="tab-pane fade in active" id="flight-search-1">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-lg form-group-icon-left">
-                                                    <div class="tab active-tab" data-value="ONE" name="tripmode">One Way</div><div class="tab" name="tripmode" data-value="ROUND">Round Trip</div>
-                                                    @Html.HiddenFor(m => m.Mode, new { @id = "Mode" })
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-lg form-group-icon-left">
-                                                    <label class="control-label">Flight Category</label>
-                                                    <div class="radio-list">
-                                                        <label style="display:inline-block;">
-                                                            @Html.RadioButtonFor(model => model.FlightType, (Resources.Domestic), new { @style = "display:inline-block;", @checked = "checked" })
-                                                            @Html.Label(Resources.Domestic, new { @style = "display:inline-block;" })
-                                                        </label>
-                                                        <label style="display:inline-block;margin-left: 10%;margin-top: 9px;">
-                                                            @Html.RadioButtonFor(model => model.FlightType, Resources.International, new { @style = "display:inline-block;" })
-                                                            @Html.Label(Resources.International, new { @style = "display:inline-block;" })
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-lg form-group-icon-left">
-                                                    <i class="fa fa-map-marker input-icon"></i>
-                                                    <label>Class</label>
-                                                    @Html.DropDownListFor(m => m.Preferredclass, new SelectList(Model.FlightClass, "Id", "Value"), new { @required = "0", id = "flightClass", @class = "form-control" })
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-lg form-group-icon-left">
-                                                    <i class="fa fa-map-marker input-icon"></i>
-                                                    <label>From</label>
-                                                    @Html.TextBoxFor(m => m.Origin, new { @required = "", @id = "flightOrigin", @class = "form-control", @placeholder = Resources.Origin })
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-lg form-group-icon-left">
-                                                    <i class="fa fa-map-marker input-icon"></i>
-                                                    <label>To</label>
-                                                    @Html.TextBoxFor(m => m.Destination, new { @required = "", @id = "flightDestination", @class = "form-control", @placeholder = Resources.Destination })
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="input-daterange" data-date-format="dd-M-yy">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group form-group-lg form-group-icon-left">
-                                                        <i class="fa fa-calendar input-icon input-icon-highlight"></i>
-                                                        <label>Departing</label>
-                                                        @Html.TextBoxFor(m => m.DepartDate, new { @id = "dateinput", @required = "", @class = "datepicker form-control", @placeholder = "dd-mmm-yyyy" })
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6" id="ReturnDateField" style="display:none;">
-                                                    <div class="form-group form-group-lg form-group-icon-left">
-                                                        <i class="fa fa-calendar input-icon input-icon-highlight"></i>
-                                                        <label>Returning</label>
-                                                        @*<input class="date-pick form-control" id="returnDate" data-date-format="dd-M-yy" name="end" type="text" />*@
-                                                        @*@Html.HiddenFor(m => m.ReturnDate, new { @id = "ReturnDate" })*@
-                                                        @Html.TextBoxFor(m => m.ReturnDate, new { @id = "returnDate", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <div class="form-group form-group-lg form-group-select-plus">
-                                                        <label>Adult 12+ yrs </label>
-                                                        <div class="btn-group btn-group-select-num" data-toggle="buttons">
-                                                            @Html.TextBoxFor(m => m.AdultPax, new { @type = "number", @id = "adult", @required = "", @class = "form-control", @min = "1", @Value = "1" })
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group form-group-lg form-group-select-plus">
-                                                        <label>Child 2-11 yrs :</label>
-                                                        <div class="btn-group btn-group-select-num" data-toggle="buttons">
-                                                            @Html.TextBoxFor(m => m.ChildPax, new { @type = "number", @id = "ChildPax", @class = "form-control", @min = "0" })
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group form-group-lg form-group-select-plus">
-                                                        <label>Infant 0-2 yrs :</label>
-                                                        <div class="btn-group btn-group-select-num" data-toggle="buttons">
-                                                            @Html.TextBoxFor(m => m.InfantPax, new { @type = "number", @id = "infant", @class = "form-control", @min = "0" })
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        @*</div>*@
-                                        <button class="btn btn-primary btn-lg" type="submit">Search for Flights</button>
-                                    </div>
+    <div class="top-area show-onload">
+        <div class="bg-holder full">
+            <div class="bg-front bg-front-mob-rel">
+                <div class="container">
+                    <div class="search-tabs search-tabs-bg search-tabs-abs mt50">
+                        <h1>Find Your Perfect Trip</h1>
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs" id="myTab">
+                                <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-plane"></i> <span>Flights</span></a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="tab-1">
+                                    @Html.Partial("~/Views/Flight/FlightMenu/orange/_SearchFlightPartialView.cshtml", Model)
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="owl-carousel owlslider owl-carousel-area visible-lg" id="owl-carousel-slider">
+                <div class="bg-holder full">
+                    <div class="bg-mask"></div>
+                    <div class="bg-blur" style="background-image:url(/img/slider-1.jpg);"></div>
+                    <div class="bg-content">
+                    </div>
+                </div>
+                <div class="bg-holder full">
+                    <div class="bg-mask"></div>
+                    <div class="bg-blur" style="background-image:url(/img/slider-2.jpg);"></div>
+                    <div class="bg-content">
                     </div>
                 </div>
             </div>
@@ -180,104 +91,103 @@
     </div>
 </div>
 <!-- END TOP AREA  -->
+@*<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>*@
 
-<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+@*<script>
+        var jq = $.noConflict();
+        jq(document).ready(function () {
+            jq("#Mode").val("ONE");
+            jq("div[name=tripmode]").bind("click", function () {
+                jq("div[name=tripmode]").removeClass("active-tab");
+                jq("div[name=tripmode]").addClass("tab");
+                jq(this).addClass("active-tab");
+                var selectedMode = jq(this).attr("data-value");
+                jq("#Mode").val(selectedMode);
+                displayReturn(selectedMode);
+            });
+            jq("#dateinput").focusout(function () {
+                jq("#DepartDate").val(this.value);
+            });
 
-<script>
-    var jq = $.noConflict();
-    jq(document).ready(function () {
-        jq("#Mode").val("ONE");
-        jq("div[name=tripmode]").bind("click", function () {
-            jq("div[name=tripmode]").removeClass("active-tab");
-            jq("div[name=tripmode]").addClass("tab");
-            jq(this).addClass("active-tab");
-            var selectedMode = jq(this).attr("data-value");
-            jq("#Mode").val(selectedMode);
-            displayReturn(selectedMode);
+            jq("#returnDate").focusout(function () {
+                jq("#ReturnDate").val(this.value);
+            });
+            // Date Picker
+            jq('#dateinput').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: "dd-M-yy",
+                minDate: 0
+            });
+
+            jq('#returnDate').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: "dd-M-yy",
+                minDate: 0
+            });
+
+            var taskIdValue = $("#boardTaskId").val();
+
+            jq('#flightOrigin').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "AssessorNameSearch",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.Id + " (" + item.Value + ")",
+                                    value: item.Id
+                                }
+                            }));
+                        },
+                        fail: function (error) {
+                            alert(erorr);
+                        }
+                    });
+                }
+            });
+
+            jq('#flightDestination').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "AssessorNameSearch",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.Id + " (" + item.Value + ")",
+                                    value: item.Id
+                                }
+                            }));
+                        },
+                        fail: function (error) {
+                            alert(erorr);
+                        }
+                    });
+                }
+            });
         });
-        jq("#dateinput").focusout(function () {
-            jq("#DepartDate").val(this.value);
-        });
 
-        jq("#returnDate").focusout(function () {
-            jq("#ReturnDate").val(this.value);
-        });
-        // Date Picker
-        jq('#dateinput').datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: "dd-M-yy",
-            minDate: 0
-        });
-
-        jq('#returnDate').datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: "dd-M-yy",
-            minDate: 0
-        });
-
-        var taskIdValue = $("#boardTaskId").val();
-
-        jq('#flightOrigin').autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "AssessorNameSearch",
-                    type: "POST",
-                    dataType: "json",
-                    data: { Prefix: request.term },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.Id + " (" + item.Value + ")",
-                                value: item.Id
-                            }
-                        }));
-                    },
-                    fail: function (error) {
-                        alert(erorr);
-                    }
-                });
+        function displayReturn(type) {
+            if (type == "ONE") {
+                $("#ReturnDateField").hide();
+                $("#returnDate").prop('required', false);
             }
-        });
-
-        jq('#flightDestination').autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "AssessorNameSearch",
-                    type: "POST",
-                    dataType: "json",
-                    data: { Prefix: request.term },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.Id + " (" + item.Value + ")",
-                                value: item.Id
-                            }
-                        }));
-                    },
-                    fail: function (error) {
-                        alert(erorr);
-                    }
-                });
+            else {
+                $("#ReturnDateField").show();
+                $("#returnDate").prop('required', true);
             }
-        });
-    });
-
-    function displayReturn(type) {
-        if (type == "ONE") {
-            $("#ReturnDateField").hide();
-            $("#returnDate").prop('required', false);
         }
-        else {
-            $("#ReturnDateField").show();
-            $("#returnDate").prop('required', true);
-        }
-    }
-</script>
+    </script>*@
 

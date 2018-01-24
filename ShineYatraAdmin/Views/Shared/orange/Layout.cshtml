@@ -1,12 +1,14 @@
 ﻿<!DOCTYPE HTML>
 <html>
 <head>
+    <title> Biz Tadka | India's #1 Multi Utility Portal </title>
+
+
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta name="keywords" content="Biz Tadka | India's #1 Multi Utility Portal" />
     <meta name="description" content="Biz Tadka | India's #1 Multi Utility Portal">
     <meta name="author" content="Biz Tadka">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UTILITY PORTAL-MASTER ADMIN</title>
 
     <!-- GOOGLE FONTS -->
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>
@@ -16,9 +18,10 @@
     <link rel="stylesheet" href="~/css/font-awesome.css">
     <link rel="stylesheet" href="~/css/icomoon.css">
     <link rel="stylesheet" href="~/css/styles.css">
-    @*<link rel="stylesheet" href="~/css/style.css">*@
     <link rel="stylesheet" href="~/css/mystyles.css">
     <script src="~/js/modernizr.js"></script>
+    <link rel="Stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="Stylesheet" href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.dataTables.min.css" />
 
     <link rel="stylesheet" href="~/css/switcher.css" />
     <link rel="alternate stylesheet" type="text/css" href="~/css/schemes/bright-turquoise.css" title="bright-turquoise" media="all" />
@@ -35,13 +38,10 @@
     <link rel="alternate stylesheet" type="text/css" href="~/css/schemes/studio.css" title="studio" media="all" />
     <link rel="alternate stylesheet" type="text/css" href="~/css/schemes/leather.css" title="leather" media="all" />
     <link rel="alternate stylesheet" type="text/css" href="~/css/schemes/denim.css" title="denim" media="all" />
-    <link rel="alternate stylesheet" type="text/css" href="~/css/schemes/scarlet.css" title="scarlet" media="all" />
 
-    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
-    <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="~/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
 
         $(function () {
@@ -59,6 +59,15 @@
         }
     </style>
 
+
+</head>
+
+<body>
+    <div class="preloader">
+        <img src="~/images/wheel.gif" width="100" height="100" />
+    </div>
+    <!-- FACEBOOK WIDGET -->
+    <div id="fb-root"></div>
     <script>
         (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
@@ -69,13 +78,6 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     </script>
-</head>
-
-<body>
-    <div class="preloader">
-        <img src="~/images/wheel.gif" width="100" height="100" />
-    </div>
-
     <!-- /FACEBOOK WIDGET -->
     <div class="global-wrap">
         <!-- Preloader -->
@@ -86,31 +88,21 @@
             <!-- End Top Navigation -->
             @RenderPage("~/Views/Shared/orange/sidebar.cshtml")
         </header>
-        <div class="bg-front bg-front-mob-rel">
-            <div class="top-area show-onload">
-                <div class="bg-holder full">
-                    @RenderBody()
-                    <div class="owl-carousel owlslider owl-carousel-area visible-lg" id="owl-carousel-slider">
-                        <div class="bg-holder full">
-                            <div class="bg-mask"></div>
-                            <div class="bg-blur" style="background-image:url(/img/slider-1.jpg);"></div>
-                            <div class="bg-content">
-                            </div>
-                        </div>
-                        <div class="bg-holder full">
-                            <div class="bg-mask"></div>
-                            <div class="bg-blur" style="background-image:url(/img/slider-2.jpg);"></div>
-                            <div class="bg-content">
-                            </div>
-                        </div>
-                    </div>
+
+        @RenderBody()
+
+        @*</div>
+                </div>
+            </div>*@
+
+        <footer id="main-footer" class="footer text-center">
+            <div class="container">
+                <div class="row row-wrap">
+                    2017 &copy; Utility Portal Master Admin
                 </div>
             </div>
-        </div>
+        </footer>
     </div>
-
-    <footer id="main-footer">2017 &copy; Utility Portal Master Admin </footer>
-
     <script src="~/js/jquery.js"></script>
     <script src="~/js/bootstrap.js"></script>
     <script src="~/js/slimmenu.js"></script>
@@ -121,6 +113,11 @@
     <script src="~/js/ionrangeslider.js"></script>
     <script src="~/js/icheck.js"></script>
     <script src="~/js/fotorama.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/buttons/1.4.2/js/buttons.html5.min.js"></script>
+
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
     <script src="~/js/typeahead.js"></script>
     <script src="~/js/card-payment.js"></script>
@@ -135,6 +132,7 @@
     <script src="~/Script/shared.js"></script>
     <script src="~/Script/otp.js"></script>
     <script src="~/Script/dashboard.js"></script>
-    </div>
+
+    @*<div id="ascrail2000" class="nicescroll-rails" style="width: 10px; z-index: 9999; cursor: default; position: fixed; top: 0px; height: 100%; right: 0px; opacity: 0.2;"><div style="position: relative; top: 136px; float: right; width: 10px; height: 239px; background-color: rgb(0, 0, 0); border: 0px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 0px;"></div></div>*@
 </body>
 </html>
