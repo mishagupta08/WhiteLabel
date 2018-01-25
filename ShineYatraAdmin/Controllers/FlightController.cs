@@ -196,7 +196,11 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(ex.InnerException);
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
-            return View("FlightMenu//BookingDetail", searchPageViewModel);
+
+            var viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//BookingDetail";
+            return View(viewFolder, searchPageViewModel);
+
+            //return View("FlightMenu//BookingDetail", searchPageViewModel);
         }
 
 

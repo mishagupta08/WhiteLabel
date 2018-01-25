@@ -1,0 +1,505 @@
+﻿@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.SearchPageViewModel
+
+@{
+    ViewBag.Title = "BookingDetail";
+    Layout = "~/Views/Shared/orange/Layout.cshtml";
+    int count = 0;
+    string[] userData = User.Identity.Name.Split('|');
+    bool askOTP = Convert.ToString(Session["otp_service_enabled"]) == "Y";
+    bool IsPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
+}
+
+<style>
+    .ui-autocomplete {
+        z-index: 100;
+    }
+</style>
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+
+@{
+    var flight = Model.flightfaredetails.FlightsDetailList.FirstOrDefault();
+    var Lastflight = Model.flightfaredetails.FlightsDetailList.LastOrDefault();
+    var time = Lastflight.ArrivalDateTime.Subtract(flight.DepartureDateTime);
+    var totatlfare = Model.flightfaredetails.FareDetail.ChargeableFares.Tax + Model.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare;
+}
+
+<div class="container">
+    <div class="row row-wrap">
+        <div class="col-md-8">
+            <h3> Passengers Details </h3>
+
+            <h4> ADULTS </h4>
+
+            <form class="tr" method="post" id="bookfightform" action="BookResponse">
+                @Html.HiddenFor(m => m.FlightBookingDetail.Origin)
+                @Html.HiddenFor(m => m.FlightBookingDetail.Destination)
+                @Html.HiddenFor(m => m.FlightBookingDetail.DepartDate)
+                @Html.HiddenFor(m => m.FlightBookingDetail.ReturnDate)
+                @Html.HiddenFor(m => m.FlightBookingDetail.AdultPax)
+
+                @Html.HiddenFor(m => m.FlightBookingDetail.ChildPax)
+                @Html.HiddenFor(m => m.FlightBookingDetail.InfantPax)
+
+                @Html.HiddenFor(m => m.FlightBookingDetail.Mode)
+                @Html.HiddenFor(m => m.FlightBookingDetail.Id)
+
+                @Html.HiddenFor(m => m.FlightBookingDetail.FlightNumber)
+                @Html.HiddenFor(m => m.FlightBookingDetail.OperatingAirlineCode)
+                @Html.HiddenFor(m => m.FlightBookingDetail.Preferredclass)
+                <input type="hidden" name="FlightBookingDetail.AdultFare" value="@totatlfare">
+                <input type="hidden" name="FlightBookingDetail.SubServiceId" value="@Model.FlightBookingDetail.SubServiceId">
+                <input type="hidden" name="FlightBookingDetail.backdiscount" value="@Model.FlightBookingDetail.backdiscount">
+                @Html.HiddenFor(m => m.walletBalance)
+
+
+                <ul class="list booking-item-passengers">
+                    @for (int i = 0; i < Model.flightSearch.AdultPax; i++)
+                    {
+                        <li>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Select </label>
+                                        @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.NameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Surname</label>
+                                        @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Age</label>
+                                        @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].age, new { @required = "", type = "number", @placeholder = "age", @class = "form-control input-group-md reg_name" })
+                                    </div>
+                                    @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.AdultCode })
+                                </div>
+                            </div>
+                        </li>
+                        count++;
+                    }
+
+                    @******** Child Booking Detail *****************@
+                    @if (Model.flightSearch.ChildPax > 0)
+                    {
+                        <li><h4> CHILDS  </h4></li>
+                        for (int i = 0; i < Model.flightSearch.ChildPax; i++)
+                        {
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Select </label>
+                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.ChildNameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Surname</label>
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label> Age</label>
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].age, new { @required = "", type = "number", @placeholder = "age", @class = "form-control input-group-md reg_name" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label> Date of Birth</label>
+                                            @Html.TextBoxFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].dob, new { @required = "", @id = "dateinput1", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
+                                            @*<input class="date-pick-years form-control" type="text" />*@
+                                        </div>
+                                    </div>
+                                    @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.ChildCode })
+                                </div>
+
+                            </li>
+                            count++;
+                        }
+                    }
+
+                    @if (Model.flightSearch.ChildPax > 0)
+                    {
+                        <li>
+                            <h4> INFANTS </h4>
+                        </li>
+
+                        for (int i = 0; i < Model.flightSearch.InfantPax; i++)
+                        {
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Select </label>
+                                            @Html.DropDownListFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].nameReference, new SelectList(Model.ChildNameReferenceList, "Id", "Value"), new { @required = "0", id = "nameReferenceDropDown", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].givenName, new { @required = "", @placeholder = "First Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Surname</label>
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].surName, new { @required = "", @placeholder = "Last Name", @class = "form-control input-group-md reg_name" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label> Age</label>
+                                            @Html.TextBoxFor(x => Model.FlightBookingDetail.PersonName.CustomerInfo[count].age, new { @required = "", type = "number", @placeholder = "age", @class = "form-control input-group-md reg_name" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label> Date of Birth</label>
+                                            @*<input class="date-pick-years form-control" type="text" />*@
+                                            @Html.TextBoxFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].dob, new { @required = "", @id = "dateinput2", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })
+                                        </div>
+                                    </div>
+                                    @Html.HiddenFor(m => Model.FlightBookingDetail.PersonName.CustomerInfo[count].psgrtype, new { @required = "", Value = Resources.InfantCode })
+                                </div>
+                            </li>
+                            count++;
+                        }
+                    }
+
+                    <li>
+                        <h4> PERSONAL DETAILS </h4>
+                    </li>
+
+                    <li>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label> Mobile No.</label>
+                                    @Html.TextBoxFor(x => Model.FlightBookingDetail.phoneNumber, new { @placeholder = "Mobile No.", @required = "", @class = "form-control " })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Emails ID </label>
+                                    @Html.TextBoxFor(x => Model.FlightBookingDetail.EmailAddress, new { @placeholder = "Email Adress", @required = "" })
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3>Payment Method </h3>
+                        @if (IsPaymentGatewayactive)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required", @class = "PaymentModebutton" })Wallet</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "bank", new { @required = "required", @class = "PaymentModebutton" })Bank</label>
+                                </div>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@Html.RadioButtonFor(x => Model.FlightBookingDetail.PaymentMode, "wallet", new { @required = "required", @class = "PaymentModebutton" })Wallet</label>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="row" id="PartialPaymentWithWalletDiv" style="display:none;">
+                            <label>@Html.CheckBoxFor(x => x.FlightBookingDetail.PartialPaymentWithWallet, new { @id = "PartialPaymentWithWallet" }) <span id="walletBalanceMessage">Your Wallet Contains some amount do you want to use that amount?</span></label>
+                        </div>
+                        <br />
+
+                        <div><label id="ErrorMessage"></label></div>
+
+                        @*<div class="red box">
+                                <div class="form-group">
+                                    <label>User ID </label>
+                                    <input class="form-control" type="text" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input class="form-control" type="text" />
+                                </div>
+                                <a class="btn btn-info" href="#"> Send OTP  </a>
+
+                                <p>&nbsp;</p>
+                                <div class="form-group">
+                                    <label>Enter OTP Code </label>
+                                    <input class="form-control" type="text" />
+                                </div>
+
+
+                            </div>*@
+
+                        @*<div class="blue box">
+
+                                <div class="form-group">
+                                    <label class="marginleft"><input class="i-check" type="checkbox" style="position: absolute; opacity: 0;"> Use Available Fund : <strong>Rs. 5100/-</strong></label>
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Pay From Payment Getway</label>
+                                    <input class="form-control" type="text" />
+                                </div>
+
+                            </div>*@
+                        @if (askOTP)
+                        {
+                            <input type="button" class="btn btn-success" value="Proceed To Booking" onclick="openotpform()">
+                        }
+                        else
+                        {
+                            <input type="submit" class="btn btn-success" value="Proceed To Booking">
+                        }
+                    </div>
+                </div>
+            </form>
+            <br>
+        </div>
+        <div class="col-md-4">
+            <div class="booking-item-payment">
+                <header class="clearfix">
+                    <h5 class="mb0">Your Booking Details</h5>
+                </header>
+                <ul class="booking-item-payment-details">
+                    <li>
+                        <h5>Flight Details</h5>
+                        <div class="booking-item-payment-flight">
+                            @foreach (var flightdetail in Model.flightfaredetails.FlightsDetailList)
+                            {
+                                var duration = flightdetail.ArrivalDateTime.Subtract(flightdetail.DepartureDateTime);
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="booking-item-flight-details">
+                                            <div class="booking-item-departure">
+                                                <i class="fa fa-plane"></i>
+                                                <h5>@flightdetail.DepartureDateTime.ToString("HH:mm")</h5>
+                                                <p class="booking-item-date">@flightdetail.DepartureDateTime.ToString("ddd, MMM dd")</p>
+                                                <p class="booking-item-destination">@flightdetail.DepartureAirportCode</p>
+                                            </div>
+                                            <div class="booking-item-arrival">
+                                                <i class="fa fa-plane fa-flip-vertical"></i>
+                                                <h5>@flightdetail.ArrivalDateTime.ToString("HH:mm")</h5>
+                                                <p class="booking-item-date">@flightdetail.ArrivalDateTime.ToString("ddd, MMM dd")</p>
+                                                <p class="booking-item-destination">@flightdetail.ArrivalAirportCode</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="booking-item-flight-duration">
+                                            <p>Duration</p>
+                                            <h5>@duration</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @*<p>STOP 2 h 55 min Charlotte, United States</p>*@
+                        </div>
+                    </li>
+                    <li>
+                        <h5>Flight (@count Passengers)</h5>
+                        <ul class="booking-item-payment-price">
+                            <li>
+                                <p class="booking-item-payment-price-title">@count Passengers</p>
+                                <p class="booking-item-payment-price-amount">
+                                    <i class="fa fa-inr" aria-hidden="true"></i> @Model.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare
+                                </p>
+                            </li>
+                            <li>
+                                <p class="booking-item-payment-price-title">Taxes</p>
+                                <p class="booking-item-payment-price-amount">
+                                    <i class="fa fa-inr" aria-hidden="true"></i>@Model.flightfaredetails.FareDetail.ChargeableFares.Tax
+                                </p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="booking-item-payment-total">
+                    Total trip: <span><i class="fa fa-inr" aria-hidden="true"></i> @totatlfare</span>
+                </p>
+            </div>
+
+            <div class="gap-small"></div>
+
+
+            <div class="booking-item-payment">
+                <header class="clearfix">
+                    <h5 class="mb0"></h5>
+                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#demo">Agent Invoice Details</button>
+                </header>
+                <div id="demo" class="collapse">
+                    <ul class="booking-item-payment-details">
+                        <li>
+                            <h5>Flight Details</h5>
+                            <div class="booking-item-payment-flight">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="booking-item-flight-details">
+                                            <div class="booking-item-departure">
+                                                <i class="fa fa-plane"></i>
+                                                <h5>@flight.DepartureDateTime.ToString("HH:mm")</h5>
+                                                <p class="booking-item-date">@flight.DepartureDateTime.ToString("ddd, MMM dd")</p>
+                                                <p class="booking-item-destination">@flight.DepartureAirportCode</p>
+                                            </div>
+                                            <div class="booking-item-arrival">
+                                                <i class="fa fa-plane fa-flip-vertical"></i>
+                                                <h5>@Lastflight.ArrivalDateTime.ToString("HH:mm")</h5>
+                                                <p class="booking-item-date">@Lastflight.ArrivalDateTime.ToString("ddd, MMM dd")</p>
+                                                <p class="booking-item-destination">@Lastflight.ArrivalAirportCode</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="booking-item-flight-duration">
+                                            <p>Total Trip Time</p>
+                                            <h5>@time h</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            @*<h5>Fare</h5>*@
+                            <ul class="booking-item-payment-price">
+                                <li>
+                                    <p class="booking-item-payment-price-title">Base Fare</p>
+                                    <p class="booking-item-payment-price-amount">
+                                        <i class="fa fa-inr" aria-hidden="true"></i>@Model.flightfaredetails.FareDetail.ChargeableFares.ActualBaseFare
+                                    </p>
+                                </li>
+                                <li>
+                                    <p class="booking-item-payment-price-title">Tax</p>
+                                    <p class="booking-item-payment-price-amount">
+                                        <i class="fa fa-inr" aria-hidden="true"></i>@Model.flightfaredetails.FareDetail.ChargeableFares.Tax
+                                    </p>
+                                </li>
+                                <li>
+                                    <p class="booking-item-payment-price-title">Total</p>
+                                    <p class="booking-item-payment-price-amount">
+                                        <i class="fa fa-inr" aria-hidden="true"></i>@totatlfare
+                                    </p>
+                                </li>
+                                <li>
+                                    <p class="booking-item-payment-price-title">Discount</p>
+                                    <p class="booking-item-payment-price-amount">
+                                        <i class="fa fa-inr" aria-hidden="true"></i>@Model.flightfaredetails.FareDetail.backdiscount
+                                    </p>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p class="booking-item-payment-total">Total  : <span><i class="fa fa-inr" aria-hidden="true"></i>@{var discountfare = totatlfare - Model.flightfaredetails.FareDetail.backdiscount;} @discountfare </span></p>
+                </div>
+            </div>
+
+            <div class="gap-small"></div>
+
+            @*<div class="booking-item-payment">
+                    <header class="clearfix">
+                        <h5 class="mb0"> Promo Code </h5>
+                    </header>
+
+                    <ul class="booking-item-payment-details">
+                        <form>
+                            <li>
+                                <div class="form-group form-group-cc-name">
+                                    <input class="form-control" type="text" placeholder="Enter Promocode to Redeem Deals" /><span class="cc-card-icon"></span>
+                                </div>
+                                <input class="btn btn-primary" type="submit" value="Calculate Discount" />
+
+                            </li>
+                        </form>
+                    </ul>
+
+                </div>*@
+
+        </div>
+    </div>
+    <div class="gap"></div>
+</div>
+
+@Html.Partial("~/Views/Shared/OTPpopup.cshtml")
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/otp.js"></script>
+
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+        // Date Picker
+        jq('#dateinput1').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        });
+
+        jq('#dateinput2').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        });
+
+        $('.PaymentModebutton').change(function () {
+            getwalletstatus(this.value);
+        });
+    });
+
+    function checkOTP(status) {
+        if (status === "success") {
+            $("#bookfightform").submit();
+        }
+    }
+
+    function getwalletstatus(value) {
+        if (value === "bank") {
+            $(".preloader").show();
+            $.ajax({
+                url: '/Common/GetUserBalance',
+                type: 'Post',
+                async: false,
+            }).done(function (result) {
+                $("#walletBalanceMessage").html("Your wallet contains Rs " + result + ". Do you want to use your wallet balance to pay your fare?");
+                $("#PartialPaymentWithWalletDiv").show();
+                $(".preloader").hide();
+            }).fail(function (xhr) {
+                alert("getwalletstatus " + xhr);
+            });
+        }
+        else {
+            $("#PartialPaymentWithWalletDiv").hide();
+        }
+    }
+</script>
+

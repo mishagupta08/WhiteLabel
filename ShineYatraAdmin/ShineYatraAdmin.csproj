@@ -943,6 +943,7 @@
     <Content Include="Views\Flight\FlightMenu\orange\SearchFlight.cshtml" />
     <Content Include="Views\Flight\FlightMenu\orange\SearchFlightResult.cshtml" />
     <Content Include="Views\Flight\FlightMenu\orange\_SearchFlightPartialView.cshtml" />
+    <Content Include="Views\Flight\FlightMenu\orange\BookingDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
