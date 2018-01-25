@@ -9,8 +9,7 @@
     var query = string.Empty;
 }
 <style>
-    .booking-item {
-        width: 173.5%;
+    .booking-item {       
         border: 1px solid #e6e6e6;
         margin: 13px 0px;
         padding: 0px;
@@ -161,26 +160,10 @@
             <aside class="booking-filters text-white">
                 <h3>Filter By:</h3>
                 <ul class="list booking-filters-list">
-                    <h5 class="booking-filters-title">Stops @*<small>Price from</small>*@</h5>
-                    <li id="stopsCheckbox">
-                        @*<div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />Non-stop
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />1 Stop
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />2+ Stops
-                                </label>
-                            </div>*@
-                        <label><input type="checkbox" checked name="Stops" class="Stops" value="0">&nbsp;0</label><br />
-                        <label><input type="checkbox" checked name="Stops" class="Stops" value="1">&nbsp;1 </label><br />
-                        <label><input type="checkbox" checked name="Stops" class="Stops" value="2">&nbsp;2</label>
+                   
+                    <li>
+                        <h5 class="booking-filters-title">Stops @*<small>Price from</small>*@</h5>
+                        <div id="stopsCheckbox"></div>
                     </li>
                     <li>
                         <h5 class="booking-filters-title">Price </h5>
@@ -209,37 +192,7 @@
                         <div id="AirlineNameCheckbox">
                             <label><input type="checkbox" checked name="type" class="airlinetype" value="Air India">&nbsp;Air India</label><br />
                             <label><input type="checkbox" checked name="type" class="airlinetype" value="Jet Airways">&nbsp;Jet Airways</label>
-                        </div>
-                        @*<div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />Lufthansa<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 215</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />American Airlines<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 350</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />Airfrance<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 154</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />Croatia Airlines<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 197</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />Delta<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 264</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input class="i-check" type="checkbox" />Air Canada<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 445</span>
-                                </label>
-                            </div>*@
+                        </div>                        
                     </li>
                     <li>
                         <h5 class="booking-filters-title">Departure Time</h5>
@@ -291,34 +244,17 @@
                 </div>
                 <table id="flightsearchResult" class="display table" width="100%">
                     <thead>
-                        <tr>
-                            <th>
-                                Airline Name
-                            </th>
-                            <th>
-                                Departure Time
-                            </th>
-                            <th>
-                                Destination Arrival Time
-                            </th>
-                            <th>
-                                duration
-                            </th>
-                            <th>
-                                Stops
-                            </th>
-                            <th>
-                                Available Seats
-                            </th>
-                            <th>
-                                Fare
-                            </th>
-                            <th>
-                                test
-                            </th>
+                        <tr style="display:none;">
+                            <th>Airline Name</th>
+                            <th>Departure Time</th>
+                            <th>Destination Arrival Time</th>
+                            <th>duration</th>       
+                            <th>test</th>  
+                            <th>stops</th>     
+                                                                           
                         </tr>
                     </thead>
-                    <tbody class="booking-item-container">
+                    <tbody >
                         @*<ul class="booking-list">*@
                         @foreach (var flightrows in Model.arrayOfSearchedFlights.Origindestinationoption)
                         {
@@ -332,42 +268,41 @@
                             i = i + 1;
 
                             <tr class="booking-item">
-                                <td width="21%">
+                                <td class="col-md-2">@flightrow.AirLineName breakit 
                                     <div class="booking-item-airline-logo">
                                         <img src=@flightrow.ImageFileName alt="Image Alternative text" title="Image Title" />
                                         <p>@flightrow.AirLineName (@flightrow.OperatingAirlineCode - @flightrow.FlightNumber)</p>
                                     </div>
                                 </td>
-                                <td width="22%">
-                                    <div class="booking-item-flight-details">
+                                <td class="col-md-2 booking-item-flight-details">
+                                   
                                         <div class="booking-item-departure">
                                             <i class="fa fa-plane"></i>
                                             <h5>@flightrow.DepartureDateTime.ToString("HH:mm")</h5>
                                             <p class="booking-item-date">@flightrow.DepartureDateTime.ToString("ddd, MMM dd") </p>
                                             <p class="booking-item-destination">@flightrow.DepartureAirportCode</p>
                                         </div>
-                                    </div>
+                                   
                                 </td>
-                                <td width="22%">
-                                    <div class="booking-item-flight-details">
+                                <td class="col-md-2 booking-item-flight-details">
+                                   
                                         <div class="booking-item-arrival">
                                             <i class="fa fa-plane fa-flip-vertical"></i>
                                             <h5>@flightrow.ArrivalDateTime.ToString("HH:mm")</h5>
                                             <p class="booking-item-date">@flightrow.ArrivalDateTime.ToString("ddd, MMM dd") </p>
                                             <p class="booking-item-destination">@flightrow.ArrivalAirportCode</p>
                                         </div>
-                                    </div>
+                                    
                                 </td>
-                                <td width="12%">
+                                <td class="col-md-2">
                                     <div>
                                         <h5>@duration.Hours.@duration.Minutes</h5>
                                         <p name="stopCount" data-row=@i>@count stop</p>
                                     </div>
                                 </td>
-                                <td>@duration.Hours.@duration.Minutes</td>
-                                <td>@count  </td>
-                                <td>@flightrow.Availability seats</td>
-                                <td width="35%">
+                                                           
+                                
+                                <td class="col-md-3 booking-item-container">
                                     <div>
                                         <span class="booking-item-price"> <i class="fa fa-inr" aria-hidden="true"></i> @calFare</span><span>/person</span>
                                         <p class="booking-item-flight-class">Class: @flightrow.BookingClassFare.ClassType</p>
@@ -390,12 +325,9 @@
                                             <input class="btn btn-primary" type="submit" value="Select">
                                         </form>
                                         @*<a class="btn btn-primary" href="flight-payment.asp">Select</a>*@
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="booking-item-details" style="display:none;" data-name=@i>
-                                <td colspan="5">
-                                    <div>
+                                    </div>                               
+                            
+                            <div class="booking-item-details">                                
                                         <div class="row">
                                             <div>
                                                 <h5>Flight Details</h5>
@@ -441,10 +373,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    
+                            </div>
+                           </td>
+                                <td>                                    
+                                       
+                                        @count                                    
                                 </td>
                             </tr>
-                            @*</li>*@
                         }
                     </tbody>
                     @*</ul>*@
@@ -460,7 +396,7 @@
 
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
-<script src="~/Script/flight.js"></script>
+<script src="~/Script/flight.js?v=1"></script>
 <script>
     var jq = $.noConflict();
     jq(document).ready(function () {
