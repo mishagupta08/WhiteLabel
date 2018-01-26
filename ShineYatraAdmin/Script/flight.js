@@ -15,8 +15,7 @@ $(document).ready(function () {
         "bPaginate": false,
         "order":[],
         "aoColumnDefs": [      
-             { 'bSortable': false, 'aTargets': [0, 1, 2, 3, 4] },
-             { "bVisible": false, "aTargets": [0] },
+             { 'bSortable': false, 'aTargets': [0, 1, 2, 3, 4] },            
              {
                  "aTargets": [0],
                  "mData": function (source, type, val) {
