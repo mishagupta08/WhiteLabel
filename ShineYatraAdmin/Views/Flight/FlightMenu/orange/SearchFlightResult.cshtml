@@ -9,7 +9,7 @@
     var query = string.Empty;
 }
 <style>
-    .booking-item {       
+    .booking-item {
         border: 1px solid #e6e6e6;
         margin: 13px 0px;
         padding: 0px;
@@ -103,64 +103,131 @@
     <h3 class="booking-title">@query<small><a class="popup-text" href="#search-dialog" data-effect="mfp-zoom-out">Change search</a></small></h3>
     <div class="row">
         <div class="col-md-3">
-            <form class="booking-item-dates-change mb30">
-                <div class="form-group form-group-icon-left">
-                    <i class="fa fa-map-marker input-icon input-icon-hightlight"></i>
-                    <label>From</label>
-                    <input class="typeahead form-control" value="Jaipur, Rajasthan, India" placeholder="City, Hotel Name or U.S. Zip Code" type="text" />
-                </div>
-                <div class="form-group form-group-icon-left">
-                    <i class="fa fa-map-marker input-icon input-icon-hightlight"></i>
-                    <label>To</label>
-                    <input class="typeahead form-control" value="Delhi, Rajasthan, India" placeholder="City, Hotel Name or U.S. Zip Code" type="text" />
-                </div>
-                <div class="form-group form-group-icon-left">
-                    <i class="fa fa-calendar input-icon input-icon-hightlight"></i>
-                    <label>Departing</label>
-                    <input class="date-pick form-control" data-date-format="MM d, D" type="text" />
-                </div>
-                <div class="form-group form-group-select-plus">
-                    <label>Passengers</label>
-                    <div class="btn-group btn-group-select-num" data-toggle="buttons">
-                        <label class="btn btn-primary active">
-                            <input type="radio" name="options" />1
-                        </label>
-                        <label class="btn btn-primary">
-                            <input type="radio" name="options" />2
-                        </label>
-                        <label class="btn btn-primary">
-                            <input type="radio" name="options" />3
-                        </label>
-                        <label class="btn btn-primary">
-                            <input type="radio" name="options" />4
-                        </label>
-                        <label class="btn btn-primary">
-                            <input type="radio" name="options" />4+
-                        </label>
+            <form action="SearchFlight" method="post" id="searchFlightForm1" @*onsubmit="return SubmitFlightSearch();"*@>
+                <div class="tabbable">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="flight-search-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-lg form-group-icon-left">
+                                        <div class="tab active-tab" data-value="ONE" name="tripmode1">One Way</div><div class="tab" name="tripmode1" data-value="ROUND">Round Trip</div>
+                                        @*@Html.HiddenFor(m => m.flightSearch.Mode, new { @id = "Mode1", @name= "Mode" })*@
+                                        <input id="Mode1" name="Mode" type="hidden" value=@Model.flightSearch.Mode>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-lg form-group-icon-left">
+                                        <label class="control-label">Flight Category</label>
+                                        <div class="radio-list">
+                                            <label style="display:inline-block;">
+                                                @*@Html.RadioButtonFor(model => model.flightSearch.FlightType, (Resources.Domestic), new { @style = "display:inline-block;", @checked = "checked" })*@
+                                                <input checked="checked" id="flightSearch_FlightType" name="FlightType" style="display:inline-block;" type="radio" value=@Resources.Domestic>
+                                                @Html.Label(Resources.Domestic, new { @style = "display:inline-block;" })
+                                            </label>
+                                            <label style="display:inline-block;margin-left: 10%;margin-top: 9px;">
+                                                @*@Html.RadioButtonFor(model => model.flightSearch.FlightType, Resources.International, new { @style = "display:inline-block;" })*@
+                                                <input id="flightSearch_FlightType" name="FlightType" style="display:inline-block;" type="radio" value=@Resources.International>
+                                                @Html.Label(Resources.International, new { @style = "display:inline-block;" })
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-lg form-group-icon-left">
+                                        <i class="fa fa-map-marker input-icon"></i>
+                                        <label>Class</label>
+                                        <select class="form-control" id="flightClass" name="Preferredclass" required="0">
+                                            <option selected="selected" value="E">Economy</option>
+                                        </select>
+
+                                        @*@Html.DropDownListFor(m => m.flightSearch.Preferredclass, new SelectList(Model.flightSearch.FlightClass, "Id", "Value"), new { @required = "0", id = "flightClass", @class = "form-control" })*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-lg form-group-icon-left">
+                                        <i class="fa fa-map-marker input-icon"></i>
+                                        <label>From</label>
+                                        @*@Html.TextBoxFor(m => m.flightSearch.Origin, new { @required = "", @id = "flightOrigin1", @class = "form-control", @placeholder = Resources.Origin })*@
+                                        <input class="form-control ui-autocomplete-input" id="flightOrigin1" name="Origin" placeholder="Origin" required="" type="text" value=@Model.flightSearch.Origin>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-lg form-group-icon-left">
+                                        <i class="fa fa-map-marker input-icon"></i>
+                                        <label>To</label>
+                                        <input class="form-control ui-autocomplete-input" id="flightDestination1" name="Destination" placeholder="Destination" required="" type="text" value=@Model.flightSearch.Destination>
+                                        @*@Html.TextBoxFor(m => m.flightSearch.Destination, new { @required = "", @id = "flightDestination1", @class = "form-control", @placeholder = Resources.Destination })*@
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-daterange" data-date-format="dd-M-yy">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-lg form-group-icon-left">
+                                            <i class="fa fa-calendar input-icon input-icon-highlight"></i>
+                                            <label>Departing</label>
+                                            @*@Html.TextBoxFor(m => m.flightSearch.DepartDate, new { @id = "dateinput1", @required = "", @class = "datepicker form-control", @placeholder = "dd-mmm-yyyy" })*@
+                                            <input class="datepicker form-control" id="dateinput1" name="DepartDate" placeholder="dd-mmm-yyyy" required="" type="text" value=@Model.flightSearch.DepartDate>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="ReturnDateField1" style="display:none;">
+                                        <div class="form-group form-group-lg form-group-icon-left">
+                                            <i class="fa fa-calendar input-icon input-icon-highlight"></i>
+                                            <label>Returning</label>
+                                            <input class="form-control datepicker" id="returnDate1" name="ReturnDate" placeholder="dd-mmm-yyyy" type="text" value=@Model.flightSearch.ReturnDate required="">
+                                            @*@Html.TextBoxFor(m => m.flightSearch.ReturnDate, new { @id = "returnDate1", @class = "form-control datepicker", @placeholder = "dd-mmm-yyyy" })*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-lg form-group-select-plus">
+                                            <label>Adult 12+ yrs </label>
+                                            <div class="btn-group btn-group-select-num" data-toggle="buttons">
+                                                @*@Html.TextBoxFor(m => m.flightSearch.AdultPax, new { @type = "number", @id = "adult1", @required = "", @class = "form-control", @min = "1", @Value = "1" })*@
+                                                <input value=@Model.flightSearch.AdultPax class="form-control" data-val="true" data-val-number="The field AdultPax must be a number." data-val-required="The AdultPax field is required." id="adult1" min="1" name="AdultPax" required="" type="number">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-lg form-group-select-plus">
+                                            <label>Child 2-11 yrs :</label>
+                                            <div class="btn-group btn-group-select-num" data-toggle="buttons">
+                                                @*@Html.TextBoxFor(m => m.flightSearch.ChildPax, new { @type = "number", @id = "ChildPax1", @class = "form-control", @min = "0" })*@
+                                                <input class="form-control" data-val="true" data-val-number="The field ChildPax must be a number." data-val-required="The ChildPax field is required." id="ChildPax1" min="0" name="ChildPax" type="number" value=@Model.flightSearch.ChildPax>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-lg form-group-select-plus">
+                                            <label>Infant 0-2 yrs :</label>
+                                            <div class="btn-group btn-group-select-num" data-toggle="buttons">
+                                                @*@Html.TextBoxFor(m => m.flightSearch.InfantPax, new { @type = "number", @id = "infant1", @class = "form-control", @min = "0" })*@
+                                                <input class="form-control" data-val="true" data-val-number="The field InfantPax must be a number." data-val-required="The InfantPax field is required." id="infant1" min="0" name="InfantPax" type="number" value=@Model.flightSearch.InfantPax>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*</div>*@
+                            <button class="btn btn-primary btn-lg" type="submit">Search for Flights</button>
+                        </div>
                     </div>
-                    <select class="form-control hidden">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option selected="selected">5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                    </select>
                 </div>
-                <input class="btn btn-primary" type="submit" value="Upadte Search" />
             </form>
+            <br />
             <aside class="booking-filters text-white">
                 <h3>Filter By:</h3>
                 <ul class="list booking-filters-list">
-                   
+
                     <li>
                         <h5 class="booking-filters-title">Stops @*<small>Price from</small>*@</h5>
                         <div id="stopsCheckbox"></div>
@@ -192,7 +259,7 @@
                         <div id="AirlineNameCheckbox">
                             <label><input type="checkbox" checked name="type" class="airlinetype" value="Air India">&nbsp;Air India</label><br />
                             <label><input type="checkbox" checked name="type" class="airlinetype" value="Jet Airways">&nbsp;Jet Airways</label>
-                        </div>                        
+                        </div>
                     </li>
                     <li>
                         <h5 class="booking-filters-title">Departure Time</h5>
@@ -248,13 +315,13 @@
                             <th>Airline Name</th>
                             <th>Departure Time</th>
                             <th>Destination Arrival Time</th>
-                            <th>duration</th>       
-                            <th>test</th>  
-                            <th>stops</th>     
-                                                                           
+                            <th>duration</th>
+                            <th>test</th>
+                            <th>stops</th>
+
                         </tr>
                     </thead>
-                    <tbody >
+                    <tbody>
                         @*<ul class="booking-list">*@
                         @foreach (var flightrows in Model.arrayOfSearchedFlights.Origindestinationoption)
                         {
@@ -268,31 +335,32 @@
                             i = i + 1;
 
                             <tr class="booking-item">
-                                <td class="col-md-2">@flightrow.AirLineName breakit 
+                                <td class="col-md-2">
+                                    @flightrow.AirLineName breakit
                                     <div class="booking-item-airline-logo">
                                         <img src=@flightrow.ImageFileName alt="Image Alternative text" title="Image Title" />
                                         <p>@flightrow.AirLineName (@flightrow.OperatingAirlineCode - @flightrow.FlightNumber)</p>
                                     </div>
                                 </td>
                                 <td class="col-md-2 booking-item-flight-details">
-                                   
-                                        <div class="booking-item-departure">
-                                            <i class="fa fa-plane"></i>
-                                            <h5>@flightrow.DepartureDateTime.ToString("HH:mm")</h5>
-                                            <p class="booking-item-date">@flightrow.DepartureDateTime.ToString("ddd, MMM dd") </p>
-                                            <p class="booking-item-destination">@flightrow.DepartureAirportCode</p>
-                                        </div>
-                                   
+
+                                    <div class="booking-item-departure">
+                                        <i class="fa fa-plane"></i>
+                                        <h5>@flightrow.DepartureDateTime.ToString("HH:mm")</h5>
+                                        <p class="booking-item-date">@flightrow.DepartureDateTime.ToString("ddd, MMM dd") </p>
+                                        <p class="booking-item-destination">@flightrow.DepartureAirportCode</p>
+                                    </div>
+
                                 </td>
                                 <td class="col-md-2 booking-item-flight-details">
-                                   
-                                        <div class="booking-item-arrival">
-                                            <i class="fa fa-plane fa-flip-vertical"></i>
-                                            <h5>@flightrow.ArrivalDateTime.ToString("HH:mm")</h5>
-                                            <p class="booking-item-date">@flightrow.ArrivalDateTime.ToString("ddd, MMM dd") </p>
-                                            <p class="booking-item-destination">@flightrow.ArrivalAirportCode</p>
-                                        </div>
-                                    
+
+                                    <div class="booking-item-arrival">
+                                        <i class="fa fa-plane fa-flip-vertical"></i>
+                                        <h5>@flightrow.ArrivalDateTime.ToString("HH:mm")</h5>
+                                        <p class="booking-item-date">@flightrow.ArrivalDateTime.ToString("ddd, MMM dd") </p>
+                                        <p class="booking-item-destination">@flightrow.ArrivalAirportCode</p>
+                                    </div>
+
                                 </td>
                                 <td class="col-md-2">
                                     <div>
@@ -300,8 +368,8 @@
                                         <p name="stopCount" data-row=@i>@count stop</p>
                                     </div>
                                 </td>
-                                                           
-                                
+
+
                                 <td class="col-md-3 booking-item-container">
                                     <div>
                                         <span class="booking-item-price"> <i class="fa fa-inr" aria-hidden="true"></i> @calFare</span>
@@ -325,9 +393,9 @@
                                             <input class="btn btn-primary" type="submit" value="Select">
                                         </form>
                                         @*<a class="btn btn-primary" href="flight-payment.asp">Select</a>*@
-                                    </div>                               
-                            
-                            <div class="booking-item-details">                                
+                                    </div>
+
+                                    <div class="booking-item-details">
                                         <div class="row">
                                             <div>
                                                 <h5>Flight Details</h5>
@@ -373,12 +441,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    
-                            </div>
-                           </td>
-                                <td>                                    
-                                       
-                                        @count                                    
+
+                                    </div>
+                                </td>
+                                <td>
+
+                                    @count
                                 </td>
                             </tr>
                         }
@@ -425,14 +493,14 @@
             oTable.draw();
         });
 
-        jq("#Mode").val("ONE");
-        jq("div[name=tripmode]").bind("click", function () {
-            jq("div[name=tripmode]").removeClass("active-tab");
-            jq("div[name=tripmode]").addClass("tab");
+        jq("#Mode1").val("ONE");
+        jq("div[name=tripmode1]").bind("click", function () {
+            jq("div[name=tripmode1]").removeClass("active-tab");
+            jq("div[name=tripmode1]").addClass("tab");
             jq(this).addClass("active-tab");
             var selectedMode = jq(this).attr("data-value");
-            jq("#Mode").val(selectedMode);
-            displayReturn(selectedMode);
+            jq("#Mode1").val(selectedMode);
+            displayReturnMode(selectedMode);
         });
         jq("#dateinput").focusout(function () {
             jq("#DepartDate").val(this.value);
@@ -460,9 +528,39 @@
             minDate: 0
         });
 
+        /***On form variables***/
+
+        jq("#dateinput1").focusout(function () {
+            jq("#DepartDate1").val(this.value);
+        });
+
+        jq("#returnDate1").focusout(function () {
+            jq("#ReturnDate1").val(this.value);
+        });
+        // Date Picker
+        jq('#dateinput1').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy",
+            minDate: 0
+        });
+
+        jq('#returnDate1').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy",
+            minDate: 0
+        });
+
+        /*****END*****/
+
         var taskIdValue = $("#boardTaskId").val();
 
-        jq('#flightOrigin').autocomplete({
+        jq('#flightOrigin1').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: "AssessorNameSearch",
@@ -484,7 +582,7 @@
             }
         });
 
-        jq('#flightDestination').autocomplete({
+        jq('#flightDestination1').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: "AssessorNameSearch",
@@ -507,14 +605,14 @@
         });
     });
 
-    function displayReturn(type) {
+    function displayReturnMode(type) {
         if (type == "ONE") {
-            $("#ReturnDateField").hide();
-            $("#returnDate").prop('required', false);
+            $("#ReturnDateField1").hide();
+            $("#returnDate1").prop('required', false);
         }
         else {
-            $("#ReturnDateField").show();
-            $("#returnDate").prop('required', true);
+            $("#ReturnDateField1").show();
+            $("#returnDate1").prop('required', true);
         }
     }
 </script>
