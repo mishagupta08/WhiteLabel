@@ -234,6 +234,8 @@
                     </li>
                     <li>
                         <h5 class="booking-filters-title">Price </h5>
+                        <label id="minprice" style="display:none;"></label>
+                        <label id="maxprice" style="display:none;"></label>
                         <input type="text" id="price-slider">
                     </li>
                     <li>
@@ -318,7 +320,7 @@
                             <th>duration</th>
                             <th>test</th>
                             <th>stops</th>
-
+                            <th>price</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -448,6 +450,9 @@
 
                                     @count
                                 </td>
+                                <td>
+                                    @calFare
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -463,54 +468,56 @@
 </div>
 
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
 <script src="~/Script/flight.js?v=1"></script>
-<script>
-    var jq = $.noConflict();
-    jq(document).ready(function () {
-        jq("p[name=stopCount]").click(function () {
-            var rowId = jq(this).attr("data-row");
-            jq("tr[data-name=" + rowId + "]").slideToggle("slow");
+<script>   
+    $(document).ready(function () {
+        $("p[name=stopCount]").click(function () {
+            var rowId = $(this).attr("data-row");
+            $("tr[data-name=" + rowId + "]").slideToggle("slow");
         });
 
-        jq("#priceRange").slider({
-            range: true,
-            step: 1,
-            values: [minvalue, maxvalue],
+        //jq("#priceRange").slider({
+        //    range: true,
+        //    step: 1,
+        //    values: [minvalue, maxvalue],
+        //    min: minvalue,
+        //    max: maxvalue
+        //});
+
+        $("#price-slider").ionRangeSlider({
             min: minvalue,
-            max: maxvalue
+            max: maxvalue,
+            type: 'double',
+            prefix: "$",
+            from: minvalue,
+            to: maxvalue,
+            // maxPostfix: "+",
+            prettify: false,
+            hasGrid: true,
+            onFinish: saveResult
         });
 
-        jq("#minprice").html(jq("#priceRange").slider("values", 0));
-        jq("#maxprice").html(jq("#priceRange").slider("values", 1));
+        $("#minprice").html(minvalue);
+        $("#maxprice").html(maxvalue);        
 
-        jq("#priceRange").on("slide", function (event, ui) {
-            jq("#minprice").html(ui.values[0]);
-            jq("#maxprice").html(ui.values[1]);
-        });
-
-        jq("#priceRange").on("slidestop", function (event, ui) {
-            oTable.draw();
-        });
-
-        jq("#Mode1").val("ONE");
-        jq("div[name=tripmode1]").bind("click", function () {
-            jq("div[name=tripmode1]").removeClass("active-tab");
-            jq("div[name=tripmode1]").addClass("tab");
-            jq(this).addClass("active-tab");
-            var selectedMode = jq(this).attr("data-value");
-            jq("#Mode1").val(selectedMode);
+        $("#Mode1").val("ONE");
+        $("div[name=tripmode1]").bind("click", function () {
+            $("div[name=tripmode1]").removeClass("active-tab");
+            $("div[name=tripmode1]").addClass("tab");
+            $(this).addClass("active-tab");
+            var selectedMode = $(this).attr("data-value");
+            $("#Mode1").val(selectedMode);
             displayReturnMode(selectedMode);
         });
-        jq("#dateinput").focusout(function () {
-            jq("#DepartDate").val(this.value);
+        $("#dateinput").focusout(function () {
+            $("#DepartDate").val(this.value);
         });
 
-        jq("#returnDate").focusout(function () {
-            jq("#ReturnDate").val(this.value);
+        $("#returnDate").focusout(function () {
+            $("#ReturnDate").val(this.value);
         });
         // Date Picker
-        jq('#dateinput').datepicker({
+        $('#dateinput').datepicker({
             autoclose: true,
             todayHighlight: true,
             changeMonth: true,
@@ -519,7 +526,7 @@
             minDate: 0
         });
 
-        jq('#returnDate').datepicker({
+        $('#returnDate').datepicker({
             autoclose: true,
             todayHighlight: true,
             changeMonth: true,
@@ -530,15 +537,15 @@
 
         /***On form variables***/
 
-        jq("#dateinput1").focusout(function () {
-            jq("#DepartDate1").val(this.value);
+        $("#dateinput1").focusout(function () {
+            $("#DepartDate1").val(this.value);
         });
 
-        jq("#returnDate1").focusout(function () {
-            jq("#ReturnDate1").val(this.value);
+        $("#returnDate1").focusout(function () {
+            $("#ReturnDate1").val(this.value);
         });
         // Date Picker
-        jq('#dateinput1').datepicker({
+        $('#dateinput1').datepicker({
             autoclose: true,
             todayHighlight: true,
             changeMonth: true,
@@ -547,7 +554,7 @@
             minDate: 0
         });
 
-        jq('#returnDate1').datepicker({
+        $('#returnDate1').datepicker({
             autoclose: true,
             todayHighlight: true,
             changeMonth: true,
@@ -560,7 +567,7 @@
 
         var taskIdValue = $("#boardTaskId").val();
 
-        jq('#flightOrigin1').autocomplete({
+        $('#flightOrigin1').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: "AssessorNameSearch",
@@ -582,7 +589,7 @@
             }
         });
 
-        jq('#flightDestination1').autocomplete({
+        $('#flightDestination1').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: "AssessorNameSearch",
@@ -615,4 +622,10 @@
             $("#returnDate1").prop('required', true);
         }
     }
+
+    var saveResult = function (data) {        
+        $("#minprice").html(data.fromNumber);
+        $("#maxprice").html(data.toNumber);       
+        oTable.draw();
+    };
 </script>

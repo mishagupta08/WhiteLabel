@@ -223,16 +223,6 @@ $(document).ready(
 $('.nav-drop').dropit();
 
 
-$("#price-slider").ionRangeSlider({
-    min: 130,
-    max: 575,
-    type: 'double',
-    prefix: "$",
-    // maxPostfix: "+",
-    prettify: false,
-    hasGrid: true
-});
-
 $('.i-check, .i-radio').iCheck({
     checkboxClass: 'i-check',
     radioClass: 'i-radio'
