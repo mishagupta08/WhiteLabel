@@ -13,9 +13,9 @@ $(document).ready(function () {
         },
         "destroy":true,              
         "bPaginate": false,
-        "order":[],
+        "order": [[6,"asc"]],
         "aoColumnDefs": [      
-             { 'bSortable': false, 'aTargets': [0, 1, 2, 3, 4] },            
+             { 'bSortable': false, 'aTargets': [0, 1, 2, 3, 4] },
              {
                  "aTargets": [0],
                  "mData": function (source, type, val) {
@@ -72,19 +72,38 @@ $(document).ready(function () {
                  // 'sort', 'type' and undefined all just use the integer
                  return source.price;
              }
+         },
+         {
+             "aTargets": [8],
+             "mData": function (source, type, val) {
+                 if (type === 'set') {                     
+                     source.durationdisplay = val;
+                     source.duration = parseFloat(val);
+                     return;
+                 }
+                 else if (type === 'display') {
+                     return source.duration;
+                 }
+                 else if (type === 'filter') {
+                     return source.duration;
+                 }
+                 // 'sort', 'type' and undefined all just use the integer
+                 return source.duration;
+             }
          }
-        ],
-        stateSave: true
+        ]
     });     
 
     oTable.column(5).visible(false);
     oTable.column(6).visible(false);
+    oTable.column(7).visible(false);
+    oTable.column(8).visible(false);
 
     var airlineNames = oTable.column(0).data().unique().sort();
     var airlinechkbox = "";
     for (var i = 0 ; i < airlineNames.length; i++)
     {
-        airlinechkbox += "<div class=\"checkbox\"><label><input type=\"checkbox\" checked name=\"type\" class=\"airlinetype i-check\" value=\"" + airlineNames[i] + "\">&nbsp;" + airlineNames[i] + "</label></div><br />";
+        airlinechkbox += "<div class=\"checkbox\"><label><input type=\"checkbox\" checked name=\"type\" class=\"airlinetype\" value=\"" + airlineNames[i] + "\">&nbsp;" + airlineNames[i] + "</label></div>";
     }
 
     $("#AirlineNameCheckbox").html(airlinechkbox);
@@ -92,7 +111,7 @@ $(document).ready(function () {
     var stops = oTable.column(5).data().unique().sort();
     var stopschkbox = "";
     for (var i = 0 ; i < stops.length; i++) {
-        stopschkbox += "<div class=\"checkbox\"><label><input type=\"checkbox\" checked name=\"Stops\" class=\"Stops i-check\" value=\"" + stops[i] + "\">&nbsp;" + stops[i] + "</label></div><br />";
+        stopschkbox += "<div class=\"checkbox\"><label><input type=\"checkbox\" checked name=\"Stops\" class=\"Stops\" value=\"" + stops[i] + "\">&nbsp;" + stops[i] + "</label></div>";
     }
 
     $("#stopsCheckbox").html(stopschkbox);
@@ -130,6 +149,24 @@ $(document).ready(function () {
         .draw();
     });
 
+    $(".classflight").change(function () {
+        //build a regex filter string with an or(|) condition
+        var types = $('input:checkbox[name="flight_class"]:checked').map(function () {
+            return this.value;
+        }).get().join('|');
+        //filter in column 0, with an regex, no smart filtering, no inputbox,not case sensitive
+        oTable
+        .columns(7)
+        .search('^' + types + '$', true, false)
+        .draw();
+    });
+
 });
 
+function Callsort(col,type)
+{
+     oTable
+    .order([col, type])
+    .draw();
+}
 

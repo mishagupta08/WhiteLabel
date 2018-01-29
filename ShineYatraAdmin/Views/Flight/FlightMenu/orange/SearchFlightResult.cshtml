@@ -239,20 +239,20 @@
                         <input type="text" id="price-slider">
                     </li>
                     <li>
-                        <h5 class="booking-filters-title">Flight Class <small>Price from</small></h5>
+                        <h5 class="booking-filters-title">Flight Class</h5>
                         <div class="checkbox">
                             <label>
-                                <input class="i-check" type="checkbox" />Economy<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 154</span>
+                                <input class="classflight" checked="checked" name="flight_class" value="Economy" type="checkbox" />Economy
                             </label>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input class="i-check" type="checkbox" />Business<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 316</span>
+                                <input class= "classflight" checked="checked" name="flight_class" value="Business" type="checkbox" />Business
                             </label>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input class="i-check" type="checkbox" />First<span class="pull-right"><i class="fa fa-inr" aria-hidden="true"></i> 450</span>
+                                <input class="classflight" checked="checked" name="flight_class"  value="First" type="checkbox" />First
                             </label>
                         </div>
                     </li>
@@ -295,13 +295,13 @@
                     <h5 class="booking-sort-title"><a href="#">Sort: Sort: Price (low to high)<i class="fa fa-angle-down"></i><i class="fa fa-angle-up"></i></a></h5>
                     <ul class="nav-drop-menu">
                         <li>
-                            <a href="#">Price (high to low)</a>
+                            <a href="#" onclick="Callsort(6,'desc')">Price (high to low)</a>
                         </li>
                         <li>
-                            <a href="#">Duration</a>
+                            <a href="#" onclick="Callsort(8, 'asc')">Duration</a>
                         </li>
                         <li>
-                            <a href="#">Stops</a>
+                            <a href="#" onclick="Callsort(5,'asc')">Stops</a>
                         </li>
                         <li>
                             <a href="#">Arrival</a>
@@ -321,6 +321,8 @@
                             <th>test</th>
                             <th>stops</th>
                             <th>price</th>
+                            <th>classtype</th>
+                            <th>duration</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -358,9 +360,9 @@
 
                                     <div class="booking-item-arrival">
                                         <i class="fa fa-plane fa-flip-vertical"></i>
-                                        <h5>@flightrow.ArrivalDateTime.ToString("HH:mm")</h5>
-                                        <p class="booking-item-date">@flightrow.ArrivalDateTime.ToString("ddd, MMM dd") </p>
-                                        <p class="booking-item-destination">@flightrow.ArrivalAirportCode</p>
+                                        <h5>@flightlastrow.ArrivalDateTime.ToString("HH:mm")</h5>
+                                        <p class="booking-item-date">@flightlastrow.ArrivalDateTime.ToString("ddd, MMM dd") </p>
+                                        <p class="booking-item-destination">@flightlastrow.ArrivalAirportCode</p>
                                     </div>
 
                                 </td>
@@ -452,6 +454,12 @@
                                 </td>
                                 <td>
                                     @calFare
+                                </td>
+                                <td>
+                                    @flightrow.BookingClassFare.ClassType
+                                </td>
+                                <td>
+                                   @duration.Hours.@duration.Minutes
                                 </td>
                             </tr>
                         }
