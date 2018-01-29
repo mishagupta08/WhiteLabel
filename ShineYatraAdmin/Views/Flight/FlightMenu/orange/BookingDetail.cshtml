@@ -231,8 +231,12 @@
                             </div>
                         }
 
-                        <div class="row" id="PartialPaymentWithWalletDiv" style="display:none;">
-                            <label>@Html.CheckBoxFor(x => x.FlightBookingDetail.PartialPaymentWithWallet, new { @id = "PartialPaymentWithWallet" }) <span id="walletBalanceMessage">Your Wallet Contains some amount do you want to use that amount?</span></label>
+                        <div class="blue box">
+
+                            <div class="form-group" id="PartialPaymentWithWalletDiv" style="display:none;">
+                                <label class="marginleft">@Html.CheckBoxFor(x => x.FlightBookingDetail.PartialPaymentWithWallet, new { @id = "PartialPaymentWithWallet", @class = "i-check", @style = "position: absolute; opacity: 0;" }) <span id="walletBalanceMessage">Your Wallet Contains some amount do you want to use that amount?</span></label>
+
+                            </div>
                         </div>
                         <br />
 
@@ -490,7 +494,7 @@
                 type: 'Post',
                 async: false,
             }).done(function (result) {
-                $("#walletBalanceMessage").html("Your wallet contains Rs " + result + ". Do you want to use your wallet balance to pay your fare?");
+                $("#walletBalanceMessage").html("Your wallet contains Rs <strong>" + result + "/- </strong>. Do you want to use your wallet balance to pay your fare?");
                 $("#PartialPaymentWithWalletDiv").show();
                 $(".preloader").hide();
             }).fail(function (xhr) {
