@@ -14,6 +14,8 @@ namespace ShineYatraAdmin.Controllers
     using System.Web.Script.Serialization;
     using System.Configuration;
     using System.Web;
+    using System.IO;
+    using System.Reflection;
 
     #endregion namespace
 
@@ -46,7 +48,38 @@ namespace ShineYatraAdmin.Controllers
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
 
-            var viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlight";
+            //----View mapping start----
+
+            // check in company Id folder
+            var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Flight//FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//SearchFlight.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//SearchFlight";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Flight//FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlight.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlight";
+                }
+                else
+                {
+                    viewFolder = "FlightMenu//SearchFlight";
+                }
+            }
+
+            //----View mapping end----
+
             return View(viewFolder, flightSearchModel);
 
             //return View("FlightMenu//SearchFlight", flightSearchModel);
@@ -86,7 +119,7 @@ namespace ShineYatraAdmin.Controllers
                 {
                     Origindestinationoption = new List<Origindestinationoption>()
                 };
-                
+
                 foreach (var flight in searchPageViewModel.arrayOfSearchedFlights.Origindestinationoption)
                 {
                     var subServiceId = flight.FlightsDetailList.FlightsDetail.First().SubServiceId;
@@ -125,7 +158,41 @@ namespace ShineYatraAdmin.Controllers
 
             searchPageViewModel.flightSearch.AssignFlightClass();
             searchPageViewModel.flightSearch.AssignTripMode();
-            var viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlightResult";
+
+
+            //----View mapping start----
+
+            // check in company Id folder
+            //var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Flight//FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//SearchFlightResult.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//SearchFlightResult";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Flight//FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlightResult.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlightResult";
+                }
+                else
+                {
+                    viewFolder = "FlightMenu//SearchFlightResult";
+                }
+            }
+
+            //----View mapping end----
+
+            //var viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//SearchFlightResult";
             return View(viewFolder, searchPageViewModel);
         }
 
@@ -141,9 +208,9 @@ namespace ShineYatraAdmin.Controllers
             _userManager = new UserManager();
             _serviceManager = new ServiceManager();
             var searchPageViewModel = new SearchPageViewModel();
+            var userData = User.Identity.Name.Split('|');
             try
             {
-                var userData = User.Identity.Name.Split('|');
                 searchPageViewModel = new SearchPageViewModel
                 {
                     flightSearch = passengerDetails,
@@ -197,10 +264,41 @@ namespace ShineYatraAdmin.Controllers
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
 
-            var viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//BookingDetail";
-            return View(viewFolder, searchPageViewModel);
+            //----View mapping start----
 
-            //return View("FlightMenu//BookingDetail", searchPageViewModel);
+            // check in company Id folder
+            //var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Flight//FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//BookingDetail.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//BookingDetail";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Flight//FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//BookingDetail.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//BookingDetail";
+                }
+                else
+                {
+                    viewFolder = "FlightMenu//BookingDetail";
+                }
+            }
+
+            //----View mapping end----
+
+            //    var viewFolder = "FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//BookingDetail";
+
+            return View(viewFolder, searchPageViewModel);
         }
 
 
