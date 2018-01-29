@@ -745,6 +745,7 @@
     <Content Include="Script\dashboard.js" />
     <Content Include="Script\flight.js" />
     <Content Include="Script\FlightReport.js" />
+    <Content Include="Script\flight_elite.js" />
     <Content Include="Script\Fund.js" />
     <Content Include="Script\group.js" />
     <Content Include="Script\hotel.js" />
