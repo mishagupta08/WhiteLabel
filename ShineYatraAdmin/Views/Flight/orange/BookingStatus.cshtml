@@ -1,10 +1,9 @@
 ﻿@model ShineYatraAdmin.Entity.BookingDetail
 @{
     ViewBag.Title = "Status";
-    Layout = "~/Views/Shared/Layout.cshtml";
+    Layout = "~/Views/Shared/orange/Layout.cshtml";
     var count = 0;
 }
-
 <div class="container">
     <div class="containerMain">
         <table border="0" width="100%" cellpadding="5" cellspacing="0" class="table-condensed">
@@ -14,247 +13,251 @@
             </tr>
         </table>
 
-        <div class="gap"></div>
+        @if (Model == null)
+        {
+            <h2 class="text-danger">Error Code:@ViewBag.statusCode &nbsp; @Html.Raw(ViewBag.status). Please <a href="@Url.Action("SearchFlight", "Flight")">try again</a>.</h2>
+        }
+        else
+        {
+            <div class="gap"></div>
 
-        <div class="SearchFlight" id="divToPrint">
-            <h2 align="center" style="color:#FF0000;"> Flight E-Ticket </h2>
-            <table border="0" cellpadding="5" cellspacing="0" width="100%">
-                <tr>
-                    <td align="left">
-                        <table class="txt_blk">
-                            <tr>
-                                @*<td width="138">
-                                        <span id="lblname"></span>
-
-
-                                        <a href="flight-booking-details.asp">
-                                            <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-chevron-left" aria-hidden="true"></i> GO BACK</button>
-                                        </a>
-                                    </td>*@
-                                <td width="139">
-                                    <a href="#" onClick="window.print();return false;">
-                                        <button type="button" class="btn btn-info btn-xs"><i class="fa fa-print" aria-hidden="true"></i> PRINT</button>
-
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="43" colspan="2"><span id="lbladd"></span> </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"> <h5> Mobile : <span id="lblmobno"> @Model.mobile_no  </span> </h5> </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <p> <h5> Email Id : <span id="lblemailId"> @Model.email  </span> </h5> </p>
-                                    <p>
-                                        <br>
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        <table width="350" align="right" cellpadding="5" cellspacing="0">
-                            <tr>
-                                <td colspan="3">
-                                    <span id="lblmsg" class="fareDetails"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="146">
-                                    <h5>  Booking Mobile No </h5>
-                                </td>
-                                <td width="18">
-                                    :
-                                </td>
-                                <td width="100">
-                                    <span id="lblbookmobno"> <h5>   @Model.mobile  </h5></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>  Booking Email Id  </h5>
-                                </td>
-                                <td>
-                                    :
-                                </td>
-                                <td>
-                                    <span id="lblBookEmailId"><h5>  @Model.email   </h5>  </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>   Issue Date  </h5>
-                                </td>
-                                <td>
-                                    :
-                                </td>
-                                <td>
-                                    <span id="lblissuedate"> <h5> @Model.txn_date  </h5></span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <h3>
-
-                Flight Details (@Model.travel_from - @Model.travel_to)
-            </h3>
-            <table class="table table-bordered">
-                <tr>
-                    <td colspan="2" class="highlight_head">
-                        <strong>Flight</strong>
-                    </td>
-                    <td class="highlight_head">
-                        <strong>Departure</strong>
-                    </td>
-                    <td class="highlight_head">
-                        <strong>Arrive</strong>
-                    </td>
-                    <td class="highlight_head">
-                        <strong>Cabin</strong>
-                    </td>
-                </tr>
-
-
-                <tr>
-                    <td>
-                        <img src="img/croatia.jpg" alt="Image Alternative text" title="Flight" style="width:50px;" />
-                    </td>
-                    <td>
-                        <span id="lstflghtdtldep_ctrl0_lblflightno">@Model.flight_id</span>
-                        (<span id="lstflghtdtldep_ctrl0_Label3">@Model.airline_code</span>)
-                    </td>
-                    <td>
-                        <span id="lstflghtdtldep_ctrl0_lbldep">@Model.travel_from</span>
-                        (<span id="lstflghtdtldep_ctrl0_lbldepttime"> @Model.travel_date</span>)
-                    </td>
-                    <td>
-                        <span id="lstflghtdtldep_ctrl0_lblarrival">@Model.travel_to</span>
-                        (<span id="lstflghtdtldep_ctrl0_lblarrivaltime">@Model.travel_date</span>)
-                    </td>
-                    <td>
-                        <span id="lstflghtdtldep_ctrl0_lblstatus">@Model.trip_category</span>
-                    </td>
-                </tr>
-
-
-            </table>
-            <br />
-            <h3> Passenger Detail </h3>
-            <table class="table table-bordered">
-                <tr>
-                    <td class="highlight_head">
-                        <strong></strong>
-                    </td>
-                    <td class="highlight_head">
-                        <strong>Passenger Name</strong>
-                    </td>
-                    <td class="highlight_head">
-                        <strong>E-ticket No.</strong>
-                    </td>
-                    <td class="highlight_head">
-                        <strong>Airline PNR</strong>
-                    </td>
-                    <td class="highlight_head">
-                        <strong>Flight Details</strong>
-                    </td>
-                </tr>
-
-                @foreach (var passenger in Model.passenger_details)
-                {
-                    count++;
+            <div class="SearchFlight" id="divToPrint">
+                <h2 align="center" style="color:#FF0000;"> Flight E-Ticket </h2>
+                <table border="0" cellpadding="5" cellspacing="0" width="100%">
                     <tr>
-                        <td>
-                            <span id="lstflightnamedep_ctrl0_Label8">@count</span>
+                        <td align="left">
+                            <table class="txt_blk">
+                                <tr>
+                                    @*<td width="138">
+                                            <span id="lblname"></span>
+
+
+                                            <a href="flight-booking-details.asp">
+                                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-chevron-left" aria-hidden="true"></i> GO BACK</button>
+                                            </a>
+                                        </td>*@
+                                    <td width="139">
+                                        <a href="#" onClick="window.print();return false;">
+                                            <button type="button" class="btn btn-info btn-xs"><i class="fa fa-print" aria-hidden="true"></i> PRINT</button>
+
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td height="43" colspan="2"><span id="lbladd"></span> </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"> <h5> Mobile : <span id="lblmobno"> @Model.mobile_no  </span> </h5> </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p> <h5> Email Id : <span id="lblemailId"> @Model.email  </span> </h5> </p>
+                                        <p>
+                                            <br>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
-                            <span id="lstflightnamedep_ctrl0_lblpsngrname">@passenger.title</span>
-                            <span id="lstflightnamedep_ctrl0_lblpsngrname1">@passenger.first_name</span>
-                            <span id="lstflightnamedep_ctrl0_lblpsngrname2">@passenger.last_name</span>
-                        </td>
-                        <td>
-                            <span id="lstflightnamedep_ctrl0_lblTicketNo">Ticket no</span>
-                        </td>
-                        <td>
-                            <span id="lstflightnamedep_ctrl0_lblconfirmationid">@Model.api_txn_id</span>
-                        </td>
-                        <td>
-                            <span id="lstflightnamedep_ctrl0_Label1">DEL</span>-
-                            <span id="lstflightnamedep_ctrl0_Label2">STV</span>
-                            (<span id="lstflightnamedep_ctrl0_Label6">SG</span>-
-                            <span id="lstflightnamedep_ctrl0_Label7">473</span>)
+                            <table width="350" align="right" cellpadding="5" cellspacing="0">
+                                <tr>
+                                    <td colspan="3">
+                                        <span id="lblmsg" class="fareDetails"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="146">
+                                        <h5>  Booking Mobile No </h5>
+                                    </td>
+                                    <td width="18">
+                                        :
+                                    </td>
+                                    <td width="100">
+                                        <span id="lblbookmobno"> <h5>   @Model.mobile  </h5></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>  Booking Email Id  </h5>
+                                    </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        <span id="lblBookEmailId"><h5>  @Model.email   </h5>  </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>   Issue Date  </h5>
+                                    </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        <span id="lblissuedate"> <h5> @Model.txn_date  </h5></span>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
-                }
+                </table>
+                <h3>
 
-                <tr id="lstflightnamedep_ctrl1_trblank">
-                    <td colspan="5" class="highlight_head"></td>
-                </tr>
+                    Flight Details (@Model.travel_from - @Model.travel_to)
+                </h3>
+                <table class="table table-bordered">
+                    <tr>
+                        <td colspan="2" class="highlight_head">
+                            <strong>Flight</strong>
+                        </td>
+                        <td class="highlight_head">
+                            <strong>Departure</strong>
+                        </td>
+                        <td class="highlight_head">
+                            <strong>Arrive</strong>
+                        </td>
+                        <td class="highlight_head">
+                            <strong>Cabin</strong>
+                        </td>
+                    </tr>
 
 
+                    <tr>
+                        <td>
+                            <img src="img/croatia.jpg" alt="Image Alternative text" title="Flight" style="width:50px;" />
+                        </td>
+                        <td>
+                            <span id="lstflghtdtldep_ctrl0_lblflightno">@Model.flight_id</span>
+                            (<span id="lstflghtdtldep_ctrl0_Label3">@Model.airline_code</span>)
+                        </td>
+                        <td>
+                            <span id="lstflghtdtldep_ctrl0_lbldep">@Model.travel_from</span>
+                            (<span id="lstflghtdtldep_ctrl0_lbldepttime"> @Model.travel_date</span>)
+                        </td>
+                        <td>
+                            <span id="lstflghtdtldep_ctrl0_lblarrival">@Model.travel_to</span>
+                            (<span id="lstflghtdtldep_ctrl0_lblarrivaltime">@Model.travel_date</span>)
+                        </td>
+                        <td>
+                            <span id="lstflghtdtldep_ctrl0_lblstatus">@Model.trip_category</span>
+                        </td>
+                    </tr>
 
-            </table>
-            <br />
 
-            <table width="100%" border="0" style="font-size: 13px; line-height: 20px; text-align: justify;" cellpadding="5" cellspacing="0">
+                </table>
+                <br />
+                <h3> Passenger Detail </h3>
+                <table class="table table-bordered">
+                    <tr>
+                        <td class="highlight_head">
+                            <strong></strong>
+                        </td>
+                        <td class="highlight_head">
+                            <strong>Passenger Name</strong>
+                        </td>
+                        <td class="highlight_head">
+                            <strong>E-ticket No.</strong>
+                        </td>
+                        <td class="highlight_head">
+                            <strong>Airline PNR</strong>
+                        </td>
+                        <td class="highlight_head">
+                            <strong>Flight Details</strong>
+                        </td>
+                    </tr>
+
+                    @foreach (var passenger in Model.passenger_details)
+                {
+                    count++;
                 <tr>
-                    <td class="txt_blk">
-                        <p>
-                            Carriage and other services provided by the carrier are subject to conditions of
-                            carriage which hereby incorporated by reference. These conditions may be obtained
-                            from the issuing carrier. If the passenger's journey involves an ultimate destination
-                            or stop in a country other than country of departure the Warsaw convention may be
-                            applicable and the convention governs and in most cases limits the liability of
-                            carriers for death or personal injury and in respect of loss of or damage to baggage.
-                        </p>
-                        <br>
-                        <h3> Airline Terms and Conditions </h3>
-                        <strong>1. Check In</strong><br />
-                        Check-in commences 2 hours prior to scheduled departure (180 minutes incase of Srinagar
-                        and Jammu airports).Passengers to report 60 minutes prior to scheduled departure
-                        time (90 minutes in case of Srinagar and Jammu airports).<br />
-                        <strong>
-                            Check-in counter closes strictly 40 minutes prior to the scheduled departure
-                            time. Boarding Gate closes 20 minutes prior to scheduled departure time. If you
-                            fail to show up at the check-in counter or the boarding gate before the closure
-                            time, you will be treated as &ldquo;no show&rdquo; passenger and fare paid will
-                            be forfeited.
-                        </strong>
-                        <br />
-                        Any Airline reserves its right to refuse passage to any Customer who is under the
-                        influence of alcohol or drugs, violent or abusive, or where the Company or its duly
-                        authorised representatives / staff believe that it is necessary for the safety and
-                        comfort of other Customers or for the protection of the aircraft and / or other
-                        assets. Such passengers will be treated as &lsquo;no show&rsquo; passengers and
-                        fare paid will be forfeited.<br />
-                        <strong>2. Baggage Allowance</strong><br />
-                        Checked Baggage allowance is 15Kg per Customer (no baggage allowance for infants);
-                        excess baggage is charged at Rs 250/Kg. Cabin Baggage allowance is 7Kg per Customer
-                        (no baggage allowance for infants). The maximum size of the cabin hand baggage cannot
-                        exceed 55 cm x 40 cm x 20 cm (20 x 14 x 9ins). Any Airline assumes no responsibility
-                        or liability for delay in carriage of baggage by air.<br />
-                        <strong>3. Cancellation and rescheduling of flights</strong><br />
-                        Any Airline will endeavour to operate the flights as per schedule, however Any Airline
-                        reserves its right to cancel, reschedule or delay the commencement or continuance
-                        of any flight or alter the stopping place or deviate from the route of the journey
-                        without thereby incurring any liability in terms of compensation, damages or loss
-                        whether direct, indirect, consequential or special or otherwise in any manner whatsoever.
-                        In case of any such cancellation or rescheduling of any flight due to any reason,
-                        Any Airline does not provide any accommodation or compensation to the affected passengers.<br />
+                    <td>
+                        <span id="lstflightnamedep_ctrl0_Label8">@count</span>
+                    </td>
+                    <td>
+                        <span id="lstflightnamedep_ctrl0_lblpsngrname">@passenger.title</span>
+                        <span id="lstflightnamedep_ctrl0_lblpsngrname1">@passenger.first_name</span>
+                        <span id="lstflightnamedep_ctrl0_lblpsngrname2">@passenger.last_name</span>
+                    </td>
+                    <td>
+                        <span id="lstflightnamedep_ctrl0_lblTicketNo">Ticket no</span>
+                    </td>
+                    <td>
+                        <span id="lstflightnamedep_ctrl0_lblconfirmationid">@Model.api_txn_id</span>
+                    </td>
+                    <td>
+                        <span id="lstflightnamedep_ctrl0_Label1">@Model.travel_from</span>-
+                        <span id="lstflightnamedep_ctrl0_Label2">@Model.travel_to</span>
+                        (<span id="lstflightnamedep_ctrl0_Label6">@Model.flight_id</span>-
+                        <span id="lstflightnamedep_ctrl0_Label7">@Model.flight_no</span>)
                     </td>
                 </tr>
-            </table>
-        </div>
-        <table border="0" align="right" cellpadding="5" cellspacing="0">
-            <tr>
-                <td></td>
-                <td></td>
+                }
 
-            </tr>
-        </table>
+                    <tr id="lstflightnamedep_ctrl1_trblank">
+                        <td colspan="5" class="highlight_head"></td>
+                    </tr>
+                </table>
+                <br />
+
+                <table width="100%" border="0" style="font-size: 13px; line-height: 20px; text-align: justify;" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <td class="txt_blk">
+                            <p>
+                                Carriage and other services provided by the carrier are subject to conditions of
+                                carriage which hereby incorporated by reference. These conditions may be obtained
+                                from the issuing carrier. If the passenger's journey involves an ultimate destination
+                                or stop in a country other than country of departure the Warsaw convention may be
+                                applicable and the convention governs and in most cases limits the liability of
+                                carriers for death or personal injury and in respect of loss of or damage to baggage.
+                            </p>
+                            <br>
+                            <h3> Airline Terms and Conditions </h3>
+                            <strong>1. Check In</strong><br />
+                            Check-in commences 2 hours prior to scheduled departure (180 minutes incase of Srinagar
+                            and Jammu airports).Passengers to report 60 minutes prior to scheduled departure
+                            time (90 minutes in case of Srinagar and Jammu airports).<br />
+                            <strong>
+                                Check-in counter closes strictly 40 minutes prior to the scheduled departure
+                                time. Boarding Gate closes 20 minutes prior to scheduled departure time. If you
+                                fail to show up at the check-in counter or the boarding gate before the closure
+                                time, you will be treated as &ldquo;no show&rdquo; passenger and fare paid will
+                                be forfeited.
+                            </strong>
+                            <br />
+                            Any Airline reserves its right to refuse passage to any Customer who is under the
+                            influence of alcohol or drugs, violent or abusive, or where the Company or its duly
+                            authorised representatives / staff believe that it is necessary for the safety and
+                            comfort of other Customers or for the protection of the aircraft and / or other
+                            assets. Such passengers will be treated as &lsquo;no show&rsquo; passengers and
+                            fare paid will be forfeited.<br />
+                            <strong>2. Baggage Allowance</strong><br />
+                            Checked Baggage allowance is 15Kg per Customer (no baggage allowance for infants);
+                            excess baggage is charged at Rs 250/Kg. Cabin Baggage allowance is 7Kg per Customer
+                            (no baggage allowance for infants). The maximum size of the cabin hand baggage cannot
+                            exceed 55 cm x 40 cm x 20 cm (20 x 14 x 9ins). Any Airline assumes no responsibility
+                            or liability for delay in carriage of baggage by air.<br />
+                            <strong>3. Cancellation and rescheduling of flights</strong><br />
+                            Any Airline will endeavour to operate the flights as per schedule, however Any Airline
+                            reserves its right to cancel, reschedule or delay the commencement or continuance
+                            of any flight or alter the stopping place or deviate from the route of the journey
+                            without thereby incurring any liability in terms of compensation, damages or loss
+                            whether direct, indirect, consequential or special or otherwise in any manner whatsoever.
+                            In case of any such cancellation or rescheduling of any flight due to any reason,
+                            Any Airline does not provide any accommodation or compensation to the affected passengers.<br />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <table border="0" align="right" cellpadding="5" cellspacing="0">
+                <tr>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+            </table>
+        }
     </div>
 
     <div class="gap"></div>

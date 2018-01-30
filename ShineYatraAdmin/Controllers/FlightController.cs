@@ -310,6 +310,7 @@ namespace ShineYatraAdmin.Controllers
         [HttpPost]
         public async Task<ActionResult> BookResponse(SearchPageViewModel bookingDetail)
         {
+            var userData = User.Identity.Name.Split('|');
             _flightManager = new FlightManager();
             _userManager = new UserManager();
             _pgManager = new PgManager();
@@ -319,7 +320,6 @@ namespace ShineYatraAdmin.Controllers
             var bookResponse = new Bookingresponse();
             try
             {
-                var userData = User.Identity.Name.Split('|');
                 var request = bookingDetail.FlightBookingDetail;
                 request.Creditcardno = "4111111111111111";
                 var isPaymentGatewayactive = Convert.ToString(Session["web_pg_api_enabled"]).ToUpper() == "Y" && userData[6] != "3";
@@ -459,6 +459,7 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(ex.InnerException);
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
+
             return RedirectToAction("BookingStatus", "Flight", new { txnId, info });
         }
 
@@ -548,6 +549,7 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(ex.InnerException);
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
+
             return RedirectToAction("BookingStatus", "Flight", new { txnId, info });
         }
 
@@ -561,12 +563,10 @@ namespace ShineYatraAdmin.Controllers
         {
             BookingDetail eticket = null;
             _serviceManager = new ServiceManager();
-
+            var userData = User.Identity.Name.Split('|');
             try
             {
                 var bookResponse = (Bookingresponse)TempData["BookingResponse"];
-
-                var userData = User.Identity.Name.Split('|');
                 var serializer = new JavaScriptSerializer();
                 if (!string.IsNullOrEmpty(txnId))
                 {
@@ -612,7 +612,41 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(ex.InnerException);
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
-            return View(eticket);
+
+
+            //----View mapping start----
+
+            // check in company Id folder
+            //var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Flight//FlightMenu//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//BookingDetail.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//BookingStatus";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Flight//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//BookingStatus.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//BookingStatus";
+                }
+                else
+                {
+                    viewFolder = "BookingStatus";
+                }
+            }
+
+            //----View mapping end----
+
+            return View(viewFolder, eticket);
         }
 
         /// <summary>
