@@ -90,6 +90,32 @@ $(document).ready(function () {
                  // 'sort', 'type' and undefined all just use the integer
                  return source.duration;
              }
+         },
+         {
+             "aTargets": [9],
+             "mData": function (source, type, val) {
+                 if (type === 'set') {
+                     var flightshift = parseFloat(val);
+                     if (flightshift >= 0 && flightshift < 12) {
+                         source.shift = "Morning";
+                     } else if (flightshift >= 12 && flightshift < 16) {
+                         source.shift = "Noon";
+                     } else if (flightshift >= 16 && flightshift < 21) {
+                         source.shift = "Evening";
+                     } else if (flightshift >= 21 && flightshift < 24) {
+                         source.shift = "Night";
+                     }
+                     return;
+                 }
+                 else if (type === 'display') {
+                     return source.shift;
+                 }
+                 else if (type === 'filter') {
+                     return source.shift;
+                 }
+                 // 'sort', 'type' and undefined all just use the integer
+                 return source.shift;
+             }
          }
         ]
     });     
@@ -98,6 +124,7 @@ $(document).ready(function () {
     oTable.column(6).visible(false);
     oTable.column(7).visible(false);
     oTable.column(8).visible(false);
+    oTable.column(9).visible(false);
 
     var airlineNames = oTable.column(0).data().unique().sort();
     var airlinechkbox = "";
@@ -157,6 +184,18 @@ $(document).ready(function () {
         //filter in column 0, with an regex, no smart filtering, no inputbox,not case sensitive
         oTable
         .columns(7)
+        .search('^' + types + '$', true, false)
+        .draw();
+    });
+
+    $(".flight_shift").change(function () {
+        //build a regex filter string with an or(|) condition
+        var types = $('input:checkbox[name="flight_shift"]:checked').map(function () {
+            return this.value;
+        }).get().join('|');
+        //filter in column 0, with an regex, no smart filtering, no inputbox,not case sensitive
+        oTable
+        .columns(9)
         .search('^' + types + '$', true, false)
         .draw();
     });
