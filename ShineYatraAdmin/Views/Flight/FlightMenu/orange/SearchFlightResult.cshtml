@@ -267,17 +267,22 @@
                         <h5 class="booking-filters-title">Departure Time</h5>
                         <div class="checkbox">
                             <label>
-                                <input class="i-check" type="checkbox" />Morning (5:00a - 11:59a)
+                                <input class="flight_shift" value="Morning" checked="checked" name="flight_shift" type="checkbox" />Morning (12:00a - 11:59a)
                             </label>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input class="i-check" type="checkbox" />Afternoon (12:00p - 5:59p)
+                                <input class="flight_shift" value="Noon" checked="checked" name="flight_shift" type="checkbox" />Afternoon (12:00p - 3:59p)
                             </label>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input class="i-check" type="checkbox" />Evening (6:00p - 11:59p)
+                                <input class="flight_shift" value="Evening" checked="checked" name="flight_shift" type="checkbox" />Evening (4:00p - 8:59p)
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input class="flight_shift" value="Night"  checked="checked" name="flight_shift" type="checkbox" />Night (9:00p - 11:59p)
                             </label>
                         </div>
                     </li>
@@ -323,6 +328,7 @@
                             <th>price</th>
                             <th>classtype</th>
                             <th>duration</th>
+                            <th>hourofday</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -333,7 +339,7 @@
                             var flightlastrow = flightrows.FlightsDetailList.FlightsDetail.Last();
                             var duration = flightlastrow.ArrivalDateTime.Subtract(flightrow.DepartureDateTime);
                             var calFare = flightrows.FareDetail.ChargeableFares.ActualBaseFare + flightrows.FareDetail.ChargeableFares.Tax;
-
+                            var hourofday = flightrow.DepartureDateTime.TimeOfDay.Hours;
                             count = flightrows.FlightsDetailList.FlightsDetail.Count();
                             count = count - 1;
                             i = i + 1;
@@ -459,6 +465,9 @@
                                 </td>
                                 <td>
                                    @duration.Hours.@duration.Minutes
+                                </td>
+                                <td>
+                                    @hourofday
                                 </td>
                             </tr>
                         }
