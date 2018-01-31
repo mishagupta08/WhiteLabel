@@ -292,16 +292,16 @@
             else
             {
                 <div class="nav-drop booking-sort">
-                    <h5 class="booking-sort-title"><a href="#">Sort: Sort: Price (low to high)<i class="fa fa-angle-down"></i><i class="fa fa-angle-up"></i></a></h5>
+                    <h5 class="booking-sort-title"><a href="#">Sort: <span id="sortBy"></span><i class="fa fa-angle-down"></i><i class="fa fa-angle-up"></i></a></h5>
                     <ul class="nav-drop-menu">
                         <li>
-                            <a href="#" onclick="Callsort(6,'desc')">Price (high to low)</a>
+                            <a href="#" onclick="Callsort(6,'desc', 'Price')">Price</a>
                         </li>
                         <li>
-                            <a href="#" onclick="Callsort(8, 'asc')">Duration</a>
+                            <a href="#" onclick="Callsort(8, 'asc','Duration')">Duration</a>
                         </li>
                         <li>
-                            <a href="#" onclick="Callsort(5,'asc')">Stops</a>
+                            <a href="#" onclick="Callsort(5,'asc','Stops')">Stops</a>
                         </li>
                         <li>
                             <a href="#">Arrival</a>
@@ -449,7 +449,6 @@
                                     </div>
                                 </td>
                                 <td>
-
                                     @count
                                 </td>
                                 <td>
@@ -496,7 +495,6 @@
             min: minvalue,
             max: maxvalue,
             type: 'double',
-            prefix: "$",
             from: minvalue,
             to: maxvalue,
             // maxPostfix: "+",

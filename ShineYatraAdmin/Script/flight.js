@@ -1,26 +1,26 @@
 ﻿var oTable;
 var maxvalue;
 var minvalue;
-$(document).ready(function () {    
+$(document).ready(function () {
     oTable = $('#flightsearchResult').DataTable({
         initComplete: function () {
             this.api().columns().every(function () {
-                var column = this;                
-                        column
-                            .search('', true, false)
-                            .draw();
-                    });                           
+                var column = this;
+                column
+                    .search('', true, false)
+                    .draw();
+            });
         },
-        "destroy":true,              
+        "destroy": true,
         "bPaginate": false,
-        "order": [[6,"asc"]],
-        "aoColumnDefs": [      
+        "order": [[6, "asc"]],
+        "aoColumnDefs": [
              { 'bSortable': false, 'aTargets': [0, 1, 2, 3, 4] },
              {
                  "aTargets": [0],
                  "mData": function (source, type, val) {
                      if (type === 'set') {
-                         var airlinename = val.split("breakit");                         
+                         var airlinename = val.split("breakit");
                          source.airlinedisplay = airlinename[1];
                          source.airlinefilter = airlinename[0];
                          return;
@@ -34,12 +34,12 @@ $(document).ready(function () {
                      // 'sort', 'type' and undefined all just use the integer
                      return source.airlinefilter;
                  }
-             
-           },
+
+             },
          {
              "aTargets": [5],
              "mData": function (source, type, val) {
-                 if (type === 'set') {                     
+                 if (type === 'set') {
                      source.stopdisplay = val;
                      source.stop = parseFloat(val);
                      return;
@@ -76,7 +76,7 @@ $(document).ready(function () {
          {
              "aTargets": [8],
              "mData": function (source, type, val) {
-                 if (type === 'set') {                     
+                 if (type === 'set') {
                      source.durationdisplay = val;
                      source.duration = parseFloat(val);
                      return;
@@ -92,7 +92,7 @@ $(document).ready(function () {
              }
          }
         ]
-    });     
+    });
 
     oTable.column(5).visible(false);
     oTable.column(6).visible(false);
@@ -101,8 +101,7 @@ $(document).ready(function () {
 
     var airlineNames = oTable.column(0).data().unique().sort();
     var airlinechkbox = "";
-    for (var i = 0 ; i < airlineNames.length; i++)
-    {
+    for (var i = 0 ; i < airlineNames.length; i++) {
         airlinechkbox += "<div class=\"checkbox\"><label><input type=\"checkbox\" checked name=\"type\" class=\"airlinetype\" value=\"" + airlineNames[i] + "\">&nbsp;" + airlineNames[i] + "</label></div>";
     }
 
@@ -115,26 +114,26 @@ $(document).ready(function () {
     }
 
     $("#stopsCheckbox").html(stopschkbox);
-       
-    var price = oTable.column(6).data().unique().join(',');  
+
+    var price = oTable.column(6).data().unique().join(',');
 
     var ids = price.split(',').map(parseFloat);
-    
+
     maxvalue = Math.max.apply(Math, ids);
     minvalue = Math.min.apply(Math, ids);
 
-   
+
     $(".airlinetype").change(function () {
         //build a regex filter string with an or(|) condition
         var types = $('input:checkbox[name="type"]:checked').map(function () {
             return this.value;
         }).get().join('|');
-        
+
         //filter in column 0, with an regex, no smart filtering, no inputbox,not case sensitive
         oTable
         .columns(0)
         .search('^' + types + '$', true, false)
-        .draw();                
+        .draw();
     });
 
     $(".Stops").change(function () {
@@ -163,10 +162,27 @@ $(document).ready(function () {
 
 });
 
-function Callsort(col,type)
-{
-     oTable
-    .order([col, type])
-    .draw();
+function Callsort(col, type, name) {
+
+    var currentSort = $("#sortBy").html();
+    var sortType = "";
+    if (currentSort == "") {
+        type = 'asc';
+        sortType = ' (Low to High) ';
+    }
+    else if (currentSort.indexOf(name) >= 0 && currentSort.indexOf('Low to High') >= 0) {
+        type = 'desc';
+        sortType = ' (High to Low) ';
+    }
+    else {
+        type = 'asc';
+        sortType = ' (Low to High) ';
+    }
+
+    $("#sortBy").html(name + sortType);
+
+    oTable
+   .order([col, type])
+   .draw();
 }
 
