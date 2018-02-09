@@ -946,6 +946,10 @@
     <Content Include="Views\Flight\FlightMenu\orange\_SearchFlightPartialView.cshtml" />
     <Content Include="Views\Flight\FlightMenu\orange\BookingDetail.cshtml" />
     <Content Include="Views\Flight\orange\BookingStatus.cshtml" />
+    <Content Include="Views\Report\orange\Ledger.cshtml" />
+    <Content Include="Views\Flight\Report\orange\FilghtList.cshtml" />
+    <Content Include="Views\Flight\Report\orange\MyFlightBookings.cshtml" />
+    <Content Include="Views\Hotel\orange\GetHotelTransactionList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

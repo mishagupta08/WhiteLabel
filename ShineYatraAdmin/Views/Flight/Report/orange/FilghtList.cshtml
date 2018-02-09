@@ -1,0 +1,133 @@
+﻿@using System.Globalization
+@model IEnumerable<ShineYatraAdmin.Entity.BookingDetail>
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+
+    .dataTables_filter, .dataTables_info {
+        display: none;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+        .table.dataTable thead th, table.dataTable thead td {
+            padding: 4px;
+            text-align: center;
+            vertical-align: middle;
+            border-bottom: 0px;
+        }
+</style>
+<table class="table table-bordered table-hover" style="width: 100%" id="FlightList">
+    <thead>
+        <tr>
+            <th class="nowrap">ID</th>
+            <th class="nowrap">Distributor</th>
+            <th class="nowrap">User Name</th>
+            <th class="nowrap">Mobile No</th>
+            <th class="nowrap">Origin</th>
+            <th class="nowrap">Destination</th>
+            <th class="nowrap">Passenger Name</th>
+            <th class="nowrap">Fare</th>
+            <th class="nowrap">DepartureDate</th>
+            <th class="nowrap">Booking</th>
+            <th class="nowrap">Print</th>
+            <th class="nowrap">Cancel</th>
+            <th class="nowrap">AgentInvoice</th>
+            <th class="nowrap">UserInvoice</th>
+            <th class="nowrap">Description</th>
+            <th class="nowrap">Remark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.txn_id) </td>
+                    <td></td>
+                    <td>@Html.DisplayFor(modelItem => item.user_name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.mobile)</td>
+                    <td>@Html.DisplayFor(modelItem => item.travel_from)</td>
+                    <td>@Html.DisplayFor(modelItem => item.travel_to)</td>
+                    <td></td>
+                    <td>@Html.DisplayFor(modelItem => item.amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.travel_date)</td>
+                    <td>@Html.DisplayFor(modelItem => item.txn_date)</td>
+                    <td></td>
+                    <td>
+                        @{
+                            var date = DateTime.ParseExact(item.travel_date, "dd-MMM-yyyy", CultureInfo.InvariantCulture);
+                            var canCancel = false || date > DateTime.Now.AddDays(-1);
+                        }
+                        @if (item.status.ToUpper().Trim() == "COMPLETED" && canCancel)
+                    {
+                            <a href="#" data-toggle="tooltip" onclick="confirmCancel('@item.api_txn_id', '@item.unique_ref_no', '@item.txn_id')" data-original-title="Close" title="Close">
+                                <span class="text-danger sa-disable">@item.api_txn_id</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @if (item.status.ToUpper().Trim() == "FAILED")
+                    {
+                            <div class="label label-table label-default">@Html.DisplayFor(modelItem => item.status)</div>
+                        }
+                        else if (item.status.ToUpper().Trim() == "COMPLETED")
+                        {
+                            <div class="label label-table label-success">BOOKED</div>
+                        }
+                        else
+                        {
+                            <div class="label label-table label-danger">@Html.DisplayFor(modelItem => item.status)</div>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.remarks)
+                    </td>
+
+                </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td>No Fund Request Found</td></tr>
+                            }
+    </tbody>
+</table>
+
+
+<script>
+    $(document).ready(function () {
+      $('#FlightList').DataTable({
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    column
+                        .search('', true, false)
+                        .draw();
+                });
+            },
+            "destroy": true,
+            "bLengthChange": false,
+            "ordering": false,
+            "language": {
+                "paginate": {
+                    "previous": "<<",
+                    "next": ">>"
+                }
+            },
+            stateSave: true
+        });
+    });
+</script>

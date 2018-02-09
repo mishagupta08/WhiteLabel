@@ -35,7 +35,39 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(ex.InnerException);
             }
 
-            var viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//Index";
+            //----View mapping start----
+
+            // check in company Id folder
+            var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Dashboard//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//Index.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder =  System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//Index";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Dashboard//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//Index.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder =  System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//Index";
+                }
+                else
+                {
+                    viewFolder = "Index";
+                }
+            }
+
+            //----View mapping end----
+
+            //var viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//Index";
             return View(viewFolder);
             //return View();
         }

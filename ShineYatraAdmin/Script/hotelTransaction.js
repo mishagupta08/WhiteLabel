@@ -129,7 +129,7 @@ function GetTransactionListDetail() {
             });
             $(".preloader").hide();
         }
-
+        $(".preloader").hide();
     }).fail(function (xhr) {
         $(".preloader").hide();
         alert(xhr);

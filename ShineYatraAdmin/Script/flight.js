@@ -36,24 +36,60 @@ $(document).ready(function () {
                  }
 
              },
-         {
-             "aTargets": [5],
-             "mData": function (source, type, val) {
-                 if (type === 'set') {
-                     source.stopdisplay = val;
-                     source.stop = parseFloat(val);
-                     return;
+             {
+                 "aTargets": [10],
+                 "mData": function (source, type, val) {
+                     if (type === 'set') {
+                         source.datedisplay = val;
+                         source.date = new Date(val);
+                         return;
+                     }
+                     else if (type === 'display') {
+                         return source.date;
+                     }
+                     else if (type === 'filter') {
+                         return source.date;
+                     }
+                     // 'sort', 'type' and undefined all just use the integer
+                     return source.date;
                  }
-                 else if (type === 'display') {
-                     return source.stopdisplay;
+             },
+             {
+                 "aTargets": [11],
+                 "mData": function (source, type, val) {
+                     if (type === 'set') {
+                         source.datedisplay = val;
+                         source.date = new Date(val);
+                         return;
+                     }
+                     else if (type === 'display') {
+                         return source.date;
+                     }
+                     else if (type === 'filter') {
+                         return source.date;
+                     }
+                     // 'sort', 'type' and undefined all just use the integer
+                     return source.date;
                  }
-                 else if (type === 'filter') {
-                     return source.stop;
-                 }
-                 // 'sort', 'type' and undefined all just use the integer
-                 return source.stop;
-             }
-         },
+             },
+                     {
+                         "aTargets": [5],
+                         "mData": function (source, type, val) {
+                             if (type === 'set') {
+                                 source.stopdisplay = val;
+                                 source.stop = parseFloat(val);
+                                 return;
+                             }
+                             else if (type === 'display') {
+                                 return source.stopdisplay;
+                             }
+                             else if (type === 'filter') {
+                                 return source.stop;
+                             }
+                             // 'sort', 'type' and undefined all just use the integer
+                             return source.stop;
+                         }
+                     },
          {
              "aTargets": [6],
              "mData": function (source, type, val) {
@@ -125,6 +161,8 @@ $(document).ready(function () {
     oTable.column(7).visible(false);
     oTable.column(8).visible(false);
     oTable.column(9).visible(false);
+    oTable.column(10).visible(false);
+    oTable.column(11).visible(false);
 
     var airlineNames = oTable.column(0).data().unique().sort();
     var airlinechkbox = "";

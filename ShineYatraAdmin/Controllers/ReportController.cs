@@ -25,21 +25,54 @@ namespace ShineYatraAdmin.Controllers
         /// <returns></returns>
         /// 
         public ActionResult Ledger()
-        {            
+        {
             try
             {
-                
+
             }
             catch (Exception Ex)
             {
                 Console.WriteLine(Ex.InnerException);
             }
-            return View();
+
+            //----View mapping start----
+
+            // check in company Id folder
+            var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//Ledger.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//Ledger";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//Ledger.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//Ledger";
+                }
+                else
+                {
+                    viewFolder = "Ledger";
+                }
+            }
+
+            //----View mapping end----
+
+            return View(viewFolder);
         }
 
         [HttpPost]
         public async Task<ActionResult> GetLedgerList(DistributorLedgerRequest request)
-        {            
+        {
             string ledgerList = null;
             MatchCollection matches = null;
             var response = "";
@@ -61,7 +94,7 @@ namespace ShineYatraAdmin.Controllers
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 Console.WriteLine(ex.InnerException);
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }

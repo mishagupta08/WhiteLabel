@@ -780,16 +780,49 @@ namespace ShineYatraAdmin.Controllers
 
         public ActionResult MyFlightBookings()
         {
-            return View("Report/MyFlightBookings");
+            //----View mapping start----
+
+            // check in company Id folder
+            var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Flight//Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//MyFlightBookings.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder = "Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//MyFlightBookings";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Flight//Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//MyFlightBookings.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder = "Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//MyFlightBookings";
+                }
+                else
+                {
+                    viewFolder = "Report//MyFlightBookings";
+                }
+            }
+
+            //----View mapping end----
+
+            return View(viewFolder);
         }
 
         public async Task<ActionResult> GetFlightList(FormCollection frm)
         {
             _flightManager = new FlightManager();
             List<BookingDetail> bookingDetails = null;
+            string[] userData = User.Identity.Name.Split('|');
             try
             {
-                string[] userData = User.Identity.Name.Split('|');
+              
                 var request = new FlightBookingListRequest
                 {
                     member_id = userData[1],
@@ -808,7 +841,40 @@ namespace ShineYatraAdmin.Controllers
                 Console.WriteLine(ex.InnerException);
                 ExceptionLogging.SendErrorTomail(ex, User.Identity.Name, ConfigurationManager.AppSettings["DomainName"]);
             }
-            return PartialView("Report/FilghtList", bookingDetails);
+
+            //----View mapping start----
+
+            // check in company Id folder
+           // var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Flight//Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//FilghtList.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder = "Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//FilghtList";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Flight//Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//FilghtList.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder = "Report//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//FilghtList";
+                }
+                else
+                {
+                    viewFolder = "Report//FilghtList";
+                }
+            }
+
+            //----View mapping end----
+
+            return PartialView(viewFolder, bookingDetails);
         }
 
         /// <summary>

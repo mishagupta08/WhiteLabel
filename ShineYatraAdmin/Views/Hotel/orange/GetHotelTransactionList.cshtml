@@ -1,0 +1,189 @@
+﻿@using System.Globalization;
+@using ShineYatraAdmin.Properties;
+@model ShineYatraAdmin.Entity.HotelViewModel
+@{
+    ViewBag.Title = "Hotel Transacton List View";
+    Layout = "~/Views/Shared/orange/Layout.cshtml";
+}
+
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+
+    .dataTables_filter, .dataTables_info {
+        display: none;
+    }
+
+    table.dataTable thead th, table.dataTable thead td {
+        border-bottom: 0px;
+    }
+
+    table.dataTable tfoot th, table.dataTable tfoot td {
+        border-top: 0px;
+    }
+</style>
+
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+@*<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>*@
+
+<div class="container">
+    <div class="row row-wrap">
+        <div class="col-md-12">
+            <h3> Ledger Report </h3>
+            <div class="gap"></div>
+            <form id="hotelFilterForm" onsubmit="return GetTransactionListDetail();">
+                <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#demo">FILTER CRITERIA</button>
+                <div id="demo" class="collapse pull-right">
+                    @*<p>&nbsp;</p><p>&nbsp;</p>*@
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3">Result Type</label>
+                                <div class="col-md-9">
+                                    <label class="col-md-5">@Html.RadioButtonFor(x => Model.FilterDetail.status, "COMPLETED", new { @class = "PaymentModebutton" }) COMPLETED</label>
+                                    <label class="col-md-5">@Html.RadioButtonFor(x => Model.FilterDetail.status, "FAIL", new { @class = "PaymentModebutton" }) FAIL</label>
+                                    <span class="help-block"> </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3">Select type</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(m => m.SelectType, new SelectList(Model.SelectTypeList, "Id", "Value"), new { @required = "0", id = "roomCountDropDown", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3"></label>
+                                <div class="col-md-9" style="padding:0px;">
+                                    @Html.TextBoxFor(m => m.SelectedTypeValue, new { @id = "selectedTypeValue", @class = "form-control", @placeholder = "Selected Type Value" })
+                                    <span class="help-block"> </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3">From date</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.FilterDetail.check_in_date, new { @id = "start", @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" })
+                                    <span class="help-block"> </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3"> To Date</label>
+                                <div class="col-md-9" style="padding:0px;">
+                                    @Html.TextBoxFor(m => m.FilterDetail.check_out_date, new { @id = "end", @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" })
+                                    <span class="help-block"> </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3"></label>
+                                <div class="col-md-9">
+                                    <button type="submit" class="btn btn-info pull-left">Submit</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    @*<p>&nbsp;</p><p>&nbsp;</p>*@
+                </div>
+
+            </form>
+            @*<h4 class="booking-title"> <a class="popup-text" href="#search-dialog" data-effect="mfp-zoom-out"> <strong>ADD NEW</strong>  </a> </h4>*@
+
+            <div class="gap-small"></div>
+            <div id="Usercontainer" style="min-height: 305px;">
+                <table class="table table-bordered table-hover" id="LedgerList" width="100%">
+                    <thead>
+                        <tr>
+                            <th data-col="0">Mobile No</th>
+                            <th data-col="1">Email Id</th>
+                            <th data-col="2">Hotel Name</th>
+                            <th data-col="3">Hotel City</th>
+                            <th data-col="4">Checkin Date</th>
+                            <th data-col="5">Checkout Date</th>
+                            <th data-col="6">Book Date</th>
+                            <th data-col="7">Book Amount</th>
+                            <th data-col="8">Booking Id</th>
+                            <th data-col="9">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="gap"></div>
+</div>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/hotelTransaction.js"></script>
+
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+        jq(".preloader").hide();
+
+        jq('#start').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        }).datepicker("setDate", new Date());
+
+        jq('#end').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        }).datepicker("setDate", new Date());
+
+        jq("#hotelFilterForm").submit(function () {
+            jq(".preloader").show();
+        })
+
+        // Date Picker
+        //jq('#start').datepicker({
+        //    autoclose: true,
+        //    todayHighlight: true,
+        //    dateFormat: "dd/mm/yy",
+        //    minDate: 0
+        //});
+
+        //jq('#end').datepicker({
+        //    autoclose: true,
+        //    todayHighlight: true,
+        //    dateFormat: "dd/mm/yy",
+        //    minDate: 0
+        //});
+
+        GetTransactionListDetail();
+    });
+</script>

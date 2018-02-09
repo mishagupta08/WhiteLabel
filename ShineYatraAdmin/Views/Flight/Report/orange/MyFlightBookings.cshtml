@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "My Bookings";
+    Layout = "~/Views/Shared/orange/Layout.cshtml";
+}
+
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+
+    table.dataTable.no-footer {
+        border-bottom: 0px;
+    }
+
+    .form-group.form-group-lg label {
+        margin-left: -12px;
+    }
+</style>
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row row-wrap">
+        <div class="col-md-12">
+            <h3>My Flight Booking</h3>
+            <div class="gap"></div>
+            <form id="FlightListFliter" onsubmit="return GetFlightList()">
+                <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#demo">FILTER CRITERIA</button>
+                <br /><br />
+                <div id="demo" class="collapse pull-right">
+                    @*<p>&nbsp;</p><p>&nbsp;</p>*@
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3">Result Type</label>
+                                <div class="col-md-9">
+                                    <label class="text-dark col-md-5"><input type="radio" name="bookStatus" value="completed">Sucess</label> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text-dark col-md-5"><input type="radio" name="bookStatus" value="notcompleted">Fail</label>
+                                    <span class="help-block"> </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3">Flight Type</label>
+                                <div class="col-md-9" style="padding:0px;">
+                                    <label class="text-dark col-md-2" style="padding:0px; margin-left:5px;"><input type="radio" name="flighttype" value="Both">Both</label> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text-dark col-md-3" style="padding:0px; margin-left:5px;"><input type="radio" name="flighttype" value="domestic">Domestic</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text-dark col-md-5" style="padding:0px; margin-left:5px;"><input type="radio" name="flighttype" value="international">International</label>
+                                    <span class="help-block"> </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="col-md-3">From Date</label>
+                                @Html.TextBox("fromDate", "", new { id = "fromdateinput", required = "required", @class = "form-control datepicker", placeholder = "dd-mmm-yyyy" })
+                            </div>
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="control-label col-md-3">To Date</label>
+                                @Html.TextBox("toDate", "", new { id = "todateinput", required = "required", @class = "form-control datepicker", placeholder = "dd-mmm-yyyy" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                    @*<p>&nbsp;</p><p>&nbsp;</p>*@
+                </div>
+
+            </form>
+            @*<h4 class="booking-title"> <a class="popup-text" href="#search-dialog" data-effect="mfp-zoom-out"> <strong>ADD NEW</strong>  </a> </h4>*@
+
+            <div class="gap-small"></div>
+            <br />
+            <div id="Usercontainer">
+
+            </div>
+        </div>
+
+    </div>
+    <div class="gap"></div>
+</div>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/FlightReport.js"></script>
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+        // Date Picker
+        jq('#fromdateinput').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        }).datepicker("setDate", new Date());
+
+        jq('#todateinput').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        }).datepicker("setDate", new Date());
+
+        GetFlightList();
+    });
+</script>

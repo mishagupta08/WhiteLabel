@@ -1300,7 +1300,40 @@
             {
                 Console.WriteLine(Ex.InnerException);
             }
-            return View("GetHotelTransactionList", hotelModel);
+
+            //----View mapping start----
+
+            // check in company Id folder
+            var userData = User.Identity.Name.Split('|');
+            var path = "~//Views//Hotel//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//GetHotelTransactionList.cshtml";
+            var serverPath = Server.MapPath(path);
+            var isExist = System.IO.File.Exists(serverPath);
+
+            var viewFolder = string.Empty;
+
+            if (isExist)
+            {
+                viewFolder =  System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//" + userData[2] + "//GetHotelTransactionList";
+            }
+            else
+            {
+                // check in Theme folder
+                path = "~//Views//Hotel//" + System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//GetHotelTransactionList.cshtml";
+                serverPath = Server.MapPath(path);
+                isExist = System.IO.File.Exists(serverPath);
+                if (isExist)
+                {
+                    viewFolder = System.Web.HttpContext.Current.Session["CompanyTheme"].ToString().ToLower() + "//GetHotelTransactionList";
+                }
+                else
+                {
+                    viewFolder = "GetHotelTransactionList";
+                }
+            }
+
+            //----View mapping end----
+
+            return View(viewFolder, hotelModel);
         }
 
         [HttpPost]

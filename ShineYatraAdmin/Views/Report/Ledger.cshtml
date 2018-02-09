@@ -22,9 +22,9 @@
     <div class="col-lg-12">
         <div class="white-box">
             <h3 class="box-title">Ledger Report</h3>
-            
+
             <div class="panel-body text-info" style="background: #F3F3F3;">
-                
+
                 <h3 class="box-title">Filter Criteria</h3>
                 <hr class="m-t-0 m-b-20">
                 <form id="LegderFliter" onsubmit="return GetLedgerList();">
@@ -37,8 +37,6 @@
                                     <span class="help-block"> </span>
                                 </div>
                             </div>
-
-
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
@@ -60,7 +58,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">User Name</label>
                                 <div class="col-md-9">
-                                    
+
                                     <input type="text" name="memberId" required="required" readonly="" class="form-control" value="@userData[0]">
                                     <span class="help-block"> </span>
                                 </div>
@@ -79,44 +77,42 @@
                     </div>
                 </form>
             </div>
-            
-            <div class="table-responsive">                
+
+            <div class="table-responsive">
                 <div id="Usercontainer" style="min-height: 305px;">
-                    <br/>
+                    <br />
                     <table class="display table" id="LedgerList" width="100%">
                         <thead>
-                        <tr>
-                           
-                            <th data-col="0">Date</th>
-                            <th data-col="1">Statement Date</th>
-                            <th data-col="2">Service Id</th>
-                            <th data-col="3">Ledger Name</th>
-                            <th data-col="4">Particulars</th>
-                            <th data-col="5">Service Type</th>
-                            <th data-col="6">Wallet Txn Id</th>
-                            <th data-col="7">Debit</th>
-                            <th data-col="8">Credit</th>
-                            <th data-col="9">Balance</th>
-                            <th data-col="10">Remark</th>
-                            <th data-col="11">Txn ref No. </th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                            <tr>
 
-                        </tbody>
+                                <th data-col="0">Date</th>
+                                <th data-col="1">Statement Date</th>
+                                <th data-col="2">Service Id</th>
+                                <th data-col="3">Ledger Name</th>
+                                <th data-col="4">Particulars</th>
+                                <th data-col="5">Service Type</th>
+                                <th data-col="6">Wallet Txn Id</th>
+                                <th data-col="7">Debit</th>
+                                <th data-col="8">Credit</th>
+                                <th data-col="9">Balance</th>
+                                <th data-col="10">Remark</th>
+                                <th data-col="11">Txn ref No. </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
                         <tfoot>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                         </tfoot>
                     </table>
                 </div>
@@ -132,7 +128,7 @@
 
 <script>
     var jq = $.noConflict();
-    jq(document).ready(function() {
+    jq(document).ready(function () {
         // Date Picker
         jq('#fromdateinput').datepicker({
             autoclose: true,
@@ -150,6 +146,6 @@
             dateFormat: "dd-M-yy"
         }).datepicker("setDate", new Date());
         GetLedgerList();
-    });    
+    });
 </script>
 

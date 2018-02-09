@@ -5,10 +5,6 @@
     bool askOTP = Convert.ToString(Session["otp_login_enabled"]).ToUpper() == "Y";
 }
 
-<div class="preloader">
-    <img src="~/images/wheel.gif" height="100" />
-</div>
-
 <html>
 <head>
     <title> Biz Tadka | India's #1 Multi Utility Portal </title>
@@ -75,6 +71,7 @@
 </head>
 
 <body>
+
     <!-- FACEBOOK WIDGET -->
     <div id="fb-root"></div>
     <script>
@@ -89,7 +86,9 @@
     </script>
     <!-- /FACEBOOK WIDGET -->
     <div class="global-wrap">
-
+        <div class="preloader">
+            <img src="~/images/wheel.gif" style="width:100px;" height="100" width="100" />
+        </div>
         <header id="main-header">
             <div class="header-top">
                 <div class="container">

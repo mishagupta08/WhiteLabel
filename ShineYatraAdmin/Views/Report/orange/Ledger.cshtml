@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Ledger";
+    Layout = "~/Views/Shared/orange/Layout.cshtml";
+    var userData = User.Identity.Name.Split('|');
+}
+
+<style>
+    table.dataTable thead .sorting,
+    table.dataTable thead .sorting_asc,
+    table.dataTable thead .sorting_desc {
+        background: none;
+    }
+
+    .dataTables_filter, .dataTables_info {
+        display: none;
+    }
+</style>
+
+<link href="~/plugins/bower_components/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<div class="gap"></div>
+<div class="container">
+    <div class="row row-wrap">
+        <div class="col-md-12">
+            <h3> Ledger Report </h3>
+            <div class="gap"></div>
+            <form id="LegderFliter" onsubmit="return GetLedgerList();">
+                <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#demo">FILTER CRITERIA</button>
+                <div id="demo" class="collapse pull-right">
+                    @*<p>&nbsp;</p><p>&nbsp;</p>*@
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="col-md-3">From Date</label>
+                                @Html.TextBox("From_date", "", new { id = "fromdateinput", required = "required", @class = "col-md-3 form-control datepicker", placeholder = "dd-mmm-yyyy" })
+                            </div>
+
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="col-md-3">To Date</label>
+                                @Html.TextBox("To_date", "", new { id = "todateinput", required = "required", @class = "col-md-3 form-control datepicker", placeholder = "dd-mmm-yyyy" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="col-md-3">User Name</label>
+                                <input type="text" name="memberId" required="required" readonly="" class="form-control col-md-6" value="@userData[0]">
+                            </div>
+                            <div class="form-group form-group-lg form-group-icon-left col-md-6">
+                                <label class="col-md-3"></label>
+                                <button type="submit" class="btn btn-info pull-left form-control col-md-6"> Submit </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    @*<p>&nbsp;</p><p>&nbsp;</p>*@
+                </div>
+
+            </form>
+            @*<h4 class="booking-title"> <a class="popup-text" href="#search-dialog" data-effect="mfp-zoom-out"> <strong>ADD NEW</strong>  </a> </h4>*@
+
+            <div class="gap-small"></div>
+
+            <table class="table table-bordered table-hover" id="LedgerList">
+                <thead>
+                    <tr>
+                        <th data-col="0">Date</th>
+                        <th data-col="1">Statement Date</th>
+                        <th data-col="2">Service Id</th>
+                        <th data-col="3">Ledger Name</th>
+                        <th data-col="4">Particulars</th>
+                        <th data-col="5">Service Type</th>
+                        <th data-col="6">Wallet Txn Id</th>
+                        <th data-col="7">Debit</th>
+                        <th data-col="8">Credit</th>
+                        <th data-col="9">Balance</th>
+                        <th data-col="10">Remark</th>
+                        <th data-col="11">Txn ref No. </th>
+                    </tr>
+                </thead>
+
+                <tbody></tbody>
+                <tfoot>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+    <div class="gap"></div>
+</div>
+
+<script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/plugins/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Script/Report.js"></script>
+
+<script>
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+        // Date Picker
+        jq('#fromdateinput').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        }).datepicker("setDate", new Date());
+
+        jq('#todateinput').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "dd-M-yy"
+        }).datepicker("setDate", new Date());
+        GetLedgerList();
+    });
+</script>

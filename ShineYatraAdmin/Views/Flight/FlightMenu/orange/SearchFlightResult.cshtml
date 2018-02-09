@@ -19,6 +19,10 @@
             border: none;
         }
 
+    .display-none {
+        display: none;
+    }
+
     .booking-item-flight-details .booking-item-departure, .booking-item-flight-details .booking-item-arrival {
         width: auto;
     }
@@ -247,12 +251,12 @@
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input class= "classflight" checked="checked" name="flight_class" value="Business" type="checkbox" />Business
+                                <input class="classflight" checked="checked" name="flight_class" value="Business" type="checkbox" />Business
                             </label>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input class="classflight" checked="checked" name="flight_class"  value="First" type="checkbox" />First
+                                <input class="classflight" checked="checked" name="flight_class" value="First" type="checkbox" />First
                             </label>
                         </div>
                     </li>
@@ -282,7 +286,7 @@
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input class="flight_shift" value="Night"  checked="checked" name="flight_shift" type="checkbox" />Night (9:00p - 11:59p)
+                                <input class="flight_shift" value="Night" checked="checked" name="flight_shift" type="checkbox" />Night (9:00p - 11:59p)
                             </label>
                         </div>
                     </li>
@@ -309,10 +313,10 @@
                             <a href="#" onclick="Callsort(5,'asc','Stops')">Stops</a>
                         </li>
                         <li>
-                            <a href="#">Arrival</a>
+                            <a href="#" onclick="Callsort(10, 'asc', 'Departure')">Departure</a>
                         </li>
                         <li>
-                            <a href="#">Departure</a>
+                            <a href="#" onclick="Callsort(11, 'asc', 'Arrival')">Arrival</a>
                         </li>
                     </ul>
                 </div>
@@ -324,11 +328,13 @@
                             <th>Destination Arrival Time</th>
                             <th>duration</th>
                             <th>test</th>
-                            <th>stops</th>
-                            <th>price</th>
-                            <th>classtype</th>
-                            <th>duration</th>
-                            <th>hourofday</th>
+                            <th class="display-none">stops</th>
+                            <th class="display-none">price</th>
+                            <th class="display-none">classtype</th>
+                            <th class="display-none">duration</th>
+                            <th class="display-none">hourofday</th>
+                            <th class="display-none">departure</th>
+                            <th class="display-none">arrival</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -454,20 +460,26 @@
 
                                     </div>
                                 </td>
-                                <td>
+                                <td class="display-none">
                                     @count
                                 </td>
-                                <td>
+                                <td class="display-none">
                                     @calFare
                                 </td>
-                                <td>
+                                <td class="display-none">
                                     @flightrow.BookingClassFare.ClassType
                                 </td>
-                                <td>
-                                   @duration.Hours.@duration.Minutes
+                                <td class="display-none">
+                                    @duration.Hours.@duration.Minutes
                                 </td>
-                                <td>
+                                <td class="display-none">
                                     @hourofday
+                                </td>
+                                <td class="display-none">
+                                    @flightrow.DepartureDateTime
+                                </td>
+                                <td class="display-none">
+                                    @flightrow.ArrivalDateTime
                                 </td>
                             </tr>
                         }
@@ -485,7 +497,7 @@
 
 <script src="~/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/Script/flight.js?v=1"></script>
-<script>   
+<script>
     $(document).ready(function () {
         $("p[name=stopCount]").click(function () {
             var rowId = $(this).attr("data-row");
@@ -513,7 +525,7 @@
         });
 
         $("#minprice").html(minvalue);
-        $("#maxprice").html(maxvalue);        
+        $("#maxprice").html(maxvalue);
 
         $("#Mode1").val("ONE");
         $("div[name=tripmode1]").bind("click", function () {
@@ -638,9 +650,9 @@
         }
     }
 
-    var saveResult = function (data) {        
+    var saveResult = function (data) {
         $("#minprice").html(data.fromNumber);
-        $("#maxprice").html(data.toNumber);       
+        $("#maxprice").html(data.toNumber);
         oTable.draw();
     };
 </script>
